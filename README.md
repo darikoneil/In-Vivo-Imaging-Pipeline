@@ -1,2 +1,1 @@
-# Calcium-Imaging-Analysis-Pipeline
-Pipeline for Analysis of Calcium Imaging
+# Pipeline for Analysis of Calcium Imaging
