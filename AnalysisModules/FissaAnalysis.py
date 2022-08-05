@@ -259,6 +259,11 @@ class FissaModule:
     def preserveOriginalSourceSeparations(self):
         self.ProcessedTraces.original_result = self.experiment.result
 
+    def pruneNonNeuronalROIs(self):
+        self.stat = self.stat[self.neuronal_index]
+        self.s2p_rois = self.s2p_rois[self.neuronal_index]
+        self.iscell = self.iscell[self.neuronal_index, :]
+
 
 # /// /// Container for Preparation Data /// ///
 class PreparationModule:
@@ -267,7 +272,7 @@ class PreparationModule:
 
         self.roi_polys = None # ROI Polygons
         self.raw = None
-        # RAW TRACES - ROI x TRIAL <- SUB-MASK x FRAME
+        # RAW TRACES - ROI x TIFF <- SUB-MASK x FRAME
         self.expansion = None # Honestly, no idea
         self.nRegions = None # Number of Sub-Masks (i.e., neuropil masks)
         self.means = None # Honestly, no idea
@@ -297,7 +302,7 @@ class SeparationModule:
         self.max_tries = None  # Honestly, no idea
         self.mixmat = None  # Honestly, no idea
         self.result = None
-        # SOURCE-SEPARATED TRACES - ROI x TRIAL <- SUB-MASK x FRAME
+        # SOURCE-SEPARATED TRACES - ROI x TIFF <- SUB-MASK x FRAME
         self.nRegions = None  # Number of Sub-Masks
 
         if _experiment is not None:
@@ -311,7 +316,7 @@ class SeparationModule:
             self.max_tries = _experiment['max_tries'] # Honestly, no idea
             self.mixmat = _experiment['mixmat'] # Honestly, no idea
             self.result = _experiment['result']
-            # SOURCE-SEPARATED TRACES - ROI x TRIAL <- SUB-MASK x FRAME
+            # SOURCE-SEPARATED TRACES - ROI x TIFF <- SUB-MASK x FRAME
             self.nRegions = _experiment['nRegions'] # Number of Sub-Masks
 
 
@@ -321,13 +326,13 @@ class ProcessedTracesModule:
 
         # /// Pre-Allocation Raw Traces///
         self.original_raw = None # Original Raw Traces
-        # ROI x TRIAL < - SUB - MASK x FRAME
+        # ROI x TIFF < - SUB - MASK x FRAME
         self.smoothed_raw = None # Smoothed Raw Traces
-        # ROI x TRIAL < - SUB - MASK x FRAME
+        # ROI x TIFF < - SUB - MASK x FRAME
         self.merged_smoothed_raw = None # Smoothed Raw Traces
         # ROI x FRAME
         self.dFoF_raw = None # Fo/F of Raw Traces
-        # ROI x TRIAL < - SUB - MASK x FRAME
+        # ROI x TIFF < - SUB - MASK x FRAME
         self.merged_dFoF_raw = None # Fo/F of Raw Traces
         # ROI (Primary Mask Only) x FRAME
         self.neuronal_dFoF_raw = None # Fo/F of Raw Traces
@@ -335,13 +340,13 @@ class ProcessedTracesModule:
 
         # /// Pre-Allocation Result Traces
         self.original_result = None # Original Result Traces
-        # ROI x TRIAL < - SUB - MASK x FRAME
+        # ROI x TIFF < - SUB - MASK x FRAME
         self.smoothed_result = None  # Smoothed Result Traces
-        # ROI x TRIAL < - SUB - MASK x FRAME
+        # ROI x TIFF < - SUB - MASK x FRAME
         self.merged_smoothed_result = None # Smoothed Result Traces
         # ROI x FRAME
         self.dFoF_result = None # Fo/F of Result Traces
-        # ROI x TRIAL < - SUB - MASK x FRAME
+        # ROI x TIFF < - SUB - MASK x FRAME
         self.merged_dFoF_result = None # Fo/F of Result Traces
         # ROI (Primary Mask Only) x FRAME
         self.neuronal_dFoF_result = None # Fo/F of Result Traces
@@ -349,5 +354,5 @@ class ProcessedTracesModule:
         self.detrended_merged_dFoF_result = None # detrended
         # ROI x FRAME
         self.detrended_dFoF_result = None # detrended
-        # ROI x TRIAL < - SUB - MASK x FRAME
+        # ROI x TIFF < - SUB - MASK x FRAME
 

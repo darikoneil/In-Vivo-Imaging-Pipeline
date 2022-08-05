@@ -10,7 +10,7 @@ def calculate_dFoF(Traces, FrameRate, **kwargs):
     # /// Parse Inputs///
     _raw = kwargs.get('raw', None)
     _use_raw_f0 = kwargs.get('use_raw_f0', True)
-    _across_trials = kwargs.get('across_trials', True)
+    _across_tiffs = kwargs.get('across_tiffs', True)
     _merge_after = kwargs.get('merge_after', True)
     _offset = kwargs.get('offset', 0.0001)
 
@@ -18,10 +18,10 @@ def calculate_dFoF(Traces, FrameRate, **kwargs):
     dFoF = np.empty_like(Traces)
     # /// Initialize Feedback
     msg = "Calculating Δf/f0"
-    if _across_trials:
-        msg += "  (using single f0 across all trials"
+    if _across_tiffs:
+        msg += "  (using single f0 across all tiffs"
     else:
-        msg += " (using unique f0 for each trial"
+        msg += " (using unique f0 for each tiff"
     if _use_raw_f0:
         msg += " using f0 derived from raw traces during calculations)"
     else:
@@ -32,7 +32,7 @@ def calculate_dFoF(Traces, FrameRate, **kwargs):
 
     # /// Determine Format ///
     if Traces[0, 0].shape:
-        _format = 0 # ROIs x TRIALS <- SUB-MASKS x FRAMES
+        _format = 0 # ROIs x TIFFS <- SUB-MASKS x FRAMES
     else:
         _format = 1 # ROIS (PRIMARY MASK ONLY x FRAMES)
 
@@ -40,7 +40,7 @@ def calculate_dFoF(Traces, FrameRate, **kwargs):
     if _format == 0:
         Traces += _offset # Add the Offset
         _neurons = len(Traces)
-        _trials = len(Traces[0])
+        _tiffs = len(Traces[0])
 
         # Loop & Solve
         for _neuron in tqdm(
@@ -50,7 +50,7 @@ def calculate_dFoF(Traces, FrameRate, **kwargs):
             disable=False,
         ):
 
-            if _across_trials:
+            if _across_tiffs:
                 _trace_conc = np.concatenate(Traces[_neuron], axis=1)
                 _trace_f0 = findBaselineF0(_trace_conc, FrameRate, 1).T[:, None]
                 if _use_raw_f0 and _raw is not None:
@@ -61,32 +61,32 @@ def calculate_dFoF(Traces, FrameRate, **kwargs):
                     _trace_conc = (_trace_conc - _trace_f0) / _trace_f0
 
                 # Store
-                _curTrial = 0
-                for _trial in range(_trials):
-                    _nextTrial = _curTrial + Traces[_neuron][_trial].shape[1]
-                    _signal = _trace_conc[:, _curTrial:_nextTrial]
-                    dFoF[_neuron][_trial] = _signal
-                    _curTrial = _nextTrial
+                _curTiff = 0
+                for _tiff in range(_tiffs):
+                    _nextTiff = _curTiff + Traces[_neuron][_tiff].shape[1]
+                    _signal = _trace_conc[:, _curTiff:_nextTiff]
+                    dFoF[_neuron][_tiff] = _signal
+                    _curTiff = _nextTiff
 
             else:
-                for _trial in range(_trials):
-                    _trace_conc = Traces[_neuron][_trial]
+                for _tiff in range(_tiffs):
+                    _trace_conc = Traces[_neuron][_tiff]
                     _trace_f0 = findBaselineF0(_trace_conc, FrameRate, 1).T[:, None]
                     _trace_f0[_trace_f0 < 0] = 0
                     if _use_raw_f0 and _raw is not None:
-                        _raw_conc = _raw[_neuron][_trial][0, :]
+                        _raw_conc = _raw[_neuron][_tiff][0, :]
                         _raw_f0 = findBaselineF0(_raw_conc, FrameRate)
                         _trace_conc = (_trace_conc - _trace_f0) / _raw_f0
                     else:
                         _trace_conc = (_trace_conc - _trace_f0) / _trace_f0
 
-                    dFoF[_neuron][_trial] = _trace_conc
+                    dFoF[_neuron][_tiff] = _trace_conc
         if _merge_after:
             _numNeurons = dFoF.shape[0]
-            _numTrials = dFoF.shape[1]
-            _firstTrialSize = dFoF[0,0].shape[1]
-            _lastTrialSize = dFoF[0, _numTrials-1].shape[1]
-            _totalFrames = _firstTrialSize*(_numTrials-1)+_lastTrialSize
+            _numTiffs = dFoF.shape[1]
+            _firstTiffSize = dFoF[0,0].shape[1]
+            _lastTiffSize = dFoF[0, _numTiffs-1].shape[1]
+            _totalFrames = _firstTiffSize*(_numTiffs-1)+_lastTiffSize
             _unmerged_dFoF = dFoF.copy()
             dFoF = np.full((_numNeurons, _totalFrames), 0, dtype=np.float64)
 
@@ -94,7 +94,7 @@ def calculate_dFoF(Traces, FrameRate, **kwargs):
             for _neuron in tqdm(
                 range(_numNeurons),
                 total=_numNeurons,
-                desc="Merging Trials",
+                desc="Merging Tiffs",
                 disable=False,
             ):
                 dFoF[_neuron, :] = np.concatenate(_unmerged_dFoF[_neuron], axis=1)[0, :]
@@ -108,7 +108,7 @@ def calculate_dFoF(Traces, FrameRate, **kwargs):
 def mergeTraces(Traces, **kwargs):
     _component = kwargs.get('component', 0)
 
-    [_neurons, _trials] = Traces.shape
+    [_neurons, _tiffs] = Traces.shape
     _frames = np.concatenate(Traces[0], axis=1)[0, :].shape[0]
     mergedTraces = np.full((_neurons, _frames), 0, dtype=np.float64)
 
@@ -116,7 +116,7 @@ def mergeTraces(Traces, **kwargs):
     for _neuron in tqdm(
         range(_neurons),
         total=_neurons,
-        desc="Merging Traces Across Trials",
+        desc="Merging Traces Across Tiffs",
         disable=False,
     ):
         mergedTraces[_neuron, :] = np.concatenate(Traces[_neuron], axis=1)[_component, :]
@@ -146,23 +146,23 @@ def smoothTraces(Traces, **kwargs):
     return smoothedTraces
 
 
-def smoothTraces_TrialOrg(Traces, **kwargs):
+def smoothTraces_TiffOrg(Traces, **kwargs):
     _niter = kwargs.get('niter', 5)
     _kappa = kwargs.get('kappa', 100)
     _gamma = kwargs.get('gamma', 0.15)
 
     from AnalysisModules.smoothies import anisotropic_diffusion
 
-    # Find Sizes of Traces - Frames, Neurons, Trials, Components, Frames In Trial
+    # Find Sizes of Traces - Frames, Neurons, Tiffs, Components, Frames In Tiff
     _frames = np.concatenate(Traces[0], axis=1)[0, :].shape[0]
-    [_neurons, _trials] = Traces.shape
+    [_neurons, _tiffs] = Traces.shape
     _components = Traces[0, 0].shape[0]
     _smoothedTracesByComponent = np.full((_neurons, _frames, _components), 0, dtype=np.float64)
     #smoothedTraces = Traces.copy()
 
-    smoothedTraces = np.empty((_neurons, _trials), dtype=object)
-    for _neuron, _trial in itertools.product(range(_neurons), range(_trials)):
-        smoothedTraces[_neuron, _trial] = np.zeros(Traces[_neuron, _trial].shape, dtype=np.float64)
+    smoothedTraces = np.empty((_neurons, _tiffs), dtype=object)
+    for _neuron, _tiff in itertools.product(range(_neurons), range(_tiffs)):
+        smoothedTraces[_neuron, _tiff] = np.zeros(Traces[_neuron, _tiff].shape, dtype=np.float64)
 
     for _neuron in tqdm(
         range(_neurons),
@@ -178,16 +178,16 @@ def smoothTraces_TrialOrg(Traces, **kwargs):
     for _neuron in tqdm(
         range(_neurons),
         total=_neurons,
-        desc="Organizing By Trial",
+        desc="Organizing By Tiff",
         disable=False,
     ):
-        _currTrial = 0
-        for _trial in range(_trials):
-            _nextTrial = _currTrial + Traces[_neuron, _trial].shape[1]
+        _currTiff = 0
+        for _tiff in range(_tiffs):
+            _nextTiff = _currTiff + Traces[_neuron, _tiff].shape[1]
             for _component in range(_components):
-                _trace = _smoothedTracesByComponent[_neuron, _currTrial:_nextTrial, _component]
-                smoothedTraces[_neuron, _trial][_component, :] = _trace
-            _currTrial = _nextTrial
+                _trace = _smoothedTracesByComponent[_neuron, _currTiff:_nextTiff, _component]
+                smoothedTraces[_neuron, _tiff][_component, :] = _trace
+            _currTiff = _nextTiff
 
     return smoothedTraces, _smoothedTracesByComponent
 
@@ -201,7 +201,7 @@ def detrendTraces(Traces, **kwargs):
     _order = kwargs.get('order', 4)
     _plot = kwargs.get('plot', False)
     [_neurons, _frames] = Traces.shape
-    detrended_traces = np.zeros_like(Traces, dtype=np.float64)
+    detrended_traces = Traces.copy()
 
     for _neuron in tqdm(
         range(_neurons),
@@ -209,17 +209,17 @@ def detrendTraces(Traces, **kwargs):
         desc="Detrending",
         disable=False,
     ):
-        detrended_traces[_neuron, :] = polynomial(Traces[_neuron, :], order=_order, plot=_plot)
+        detrended_traces[_neuron, :] = polynomial(detrended_traces[_neuron, :], order=_order, plot=_plot)
 
     return detrended_traces
 
 
-def detrendTraces_TrialOrg(Traces, **kwargs):
+def detrendTraces_TiffOrg(Traces, **kwargs):
     _order = kwargs.get('order', 4)
     _plot = kwargs.get('plot', False)
 
     _frames = np.concatenate(Traces[0], axis=1)[0, :].shape[0]
-    [_neurons, _trials] = Traces.shape
+    [_neurons, _tiffs] = Traces.shape
     _components = Traces[0, 0].shape[0]
     _mergedDetrendedTraces = np.full((_neurons, _frames, _components), 0, dtype=np.float64)
     detrendedTraces = Traces.copy()
@@ -232,22 +232,22 @@ def detrendTraces_TrialOrg(Traces, **kwargs):
     ):
         for _component in range(_components):
             _mergedDetrendedTraces[_neuron, :, _component] = polynomial(np.concatenate(Traces[_neuron],
-                                                                                       axis=1)[_component, :],
+                                                                                       axis=1)[_component, :].copy(),
                                                                                         order=_order, plot=_plot)
 
     for _neuron in tqdm(
             range(_neurons),
             total=_neurons,
-            desc="Organizing By Trial",
+            desc="Organizing By Tiff",
             disable=False,
     ):
-        _currTrial = 0
-        for _trial in range(_trials):
-            _nextTrial = _currTrial + Traces[_neuron, _trial].shape[1]
+        _currTiff = 0
+        for _tiff in range(_tiffs):
+            _nextTiff = _currTiff + Traces[_neuron, _tiff].shape[1]
             for _component in range(_components):
-                _trace = _mergedDetrendedTraces[_neuron, _currTrial:_nextTrial, _component]
-                detrendedTraces[_neuron, _trial][_component, :] = _trace
-            _currTrial = _nextTrial
+                _trace = _mergedDetrendedTraces[_neuron, _currTiff:_nextTiff, _component]
+                detrendedTraces[_neuron, _tiff][_component, :] = _trace
+            _currTiff = _nextTiff
 
     return detrendedTraces
 
