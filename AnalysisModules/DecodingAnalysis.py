@@ -1,6 +1,6 @@
 import numpy as np
 import pickle as pkl
-
+import pathlib
 # Imports for classes in file organized by class
 # Not sure if I should use conditional imports...
 # More graceful failure if certain package not installed
@@ -8,13 +8,16 @@ import pickle as pkl
 # So right now, let's follow PEP8
 
 # WienerFilterDecoder
-from Neural_Decoding.Neural_Decoding.decoders import WienerFilterDecoder
+from AnalysisModules.ModifiedDecoders import WienerFilterDecoder
 
 # WienerCascadeDecoder
 from Neural_Decoding.Neural_Decoding.decoders import WienerCascadeDecoder
 
 # Metrics functions from Neural Decoding Package from Joshua Glaser while in Kording Lab
 from Neural_Decoding.Neural_Decoding.metrics import get_R2
+
+# Metrics from sk-learn
+from sklearn import metrics
 
 
 class DecodingModule:
@@ -26,6 +29,13 @@ class DecodingModule:
         self.feature_data = kwargs.get('FeatureData', None)
         self.label_data = kwargs.get('LabelData', None)
         self.data_splits = kwargs.get('DataSplits', [0.8, 0.2])
+        self.covariance_matrix = kwargs.get('CovarianceMatrix', None)
+        _feature_data_file = kwargs.get('FeatureDataFile', None)
+        _label_data_file = kwargs.get('LabelDataFile', None)
+
+        # load if necessary
+        if _feature_data_file is not None or _label_data_file is not None:
+            self.loadFeaturesLabels(_feature_data_file, _label_data_file)
 
         # Initialization
         self.training_x = None
@@ -40,14 +50,60 @@ class DecodingModule:
         # Instance Performance Metrics
         self.ModelPerformance = PerformanceMetrics()
 
+    def loadFeaturesLabels(self, _feature_data_file, _label_data_file):
+        if _feature_data_file is not None and self.feature_data is None:
+            try:
+                _feature_file_ext = pathlib.Path(_feature_data_file).suffix
+                if _feature_file_ext == ".npy" or _feature_file_ext == ".npz":
+                    self.feature_data = np.load(_feature_data_file, allow_pickle=True)
+                elif _feature_file_ext == ".csv":
+                    self.feature_data = np.genfromtxt(_feature_data_file, dtype=int, delimiter=",")
+                else:
+                    print("Features data in unexpected file type.")
+                if self.feature_data.shape[1] != self.neural_data.shape[1] and self.neural_data is not None:
+                    raise AssertionError
+                # noinspection PyUnresolvedReferences
+                if len(self.feature_data.shape) != len(self.neural_data.shape) and self.neural_data is not None:
+                    raise ValueError
+            except RuntimeError:
+                print("Could not load feature data.")
+            except AssertionError:
+                print("The number of features samples must match the number of neural data samples.")
+            except ValueError:
+                print('The organization of features and neural data must match.')
+        if _label_data_file is not None and self.label_data is None:
+            try:
+                _label_file_ext = pathlib.Path(_label_data_file).suffix
+                if _label_file_ext == ".npy" or _label_file_ext == ".npz":
+                    self.label_data = np.load(_label_data_file, allow_pickle=True)
+                elif _label_file_ext == ".csv":
+                    self.label_data = np.genfromtxt(_label_data_file, dtype=int, delimiter=",")
+                else:
+                    print("Labels data in unexpected file type.")
+                if self.label_data.shape[1] != self.neural_data.shape[1] and self.neural_data is not None:
+                    raise AssertionError
+                # noinspection PyUnresolvedReferences
+                if len(self.label_data.shape) != len(self.neural_data.shape) and self.neural_data is not None:
+                    raise ValueError
+            except RuntimeError:
+                print("Could not load label data.")
+            except AssertionError:
+                print('The number of label samples must match the number of neural data samples')
+            except ValueError:
+                print("The organization of labels and neural data must match.")
+
     def splitData(self):
         if self.neural_data_organization == "Matrix Org":
             _training_frames = int(self.data_splits[0] * self.num_frames)
             if len(self.data_splits) == 2:
+                print("Splitting data in training & testing sets")
+                print("Data splits are: " +
+                      str(self.data_splits[0]*100) + "% training" +
+                      " vs " + str(self.data_splits[1]*100) + "% testing")
                 self.training_x = self.neural_data[:, 0:_training_frames]
-                self.training_y = self.neural_data[:, 0:_training_frames]
+                self.training_y = self.label_data[0:_training_frames]
                 self.testing_x = self.neural_data[:, _training_frames:self.num_frames+1]
-                self.testing_y = self.neural_data[:, _training_frames:self.num_frames+1]
+                self.testing_y = self.label_data[_training_frames:self.num_frames+1]
             elif len(self.data_splits) == 3:
                 self.training_x = self.neural_data[:, 0:_training_frames]
                 self.training_y = self.neural_data[:, 0:_training_frames]
@@ -113,12 +169,15 @@ class PerformanceMetrics:
         self.r = None  # R
         self.r2 = None # R-Squared
         self.hits = None # tp+fp
+        self.mean_abs_error = None # Mean absolute error
+        self.root_mean_square_error = None # Root mean square error
 
         # Secondary
         self.accuracy = None  # (tp+tn)/(tp+fn+fp+tn)
         self.precision = None  # PPV or Precision, = tn/(tp+fp)
         self.recall = None  # Sensitivity, TPR, Recall, = tp/(tp+fn)
         self.specificity = None  # TNR, Specificity, = tn/(tn+fp)
+
 
         # Tertiary
         self.balanced_accuracy = None # Balanced Accuracy
@@ -138,33 +197,49 @@ class PerformanceMetrics:
 
 
 class WienerFilter(DecodingModule):
-    # Class for easily managing Wiener Filter Decoding
-    # The Wiener Filter is imported from the Neural Decoding package
-    # from Joshua Glaser while in Kording Lab
+    # Class for easily managing Wiener Filter Decoding / Linear Regression
     # Note inheritances from generic Decoder Module class
     def __init__(self, **kwargs):
         # noinspection PyArgumentList
         super().__init__(**kwargs)
         self.internalModel = WienerFilterDecoder()
-
+        print("Instanced Wiener Filter")
 
     def fitModel(self, **kwargs):
-        print("Fitting Wiener Filter")
-        self.internalModel.fit(self.training_x, self.training_y)
+        _fit_intercept = kwargs.get('fit_intercept', False)
+        _n_jobs = kwargs.get('n_jobs', None)
+        print("Fitting Wiener Filter...")
+        self.internalModel.fit(self.training_x.T, self.training_y.T, fit_intercept=_fit_intercept, n_jobs=_n_jobs)
+        # noinspection PyArgumentList
+        print("Finished")
 
     def assessModel(self, **kwargs):
+
+        # maybe not smart for multiple outputs
+        _compare_training = kwargs.get('training', True)
         _compare_testing = kwargs.get('testing', True)
         _compare_validation = kwargs.get('validation', False)
+        _full_assessment = kwargs.get('full_assessment', True)
+        _multioutput = kwargs.get('multioutput', "uniform_average")
+        r2 = []
+        if _compare_training:
+            _predicted_training_y = self.makePrediction(observed=self.training_x)
+            _r2_train = metrics.r2_score(self.training_y, _predicted_training_y, multioutput=_multioutput)
+            r2.append(_r2_train)
         if _compare_testing:
-            self.ModelPerformance.r2 = get_R2(self.testing_y, self.predicted_testing_y)
+            _r2_test = metrics.r2_score(self.testing_y, self.predicted_testing_y, multioutput=_multioutput)
+            r2.append(_r2_test)
         if _compare_validation:
-            self.ModelPerformance.r2 = get_R2(self.validation_y, self.predicted_validation_y)
+            _r2_valid = metrics.r2_score(self.validation_y, self.predicted_validation_y, multioutput=_multioutput)
+            r2.append(_r2_valid)
+
+
 
     def makePrediction(self, **kwargs):
         _observed = kwargs.get('observed', None)
         if _observed is not None:
-            predicted = self.internalModel.predict(_observed)
-            return predicted
+            predicted = self.internalModel.predict(_observed.T)
+            return predicted.T
         else:
             print("Error: Please Supply Observed Neural Activity to Generate Predicted Labels")
 
@@ -178,12 +253,13 @@ class WienerCascade(DecodingModule):
         # noinspection PyArgumentList
         super().__init__(**kwargs)
         _degrees = kwargs.get("degree", 3)
-        print("Instancing Wiener Cascade with a degree of " + _degrees)
         self.internalModel = WienerCascadeDecoder(degree=_degrees)
+        print("Instanced Wiener Cascade with a degree of " + _degrees)
 
     def fitModel(self, **kwargs):
-        print("Fitting Wiener Cascade")
+        print("Fitting Wiener Cascade...")
         self.internalModel.fit(self.training_x, self.training_y)
+        print("Finished")
 
     def assessModel(self, **kwargs):
         _compare_testing = kwargs.get('testing', True)
@@ -200,3 +276,4 @@ class WienerCascade(DecodingModule):
             return predicted
         else:
             print("Error: Please Supply Observed Neural Activity to Generate Predicted Labels")
+

@@ -9,8 +9,8 @@ class FissaModule:
     def __init__(self, **kwargs):
 
         # ///Parse Inputs///
-        data_folder = kwargs.get('data_folder', None)
-        index_file = kwargs.get('index_file', None)
+        _data_folder = kwargs.get('data_folder', None)
+        _index_file = kwargs.get('index_file', None)
         self.neuronal_index = kwargs.get('neuronal_index', None)
         self.frame_rate = kwargs.get('frame_rate', None)
         self.prep_file = kwargs.get('prep_file', None)
@@ -28,11 +28,11 @@ class FissaModule:
         self.index_path = None
 
         # /// Load Data (Suite2P & FISSA) ///
-        if data_folder is not None:
-            self.loadDataFolder(data_folder)
+        if _data_folder is not None:
+            self.loadDataFolder(_data_folder)
             # Load Neuronal Index if specified or derive
-            if index_file is not None:
-                self.index_path = index_file
+            if _index_file is not None:
+                self.index_path = _index_file
                 self.loadNeuronalIndex()
             else:
                 self.deriveNeuronalIndex()
@@ -44,13 +44,13 @@ class FissaModule:
         self.preparation = PreparationModule() # Store Fissa Preparation Data
         self.ProcessedTraces = ProcessedTracesModule()
 
-    def loadDataFolder(self, data_folder):
+    def loadDataFolder(self, _data_folder):
 
-        self.images = data_folder + '\\suite2p\\plane0\\reg_tif'
+        self.images = _data_folder + '\\suite2p\\plane0\\reg_tif'
         # Images stored here
 
         try:
-            self.ops = np.load((data_folder + '\\suite2p\\plane0\\ops.npy'),
+            self.ops = np.load((_data_folder + '\\suite2p\\plane0\\ops.npy'),
                                 allow_pickle=True).item()
             if type(self.ops) is not dict:
                 raise TypeError
@@ -69,7 +69,7 @@ class FissaModule:
         # Derive frame_rate if and only if it was not specified
 
         try:
-            self.stat = np.load((data_folder + '\\suite2p\\plane0\\stat.npy'),
+            self.stat = np.load((_data_folder + '\\suite2p\\plane0\\stat.npy'),
                                 allow_pickle=True)
             if type(self.stat) is not np.ndarray:
                 raise TypeError
@@ -80,7 +80,7 @@ class FissaModule:
         # Suite2P stats stored here & loaded
 
         try:
-            self.iscell = np.load((data_folder + '\\suite2p\\plane0\\iscell.npy'),
+            self.iscell = np.load((_data_folder + '\\suite2p\\plane0\\iscell.npy'),
                                     allow_pickle=True)
             if type(self.iscell) is not np.ndarray:
                 raise TypeError
@@ -97,7 +97,7 @@ class FissaModule:
             print("Could not load Suite2P ROIs")
 
         if self.output_folder is None:
-            self.output_folder = data_folder + '\\'
+            self.output_folder = _data_folder + '\\'
             # Where to Save Any New Exports
 
         if self.prep_file is not None:
@@ -106,7 +106,7 @@ class FissaModule:
             except RuntimeError or AttributeError:
                 print("Could not load FISSA prepared file")
         else:
-            self.prep_file = data_folder + "\\prepared.npz"
+            self.prep_file = _data_folder + "\\prepared.npz"
             # Location of Fissa Preparation File
 
         if self.sep_file is not None:
@@ -115,7 +115,7 @@ class FissaModule:
             except RuntimeError or AttributeError:
                 print("Could not load FISSA separation file")
         else:
-            self.sep_file = data_folder + "\\separated.npz"
+            self.sep_file = _data_folder + "\\separated.npz"
             # Location of Fissa Separation File
 
     def loadSuite2P_ROIs(self):

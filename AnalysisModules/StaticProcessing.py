@@ -292,4 +292,3 @@ def anisotropicDiffusion(Trace, **kwargs):
 def calculateFiringRate(SpikeProb, FrameRate):
     firing_rate = SpikeProb*FrameRate
     return firing_rate
-
