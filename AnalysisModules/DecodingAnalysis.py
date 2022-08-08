@@ -19,6 +19,9 @@ from Neural_Decoding.Neural_Decoding.metrics import get_R2
 # Metrics from sk-learn
 from sklearn import metrics
 
+# Metrics Dictionary Constructor
+import itertools
+
 
 class DecodingModule:
     # Generic decoding module super-class with conserved methods, properties,
@@ -40,15 +43,14 @@ class DecodingModule:
         # Initialization
         self.training_x = None
         self.training_y = None
+        self.predicted_training_y = None
         self.testing_x = None
         self.testing_y = None
         self.predicted_testing_y = None
         self.validation_x = None
         self.validation_y = None
         self.predicted_validation_y = None
-
-        # Instance Performance Metrics
-        self.ModelPerformance = PerformanceMetrics()
+        self.ModelPerformance = None
 
     def loadFeaturesLabels(self, _feature_data_file, _label_data_file):
         if _feature_data_file is not None and self.feature_data is None:
@@ -116,7 +118,13 @@ class DecodingModule:
         print("1st")
 
     def assessModel(self, **kwargs):
-        print("2nd)")
+        print("2nd")
+
+    def commonAssessment(self, **kwargs):
+        print("2nd")
+
+    def fullAssessment(self, **kwargs):
+        print("2nd")
 
     def makePrediction(self, **kwargs):
         print("3rd")
@@ -157,45 +165,6 @@ class DecodingModule:
                 return self.neural_data.shape[1]
 
 
-class PerformanceMetrics:
-    # Container class for a variety of performance metrics
-    # Methods to calculate secondary & tertiary measures from primary measures
-    def __init__(self):
-        # Primary
-        self.tp = None # True Positive
-        self.fn = None # False Negative
-        self.fp = None # False Positive
-        self.tn = None # True Negative
-        self.r = None  # R
-        self.r2 = None # R-Squared
-        self.hits = None # tp+fp
-        self.mean_abs_error = None # Mean absolute error
-        self.root_mean_square_error = None # Root mean square error
-
-        # Secondary
-        self.accuracy = None  # (tp+tn)/(tp+fn+fp+tn)
-        self.precision = None  # PPV or Precision, = tn/(tp+fp)
-        self.recall = None  # Sensitivity, TPR, Recall, = tp/(tp+fn)
-        self.specificity = None  # TNR, Specificity, = tn/(tn+fp)
-
-
-        # Tertiary
-        self.balanced_accuracy = None # Balanced Accuracy
-        self.fpr = None # FPR, Fallout, = fp/(tn+fp)
-        self.fnr = None # FNR, Miss, = fn/(tp+fn)
-        self.rpp = None  # Rate of Positive Predictions
-        # = (tp+fp)/(tp+fn+fp+tn)
-        self.rnp = None  # Rate of Negative Predictions
-        # = (tn+fn) / (tp+fn+fp+tn)
-        self.ecost = None # Expected Cost
-        # ecost = (tp*Cost(P|P)+fn*Cost(N|P)+fp* Cost(P|N)+tn*Cost(N|N))/(tp+fn+fp+tn)
-        self.markedness = None # Markedness
-        self.informedness = None # Informedness
-        self.AUC = None # Area Under the Curve of Receiver Operating Characteristic
-        # ROC = TPR vs. FPR
-        self.AUC_PR = None # Area Under the Curve of Precision-Recall Curve
-
-
 class WienerFilter(DecodingModule):
     # Class for easily managing Wiener Filter Decoding / Linear Regression
     # Note inheritances from generic Decoder Module class
@@ -203,6 +172,8 @@ class WienerFilter(DecodingModule):
         # noinspection PyArgumentList
         super().__init__(**kwargs)
         self.internalModel = WienerFilterDecoder()
+        # Instance Performance Metrics
+        self.ModelPerformance = PerformanceMetrics("Regression", len(self.data_splits))
         print("Instanced Wiener Filter")
 
     def fitModel(self, **kwargs):
@@ -210,30 +181,58 @@ class WienerFilter(DecodingModule):
         _n_jobs = kwargs.get('n_jobs', None)
         print("Fitting Wiener Filter...")
         self.internalModel.fit(self.training_x.T, self.training_y.T, fit_intercept=_fit_intercept, n_jobs=_n_jobs)
+        self.predicted_training_y = self.makePrediction(observed=self.training_x)
         # noinspection PyArgumentList
         print("Finished")
 
     def assessModel(self, **kwargs):
-
-        # maybe not smart for multiple outputs
-        _compare_training = kwargs.get('training', True)
-        _compare_testing = kwargs.get('testing', True)
-        _compare_validation = kwargs.get('validation', False)
-        _full_assessment = kwargs.get('full_assessment', True)
         _multioutput = kwargs.get('multioutput', "uniform_average")
-        r2 = []
-        if _compare_training:
-            _predicted_training_y = self.makePrediction(observed=self.training_x)
-            _r2_train = metrics.r2_score(self.training_y, _predicted_training_y, multioutput=_multioutput)
-            r2.append(_r2_train)
-        if _compare_testing:
-            _r2_test = metrics.r2_score(self.testing_y, self.predicted_testing_y, multioutput=_multioutput)
-            r2.append(_r2_test)
-        if _compare_validation:
-            _r2_valid = metrics.r2_score(self.validation_y, self.predicted_validation_y, multioutput=_multioutput)
-            r2.append(_r2_valid)
+        self.ModelPerformance[('r2', 'training')] = metrics.r2_score(self.training_y, self.predicted_training_y, multioutput=_multioutput)
 
+    def commonAssessment(self, **kwargs):
+        _flag_valid = True
+        # R2
+        _multioutput = kwargs.get('multioutput', "uniform_average")
+        if self.ModelPerformance[('r2', 'training')] is None:
+            self.ModelPerformance[('r2', 'training')] = metrics.r2_score(self.training_y,
+                                                                         self.predicted_training_y,
+                                                                         multioutput=_multioutput)
+        if self.ModelPerformance[('r2', 'testing')] is None:
+            self.ModelPerformance[('r2', 'testing')] = metrics.r2_score(self.testing_y,
+                                                                         self.predicted_testing_y,
+                                                                         multioutput=_multioutput)
+        if _flag_valid:
+            if self.ModelPerformance[('r2', 'validation')] is None:
+                self.ModelPerformance[('r2', 'validation')] = metrics.r2_score(self.validation_y,
+                                                                                self.predicted_validation_y,
+                                                                                _multioutput=_multioutput)
+        #Mean_abs_error
+        if self.ModelPerformance[('mean_abs_error', 'training')] is None:
+            self.ModelPerformance[('mean_abs_error', 'training')] = metrics.mean_absolute_error(self.training_y,
+                                                                                                self.predicted_training_y)
+        if self.ModelPerformance[('mean_abs_error', 'testing')] is None:
+            self.ModelPerformance[('mean_abs_error', 'testing')] = metrics.mean_absolute_error(self.testing_y,
+                                                                                               self.predicted_testing_y)
+        if _flag_valid:
+            if self.ModelPerformance[('mean_abs_error', 'validation')] is None:
+                self.ModelPerformance[('mean_abs_error', 'validation')] = metrics.mean_absolute_error(self.validation_y,
+                                                                                                      self.predicted_validation_y)
 
+        #mean_squared_error
+        if self.ModelPerformance[('mean_squared_error', 'training')] is None:
+            self.ModelPerformance[('mean_squared_error', 'training')] = metrics.mean_squared_error(self.training_y,
+                                                                                                    self.predicted_training_y)
+        if self.ModelPerformance[('mean_squared_error', 'testing')] is None:
+            self.ModelPerformance[('mean_squared_error', 'testing')] = metrics.mean_squared_error(self.testing_y,
+                                                                                                   self.predicted_testing_y)
+        if _flag_valid:
+            if self.ModelPerformance[('mean_squared_error', 'validation')] is None:
+                self.ModelPerformance[('mean_squared_error', 'validation')] = metrics.mean_squared_error(self.validation_y,
+                                                                                                          self.predicted_validation_y)
+
+    def fullAssessment(self, **kwargs):
+        # Perform Assessment of R2, mean_abs_error, root_mean_squared
+        self.ModelPerformance.r2 = []
 
     def makePrediction(self, **kwargs):
         _observed = kwargs.get('observed', None)
@@ -242,6 +241,11 @@ class WienerFilter(DecodingModule):
             return predicted.T
         else:
             print("Error: Please Supply Observed Neural Activity to Generate Predicted Labels")
+
+    def makeAllPredictions(self):
+        self.predicted_testing_y = self.makePrediction(observed=self.testing_x)
+        if len(self.data_splits) == 3:
+            self.predicted_validation_y = self.makePrediction(observed=self.validation_x)
 
 
 class WienerCascade(DecodingModule):
@@ -253,6 +257,7 @@ class WienerCascade(DecodingModule):
         # noinspection PyArgumentList
         super().__init__(**kwargs)
         _degrees = kwargs.get("degree", 3)
+        self.ModelPerformance = PerformanceMetrics("Regression", len(self.data_splits))
         self.internalModel = WienerCascadeDecoder(degree=_degrees)
         print("Instanced Wiener Cascade with a degree of " + _degrees)
 
@@ -277,3 +282,73 @@ class WienerCascade(DecodingModule):
         else:
             print("Error: Please Supply Observed Neural Activity to Generate Predicted Labels")
 
+
+def PerformanceMetrics(Type, NumberOfSplits):
+    # dict constructor for a variety of performance metrics
+    # Methods to calculate secondary & tertiary measures from primary measures
+
+    # construct
+    ModelPerformance = dict()
+
+    # Metrics tiered by Most Common, Common, Uncommon
+    if Type == "Regression":
+        _common_metrics_list = ['r2', 'mean_abs_error', 'mean_squared_error']
+        # Common
+        # r2 = None # R^2 /  Coefficient of Determination
+        # mean_abs_error = None # Mean Absolute Error
+
+        _uncommon_metrics_list = ['median_absolute_error', 'max_error', 'explained_variance_score']
+        # Uncommon
+        # median_absolute_error = None # Median Absolute Error
+        # max_error = None # Max Error
+        # mean_squared_error = None  # Mean Squared Error
+        # explained_variance_score = None  # Explained Variance Regression Score
+
+        # Now I append. I realize this was kinda pointless, but it makes sense
+        # purely from a documentation perspective. It seems too much work to
+
+        _metrics_list = _common_metrics_list + _uncommon_metrics_list
+        if NumberOfSplits == 2:
+            _tuples_list = ['training', 'testing']
+        elif NumberOfSplits == 3:
+            _tuples_list = ['training', 'testing', 'validation']
+        else:
+            print("More than three splits is not yet implemented.")
+            print("Using default train/test")
+            _tuples_list = ['training', 'testing']
+        _combined = list(itertools.product(_metrics_list, _tuples_list))
+
+        for key in _combined:
+            ModelPerformance.fromkeys(key, None)
+            return ModelPerformance
+
+    elif Type == "Classification":
+        print("3RD")
+        # Most Common
+        #self.accuracy = None  # (tp+tn)/(tp+fn+fp+tn)
+        #self.precision = None  # PPV or Precision, = tn/(tp+fp)
+        #self.recall = None  # Sensitivity, TPR, Recall, = tp/(tp+fn)
+        #self.specificity = None  # TNR, Specificity, = tn/(tn+fp)
+        #self.f1 = None # F-Score, F-Measure
+
+        # Common
+        #self.balanced_accuracy = None  # Balanced Accuracy
+        #self.AUC = None  # Area Under the Curve of Receiver Operating Characteristic
+        # ROC = TPR vs. FPR
+        #self.AUC_PR = None  # Area Under the Curve of Precision-Recall Curve
+        #self.fpr = None  # FPR, Fallout, = fp/(tn+fp)
+        #self.fnr = None  # FNR, Miss, = fn/(tp+fn)
+        #self.average_precision = None # average precision
+        # Uncommon
+        #self.tp = None  # True Positive
+        #self.fn = None  # False Negative
+        #self.fp = None  # False Positive
+        #self.tn = None  # True Negative
+        #self.rpp = None  # Rate of Positive Predictions
+        # = (tp+fp)/(tp+fn+fp+tn)
+        #self.rnp = None  # Rate of Negative Predictions
+        # = (tn+fn) / (tp+fn+fp+tn)
+        #self.ecost = None # Expected Cost
+        # ecost = (tp*Cost(P|P)+fn*Cost(N|P)+fp* Cost(P|N)+tn*Cost(N|N))/(tp+fn+fp+tn)
+        #self.markedness = None # Markedness
+        #self.informedness = None # Informedness
