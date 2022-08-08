@@ -1,5 +1,5 @@
 import matplotlib
-#matplotlib.use('Qt5Agg')
+matplotlib.use('Qt5Agg')
 from matplotlib import pyplot as plt
 from matplotlib.widgets import Slider
 import numpy as np
@@ -32,14 +32,6 @@ def plotResult_DFOF(Module, Neuron, Limits):
     ax1.set_title("Δf/f0 Result")
     ax1.plot(Module.neuronal_dFoF_results[Neuron, :], color="orange")
     ax1.set_xlim(Limits)
-
-
-import matplotlib
-matplotlib.use('Qt5Agg')
-from matplotlib import pyplot as plt
-from matplotlib.widgets import Slider
-import sys
-import numpy as np
 
 
 def interactivePlot1(RawTraces, SmoothTraces, FrameRate, Frames):

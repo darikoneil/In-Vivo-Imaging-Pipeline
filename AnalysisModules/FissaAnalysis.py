@@ -261,7 +261,7 @@ class FissaModule:
 
     def pruneNonNeuronalROIs(self):
         self.stat = self.stat[self.neuronal_index]
-        self.s2p_rois = self.s2p_rois[self.neuronal_index]
+        self.s2p_rois = [self.s2p_rois[i] for i in self.neuronal_index]
         self.iscell = self.iscell[self.neuronal_index, :]
 
 
