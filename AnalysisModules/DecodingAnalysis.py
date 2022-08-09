@@ -132,6 +132,13 @@ class DecodingModule:
     def makePrediction(self, **kwargs):
         print("3rd")
 
+    def printAssessment(self):
+        print("Printing Assessment of Model Performance:")
+        # Iterate over key/value pairs in dict and print them
+        for key, value in self.ModelPerformance.items():
+            if value is not None:
+                print(key, ' : ', value)
+
     # Here are some useful properties of the neural data that we must access often
 
     @property
@@ -174,43 +181,46 @@ class LogisticRegression(DecodingModule):
     def __init__(self, **kwargs):
         # noinspection PyArgumentList
         super().__init__(**kwargs)
+        print("Instanced Logistic Regression")
         self.internalModel = LogisticRegressionDecoder()
         self.ModelPerformance = PerformanceMetrics("Classification", len(self.data_splits))
 
     def fitModel(self, **kwargs):
+        print("Fitting Logistic Regression...")
         _penalty = kwargs.get('penalty', 'l1')
         _solver = kwargs.get('solver', 'liblinear')
         _max_iter = kwargs.get('max_iter', 100000)
         self.internalModel.fit(self.training_x.T, self.training_y.T, penalty=_penalty,
                                solver=_solver, max_iter=_max_iter)
+        print("Finished")
 
     def assessFit(self, **kwargs):
         _normalize = kwargs.get('normalize', True)
         self.predicted_training_y = self.makePrediction(observed=self.training_x)
-        self.ModelPerformance[('accuracy', 'training')] = self.internalModel.score(self.training_y, self.predicted_training_y)
-        print("Not Yet Implemented")
+        self.ModelPerformance[('accuracy', 'training')] = self.internalModel.model.score(self.training_x.T, self.training_y.T)
+        print("Training Classification Accuracy is " + str(self.ModelPerformance[('accuracy', 'training')]))
 
     def commonAssessment(self, **kwargs):
         _flag_valid = kwargs.get('flag_valid', False)
 
         # Accuracy
         if self.ModelPerformance[('accuracy', 'training')] is None:
-            self.ModelPerformance[('accuracy', 'training')] = self.internalModel.score(self.training_y,
-                                                                                       self.predicted_training_y)
+            self.ModelPerformance[('accuracy', 'training')] = self.internalModel.model.score(self.training_x.T,
+                                                                                             self.training_y.T)
         if self.ModelPerformance[('accuracy', 'testing')] is None:
-            self.ModelPerformance[('accuracy', 'testing')] = self.internalModel.score(self.validation_y,
-                                                                                      self.predicted_testing_y)
+            self.ModelPerformance[('accuracy', 'testing')] = self.internalModel.model.score(self.testing_x.T,
+                                                                                            self.testing_y.T)
         if _flag_valid:
             if self.ModelPerformance[('accuracy', 'validation')] is None:
-                self.ModelPerformance[('accuracy', 'validation')] = self.internalModel.score(self.validation_y,
-                                                                                             self.predicted_validation_y)
+                self.ModelPerformance[('accuracy', 'validation')] = self.internalModel.model.score(self.validation_x.T,
+                                                                                                   self.validation_y.T)
 
         # Precision
         if self.ModelPerformance[('precision', 'training')] is None:
             self.ModelPerformance[('precision', 'training')] = metrics.precision_score(self.training_y,
                                                                                        self.predicted_training_y)
         if self.ModelPerformance[('precision', 'testing')] is None:
-            self.ModelPerformance[('precision', 'testing')] = metrics.precision_score(self.validation_y,
+            self.ModelPerformance[('precision', 'testing')] = metrics.precision_score(self.testing_y,
                                                                                       self.predicted_testing_y)
         if _flag_valid:
             if self.ModelPerformance[('precision', 'validation')] is None:
@@ -222,7 +232,7 @@ class LogisticRegression(DecodingModule):
             self.ModelPerformance[('recall', 'training')] = metrics.recall_score(self.training_y,
                                                                                        self.predicted_training_y)
         if self.ModelPerformance[('recall', 'testing')] is None:
-            self.ModelPerformance[('recall', 'testing')] = metrics.recall_score(self.validation_y,
+            self.ModelPerformance[('recall', 'testing')] = metrics.recall_score(self.testing_y,
                                                                                       self.predicted_testing_y)
         if _flag_valid:
             if self.ModelPerformance[('recall', 'validation')] is None:
@@ -234,7 +244,7 @@ class LogisticRegression(DecodingModule):
             self.ModelPerformance[('f1', 'training')] = metrics.f1_score(self.training_y,
                                                                                        self.predicted_training_y)
         if self.ModelPerformance[('f1', 'testing')] is None:
-            self.ModelPerformance[('f1', 'testing')] = metrics.f1_score(self.validation_y,
+            self.ModelPerformance[('f1', 'testing')] = metrics.f1_score(self.testing_y,
                                                                                       self.predicted_testing_y)
         if _flag_valid:
             if self.ModelPerformance[('f1', 'validation')] is None:
@@ -246,7 +256,7 @@ class LogisticRegression(DecodingModule):
             self.ModelPerformance[('balanced_accuracy', 'training')] = metrics.balanced_accuracy_score(self.training_y,
                                                                                                        self.predicted_training_y)
         if self.ModelPerformance[('balanced_accuracy', 'testing')] is None:
-            self.ModelPerformance[('balanced_accuracy', 'testing')] = metrics.balanced_accuracy_score(self.validation_y,
+            self.ModelPerformance[('balanced_accuracy', 'testing')] = metrics.balanced_accuracy_score(self.testing_y,
                                                                                                       self.predicted_testing_y)
         if _flag_valid:
             if self.ModelPerformance[('balanced_accuracy', 'validation')] is None:
@@ -258,7 +268,7 @@ class LogisticRegression(DecodingModule):
             self.ModelPerformance[('AUC', 'training')] = metrics.roc_auc_score(self.training_y,
                                                                                        self.predicted_training_y)
         if self.ModelPerformance[('AUC', 'testing')] is None:
-            self.ModelPerformance[('AUC', 'testing')] = metrics.roc_auc_score(self.validation_y,
+            self.ModelPerformance[('AUC', 'testing')] = metrics.roc_auc_score(self.testing_y,
                                                                                       self.predicted_testing_y)
         if _flag_valid:
             if self.ModelPerformance[('AUC', 'validation')] is None:
@@ -270,7 +280,7 @@ class LogisticRegression(DecodingModule):
             self.ModelPerformance[('AUC_PR', 'training')] = metrics.average_precision_score(self.training_y,
                                                                                             self.predicted_training_y)
         if self.ModelPerformance[('AUC_PR', 'testing')] is None:
-            self.ModelPerformance[('AUC_PR', 'testing')] = metrics.average_precision_score(self.validation_y,
+            self.ModelPerformance[('AUC_PR', 'testing')] = metrics.average_precision_score(self.testing_y,
                                                                                            self.predicted_testing_y)
         if _flag_valid:
             if self.ModelPerformance[('AUC_PR', 'validation')] is None:
@@ -280,8 +290,21 @@ class LogisticRegression(DecodingModule):
     def fullAssessment(self, **kwargs):
         print("Not Yet Implemented")
 
+    def makePrediction(self, **kwargs):
+        _observed = kwargs.get('observed', None)
+        if _observed is not None:
+            predicted = self.internalModel.predict(_observed.T)
+            return predicted.T
+        else:
+            print("Error: Please Supply Observed Neural Activity to Generate Predicted Labels")
 
-class WienerFilter(DecodingModule):
+    def makeAllPredictions(self):
+        self.predicted_testing_y = self.makePrediction(observed=self.testing_x)
+        if len(self.data_splits) == 3:
+            self.predicted_validation_y = self.makePrediction(observed=self.validation_x)
+
+
+class LinearRegression(DecodingModule):
     # Class for easily managing Wiener Filter Decoding / Linear Regression
     # Note inheritances from generic Decoder Module class
     def __init__(self, **kwargs):
@@ -304,6 +327,7 @@ class WienerFilter(DecodingModule):
     def assessFit(self, **kwargs):
         _multioutput = kwargs.get('multioutput', "uniform_average")
         self.ModelPerformance[('r2', 'training')] = metrics.r2_score(self.training_y, self.predicted_training_y, multioutput=_multioutput)
+        print("Training R2 is " + str(self.ModelPerformance[('r2', 'training')]))
 
     def commonAssessment(self, **kwargs):
         _flag_valid = kwargs.get('flag_valid', False)
@@ -323,7 +347,7 @@ class WienerFilter(DecodingModule):
                 self.ModelPerformance[('r2', 'validation')] = metrics.r2_score(self.validation_y,
                                                                                 self.predicted_validation_y,
                                                                                 _multioutput=_multioutput)
-        #mean_absolute_error
+        # mean_absolute_error
         if self.ModelPerformance[('mean_absolute_error', 'training')] is None:
             self.ModelPerformance[('mean_absolute_error', 'training')] = metrics.mean_absolute_error(self.training_y,
                                                                                                 self.predicted_training_y)
@@ -335,7 +359,7 @@ class WienerFilter(DecodingModule):
                 self.ModelPerformance[('mean_absolute_error', 'validation')] = metrics.mean_absolute_error(self.validation_y,
                                                                                                       self.predicted_validation_y)
 
-        #mean_squared_error
+        # mean_squared_error
         if self.ModelPerformance[('mean_squared_error', 'training')] is None:
             self.ModelPerformance[('mean_squared_error', 'training')] = metrics.mean_squared_error(self.training_y,
                                                                                                     self.predicted_training_y)
@@ -364,7 +388,7 @@ class WienerFilter(DecodingModule):
             self.predicted_validation_y = self.makePrediction(observed=self.validation_x)
 
 
-class WienerCascade(DecodingModule):
+class LinearNonLinearRegression(DecodingModule):
     # Class for easily managing Wiener Filter Decoding
     # The Wiener Filter is imported from the Neural Decoding package
     # from Joshua Glaser while in Kording Lab
@@ -435,7 +459,7 @@ def PerformanceMetrics(Type, NumberOfSplits):
         _combined = list(itertools.product(_metrics_list, _tuples_list))
 
         for key in _combined:
-            ModelPerformance.fromkeys(key, None)
+            ModelPerformance[key] = None
             return ModelPerformance
 
     elif Type == "Classification":
@@ -482,5 +506,5 @@ def PerformanceMetrics(Type, NumberOfSplits):
         _combined = list(itertools.product(_metrics_list, _tuples_list))
 
         for key in _combined:
-            ModelPerformance.fromkeys(key, None)
-            return ModelPerformance
+            ModelPerformance[key] = None
+        return ModelPerformance

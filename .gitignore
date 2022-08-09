@@ -134,3 +134,5 @@ AnalysisModules/DebugScript2.py
 AnalysisModules/DebugScript.py
 DEM2_RET_FeatureList.csv
 AnalysisModules/Scratch.py
+AnalysisModules/DebugScript3.py
+AnalysisModules/__pycache__/NewDecoders.cpython-37.pyc
