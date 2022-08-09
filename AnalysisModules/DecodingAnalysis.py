@@ -460,7 +460,7 @@ def PerformanceMetrics(Type, NumberOfSplits):
 
         for key in _combined:
             ModelPerformance[key] = None
-            return ModelPerformance
+        return ModelPerformance
 
     elif Type == "Classification":
 
