@@ -292,3 +292,69 @@ def anisotropicDiffusion(Trace, **kwargs):
 def calculateFiringRate(SpikeProb, FrameRate):
     firing_rate = SpikeProb*FrameRate
     return firing_rate
+
+
+def generateCovarianceMatrix(NeuralActivity, ActivityMeasure, **kwargs):
+    _num_neurons = kwargs.get('NumNeurons', NeuralActivity.shape[0])
+    _num_frames = kwargs.get('NumFrames', NeuralActivity.shape[1])
+    _bin_length = kwargs.get('BinLength', None)
+
+    if ActivityMeasure == "Firing Rate" and _bin_length is None:
+        covMatrix = np.cov(NeuralActivity)
+        return covMatrix
+
+
+def pruneNaN(NeuralActivity, **kwargs):
+    _feature_data = kwargs.get('FeatureData', None)
+    _label_data = kwargs.get('LabelData', None)
+
+    try:
+        if len(NeuralActivity.shape) != 2:
+            print("Culprit: Neural Activity")
+            raise TypeError
+        prunedNeuralActivity = np.delete(NeuralActivity, np.where(np.isnan(NeuralActivity)), axis=1)
+
+        if _feature_data is not None:
+            if len(_feature_data.shape) > 2:
+                print("Culprit: Feature Data")
+                raise TypeError
+            if _feature_data.shape[-1] != NeuralActivity.shape[-1]:
+                print("Culprit: Feature Data")
+                raise ValueError
+        prunedFeatureData = np.delete(_feature_data, np.where(np.isnan(NeuralActivity)),
+                                      axis=len(_feature_data.shape)-1)
+
+        if _label_data is not None:
+            if len(_label_data.shape) > 2:
+                print("Culprit: Label Data")
+                raise TypeError
+            if _label_data.shape[-1] != NeuralActivity.shape[-1]:
+                print("Culprit: Label Data")
+                raise ValueError
+        prunedLabelData = np.delete(_label_data, np.where(np.isnan(NeuralActivity)),
+                                    axis=len(_label_data.shape)-1)
+
+        if _feature_data is not None and _label_data is not None:
+            return prunedNeuralActivity, prunedFeatureData, prunedLabelData
+
+        elif _feature_data is not None and _label_data is None:
+            return prunedNeuralActivity, prunedFeatureData
+
+        elif _feature_data is None and _label_data is not None:
+            return prunedNeuralActivity, prunedLabelData
+
+        elif _feature_data is None and _label_data is None:
+            return prunedNeuralActivity
+
+    except TypeError:
+        print("Data must be in Matrix Form!")
+    except AttributeError:
+        print("Data must be in a numpy array!")
+    except ValueError:
+        print("The number of Feature or Label samples must match the number of Neural samples!")
+
+
+
+
+
+

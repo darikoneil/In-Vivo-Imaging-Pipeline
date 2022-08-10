@@ -1,0 +1,87 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="DuplicatedCode" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <Languages>
+        <language minSize="141" name="Python" />
+      </Languages>
+    </inspection_tool>
+    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="23">
+            <item index="0" class="java.lang.String" itemvalue="sphinx" />
+            <item index="1" class="java.lang.String" itemvalue="pytest" />
+            <item index="2" class="java.lang.String" itemvalue="sphinx-rtd-theme" />
+            <item index="3" class="java.lang.String" itemvalue="pytest-benchmark" />
+            <item index="4" class="java.lang.String" itemvalue="pytest-timeout" />
+            <item index="5" class="java.lang.String" itemvalue="numba" />
+            <item index="6" class="java.lang.String" itemvalue="pywinpty" />
+            <item index="7" class="java.lang.String" itemvalue="tornado" />
+            <item index="8" class="java.lang.String" itemvalue="threadpoolctl" />
+            <item index="9" class="java.lang.String" itemvalue="pandocfilters" />
+            <item index="10" class="java.lang.String" itemvalue="kiwisolver" />
+            <item index="11" class="java.lang.String" itemvalue="typing-extensions" />
+            <item index="12" class="java.lang.String" itemvalue="llvmlite" />
+            <item index="13" class="java.lang.String" itemvalue="mkl-random" />
+            <item index="14" class="java.lang.String" itemvalue="pyrsistent" />
+            <item index="15" class="java.lang.String" itemvalue="mkl-fft" />
+            <item index="16" class="java.lang.String" itemvalue="jupyterlab-widgets" />
+            <item index="17" class="java.lang.String" itemvalue="colorama" />
+            <item index="18" class="java.lang.String" itemvalue="PyQt5" />
+            <item index="19" class="java.lang.String" itemvalue="argon2-cffi" />
+            <item index="20" class="java.lang.String" itemvalue="entrypoints" />
+            <item index="21" class="java.lang.String" itemvalue="pyparsing" />
+            <item index="22" class="java.lang.String" itemvalue="Pillow" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyPep8Inspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="E501" />
+          <option value="E402" />
+          <option value="E127" />
+          <option value="E261" />
+          <option value="E303" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyPep8NamingInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="N802" />
+          <option value="N806" />
+          <option value="N803" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="BurrowStates.Burrow.state" />
+          <option value="BurrowStates.Burrow.falseTrial" />
+          <option value="BurrowStates.Burrow.returnToSetup" />
+          <option value="BurrowStates.Burrow.graduateReleasing" />
+          <option value="BurrowStates.Burrow.graduateRetracting" />
+          <option value="BurrowStates.Burrow.startRetracting" />
+          <option value="BurrowStates.Burrow.graduatePre" />
+          <option value="BurrowStates.Burrow.graduateITI" />
+          <option value="BurrowStates.Burrow.graduateHabituation" />
+          <option value="BurrowStates.Burrow.startBehavior" />
+          <option value="BurrowStates.Burrow.graduateCooldownRetract" />
+          <option value="AnalysisModules.FissaAnalysis.SeparationModule.save_separated" />
+          <option value="AnalysisModules.FissaAnalysis.SeparationModule.save_prep" />
+          <option value="AnalysisModules.FissaAnalysis.SeparationModule.separation_prep" />
+          <option value="AnalysisModules.FissaAnalysis.SeparationModule.roi_polys" />
+          <option value="AnalysisModules.FissaAnalysis.SeparationModule.raw" />
+          <option value="AnalysisModules.FissaAnalysis.SeparationModule.means" />
+          <option value="AnalysisModules.FissaAnalysis.SeparationModule.separate" />
+          <option value="AnalysisModules.NewDecoders.LogisticRegressionDecoder.score" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

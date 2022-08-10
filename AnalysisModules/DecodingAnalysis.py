@@ -200,8 +200,16 @@ class LogisticRegression(DecodingModule):
         self.ModelPerformance[('accuracy', 'training')] = self.internalModel.model.score(self.training_x.T, self.training_y.T)
         print("Training Classification Accuracy is " + str(self.ModelPerformance[('accuracy', 'training')]))
 
+    # noinspection PyTypeChecker
     def commonAssessment(self, **kwargs):
         _flag_valid = kwargs.get('flag_valid', False)
+
+        # Ensure We have all our predictions already made
+        if self.predicted_training_y is None or self.predicted_testing_y is None:
+            self.makeAllPredictions()
+        if _flag_valid:
+            if self.predicted_validation_y is None:
+                self.makeAllPredictions()
 
         # Accuracy
         if self.ModelPerformance[('accuracy', 'training')] is None:
@@ -244,8 +252,7 @@ class LogisticRegression(DecodingModule):
             self.ModelPerformance[('f1', 'training')] = metrics.f1_score(self.training_y,
                                                                                        self.predicted_training_y)
         if self.ModelPerformance[('f1', 'testing')] is None:
-            self.ModelPerformance[('f1', 'testing')] = metrics.f1_score(self.testing_y,
-                                                                                      self.predicted_testing_y)
+            self.ModelPerformance[('f1', 'testing')] = metrics.f1_score(self.testing_y, self.predicted_testing_y)
         if _flag_valid:
             if self.ModelPerformance[('f1', 'validation')] is None:
                 self.ModelPerformance[('f1', 'validation')] = metrics.f1_score(self.validation_y,
@@ -253,15 +260,16 @@ class LogisticRegression(DecodingModule):
 
         # balanced accuracy
         if self.ModelPerformance[('balanced_accuracy', 'training')] is None:
-            self.ModelPerformance[('balanced_accuracy', 'training')] = metrics.balanced_accuracy_score(self.training_y,
-                                                                                                       self.predicted_training_y)
+            self.ModelPerformance[('balanced_accuracy', 'training')] = \
+                metrics.balanced_accuracy_score(self.training_y, self.predicted_training_y)
         if self.ModelPerformance[('balanced_accuracy', 'testing')] is None:
-            self.ModelPerformance[('balanced_accuracy', 'testing')] = metrics.balanced_accuracy_score(self.testing_y,
-                                                                                                      self.predicted_testing_y)
+            self.ModelPerformance[('balanced_accuracy', 'testing')] = \
+                metrics.balanced_accuracy_score(self.testing_y, self.predicted_testing_y)
+
         if _flag_valid:
             if self.ModelPerformance[('balanced_accuracy', 'validation')] is None:
-                self.ModelPerformance[('balanced_accuracy', 'validation')] = metrics.balanced_accuracy_score(self.validation_y,
-                                                                                                             self.predicted_validation_y)
+                self.ModelPerformance[('balanced_accuracy', 'validation')] = \
+                    metrics.balanced_accuracy_score(self.validation_y, self.predicted_validation_y)
 
         # AUC of ROC
         if self.ModelPerformance[('AUC', 'training')] is None:
@@ -273,7 +281,7 @@ class LogisticRegression(DecodingModule):
         if _flag_valid:
             if self.ModelPerformance[('AUC', 'validation')] is None:
                 self.ModelPerformance[('AUC', 'validation')] = metrics.roc_auc_score(self.validation_y,
-                                                                                    self.predicted_validation_y)
+                                                                                     self.predicted_validation_y)
 
         # AUC of PR
         if self.ModelPerformance[('AUC_PR', 'training')] is None:
@@ -284,8 +292,35 @@ class LogisticRegression(DecodingModule):
                                                                                            self.predicted_testing_y)
         if _flag_valid:
             if self.ModelPerformance[('AUC_PR', 'validation')] is None:
-                self.ModelPerformance[('AUC_PR', 'validation')] = metrics.average_precision_score(self.validation_y,
-                                                                                                  self.predicted_validation_y)
+                self.ModelPerformance[('AUC_PR', 'validation')] = \
+                    metrics.average_precision_score(self.validation_y, self.predicted_validation_y)
+
+        if self.ModelPerformance[('ROC', 'training')] is None:
+            self.ModelPerformance[('ROC', 'training')] = metrics.roc_curve(self.training_y, self.predicted_training_y,
+                                                                           drop_intermediate=False)
+
+        if self.ModelPerformance[('ROC', 'testing')] is None:
+            self.ModelPerformance[('ROC', 'testing')] = metrics.roc_curve(self.testing_y, self.predicted_testing_y,
+                                                                          drop_intermediate=False)
+
+        if _flag_valid:
+            if self.ModelPerformance[('ROC', 'validation')] is None:
+                self.ModelPerformance[('ROC', 'validation')] = metrics.roc_curve(self.validation_y,
+                                                                                 self.predicted_validation_y,
+                                                                                 drop_intermediate=False)
+
+        if self.ModelPerformance[('PR', 'training')] is None:
+            self.ModelPerformance[('PR', 'training')] = metrics.precision_recall_curve(self.training_y,
+                                                                                       self.predicted_training_y)
+
+        if self.ModelPerformance[('PR', 'testing')] is None:
+            self.ModelPerformance[('PR', 'testing')] = metrics.precision_recall_curve(self.testing_y,
+                                                                                      self.predicted_testing_y)
+
+        if _flag_valid:
+            if self.ModelPerformance[('PR', 'validation')] is None:
+                self.ModelPerformance[('PR', 'validation')] = \
+                    metrics.precision_recall_curve(self.validation_y, self.predicted_validation_y)
 
     def fullAssessment(self, **kwargs):
         print("Not Yet Implemented")
@@ -470,11 +505,13 @@ def PerformanceMetrics(Type, NumberOfSplits):
         # self.recall = None  # Sensitivity, TPR, Recall, = tp/(tp+fn)
         # self.f1 = None # F-Score, F-Measure
 
-        _common_metrics_list = ['balanced_accuracy', 'AUC', 'AUC_PR']
+        _common_metrics_list = ['balanced_accuracy', 'AUC', 'AUC_PR', 'ROC', 'PR']
         # self.balanced_accuracy = None  # Balanced Accuracy
         # self.AUC = None  # Area Under the Curve of Receiver Operating Characteristic
-        # ROC = TPR vs. FPR
+        # ROC = TPR vs. FPR Curves
         # self.AUC_PR = None  # Area Under the Curve of Precision-Recall Curve
+        # PR = Precision-Recall Curves
+
 
         #_uncommon_metrics_list = ['specificity', 'fpr', 'fnr', 'tp', 'fn', 'fp', 'tn', 'rpp', 'rnp',
                                   #'ecost', 'markedness', 'informedness']
