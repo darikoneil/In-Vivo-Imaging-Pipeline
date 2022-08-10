@@ -8,6 +8,27 @@ import sys
 from cascade2p.utils import plot_dFF_traces, plot_noise_level_distribution
 import seaborn as sns
 
+# Some of these are wonky, need to go back and touch up
+
+# Above this line == Not Wonky
+
+
+def plotROC(TPR, FPR, **kwargs):
+    _auc = kwargs.get('AUC', None)
+    _ax = kwargs.get('ax', None)
+    _color = kwargs.get('color', "#139fff")
+
+    if _ax is None:
+        fig = plt.figure(figsize=(12, 6))
+        ax1 = fig.add_subplot(111)
+        ax1.plot(TPR, FPR, color=_color, lw=1, alpha=0.95)
+        ax1.set_title("Receiver Operating Characteristic")
+        ax1.set_xlabel("False Positive Rate")
+        ax1.set_ylabel("True Positive Rate")
+        plt.show()
+    else:
+        _ax.plot(TPR, FPR, color=_color, lw=1, alpha=0.95)
+
 
 def plotNoise(Traces, FrameRate):
     # plt.figure(1)

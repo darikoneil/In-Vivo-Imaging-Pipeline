@@ -25,6 +25,10 @@ from sklearn import metrics
 # Metrics Dictionary Constructor
 import itertools
 
+# Visualization
+from matplotlib import pyplot as plt
+from AnalysisModules.StaticPlotting import plotROC
+
 
 class DecodingModule:
     # Generic decoding module super-class with conserved methods, properties,
@@ -139,6 +143,20 @@ class DecodingModule:
             if value is not None:
                 print(key, ' : ', value)
 
+    def plotROCs(self, **kwargs):
+
+        fig = plt.figure(figsize=(12, 6))
+        ax1 = fig.add_subplot(111)
+        ax1.set_title("Receiver Operating Characteristic")
+        ax1.set_xlabel("False Positive Rate")
+        ax1.set_ylabel("True Positive Rate")
+        plotROC(self.ModelPerformance[('ROC', 'training')][0], self.ModelPerformance[('ROC', 'training')][1], ax=ax1)
+        plotROC(self.ModelPerformance[('ROC', 'testing')][0], self.ModelPerformance[('ROC', 'testing')][1], color="#ff4e4b", ax=ax1)
+
+        if ('ROC', 'validation') in self.ModelPerformance:
+            plotROC(self.ModelPerformance['ROC', 'validation'][0], self.ModelPerformance['ROC', 'validation'][1], color="#40cc8b", ax=ax1)
+
+        ax1.legend(['Training', 'Testing'])
     # Here are some useful properties of the neural data that we must access often
 
     @property
@@ -296,31 +314,36 @@ class LogisticRegression(DecodingModule):
                     metrics.average_precision_score(self.validation_y, self.predicted_validation_y)
 
         if self.ModelPerformance[('ROC', 'training')] is None:
-            self.ModelPerformance[('ROC', 'training')] = metrics.roc_curve(self.training_y, self.predicted_training_y,
+            _probas = self.internalModel.model.decision_function(self.training_x.T)
+            self.ModelPerformance[('ROC', 'training')] = metrics.roc_curve(self.training_y, _probas,
                                                                            drop_intermediate=False)
 
         if self.ModelPerformance[('ROC', 'testing')] is None:
-            self.ModelPerformance[('ROC', 'testing')] = metrics.roc_curve(self.testing_y, self.predicted_testing_y,
+            _probas = self.internalModel.model.decision_function(self.testing_x.T)
+            self.ModelPerformance[('ROC', 'testing')] = metrics.roc_curve(self.testing_y, _probas,
                                                                           drop_intermediate=False)
 
         if _flag_valid:
             if self.ModelPerformance[('ROC', 'validation')] is None:
+                _probas = self.internalModel.model.decision_function(self.validation_x.T)
                 self.ModelPerformance[('ROC', 'validation')] = metrics.roc_curve(self.validation_y,
-                                                                                 self.predicted_validation_y,
+                                                                                 _probas,
                                                                                  drop_intermediate=False)
 
         if self.ModelPerformance[('PR', 'training')] is None:
-            self.ModelPerformance[('PR', 'training')] = metrics.precision_recall_curve(self.training_y,
-                                                                                       self.predicted_training_y)
+            _probas = self.internalModel.model.decision_function(self.training_x.T)
+            self.ModelPerformance[('PR', 'training')] = metrics.precision_recall_curve(self.training_y, _probas)
 
         if self.ModelPerformance[('PR', 'testing')] is None:
+            _probas = self.internalModel.model.decision_function(self.testing_x.T)
             self.ModelPerformance[('PR', 'testing')] = metrics.precision_recall_curve(self.testing_y,
-                                                                                      self.predicted_testing_y)
+                                                                                      _probas)
 
         if _flag_valid:
             if self.ModelPerformance[('PR', 'validation')] is None:
+                _probas = self.internalModel.model.decision_function(self.validation_x.T)
                 self.ModelPerformance[('PR', 'validation')] = \
-                    metrics.precision_recall_curve(self.validation_y, self.predicted_validation_y)
+                    metrics.precision_recall_curve(self.validation_y, _probas)
 
     def fullAssessment(self, **kwargs):
         print("Not Yet Implemented")
