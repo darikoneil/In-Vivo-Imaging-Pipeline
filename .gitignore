@@ -136,3 +136,4 @@ DEM2_RET_FeatureList.csv
 AnalysisModules/Scratch.py
 AnalysisModules/DebugScript3.py
 AnalysisModules/__pycache__/NewDecoders.cpython-37.pyc
+AnalysisModules/__pycache__/BurrowBehaviorSpecific.cpython-37.pyc

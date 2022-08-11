@@ -27,7 +27,7 @@ def plotROC(TPR, FPR, **kwargs):
         ax1.set_ylabel("True Positive Rate")
         plt.show()
     else:
-        _ax.plot(TPR, FPR, color=_color, lw=1, alpha=0.95)
+        _ax.plot(TPR, FPR, color=_color, lw=3, alpha=0.95)
 
 
 def plotNoise(Traces, FrameRate):
@@ -174,3 +174,5 @@ def plotFiringRateMatrix(FiringRates, FrameRate, **kwargs):
     ax1.set_yticks([0, int(FiringRates.shape[0])], labels=[0, int(FiringRates.shape[0])])
     ax1.set_title("Firing Rate Map")
     plt.show()
+
+

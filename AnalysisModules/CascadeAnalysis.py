@@ -175,6 +175,4 @@ class ProcessedInferences:
         self.firing_rates = None
         self.burst_events = None
         self.high_activity_frames = None
-        self.firing_rates_trial_org = None
-        self.mean_firing_rates_by_trial = None
         self.utilized_model_name = None

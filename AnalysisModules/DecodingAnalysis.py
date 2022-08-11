@@ -157,6 +157,7 @@ class DecodingModule:
             plotROC(self.ModelPerformance['ROC', 'validation'][0], self.ModelPerformance['ROC', 'validation'][1], color="#40cc8b", ax=ax1)
 
         ax1.legend(['Training', 'Testing'])
+        plt.show()
     # Here are some useful properties of the neural data that we must access often
 
     @property

@@ -4,7 +4,8 @@ from tqdm.auto import tqdm
 from fissa.deltaf import findBaselineF0
 from obspy.signal.detrend import polynomial
 import itertools
-
+import sklearn.preprocessing
+import scipy.ndimage
 
 def calculate_dFoF(Traces, FrameRate, **kwargs):
     # /// Parse Inputs///
@@ -354,6 +355,11 @@ def pruneNaN(NeuralActivity, **kwargs):
         print("The number of Feature or Label samples must match the number of Neural samples!")
 
 
+def normalizeSmoothFiringRates(FiringRates, Sigma):
+    smoothedFiringRates = scipy.ndimage.gaussian_filter1d(FiringRates, Sigma, axis=1)
+    #normFiringRates = sklearn.preprocessing.minmax_scale(smoothedFiringRates, axis=1, copy=True)
+    normFiringRates = smoothedFiringRates/np.max(smoothedFiringRates, axis=0)
+    return normFiringRates
 
 
 
