@@ -7,6 +7,7 @@ import itertools
 import sklearn.preprocessing
 import scipy.ndimage
 
+
 def calculate_dFoF(Traces, FrameRate, **kwargs):
     # /// Parse Inputs///
     _raw = kwargs.get('raw', None)

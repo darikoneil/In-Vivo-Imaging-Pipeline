@@ -12,6 +12,19 @@ class Retrieval(BehavioralStage):
         return
 
 
+class Encoding(BehavioralStage):
+    def __init__(self, Meta):
+        super().__init__(Meta)
+        self.stage_directory = self.mouse_directory + "\\Encoding"
+        return
+
+
+class PreExposure(BehavioralStage):
+    def __init__(self, Meta):
+        super().__init__(Meta)
+        self.stage_directory = self.mouse_directory + "\\PreExposure"
+        return
+
 
 def identifyTrialValence(csIndexFile):
     _csIndex = np.genfromtxt(csIndexFile, int, delimiter=",")
