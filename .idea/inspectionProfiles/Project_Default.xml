@@ -80,6 +80,8 @@
           <option value="AnalysisModules.FissaAnalysis.SeparationModule.means" />
           <option value="AnalysisModules.FissaAnalysis.SeparationModule.separate" />
           <option value="AnalysisModules.NewDecoders.LogisticRegressionDecoder.score" />
+          <option value="AnalysisModules.ExperimentHierarchy.ExperimentData.mouse_id" />
+          <option value="AnalysisModules.ExperimentHierarchy.ExperimentData.directory" />
         </list>
       </option>
     </inspection_tool>

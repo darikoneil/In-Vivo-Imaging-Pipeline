@@ -137,3 +137,5 @@ AnalysisModules/Scratch.py
 AnalysisModules/DebugScript3.py
 AnalysisModules/__pycache__/NewDecoders.cpython-37.pyc
 AnalysisModules/__pycache__/BurrowBehaviorSpecific.cpython-37.pyc
+AnalysisModules/__pycache__/BurrowFearConditioning.cpython-37.pyc
+AnalysisModules/__pycache__/ExperimentHierarchy.cpython-37.pyc

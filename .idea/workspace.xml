@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/AnalysisModules/BurrowBehaviorSpecific.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AnalysisModules/DebugExperiment.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/CascadeAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/CascadeAnalysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/DecodingAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/DecodingAnalysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/StaticPlotting.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/StaticPlotting.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/BurrowBehaviorSpecific.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/StaticProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/StaticProcessing.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -26,6 +26,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -60,6 +68,8 @@
       <workItem from="1660148412602" duration="6731000" />
       <workItem from="1660168658571" duration="3827000" />
       <workItem from="1660222957871" duration="20171000" />
+      <workItem from="1660256031717" duration="2380000" />
+      <workItem from="1660308105846" duration="5662000" />
     </task>
     <servers />
   </component>

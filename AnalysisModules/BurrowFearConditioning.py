@@ -1,35 +1,14 @@
 import numpy as np
-
+from AnalysisModules.ExperimentHierarchy import BehavioralStage
 # Functions specific to burrow behaviors
 
 # Trace Fear Burrow Behavior
 
 
-
-class ExperimentData:
-    def __init__(self):
-        return
-
-    def add_stage(self, Type):
-        if Type == 'PreExposure':
-            print("PreExposure")
-        elif Type == "Encoding":
-            print("Encoding")
-        elif Type == "Retrieval":
-            # noinspection PyAttributeOutsideInit
-            self.Retrieval = Retrieval()
-
-
-class BehavioralStage:
-    def __init__(self):
-        self.plus_trials = None
-        self.minus_trials = None
-        self.num_trials = None
-
-
 class Retrieval(BehavioralStage):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, Meta):
+        super().__init__(Meta)
+        self.stage_directory = self.mouse_directory + "\\Retrieval"
         return
 
 
