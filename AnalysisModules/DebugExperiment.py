@@ -61,8 +61,47 @@ Data.Retrieval.Cascade.saveSpikeInference(Data.Retrieval.Fissa.output_folder)
 Data.Retrieval.Cascade.exportSpikeProb(Data.Retrieval.Fissa.output_folder)
 Data.Retrieval.Cascade.exportSpikeInference(Data.Retrieval.Fissa.output_folder)
 
+
+
 # Log Reg
-Data.Retrieval.LogReg = LogisticRegression(NeuralData=Data.Retrieval.Cascade.ProcessedInferences.firing_rates)
+Data.Retrieval.LogReg = LogisticRegression(NeuralData=Data.Retrieval.Cascade.ProcessedInferences.firing_rates,
+                                           FeatureDataFile=
+                                           "H:\\DEM_Excitatory_Study\\DEM3\\Retrieval\\Imaging\\10Hz\\FeatureIndex.csv")
+
+# Let's prep for an informed segmentation of the data
+# from AnalysisModules.BurrowFearConditioning import reorganizeData, identifyTrialValence
+
+# Data.Retrieval.NeuralActivity_TrialOrg, Data.Retrieval.FeatureIndex = reorganizeData(Data.Retrieval.LogReg.neural_data,
+                                                                                     # Data.Retrieval.LogReg.feature_data,
+                                                                                     # Data.Retrieval.Cascade.frame_rate,
+                                                                                     # ResponseLength=15)
+
+# Data.Retrieval.plus_trials, Data.Retrieval.minus_trials = identifyTrialValence("H:\\DEM_Excitatory_Study\\DEM3\\Retrieval\\Behavior\\BehavioralExports\\RETRIEVAL_M4618_Second_RoundcsIndex.csv")
+
+
+# Data.Retrieval.LogReg.label_data = Data.Retrieval.LogReg.feature_data[2, :].copy()
+
+# Remove NaN Frames from Spike Inference
+Data.Retrieval.LogReg.neural_data, Data.Retrieval.LogReg.feature_data, Data.Retrieval.LogReg.label_data = \
+    pruneNaN(Data.Retrieval.LogReg.neural_data, FeatureData=Data.Retrieval.LogReg.feature_data,
+             LabelData=Data.Retrieval.LogReg.label_data)
+
+# Split
+Data.Retrieval.LogReg.splitData()
+
+# Fit
+Data.Retrieval.LogReg.fitModel(penalty='l1', solver='liblinear', max_iter=100000)
+
+# Assess on Training
+Data.Retrieval.LogReg.assessFit()
+
+# Make Predictions on Withheld Data
+Data.Retrieval.LogReg.makeAllPredictions()
+
+# Extended Assessment
+Data.Retrieval.LogReg.commonAssessment()
+Data.Retrieval.LogReg.printAssessment()
+Data.Retrieval.LogReg.plotROCs()
 
 
 
