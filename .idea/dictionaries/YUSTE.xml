@@ -4,6 +4,7 @@
       <w>covariate</w>
       <w>multioutput</w>
       <w>probas</w>
+      <w>shuf</w>
     </words>
   </dictionary>
 </component>

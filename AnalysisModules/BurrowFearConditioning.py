@@ -9,6 +9,7 @@ class Retrieval(BehavioralStage):
     def __init__(self, Meta):
         super().__init__(Meta)
         self.stage_directory = self.mouse_directory + "\\Retrieval"
+        self.setFolders()
         return
 
 
@@ -16,6 +17,7 @@ class Encoding(BehavioralStage):
     def __init__(self, Meta):
         super().__init__(Meta)
         self.stage_directory = self.mouse_directory + "\\Encoding"
+        self.setFolders()
         return
 
 
@@ -23,6 +25,7 @@ class PreExposure(BehavioralStage):
     def __init__(self, Meta):
         super().__init__(Meta)
         self.stage_directory = self.mouse_directory + "\\PreExposure"
+        self.setFolders()
         return
 
 
@@ -81,6 +84,7 @@ def reorganizeData(NeuralActivity, TrialFeatures, ImFreq, **kwargs):
     _ucs_time = int(round(_ucs_time))
     _response_time = int(round(_response_time))
 
+    _num_features = TrialFeatures.shape[0]
     _trial_indicator = np.sum(TrialFeatures[4:6, :], axis=0)
     _trial_indicator[_trial_indicator > 1] = 1
     _trial_frames = np.where(_trial_indicator == 1)[0]
@@ -95,11 +99,13 @@ def reorganizeData(NeuralActivity, TrialFeatures, ImFreq, **kwargs):
     _total_frames_per_trial = _before_trial_start_frames + _trial_length + _after_trial_end_frames
 
     NeuralActivity_TrialOrg = np.full((_num_trials, _num_neurons, _total_frames_per_trial), 0, dtype=np.float64)
+    FeatureData_TrialOrg = np.full((_num_trials, _num_features, _total_frames_per_trial), 0, dtype=np.float64)
 
     for _trial in range(_num_trials):
         _start_idx = _trial_frames[_start_trial_idx[_trial]] - _before_trial_start_frames
         _end_idx = _trial_frames[_end_trial_idx[_trial]] + _after_trial_end_frames+1 # one to handle indexing
         NeuralActivity_TrialOrg[_trial, :, :] = NeuralActivity[:, _start_idx:_end_idx]
+        FeatureData_TrialOrg[_trial, :, :] = TrialFeatures[:, _start_idx:_end_idx]
 
     FeatureIndex = dict()
     FeatureIndex['ITI_PRE'] = (0, _iti_pre_inc)
@@ -116,10 +122,4 @@ def reorganizeData(NeuralActivity, TrialFeatures, ImFreq, **kwargs):
     FeatureIndex['UCS'] = (FeatureIndex['TRACE'][1], FeatureIndex['TRACE'][1]+_ucs_time)
     # NOTE: DOUBLE CHECK UCS TIME
 
-    return NeuralActivity_TrialOrg, FeatureIndex
-
-
-
-
-
-
+    return NeuralActivity_TrialOrg, FeatureIndex, FeatureData_TrialOrg

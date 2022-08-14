@@ -361,3 +361,9 @@ def normalizeSmoothFiringRates(FiringRates, Sigma):
     #normFiringRates = sklearn.preprocessing.minmax_scale(smoothedFiringRates, axis=1, copy=True)
     normFiringRates = smoothedFiringRates/np.max(smoothedFiringRates, axis=0)
     return normFiringRates
+
+
+def generateSpikeMatrix(SpikeTimes, NumFrames):
+    print("Not Yet Implemented")
+    SpikeMatrix = []
+    return SpikeMatrix

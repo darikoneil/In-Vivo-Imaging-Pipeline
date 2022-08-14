@@ -1,5 +1,7 @@
 import os
 from datetime import date, datetime
+import pickle as pkl
+import numpy as np
 
 
 
@@ -31,6 +33,21 @@ class ExperimentData:
     def recordMod(self):
         self.modifications.append((self.getDate(), self.getTime()))
 
+    def saveHierarchy(self):
+        print("Saving Experimental Hierarchy..")
+        _output_file = self.directory + "//" + "ExperimentalHierarchy"
+        _output_pickle = open(_output_file, 'wb')
+
+        # iterate through meta
+        _metas = [self.directory, self.mouse_id, self.study, self.study_mouse, self.instance_date, self.modifications]
+        for _meta in _metas:
+            pkl.dump(_meta, _output_pickle)
+        _output_pickle.close()
+        print("Finished.")
+
+    def loadHierarchy(self):
+        return
+
 
 class BehavioralStage:
     def __init__(self, Meta):
@@ -40,11 +57,18 @@ class BehavioralStage:
         self.study_mouse = Meta[3]
         self.instance_date = ExperimentData.getDate()
         self.modifications = [(ExperimentData.getDate(), ExperimentData.getTime())]
+        self.stage_directory = None
+        self.computation_output_folder = None
+        self.data_input_folder = None
+        self.index_file = None
+        self.features_file = None
 
     def recordMod(self):
         self.modifications.append((ExperimentData.getDate(), ExperimentData.getTime()))
 
-
+    def setFolders(self):
+        self.computation_output_folder = self.stage_directory + "\\Computation"
+        self.data_input_folder = self.stage_directory + "\\Imaging"
 
 
 

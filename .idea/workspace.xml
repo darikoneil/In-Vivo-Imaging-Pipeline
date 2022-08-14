@@ -5,8 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/AnalysisModules/AnalysisNotebook.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AnalysisModules/DebugExperiment_Load.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/DebugExperiment.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/DebugExperiment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/StaticProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/StaticProcessing.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,11 +52,16 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/AnalysisModules" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.DirectoryMappings" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\AnalysisModules" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="project-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -66,6 +76,8 @@
       <workItem from="1660222957871" duration="20171000" />
       <workItem from="1660256031717" duration="2380000" />
       <workItem from="1660308105846" duration="14383000" />
+      <workItem from="1660413489315" duration="2411000" />
+      <workItem from="1660495581955" duration="6645000" />
     </task>
     <servers />
   </component>
