@@ -144,7 +144,8 @@ class DecodingModule:
         # Iterate over key/value pairs in dict and print them
         for key, value in self.ModelPerformance.items():
             if value is not None:
-                print(key, ' : ', value)
+                if key[0] is not "ROC" and key[0] is not "PR":
+                    print(key, ' : ', value)
 
     def plotROCs(self, **kwargs):
 
@@ -156,12 +157,23 @@ class DecodingModule:
         plotROC(self.ModelPerformance[('ROC', 'training')][0], self.ModelPerformance[('ROC', 'training')][1], ax=ax1)
         plotROC(self.ModelPerformance[('ROC', 'testing')][0], self.ModelPerformance[('ROC', 'testing')][1], color="#ff4e4b", ax=ax1)
 
+        ax1.plot([0, 1], [0, 1], color="black", lw=3, ls='--', alpha=0.95)
+        ax1.legend(['Training', 'Testing', 'No-Skill'])
+
         if ('ROC', 'validation') in self.ModelPerformance:
             plotROC(self.ModelPerformance['ROC', 'validation'][0], self.ModelPerformance['ROC', 'validation'][1], color="#40cc8b", ax=ax1)
 
-        ax1.legend(['Training', 'Testing'])
+
         plt.show()
     # Here are some useful properties of the neural data that we must access often
+
+    def saveModel(self, OutputFolder):
+        print("Saving Model...")
+        _output_file = OutputFolder + "//" + "GenericModel"
+        _output_pickle = open(_output_file, 'wb')
+        pkl.dump(self, _output_pickle)
+        _output_pickle.close()
+        print("Finished.")
 
     @property
     def neural_data_organization(self):

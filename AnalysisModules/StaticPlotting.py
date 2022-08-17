@@ -1,5 +1,7 @@
 
 import matplotlib
+import scipy.ndimage
+
 matplotlib.use('Qt5Agg')
 from matplotlib import pyplot as plt
 from matplotlib.widgets import Slider
@@ -25,9 +27,16 @@ def plotROC(TPR, FPR, **kwargs):
         ax1.set_title("Receiver Operating Characteristic")
         ax1.set_xlabel("False Positive Rate")
         ax1.set_ylabel("True Positive Rate")
+        ax1.set_xlim([-0.01, 1.01])
+        ax1.set_ylim([-0.01, 1.01])
+
+        # Baseline
+        ax1.plot([0, 1], [0, 1], color="black", lw=1, alpha=0.95, ls="--")
         plt.show()
     else:
         _ax.plot(TPR, FPR, color=_color, lw=3, alpha=0.95)
+        _ax.set_xlim([-0.01, 1.01])
+        _ax.set_ylim([-0.01, 1.01])
 
 
 def plotNoise(Traces, FrameRate):
@@ -175,4 +184,20 @@ def plotFiringRateMatrix(FiringRates, FrameRate, **kwargs):
     ax1.set_title("Firing Rate Map")
     plt.show()
 
+
+
+def stinky(ok):
+    fig = plt.figure(figsize=(12, 6))
+    ax1 = fig.add_subplot(111)
+    smoothedFiringRates = scipy.ndimage.gaussian_filter1d(FiringRates.copy(), 10)
+    normed_smoothed_firingrates = np.zeros_like(smoothedFiringRates.copy())
+    for i in range(978):
+        normed_smoothed_firingrates[i, :] = smoothedFiringRates[i, :]/np.nanmax(smoothedFiringRates[i, :])
+    fff = sns.heatmap(normed_smoothed_firingrates, ax=ax1, cmap="Spectral_r")
+    ax1.set_xticks((range(int(0), int(35000), int(5000))), labels=(range(int(0), int(35000/10), int(5000/10))))
+    ax1.set_yticks([0, 978], labels=[0, 978])
+    ax1.set_title("Firing Rate Map")
+    plt.show()
+    ax1.set_xlabel("Time (s)")
+    ax1.set_ylabel("Neuron (#)")
 

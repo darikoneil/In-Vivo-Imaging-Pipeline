@@ -176,3 +176,4 @@ class ProcessedInferences:
         self.burst_events = None
         self.high_activity_frames = None
         self.utilized_model_name = None
+        self.spike_matrix = None

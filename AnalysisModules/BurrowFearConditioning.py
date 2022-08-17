@@ -123,3 +123,15 @@ def reorganizeData(NeuralActivity, TrialFeatures, ImFreq, **kwargs):
     # NOTE: DOUBLE CHECK UCS TIME
 
     return NeuralActivity_TrialOrg, FeatureIndex, FeatureData_TrialOrg
+
+
+def shuffleTrials(NeuralActivityInTrialForm, **kwargs):
+    print("Not Yet")
+
+    _num_trials = 5
+    _shufIdx = np.arange(5)
+    np.random.shuffle(_shufIdx)
+    shuffledPlus = LearnedPlusActivity[_shufIdx, :, :]
+    shuffledMinus = LearnedMinusActivity[_shufIdx, :, :]
+
+    return

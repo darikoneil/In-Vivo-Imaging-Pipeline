@@ -2,8 +2,17 @@
   <dictionary name="YUSTE">
     <words>
       <w>covariate</w>
+      <w>darkgrid</w>
+      <w>edgecolor</w>
+      <w>edgecolors</w>
+      <w>histplot</w>
+      <w>lbfgs</w>
+      <w>linewidth</w>
+      <w>linewidths</w>
+      <w>logscale</w>
       <w>multioutput</w>
       <w>probas</w>
+      <w>scatterplot</w>
       <w>shuf</w>
     </words>
   </dictionary>
