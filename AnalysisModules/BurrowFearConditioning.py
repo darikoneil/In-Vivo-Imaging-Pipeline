@@ -1,178 +1,206 @@
 import numpy as np
+import pathlib
 from AnalysisModules.ExperimentHierarchy import BehavioralStage
 # Functions specific to burrow behaviors
 
 # Trace Fear Burrow Behavior
 
 
-class Retrieval(BehavioralStage):
-    def __init__(self, Meta):
+class FearConditioning(BehavioralStage):
+    def __init__(self, Meta, Stage):
         super().__init__(Meta)
-        self.stage_directory = self.mouse_directory + "\\Retrieval"
+        self.stage_directory = self.mouse_directory + "\\" + Stage
         self.setFolders()
         return
 
+    @classmethod
+    def identifyTrialValence(cls, csIndexFile):
+        _csIndex = np.genfromtxt(csIndexFile, int, delimiter=",")
+        PlusTrials = np.where(_csIndex == 0)
+        MinusTrials = np.where(_csIndex == 1)
+        return PlusTrials[0], MinusTrials[0]
 
-class Encoding(BehavioralStage):
-    def __init__(self, Meta):
-        super().__init__(Meta)
-        self.stage_directory = self.mouse_directory + "\\Encoding"
-        self.setFolders()
-        return
+    @classmethod
+    def reorganizeData(cls, NeuralActivity, TrialFeatures, ImFreq, **kwargs):
+        _iti_time = kwargs.get('ITILength', 90)
+        _retract_time = kwargs.get('RetractLength', 5)
+        _release_time = kwargs.get('ReleaseLength', 5)
+        _iti_pre_inc = kwargs.get('ITIIncludedBeforeTrial', 30)
+        _iti_post_inc = kwargs.get('ITIIncludedAfterTrial', 30)
+        _pre_time = kwargs.get('PreLength', 15)
+        _cs_time = kwargs.get('CSLength', 15)
+        _trace_time = kwargs.get('TraceLength', 10)
+        _ucs_time = kwargs.get('UCSLength', 5.5)
+        _response_time = kwargs.get('ResponseLength', 10)
 
+        try:
+            if len(NeuralActivity.shape) > 2:
+                raise TypeError
+            _num_neurons, _num_frames = NeuralActivity.shape
+            if _num_neurons > _num_frames:
+                print("Data contains more neurons than frames. Check to ensure your data is in the form neurons x frames.")
+        except TypeError:
+            print("Neural activity and trial features must be in matrix form")
+            return
+        except AttributeError:
+            print("Data must be numpy array")
+            return
 
-class PreExposure(BehavioralStage):
-    def __init__(self, Meta):
-        super().__init__(Meta)
-        self.stage_directory = self.mouse_directory + "\\PreExposure"
-        self.setFolders()
-        return
+        _iti_time *= ImFreq
+        _retract_time *= ImFreq
+        _release_time *= ImFreq
+        _iti_pre_inc *= ImFreq
+        _iti_post_inc *= ImFreq
+        _pre_time *= ImFreq
+        _cs_time *= ImFreq
+        _trace_time *= ImFreq
+        _ucs_time *= ImFreq
+        _response_time *= ImFreq
 
+        # Round to Integers
+        _iti_time = int(round(_iti_time))
+        _retract_time = int(round(_retract_time))
+        _release_time = int(round(_release_time))
+        _iti_pre_inc = int(round(_iti_pre_inc))
+        _iti_post_inc = int(round(_iti_post_inc))
+        _pre_time = int(round(_pre_time))
+        _cs_time = int(round(_cs_time))
+        _trace_time = int(round(_trace_time))
+        _ucs_time = int(round(_ucs_time))
+        _response_time = int(round(_response_time))
 
-def identifyTrialValence(csIndexFile):
-    _csIndex = np.genfromtxt(csIndexFile, int, delimiter=",")
-    PlusTrials = np.where(_csIndex == 0)
-    MinusTrials = np.where(_csIndex == 1)
-    return PlusTrials, MinusTrials
+        _num_features = TrialFeatures.shape[0]
+        _trial_indicator = np.sum(TrialFeatures[4:6, :], axis=0)
+        _trial_indicator[_trial_indicator > 1] = 1
+        _trial_frames = np.where(_trial_indicator == 1)[0]
+        _diff_trial_frames = np.diff(_trial_frames)
+        _end_trial_idx = np.append(np.where(_diff_trial_frames > 1)[0], _trial_frames.shape[0]-1)
+        _start_trial_idx = np.append(np.array([0], dtype=np.int64), _end_trial_idx[0:-1]+1)
 
+        _num_trials = len(_start_trial_idx)
+        _trial_length = _end_trial_idx[0]+1
+        _before_trial_start_frames = _pre_time + _release_time + _iti_pre_inc
+        _after_trial_end_frames = _retract_time + _iti_post_inc
+        _total_frames_per_trial = _before_trial_start_frames + _trial_length + _after_trial_end_frames
 
-def reorganizeData(NeuralActivity, TrialFeatures, ImFreq, **kwargs):
-    _iti_time = kwargs.get('ITILength', 90)
-    _retract_time = kwargs.get('RetractLength', 5)
-    _release_time = kwargs.get('ReleaseLength', 5)
-    _iti_pre_inc = kwargs.get('ITIIncludedBeforeTrial', 30)
-    _iti_post_inc = kwargs.get('ITIIncludedAfterTrial', 30)
-    _pre_time = kwargs.get('PreLength', 15)
-    _cs_time = kwargs.get('CSLength', 15)
-    _trace_time = kwargs.get('TraceLength', 10)
-    _ucs_time = kwargs.get('UCSLength', 5.5)
-    _response_time = kwargs.get('ResponseLength', 10)
+        NeuralActivity_TrialOrg = np.full((_num_trials, _num_neurons, _total_frames_per_trial), 0, dtype=np.float64)
+        FeatureData_TrialOrg = np.full((_num_trials, _num_features, _total_frames_per_trial), 0, dtype=np.float64)
 
-    try:
-        if len(NeuralActivity.shape) > 2:
-            raise TypeError
-        _num_neurons, _num_frames = NeuralActivity.shape
-        if _num_neurons > _num_frames:
-            print("Data contains more neurons than frames. Check to ensure your data is in the form neurons x frames.")
-    except TypeError:
-        print("Neural activity and trial features must be in matrix form")
-        return
-    except AttributeError:
-        print("Data must be numpy array")
-        return
+        for _trial in range(_num_trials):
+            _start_idx = _trial_frames[_start_trial_idx[_trial]] - _before_trial_start_frames
+            _end_idx = _trial_frames[_end_trial_idx[_trial]] + _after_trial_end_frames+1 # one to handle indexing
+            NeuralActivity_TrialOrg[_trial, :, :] = NeuralActivity[:, _start_idx:_end_idx]
+            FeatureData_TrialOrg[_trial, :, :] = TrialFeatures[:, _start_idx:_end_idx]
 
-    _iti_time *= ImFreq
-    _retract_time *= ImFreq
-    _release_time *= ImFreq
-    _iti_pre_inc *= ImFreq
-    _iti_post_inc *= ImFreq
-    _pre_time *= ImFreq
-    _cs_time *= ImFreq
-    _trace_time *= ImFreq
-    _ucs_time *= ImFreq
-    _response_time *= ImFreq
+        FeatureIndex = dict()
+        FeatureIndex['ITI_PRE'] = (0, _iti_pre_inc)
+        FeatureIndex['RELEASE'] = (FeatureIndex['ITI_PRE'][1], FeatureIndex['ITI_PRE'][1]+_release_time)
+        FeatureIndex['PRE'] = (FeatureIndex['RELEASE'][1], FeatureIndex['RELEASE'][1]+_pre_time)
+        FeatureIndex['TRIAL'] = (FeatureIndex['PRE'][1], FeatureIndex['PRE'][1]+_trial_length)
+        FeatureIndex['RETRACT'] = (FeatureIndex['TRIAL'][1], FeatureIndex['TRIAL'][1]+_retract_time)
+        FeatureIndex['ITI_POST'] = (FeatureIndex['RETRACT'][1], FeatureIndex['RETRACT'][1]+_iti_post_inc)
 
-    # Round to Integers
-    _iti_time = int(round(_iti_time))
-    _retract_time = int(round(_retract_time))
-    _release_time = int(round(_release_time))
-    _iti_pre_inc = int(round(_iti_pre_inc))
-    _iti_post_inc = int(round(_iti_post_inc))
-    _pre_time = int(round(_pre_time))
-    _cs_time = int(round(_cs_time))
-    _trace_time = int(round(_trace_time))
-    _ucs_time = int(round(_ucs_time))
-    _response_time = int(round(_response_time))
+        # Sub-Trial Index
+        FeatureIndex['CS'] = (FeatureIndex['PRE'][1], FeatureIndex['PRE'][1]+_cs_time)
+        FeatureIndex['TRACE'] = (FeatureIndex['CS'][1], FeatureIndex['CS'][1]+_trace_time)
+        FeatureIndex['RESPONSE'] = (FeatureIndex['TRACE'][1], FeatureIndex['TRACE'][1]+_response_time)
+        FeatureIndex['UCS'] = (FeatureIndex['TRACE'][1], FeatureIndex['TRACE'][1]+_ucs_time)
+        # NOTE: DOUBLE CHECK UCS TIME
 
-    _num_features = TrialFeatures.shape[0]
-    _trial_indicator = np.sum(TrialFeatures[4:6, :], axis=0)
-    _trial_indicator[_trial_indicator > 1] = 1
-    _trial_frames = np.where(_trial_indicator == 1)[0]
-    _diff_trial_frames = np.diff(_trial_frames)
-    _end_trial_idx = np.append(np.where(_diff_trial_frames > 1)[0], _trial_frames.shape[0]-1)
-    _start_trial_idx = np.append(np.array([0], dtype=np.int64), _end_trial_idx[0:-1]+1)
+        return NeuralActivity_TrialOrg, FeatureIndex, FeatureData_TrialOrg
 
-    _num_trials = len(_start_trial_idx)
-    _trial_length = _end_trial_idx[0]+1
-    _before_trial_start_frames = _pre_time + _release_time + _iti_pre_inc
-    _after_trial_end_frames = _retract_time + _iti_post_inc
-    _total_frames_per_trial = _before_trial_start_frames + _trial_length + _after_trial_end_frames
+    @classmethod
+    def shuffleTrials(cls, NeuralActivityInTrialForm, **kwargs):
+        _features = kwargs.get('FeatureData', None)
+        _trial_subset = kwargs.get('TrialSubset', None)
+        try:
+            if len(NeuralActivityInTrialForm.shape) != 3:
+                raise ValueError
+            if _features is not None:
+                if len(NeuralActivityInTrialForm.shape) != len(_features.shape):
+                    raise AssertionError
+        except ValueError:
+            print("Neural Activity must be in trial form")
+            return
+        except AssertionError:
+            print("Neural and Feature Data must be in the same shape")
+            return
 
-    NeuralActivity_TrialOrg = np.full((_num_trials, _num_neurons, _total_frames_per_trial), 0, dtype=np.float64)
-    FeatureData_TrialOrg = np.full((_num_trials, _num_features, _total_frames_per_trial), 0, dtype=np.float64)
+        if _trial_subset is not None:
+            _shuffle_index = _trial_subset.copy()
+            np.random.shuffle(_shuffle_index)
+        else:
+            _shuffle_index = np.arange(NeuralActivityInTrialForm.shape[0])
+            np.random.shuffle(_shuffle_index)
 
-    for _trial in range(_num_trials):
-        _start_idx = _trial_frames[_start_trial_idx[_trial]] - _before_trial_start_frames
-        _end_idx = _trial_frames[_end_trial_idx[_trial]] + _after_trial_end_frames+1 # one to handle indexing
-        NeuralActivity_TrialOrg[_trial, :, :] = NeuralActivity[:, _start_idx:_end_idx]
-        FeatureData_TrialOrg[_trial, :, :] = TrialFeatures[:, _start_idx:_end_idx]
-
-    FeatureIndex = dict()
-    FeatureIndex['ITI_PRE'] = (0, _iti_pre_inc)
-    FeatureIndex['RELEASE'] = (FeatureIndex['ITI_PRE'][1], FeatureIndex['ITI_PRE'][1]+_release_time)
-    FeatureIndex['PRE'] = (FeatureIndex['RELEASE'][1], FeatureIndex['RELEASE'][1]+_pre_time)
-    FeatureIndex['TRIAL'] = (FeatureIndex['PRE'][1], FeatureIndex['PRE'][1]+_trial_length)
-    FeatureIndex['RETRACT'] = (FeatureIndex['TRIAL'][1], FeatureIndex['TRIAL'][1]+_retract_time)
-    FeatureIndex['ITI_POST'] = (FeatureIndex['RETRACT'][1], FeatureIndex['RETRACT'][1]+_iti_post_inc)
-
-    # Sub-Trial Index
-    FeatureIndex['CS'] = (FeatureIndex['PRE'][1], FeatureIndex['PRE'][1]+_cs_time)
-    FeatureIndex['TRACE'] = (FeatureIndex['CS'][1], FeatureIndex['CS'][1]+_trace_time)
-    FeatureIndex['RESPONSE'] = (FeatureIndex['TRACE'][1], FeatureIndex['TRACE'][1]+_response_time)
-    FeatureIndex['UCS'] = (FeatureIndex['TRACE'][1], FeatureIndex['TRACE'][1]+_ucs_time)
-    # NOTE: DOUBLE CHECK UCS TIME
-
-    return NeuralActivity_TrialOrg, FeatureIndex, FeatureData_TrialOrg
-
-
-def shuffleTrials(NeuralActivityInTrialForm, **kwargs):
-    print("Not Yet")
-    _features = kwargs.get('FeatureData', None)
-    _trial_subset = kwargs.get('TrialSubset', None)
-    try:
-        if len(NeuralActivityInTrialForm.shape) != 3:
-            raise ValueError
         if _features is not None:
-            if len(NeuralActivityInTrialForm.shape) != len(_features.shape):
-                raise AssertionError
-    except ValueError:
-        print("Neural Activity must be in trial form")
-        return
-    except AssertionError:
-        print("Neural and Feature Data must be in the same shape")
-        return
+            shuffled_features = _features[_shuffle_index, :, :]
+            shuffled_neural_data = NeuralActivityInTrialForm[_shuffle_index, :, :]
+            return shuffled_neural_data, shuffled_features
+        else:
+            shuffled_neural_data = NeuralActivityInTrialForm[_shuffle_index, :, :]
+            return shuffled_neural_data
 
-    if _trial_subset is not None:
-        _shuffle_index = _trial_subset.copy()
+    @classmethod
+    def shuffleFrames(cls, NeuralActivityInMatrixForm):
+        _shuffle_index = np.arange(NeuralActivityInMatrixForm.shape[1])
         np.random.shuffle(_shuffle_index)
-    else:
-        _shuffle_index = np.arange(NeuralActivityInTrialForm.shape[0])
-        np.random.shuffle(_shuffle_index)
-
-    if _features is not None:
-        shuffled_features = _features[_shuffle_index, :, :]
-        shuffled_neural_data = NeuralActivityInTrialForm[_shuffle_index, :, :]
-        return shuffled_neural_data, shuffled_features
-    else:
-        shuffled_neural_data = NeuralActivityInTrialForm[_shuffle_index, :, :]
+        shuffled_neural_data = NeuralActivityInMatrixForm[:, _shuffle_index]
         return shuffled_neural_data
 
+    @classmethod
+    def shuffleEachNeuron(cls, NeuralActivityInMatrixForm):
+        _num_neurons, _num_frames = NeuralActivityInMatrixForm.shape
+        shuffled_neural_data = np.zeros_like(NeuralActivityInMatrixForm).copy() # cuz paranoid
+        _shuffle_index = np.arange(_num_frames)
 
-def shuffleFrames(NeuralActivityInMatrixForm):
-    _shuffle_index = np.arange(NeuralActivityInMatrixForm.shape[1])
-    np.random.shuffle(_shuffle_index)
-    shuffled_neural_data = NeuralActivityInMatrixForm[:, _shuffle_index]
-    return shuffled_neural_data
+        for _neuron in range(_num_neurons):
+            np.random.shuffle(_shuffle_index)
+            shuffled_neural_data[_neuron, :] = NeuralActivityInMatrixForm[_neuron, _shuffle_index]
+
+        return shuffled_neural_data
+
+    @classmethod
+    def loadFeatures(cls, FeatureFile):
+        _feature_data_file = FeatureFile
+        try:
+            _feature_file_ext = pathlib.Path(_feature_data_file).suffix
+            if _feature_file_ext == ".npy" or _feature_file_ext == ".npz":
+                feature_data = np.load(_feature_data_file, allow_pickle=True)
+                return feature_data
+            elif _feature_file_ext == ".csv":
+                feature_data = np.genfromtxt(_feature_data_file, dtype=int, delimiter=",")
+                return feature_data
+            else:
+                print("Features data in unexpected file type.")
+                raise RuntimeError
+            # noinspection PyUnresolvedReferences
+        except RuntimeError:
+            print("Could not load feature data.")
+
+    @classmethod
+    def generateTimeBins(cls):
+        return
+
+    @classmethod
+    def collapseFeatures(cls, Features, **kwargs):
+        _feature_subset = kwargs.get('FeatureSubset', None)
+
+        if _feature_subset is not None:
+            Features = Features[:, _feature_subset, :].copy()
+
+        _num_trials, _num_features, _num_frames = Features.shape
+
+        collapsed_features = np.zeros_like(Features).copy()
+
+        for _feature in range(_num_features):
+            for _trial in range(_num_trials):
+                # Add one to _feature indicator value to account for no-feature trials
+                collapsed_features[_trial, _feature, np.where(Features[_trial, _feature, :] == 1)] = _feature+1
+
+        collapsed_features_vectorized = np.full((_num_trials, 1, _num_frames), 0, dtype=np.int32)
+        for _trial in range(_num_trials):
+            collapsed_features_vectorized[_trial, 0, :] = np.sum(collapsed_features[_trial, :, :], axis=0)
 
 
-def shuffleEachNeuron(NeuralActivityInMatrixForm):
-    _num_neurons, _num_frames = NeuralActivityInMatrixForm.shape
-    shuffled_neural_data = np.zeros_like(NeuralActivityInMatrixForm).copy() # cuz paranoid
-    _shuffle_index = np.arange(_num_frames)
-
-    for _neuron in range(_num_neurons):
-        np.random.shuffle(_shuffle_index)
-        shuffled_neural_data[_neuron, :] = NeuralActivityInMatrixForm[_neuron, _shuffle_index]
-
-    return shuffled_neural_data
-
+        return collapsed_features_vectorized

@@ -364,7 +364,6 @@ def normalizeSmoothFiringRates(FiringRates, Sigma):
 
 
 def generateSpikeMatrix(SpikeTimes, NumFrames):
-    print("Not Yet Implemented")
     _num_neurons = SpikeTimes.shape[0]
     SpikeMatrix = np.full((_num_neurons, NumFrames), 0, dtype=np.int32)
 
