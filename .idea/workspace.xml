@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="" />
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/DecodingAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/DecodingAnalysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/NewDecoders.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/NewDecoders.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/Test_of_binning.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/Test_of_binning.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -72,7 +78,7 @@
       <workItem from="1660413489315" duration="2411000" />
       <workItem from="1660495581955" duration="6645000" />
       <workItem from="1660567613352" duration="38849000" />
-      <workItem from="1660694030202" duration="12261000" />
+      <workItem from="1660694030202" duration="15228000" />
     </task>
     <servers />
   </component>
@@ -92,15 +98,5 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/AnalysisModules/StaticProcessing.py</url>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

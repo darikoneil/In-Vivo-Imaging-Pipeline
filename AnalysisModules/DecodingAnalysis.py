@@ -208,6 +208,111 @@ class DecodingModule:
             elif self.neural_data_organization == "Matrix Org":
                 return self.neural_data.shape[1]
 
+    @classmethod
+    def shuffleTrials(cls, NeuralActivityInTrialForm, **kwargs):
+        _features = kwargs.get('FeatureData', None)
+        _trial_subset = kwargs.get('TrialSubset', None)
+        try:
+            if len(NeuralActivityInTrialForm.shape) != 3:
+                raise ValueError
+            if _features is not None:
+                if len(NeuralActivityInTrialForm.shape) != len(_features.shape):
+                    raise AssertionError
+        except ValueError:
+            print("Neural Activity must be in trial form")
+            return
+        except AssertionError:
+            print("Neural and Feature Data must be in the same shape")
+            return
+
+        if _trial_subset is not None:
+            _shuffle_index = _trial_subset.copy()
+            np.random.shuffle(_shuffle_index)
+        else:
+            _shuffle_index = np.arange(NeuralActivityInTrialForm.shape[0])
+            np.random.shuffle(_shuffle_index)
+
+        if _features is not None:
+            shuffled_features = _features[_shuffle_index, :, :]
+            shuffled_neural_data = NeuralActivityInTrialForm[_shuffle_index, :, :]
+            return shuffled_neural_data, shuffled_features
+        else:
+            shuffled_neural_data = NeuralActivityInTrialForm[_shuffle_index, :, :]
+            return shuffled_neural_data
+
+    @classmethod
+    def shuffleFrames(cls, DataInMatrixForm, **kwargs):
+        _features = kwargs.get('FeatureData', None)
+        _labels = kwargs.get('LabelData', None)
+        _shuffle_index = np.arange(DataInMatrixForm.shape[1])
+        np.random.shuffle(_shuffle_index)
+        shuffled_data = DataInMatrixForm[:, _shuffle_index]
+        if _labels is None and _features is None:
+            return shuffled_data
+        elif _features is not None and _labels is None:
+            shuffled_features = _features[:, _shuffle_index]
+            return shuffled_data, shuffled_features
+        elif _features is not None and _labels is not None:
+            shuffled_features = _features[:, _shuffle_index]
+            shuffled_labels = _labels[:, _shuffle_index]
+            return shuffled_data, shuffled_features, shuffled_labels
+        elif _features is None and _labels is not None:
+            shuffled_labels = _labels[:, _shuffle_index]
+            return shuffled_data, shuffled_labels
+
+    @classmethod
+    def shuffleEachNeuron(cls, NeuralActivityInMatrixForm):
+        _num_neurons, _num_frames = NeuralActivityInMatrixForm.shape
+        shuffled_neural_data = np.zeros_like(NeuralActivityInMatrixForm).copy() # cuz paranoid
+        _shuffle_index = np.arange(_num_frames)
+
+        for _neuron in range(_num_neurons):
+            np.random.shuffle(_shuffle_index)
+            shuffled_neural_data[_neuron, :] = NeuralActivityInMatrixForm[_neuron, _shuffle_index]
+
+        return shuffled_neural_data
+
+    @classmethod
+    def collapseFeatures(cls, Features, **kwargs):
+        _feature_subset = kwargs.get('FeatureSubset', None)
+
+        if _feature_subset is not None:
+            Features = Features[:, _feature_subset, :].copy()
+
+        _num_trials, _num_features, _num_frames = Features.shape
+
+        collapsed_features = np.zeros_like(Features).copy()
+
+        for _feature in range(_num_features):
+            for _trial in range(_num_trials):
+                # Add one to _feature indicator value to account for no-feature trials
+                collapsed_features[_trial, _feature, np.where(Features[_trial, _feature, :] == 1)] = _feature+1
+
+        collapsed_features_vectorized = np.full((_num_trials, 1, _num_frames), 0, dtype=np.int32)
+        for _trial in range(_num_trials):
+            collapsed_features_vectorized[_trial, 0, :] = np.sum(collapsed_features[_trial, :, :], axis=0)
+
+
+        return collapsed_features_vectorized
+
+    @classmethod
+    def loadFeatures(cls, FeatureFile):
+        _feature_data_file = FeatureFile
+        try:
+            _feature_file_ext = pathlib.Path(_feature_data_file).suffix
+            if _feature_file_ext == ".npy" or _feature_file_ext == ".npz":
+                feature_data = np.load(_feature_data_file, allow_pickle=True)
+                return feature_data
+            elif _feature_file_ext == ".csv":
+                feature_data = np.genfromtxt(_feature_data_file, dtype=int, delimiter=",")
+                return feature_data
+            else:
+                print("Features data in unexpected file type.")
+                raise RuntimeError
+            # noinspection PyUnresolvedReferences
+        except RuntimeError:
+            print("Could not load feature data.")
+
 
 class LogisticRegression(DecodingModule):
     # Class for easily managing Logistic Regression
@@ -237,6 +342,7 @@ class LogisticRegression(DecodingModule):
     # noinspection PyTypeChecker
     def commonAssessment(self, **kwargs):
         _flag_valid = kwargs.get('flag_valid', False)
+        _multi = kwargs.get('multi', False)
 
         # Ensure We have all our predictions already made
         if self.predicted_training_y is None or self.predicted_testing_y is None:
@@ -258,16 +364,17 @@ class LogisticRegression(DecodingModule):
                                                                                                    self.validation_y.T)
 
         # Precision
-        if self.ModelPerformance[('precision', 'training')] is None:
-            self.ModelPerformance[('precision', 'training')] = metrics.precision_score(self.training_y,
-                                                                                       self.predicted_training_y)
-        if self.ModelPerformance[('precision', 'testing')] is None:
-            self.ModelPerformance[('precision', 'testing')] = metrics.precision_score(self.testing_y,
-                                                                                      self.predicted_testing_y)
-        if _flag_valid:
-            if self.ModelPerformance[('precision', 'validation')] is None:
-                self.ModelPerformance[('precision', 'validation')] = metrics.precision_score(self.validation_y,
-                                                                                             self.predicted_validation_y)
+        if _multi is not True:
+            if self.ModelPerformance[('precision', 'training')] is None:
+                self.ModelPerformance[('precision', 'training')] = metrics.precision_score(self.training_y,
+                                                                                           self.predicted_training_y)
+            if self.ModelPerformance[('precision', 'testing')] is None:
+                self.ModelPerformance[('precision', 'testing')] = metrics.precision_score(self.testing_y,
+                                                                                          self.predicted_testing_y)
+            if _flag_valid:
+                if self.ModelPerformance[('precision', 'validation')] is None:
+                    self.ModelPerformance[('precision', 'validation')] = metrics.precision_score(self.validation_y,
+                                                                                                 self.predicted_validation_y)
 
         # Recall
         if self.ModelPerformance[('recall', 'training')] is None:
