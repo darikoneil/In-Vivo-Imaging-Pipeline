@@ -129,7 +129,6 @@ def shuffleTrials(NeuralActivityInTrialForm, **kwargs):
     print("Not Yet")
     _features = kwargs.get('FeatureData', None)
     _trial_subset = kwargs.get('TrialSubset', None)
-
     try:
         if len(NeuralActivityInTrialForm.shape) != 3:
             raise ValueError
@@ -157,3 +156,23 @@ def shuffleTrials(NeuralActivityInTrialForm, **kwargs):
     else:
         shuffled_neural_data = NeuralActivityInTrialForm[_shuffle_index, :, :]
         return shuffled_neural_data
+
+
+def shuffleFrames(NeuralActivityInMatrixForm):
+    _shuffle_index = np.arange(NeuralActivityInMatrixForm.shape[1])
+    np.random.shuffle(_shuffle_index)
+    shuffled_neural_data = NeuralActivityInMatrixForm[:, _shuffle_index]
+    return shuffled_neural_data
+
+
+def shuffleEachNeuron(NeuralActivityInMatrixForm):
+    _num_neurons, _num_frames = NeuralActivityInMatrixForm.shape
+    shuffled_neural_data = np.zeros_like(NeuralActivityInMatrixForm).copy() # cuz paranoid
+    _shuffle_index = np.arange(_num_frames)
+
+    for _neuron in range(_num_neurons):
+        np.random.shuffle(_shuffle_index)
+        shuffled_neural_data[_neuron, :] = NeuralActivityInMatrixForm[_neuron, _shuffle_index]
+
+    return shuffled_neural_data
+
