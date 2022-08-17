@@ -5,15 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/AnalysisModules/AnalysisNotebook_Load.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AnalysisModules/DebugExperiment_Load_DEM2_ENC.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/CascadeAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/CascadeAnalysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/DecodingAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/DecodingAnalysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/StaticPlotting.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/StaticPlotting.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/StaticProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/StaticProcessing.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +75,7 @@
       <workItem from="1660413489315" duration="2411000" />
       <workItem from="1660495581955" duration="6645000" />
       <workItem from="1660567613352" duration="38849000" />
-      <workItem from="1660694030202" duration="1547000" />
+      <workItem from="1660694030202" duration="3306000" />
     </task>
     <servers />
   </component>

@@ -127,11 +127,33 @@ def reorganizeData(NeuralActivity, TrialFeatures, ImFreq, **kwargs):
 
 def shuffleTrials(NeuralActivityInTrialForm, **kwargs):
     print("Not Yet")
+    _features = kwargs.get('FeatureData', None)
+    _trial_subset = kwargs.get('TrialSubset', None)
 
-    _num_trials = 5
-    _shufIdx = np.arange(5)
-    np.random.shuffle(_shufIdx)
-    shuffledPlus = LearnedPlusActivity[_shufIdx, :, :]
-    shuffledMinus = LearnedMinusActivity[_shufIdx, :, :]
+    try:
+        if len(NeuralActivityInTrialForm.shape) != 3:
+            raise ValueError
+        if _features is not None:
+            if len(NeuralActivityInTrialForm.shape) != len(_features.shape):
+                raise AssertionError
+    except ValueError:
+        print("Neural Activity must be in trial form")
+        return
+    except AssertionError:
+        print("Neural and Feature Data must be in the same shape")
+        return
 
-    return
+    if _trial_subset is not None:
+        _shuffle_index = _trial_subset.copy()
+        np.random.shuffle(_shuffle_index)
+    else:
+        _shuffle_index = np.arange(NeuralActivityInTrialForm.shape[0])
+        np.random.shuffle(_shuffle_index)
+
+    if _features is not None:
+        shuffled_features = _features[_shuffle_index, :, :]
+        shuffled_neural_data = NeuralActivityInTrialForm[_shuffle_index, :, :]
+        return shuffled_neural_data, shuffled_features
+    else:
+        shuffled_neural_data = NeuralActivityInTrialForm[_shuffle_index, :, :]
+        return shuffled_neural_data
