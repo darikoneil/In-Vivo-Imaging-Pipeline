@@ -61,12 +61,12 @@ Labels = np.append(np.concatenate(PlusFeatureVector[:, :, IncludedFrames[0]:Incl
 # Now Let's Do a Full Decode
 LogReg = LogisticRegression(NeuralData=Spikes, LabelData=Labels)
 LogReg.neural_data, LogReg.label_data = LogReg.shuffleFrames(LogReg.neural_data, LabelData=LogReg.label_data)
+LogReg.label_data = LogReg.label_data.squeeze()
 
 LogReg.splitData()
 LogReg.fitModel(penalty='l2', solver='lbfgs', max_iter=100000, multi="multinomial")
 LogReg.assessFit()
 LogReg.makeAllPredictions()
-LogReg.commonAssessment()
 
 
 
