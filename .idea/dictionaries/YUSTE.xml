@@ -1,10 +1,13 @@
 <component name="ProjectDictionaryState">
   <dictionary name="YUSTE">
     <words>
+      <w>blockwise</w>
       <w>covariate</w>
       <w>darkgrid</w>
       <w>edgecolor</w>
       <w>edgecolors</w>
+      <w>filt</w>
+      <w>fnames</w>
       <w>histplot</w>
       <w>lbfgs</w>
       <w>linewidth</w>

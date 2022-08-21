@@ -146,3 +146,7 @@ AnalysisModules/DebugExperiment_Load.py
 conda-meta/python-3.7.12-h900ac77_100_cpython.json
 conda-meta/python-3.7.12-h900ac77_100_cpython.json
 conda-meta/wheel-0.37.1-pyhd8ed1ab_0.json
+AnalysisModules/__pycache__/PreprocessingImages.cpython-37.pyc
+__pycache__/PreprocessingImages.cpython-37.pyc
+.idea/workspace.xml
+requirements.txt

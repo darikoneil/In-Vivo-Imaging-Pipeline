@@ -5,12 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="">
+<<<<<<< Updated upstream
       <change afterPath="$PROJECT_DIR$/AnalysisModules/ExperimentalHiearchyExample.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/Test_of_binning.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/Test_of_binning.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" />
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,6 +84,7 @@
       <workItem from="1660413489315" duration="2411000" />
       <workItem from="1660495581955" duration="6645000" />
       <workItem from="1660567613352" duration="38849000" />
+<<<<<<< Updated upstream
       <workItem from="1660694030202" duration="19584000" />
       <workItem from="1660843672196" duration="771000" />
       <workItem from="1660844513388" duration="900000" />
@@ -89,6 +94,10 @@
       <workItem from="1660861366811" duration="422000" />
       <workItem from="1660861898595" duration="198000" />
       <workItem from="1660933521118" duration="9615000" />
+=======
+      <workItem from="1660694030202" duration="15228000" />
+      <workItem from="1661006117134" duration="428000" />
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>
