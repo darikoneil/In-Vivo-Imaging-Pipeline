@@ -1,5 +1,6 @@
 import numpy as np
 import pathlib
+import pickle as pkl
 from AnalysisModules.ExperimentHierarchy import BehavioralStage
 # Functions specific to burrow behaviors
 
@@ -7,10 +8,18 @@ from AnalysisModules.ExperimentHierarchy import BehavioralStage
 
 
 class FearConditioning(BehavioralStage):
-    def __init__(self, Meta, Stage):
+    def __init__(self, Meta, Stage, **kwargs):
         super().__init__(Meta)
         self.stage_directory = self.mouse_directory + "\\" + Stage
         self.setFolders()
+        self.trials_per_stim = kwargs.get('TrialsPerStim', None)
+        self.num_stim = kwargs.get('NumStim', 2)
+        self.total_trials = self.trials_per_stim * self.num_stim
+        self.stage_id = Stage
+        self.habituation_data = None
+        self.pretrial_data = None
+        self.iti_data = None
+        self.trial_data = None
         return
 
     @classmethod
@@ -112,3 +121,148 @@ class FearConditioning(BehavioralStage):
     @classmethod
     def generateTimeBins(cls):
         return
+
+    @classmethod
+    def loadAnalogData(cls, Filename):
+        analogData = np.load(Filename)
+        return analogData
+
+    @classmethod
+    def loadDigitalData(cls, Filename):
+        digitalData = np.load(Filename)
+        digitalData = digitalData.__abs__()-1
+        # noinspection PyUnresolvedReferences
+        digitalData[np.where(digitalData == 255)] = 1
+        return digitalData
+
+    @classmethod
+    def loadStateData(cls, Filename):
+        stateData = np.load(Filename)
+        return stateData
+
+    @classmethod
+    def loadDictionaryData(cls, Filename):
+        with open(Filename, 'r') as f:
+            dictionaryData = pkl.load(f)
+        return dictionaryData
+
+    @classmethod
+    def OrganizeBehavioralData(cls, AnalogData, DigitalData, StateData, Trial, Dictionary, **kwargs):
+        HabituationData = OrganizeHabituation('Habituation', AnalogData, DigitalData, StateData, Trial, Dictionary)
+        PreTrialData = OrganizePreTrial('PreTrial', AnalogData, DigitalData, StateData, Trial, Dictionary)
+        ITIData = OrganizeITI('InterTrial',  AnalogData, DigitalData, StateData, Trial, Dictionary)
+        TrialData = OrganizeTrial('Trial',  AnalogData, DigitalData, StateData, Trial, Dictionary)
+        return HabituationData, PreTrialData, ITIData, TrialData
+
+    def loadBehavioralData(self):
+        analogData = FearConditioning.loadAnalogData(self.generateFileID('Analog'))
+        digitalData = FearConditioning.loadDigitalData(self.generateFileID('Digital'))
+        stateData = FearConditioning.loadStateData(self.generateFileID('State'))
+        dictionaryData = FearConditioning.loadDictionaryData(self.generateFileID('Dictionary'))
+        # noinspection PyTypeChecker
+        self.habituation_data, self.iti_data, self.pretrial_data, self.trial_data = FearConditioning.OrganizeBehavioralData(analogData, digitalData, stateData, self.total_trials, dictionaryData)
+
+    def generateFileID(self, SaveType):
+        if SaveType == 'Analog':
+            _save_type = 'AnalogData.npy'
+        elif SaveType == 'Digital':
+            _save_type = 'DigitalData'
+        elif SaveType == 'State':
+            _save_type = 'State'
+        elif SaveType == 'Dictionary':
+            _save_type = 'StimulusInfo.pkl'
+        else:
+            return print("Unrecognized Behavioral Data Type")
+
+        filename = self.stage_directory + "\\Behavior\\RawBehavioralData\\" + self.stage_id + "_" + self.mouse_id + "_" + str(self.total_trials) + "_of_" + str(self.total_trials) + "_" + _save_type
+        return filename
+
+
+class OrganizeBehavior:
+    def __init__(self, State, AnalogData, DigitalData, StateData, Trial, **kwargs):
+        self.imaging_sync_channel = kwargs.get('ImagingSyncChannel', 0)
+        self.prop_channel = kwargs.get('PropChannel', 1)
+        self.force_channel = kwargs.get('ForceChannel', 2)
+        self.gate_channel = kwargs.get('GateChannel', 1)
+        self.buffer_size = kwargs.get('BufferSize', 100)
+
+        _idx = OrganizeBehavior.indexData(State, StateData, self.buffer_size, Trial)
+        self.imaging_sync = AnalogData[self.imaging_sync_channel, _idx]
+        self.prop_data = AnalogData[self.prop_channel, _idx]
+        self.force_data = AnalogData[self.force_channel, _idx]
+
+        if DigitalData.shape.__len__() == 1:
+            self.gateData = DigitalData[_idx]
+        elif DigitalData.shape.__len__() > 1:
+            self.gateData = DigitalData[self.gate_channel, _idx]
+
+    @classmethod
+    def indexData(cls, State, StateData, BufferSize, Trial):
+        _idx = np.where(StateData == State)
+        _dIdx = np.diff(_idx[0])
+        _fIdx = np.where(_dIdx > 1)
+        # since current trial is also the last trial right now, the current index will always be the
+        # last of the fidx to the end of idx
+        # if _fIdx.__len__() > 0 and 1 < currenttrial < totaltrials:
+        #   _indexIdx = range((_fIdx[currenttrial-2]+1), _fIdx[currenttrial-1])
+        #  _idx = _idx[0][_indexIdx]*buffersize
+        # elif _fIdx.__len__() > 0 and currenttrial == totaltrials:
+        # #_indexIdx = range((_fIdx[currenttrial-2]+1), _idx[0].__len__())
+        # #_idx = _idx[0][_indexIdx]*buffersize
+        if _fIdx[0].__len__() > 0:
+            _indexIdx = range((_fIdx[0][Trial-2]+1), _idx[0].__len__())
+            _idx = _idx[0][_indexIdx]*BufferSize
+        else:
+            _idx = _idx[0]*BufferSize
+        return _idx
+
+
+class OrganizeTrial(OrganizeBehavior):
+    def __init__(self, State, AnalogData, DigitalData, StateData, Trial, Dictionary, **kwargs):
+        # noinspection PyArgumentList
+        super().__init__(State, AnalogData, DigitalData, StateData, Trial, **kwargs)
+
+        # do stuff unique to this class
+        self.trialStartTime = Dictionary["trialStart"]  # float
+        self.trialEndTime = Dictionary["trialEnd"]  # float
+        self.trialStartFrames = int(0)  # int
+        self.trialEndFrames = int(self.trialEndTime[0] - self.trialStartTime[0])  # int
+        self.csStartTime = Dictionary["csStart"]  # float
+        self.csEndTime = Dictionary["csEnd"]  # float
+        self.csStartFrames = int(self.csStartTime[0]-self.trialStartTime[0])  # int
+        self.csEndFrames = int(self.csEndTime[0]-self.trialStartTime[0])  # int
+        self.ucsStartTime = Dictionary["ucsStart"]  # float
+        self.ucsEndTime = Dictionary["ucsEnd"]  # float
+        self.ucsStartFrames = int(self.ucsStartTime[0] - self.trialStartTime[0])  # int
+        self.ucsEndFrames = int(self.ucsEndTime[0] - self.trialStartTime[0])  # int
+        self.csType = Dictionary["stimulusTypes"][Trial-1]
+
+
+class OrganizeITI(OrganizeBehavior):
+    def __init__(self, State, AnalogData, DigitalData, StateData, Trial, Dictionary, **kwargs):
+        # noinspection PyArgumentList
+        super().__init__(State, AnalogData, DigitalData, StateData, Trial, **kwargs)
+        self.ITIStartTime = Dictionary["interStart"]
+        self.ITIEndTime = Dictionary["interEnd"]
+        self.ITIStartFrames = 0
+        self.ITIEndFrames = int(self.ITIEndTime[0] - self.ITIStartTime[0])
+
+
+class OrganizePreTrial(OrganizeBehavior):
+    def __init__(self, State, AnalogData, DigitalData, StateData, Trial, Dictionary, **kwargs):
+        # noinspection PyArgumentList
+        super().__init__(State, AnalogData, DigitalData, StateData, Trial, **kwargs)
+        self.preStartTime = Dictionary["preStart"]
+        self.preEndTime = Dictionary["preEnd"]
+        self.preStartFrames = 0
+        self.preEndFrames = int(self.preEndTime[0] - self.preStartTime[0])
+
+
+class OrganizeHabituation(OrganizeBehavior):
+    def __init__(self, State, AnalogData, DigitalData, StateData, Trial, Dictionary, **kwargs):
+        # noinspection PyArgumentList
+        super().__init__(State, AnalogData, DigitalData, StateData, Trial, **kwargs)
+        self.habStartTime = Dictionary["habStart"]
+        self.habEndTime = Dictionary["habEnd"]
+        self.habStartFrames = 0
+        self.habEndFrames = int(self.habEndTime[0] - self.habStartTime[0])

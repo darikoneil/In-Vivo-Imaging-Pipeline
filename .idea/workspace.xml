@@ -5,12 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/AnalysisModules/ExperimentalHiearchyExample.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/Test_of_binning.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/Test_of_binning.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/DebugScript.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/DebugScript2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/DebugScript3.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/FearConditioningDecoding.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/Notebooks/ExperimentalHiearchyExample.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/Notebooks/ExperimentalHiearchyExample.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/Scratch.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/test_script_filter.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
