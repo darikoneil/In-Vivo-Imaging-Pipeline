@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/AnalysisModules/personal1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/PreprocessingImages.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/PreprocessingImages.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +59,9 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\AnalysisModules" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="project-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -89,7 +90,7 @@
       <workItem from="1660933521118" duration="9615000" />
       <workItem from="1661113827962" duration="2623000" />
       <workItem from="1661176105477" duration="4171000" />
-      <workItem from="1661187500706" duration="2301000" />
+      <workItem from="1661187500706" duration="2561000" />
     </task>
     <servers />
   </component>
