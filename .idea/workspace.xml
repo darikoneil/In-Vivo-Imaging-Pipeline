@@ -5,15 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/AnalysisModules/personal1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/DebugScript.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/DebugScript2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/DebugScript3.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/FearConditioningDecoding.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/Notebooks/ExperimentalHiearchyExample.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/Notebooks/ExperimentalHiearchyExample.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/Scratch.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/test_script_filter.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/PreprocessingImages.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/PreprocessingImages.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,8 +19,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Stub" />
-        <option value="Python Script" />
         <option value="Jupyter Notebook" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -92,6 +87,9 @@
       <workItem from="1660861366811" duration="422000" />
       <workItem from="1660861898595" duration="198000" />
       <workItem from="1660933521118" duration="9615000" />
+      <workItem from="1661113827962" duration="2623000" />
+      <workItem from="1661176105477" duration="4171000" />
+      <workItem from="1661187500706" duration="2301000" />
     </task>
     <servers />
   </component>
