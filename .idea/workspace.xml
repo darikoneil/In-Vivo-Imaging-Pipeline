@@ -5,8 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/AnalysisModules/TestFreeze.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AnalysisModules/XXX.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AnalysisModules/s.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/PreprocessingImages.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/PreprocessingImages.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +57,7 @@
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.DirectoryMappings" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.documentation.PythonDocumentationConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -90,7 +94,16 @@
       <workItem from="1660933521118" duration="9615000" />
       <workItem from="1661113827962" duration="2623000" />
       <workItem from="1661176105477" duration="4171000" />
-      <workItem from="1661187500706" duration="2561000" />
+      <workItem from="1661187500706" duration="3665000" />
+      <workItem from="1661200139130" duration="5658000" />
+      <workItem from="1661261966239" duration="859000" />
+      <workItem from="1661272922856" duration="2010000" />
+      <workItem from="1661291016379" duration="9465000" />
+      <workItem from="1661357047143" duration="1187000" />
+      <workItem from="1661358254555" duration="5167000" />
+      <workItem from="1661367313166" duration="85000" />
+      <workItem from="1661367401830" duration="3408000" />
+      <workItem from="1661374290446" duration="842000" />
     </task>
     <servers />
   </component>

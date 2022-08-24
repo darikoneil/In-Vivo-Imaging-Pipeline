@@ -6,6 +6,7 @@
       <w>darkgrid</w>
       <w>edgecolor</w>
       <w>edgecolors</w>
+      <w>fnames</w>
       <w>histplot</w>
       <w>lbfgs</w>
       <w>linewidth</w>

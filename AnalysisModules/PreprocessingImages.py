@@ -10,11 +10,69 @@ import tifffile
 
 
 class PreProcessing:
+    """
+    PreProcessing
+    -------------
+    Class containing a variety of static methods for preprocessing images
+
+    Static Methods
+    --------------
+    **loadBrukerTiffs** : Load a sequence of tiff files from a directory.
+
+    **repackageBrukerTiffs** :  Repackages a sequence of tiff files within a directory to a smaller sequence of tiff stacks.
+
+    **filterTiff** : Denoise a tiff stack using a multidimensional median filter
+
+    **fastFilterTiff** : GPU-parallelized multidimensional median filter
+
+
+    **saveTiff** : Save an array to a single tiff file
+
+    **loadTiff** : Load a single tiff file
+
+    **loadAllTiffs** : Load a sequence of tiff stacks
+
+    **blockwiseFastFilterTiff** : Blockwise, GPU-parallelized multidimensional median filter
+
+    **saveTiffStack** : Save an array to a sequence of tiff stacks
+    """
     def __init__(self):
         return
 
     @staticmethod
     def loadBrukerTiffs(VideoDirectory):
+        """
+        loadBrukerTiffs
+        ---------------
+        Load a sequence of tiff files from a directory.
+
+        Designed to compile the outputs of a certain imaging utility
+        that exports recordings such that each frame is saved as a single tiff.
+
+        Inputs
+        ------
+        *VideoDirectory* : string
+            Directory containing a sequence of single frame tiff files
+
+        Outputs
+        -------
+        *complete_image* : numpy array [frames, x pixels, y pixels]
+            All tiff files in the directory compiled into a single array
+
+        See Also
+        --------
+        *loadTiff* : Load a tiff file
+        *loadAllTiffs* : Load a sequence of tiff stacks`
+
+        Example
+        -------
+        complete_image = loadBrukerTiffs("D:\\MyVideoDirectory")
+
+        :param VideoDirectory: Directory containing a sequence of single frame tiff files
+        :type VideoDirectory: str
+        :return: complete_image:  All tiff files in the directory compiled into a single array
+        :rtype: np.uint16
+        """
         _fnames = os.listdir(VideoDirectory)
         _num_frames = len(_fnames)
         complete_image = np.full((_num_frames, 512, 512), 0, dtype=np.uint16)
@@ -30,6 +88,39 @@ class PreProcessing:
 
     @staticmethod
     def repackageBrukerTiffs(VideoDirectory, OutputDirectory):
+        """
+        repackageBrukerTiffs
+        --------------------
+        Repackages a sequence of tiff files within a directory to a smaller sequence
+        of tiff stacks.
+
+        Designed to compile the outputs of a certain imaging utility
+        that exports recordings such that each frame is saved as a single tiff.
+
+        Inputs
+        ------
+        *VideoDirectory* : string
+            Directory containing a sequence of single frame tiff files
+
+        *OutputDirectory* : string
+            Empty directory where tiff stacks will be saved
+
+        See Also
+        --------
+        *loadBrukerTiffs* : Load a sequence of tiff files from a directory.
+
+        Example
+        -------
+        repackageBrukerTiffs(
+            "D:\\MyVideoDirectory", "D:\\NewVideoDirectory"
+                )
+
+        :param VideoDirectory: Directory containing a sequence of single frame tiff files
+        :type VideoDirectory: str
+        :param OutputDirectory: Empty directory where tiff stacks will be saved
+        :type OutputDirectory: str
+
+        """
         print("Repackaging...")
         _fnames = os.listdir(VideoDirectory)
         _num_frames = len(_fnames)
@@ -37,9 +128,11 @@ class PreProcessing:
         _chunks = math.ceil(_num_frames/7000)
 
         c_idx = 1
+        _offset = int()
         for _chunk in range(0, _num_frames, 7000):
 
             _start_idx = _chunk
+            _offset = _start_idx
             _end_idx = _chunk + 7000
             if _end_idx > _num_frames:
                 _end_idx = _num_frames+1
@@ -51,8 +144,7 @@ class PreProcessing:
                 desc="Loading Images...",
                 disable=False,
             ):
-
-                image_chunk[_fname, :, :] = np.asarray(Image.open(VideoDirectory + "\\" + _fnames[_fname]))
+                image_chunk[_fname, :, :] = np.asarray(Image.open(VideoDirectory + "\\" + _fnames[_fname+_offset]))
             if c_idx < 10:
                 PreProcessing.saveTiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_0" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
             else:
@@ -62,16 +154,81 @@ class PreProcessing:
 
     @staticmethod
     def filterTiff(Tiff, **kwargs):
-        _kernel = kwargs.get('Kernel', np.ones((3, 3, 3)))
+        """
+        filterTiff
+        ----------
+        Denoise a tiff stack using a multidimensional median filter
+
+        This function simply calls scipy.ndimage.median_filter
+
+        Inputs
+        ------
+        *Tiff* : numpy array [frames, x pixels, y pixels]
+            Tiff stack to be filtered
+
+        Keyword Arguments
+        -----------------
+        *Footprint* : numpy array [z pixels, x pixels, y pixels]
+            Mask indicating the footprint of the median filter
+                Default -> 3 x 3 x 3
+                    Example -> np.ones((3, 3, 3))
+
+        Outputs
+        -------
+        *filtered_tiff* : numpy array [frames, x pixels, y pixels]
+
+        See Also
+        --------
+        *fastFilterTiff* : GPU-parallelized multidimensional median filter
+        *blockwiseFastFilterTiff* : Blockwise, GPU-parallelized multidimensional median filter
+
+        :param Tiff: Tiff stack to be filtered
+        :return: filtered_tiff
+        :keyword Footprint: Mask of the median filter
+        :type Tiff: np.int16
+        :rtype: np.int16
+        """
+        _footprint = kwargs.get('Footprint', np.ones((3, 3, 3)))
 
         print("Filtering...")
-        filtered_tiff = scipy.ndimage.median_filter(Tiff, footprint=_kernel)
+        filtered_tiff = scipy.ndimage.median_filter(Tiff, footprint=_footprint)
         print("Finished")
         return filtered_tiff
 
     @staticmethod
     def fastFilterTiff(Tiff, **kwargs):
-        _footprint = kwargs.get('footprint', np.ones((3, 1, 1)))
+        """
+        fastFilterTiff
+        --------------
+        GPU-parallelized multidimensional median filter
+
+        Inputs
+        ------
+        *Tiff* : numpy array [frames, x pixels, y pixels]
+            Tiff stack to be filtered
+
+        Keyword Arguments
+        -----------------
+        *Footprint* : numpy array [z pixels, x pixels, y pixels]
+            Mask indicating the footprint of the median filter
+                Default -> 3 x 3 x 3
+                    Example -> np.ones((3, 3, 3))
+
+        Outputs
+        -------
+        *filtered_tiff* : numpy array [frames, x pixels, y pixels]
+
+        See Also
+        --------
+        *filterTiff* : Denoise a tiff stack using multidimensional median filter
+        *blockwiseFastFilterTiff* : Blockwise, GPU-parallelized multidimensional median filter
+
+        :param Tiff: Tiff stack to be filtered
+        :type Tiff: np.int16
+        :return: filtered_tiff
+        :keyword Footprint: Mask of the median filter
+        """
+        _footprint = kwargs.get('Footprint', np.ones((3, 3, 3)))
         _converted_tiff = cupy.asarray(Tiff)
         filtered_tiff = cupyx.scipy.ndimage.median_filter(_converted_tiff, footprint=_footprint)
         return filtered_tiff
@@ -84,6 +241,16 @@ class PreProcessing:
 
     @staticmethod
     def loadTiff(fname, num_frames):
+        """
+        hello
+        -----
+        goodbye
+        *hi*
+
+        :param fname: filename
+        :param num_frames: number of frames
+        :return: numpy array
+        """
         return tifffile.imread(fname, key=range(0, num_frames, 1))
 
     @staticmethod
