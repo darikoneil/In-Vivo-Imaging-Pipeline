@@ -13,23 +13,20 @@ class FissaModule:
 
     Self Methods
     ------------
-
-    Class Methods
-    -------------
-    **loadDataFolder**
-    **loadSuite2P_ROIs**
-    **loadNeuronalIndex**
-    **deriveNeuronalIndex**
-    **loadFissaPrep**
-    **loadFissaSep**
-    **initializeFissa**
-    **passPrepToFissa**
-    **saveFissaPrep**
-    **saveFissaSep**
-    **saveFissaAll**
-    **saveProcessedTraces**
-    **loadProcessedTraces**
-    **saveAll**
+    **loadDataFolder** : Load a Suite2P folder (single-plane only) into Class
+    **loadSuite2P_ROIs** : Loads Suite2P ROI Masks into Class
+    **loadNeuronalIndex** : Loads Neuronal Index into Class
+    **deriveNeuronalIndex** : Derives Neuronal Index from Class
+    **loadFissaPrep** : Load saved preparation data into class
+    **loadFissaSep** : Load saved separation data into class
+    **initializeFissa** : Initialize Fissa
+    **passPrepToFissa** : Passes Preparation Data to Use in Separation Process
+    **saveFissaPrep** : Saves Fissa Prep
+    **saveFissaSep** : Saves Fissa Sep
+    **saveFissaAll** : Saves Sep & Prep
+    **saveProcessedTraces** : Saves Processed Traces
+    **loadProcessedTraces** : Loads Processed Traces
+    **saveAll** : Saves All
     **extractTraces**
     **separateTraces**
     **passExperimentToPrep**
@@ -80,9 +77,22 @@ class FissaModule:
         """
         loadDataFolder
         --------------
-        Load a Suite2P folder (single-plane only)
+        Load a Suite2P folder (single-plane only) into Class
 
-        :param str _data_folder: Suite2P folder with registered tiffs
+        **Modifies**
+            | self.images
+            | self.ops
+            | self.stat
+            | self.iscell
+            | self.s2p_rois
+            | self.output_folder
+            | self.preparation
+            | self.experiment
+            | self.prep_file
+            | self.sep_file
+
+        :param _data_folder: Suite2P folder with registered tiffs
+        :type _data_folder: str
         :rtype: None
         """
         self.images = _data_folder + '\\suite2p\\plane0\\reg_tif'
@@ -158,6 +168,19 @@ class FissaModule:
             # Location of Fissa Separation File
 
     def loadSuite2P_ROIs(self):
+        """
+        Loads Suite2P ROI Masks into Class
+
+        **Requires**
+            | self.ops
+            | self.cells
+            | self.stat
+
+        **Modifies**
+            | self.s2p_rois
+
+        :rtype: None
+        """
         # Get image size
         Lx = self.ops["Lx"]
         Ly = self.ops["Ly"]
@@ -179,6 +202,17 @@ class FissaModule:
         self.s2p_rois = rois
 
     def loadNeuronalIndex(self):
+        """
+        Loads Neuronal Index into Class
+
+        **Requires**
+        self.index_path
+
+        **Modifies**
+        self.neuronal_index
+
+        :rtype: None
+        """
         # Load File
         file_ext = pathlib.Path(self.index_path).suffix
         if file_ext == ".npy" or file_ext == ".npz":
@@ -203,12 +237,34 @@ class FissaModule:
             print("Adjusting from 1-to-0 indexing")
 
     def deriveNeuronalIndex(self):
+        """
+        Derives Neuronal Index from Class
+
+        **Requires**
+            | self.iscell
+
+        **Modifies**
+            | self.neuronal_index
+
+        :rtype: None
+        """
         self.neuronal_index = self.iscell[:, 0].astype(dtype=np.int64, copy=True)
         self.neuronal_index = np.where(self.neuronal_index < 1, np.nan, self.neuronal_index)
         self.neuronal_index = self.neuronal_index*range(self.neuronal_index.shape[0])
         self.neuronal_index = self.neuronal_index[~np.isnan(self.neuronal_index)]
 
     def loadFissaPrep(self):
+        """
+        Load saved preparation data into class
+
+        **Requires**
+            | self.prep_file
+
+        **Modifies**
+            | self.preparation
+
+        :rtype: None
+        """
         # Load Existing Prep File
         print('Loading Fissa Preparation...')
         _prep = np.load(self.prep_file, allow_pickle=True)
@@ -216,6 +272,18 @@ class FissaModule:
         print('Finished Loading Fissa Prep')
 
     def loadFissaSep(self):
+        """
+        Load saved separation data into class
+
+        **Requires**
+            | self.sep_file
+
+        **Modifies**
+            | self.experiment
+
+        :rtype: None
+        """
+
         # Load Existing Sep File
         print('Loading Fissa Separation...')
         _sep = np.load(self.sep_file, allow_pickle=True)
@@ -223,12 +291,34 @@ class FissaModule:
         print('Finished Loading Fissa Sep')
 
     def initializeFissa(self):
+        """
+        Initialize Fissa
+
+        **Requires**
+            | self.images
+            | self.s2p_rois
+
+        **Modifies**
+            | self.experiment
+
+        :rtype: None
+        """
         self.experiment = fissa.Experiment(self.images, [self.s2p_rois[:len(self.s2p_rois)]])
         # noinspection PyProtectedMember
         self.experiment._adopt_default_parameters(only_preparation=False, force=False)
         print("Initialized Fissa")
 
     def passPrepToFissa(self):
+        """
+        Passes Preparation Data to Use in Separation Process
+
+        **Requires**
+            | self.preparation
+
+        **Modifies**
+            | self.experiment
+        :rtype: None
+        """
         self.experiment.means = self.preparation.means
         self.experiment.roi_polys = self.preparation.roi_polys
         self.experiment.expansion = self.preparation.expansion
@@ -236,17 +326,56 @@ class FissaModule:
         self.experiment.raw = self.preparation.raw
 
     def saveFissaPrep(self):
+        """
+        Saves Fissa Prep
+
+        **Requires**
+            | self.preparation
+            | self.experiment
+            | self.output_folder
+
+        :rtype: None
+        """
         self.experiment.save_prep(destination=self.output_folder+"prepared.npz")
         print("Finished Saving Prep")
 
     def saveFissaSep(self):
+        """
+        Saves Fissa Sep
+
+        **Requires**
+            | self.preparation
+            | self.experiment
+            | self.output_folder
+
+        :rtype: None
+        """
         self.experiment.save_separated(destination=self.output_folder+"separated.npz")
 
     def saveFissaAll(self):
+        """
+        Saves Fissa Sep & Prep
+
+        **Requires**
+            | self.preparation
+            | self.experiment
+            | self.output_folder
+
+        :rtype: None
+        """
         self.saveFissaPrep()
         self.saveFissaSep()
 
     def saveProcessedTraces(self):
+        """
+        Saves Processed Traces
+
+        **Requires**
+            self.ProcessedTraces
+            self.output_folder
+
+        :rtype:
+        """
         print("Saving Processed Traces...")
         _output_file = self.output_folder + "ProcessedTraces"
         _output_pickle = open(_output_file, 'wb')
@@ -255,6 +384,18 @@ class FissaModule:
         print("Finished Saving Processed Traces.")
 
     def loadProcessedTraces(self):
+        """
+        Loads Processed Traces
+
+        **Requires**
+            | self.output_folder
+            | self.ProcessedTraces
+
+        **Modifies**
+            | self.ProcessedTraces
+
+        :rtype: None
+        """
         print("Loading Processed Traces...")
         _input_file = self.output_folder + "ProcessedTraces"
         _input = open(_input_file, 'rb')
@@ -263,6 +404,17 @@ class FissaModule:
         print("Finished Loading Processed Traces.")
 
     def saveAll(self):
+        """
+        Saves All
+
+        **Requires**
+            | self.output_folder
+            | self.preparation
+            | self.experiment
+            | self.ProcessedTraces
+
+        :rtype: None
+        """
         self.saveFissaPrep()
         self.saveFissaSep()
         self.saveProcessedTraces()

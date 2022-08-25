@@ -5,6 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/DebugData/ProcessedInferences" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DebugData/discrete_approximation.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DebugData/spike_prob.mat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DebugData/spike_prob.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DebugData/spike_times.mat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DebugData/spike_times.npy" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/FissaAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/FissaAnalysis.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/Notebooks/Analysis_of_Imaging_Data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/Notebooks/Analysis_of_Imaging_Data.ipynb" afterDir="false" />
@@ -108,7 +114,7 @@
       <workItem from="1661432729715" duration="7171000" />
       <workItem from="1661443119499" duration="8666000" />
       <workItem from="1661452470452" duration="101000" />
-      <workItem from="1661452650906" duration="7855000" />
+      <workItem from="1661452650906" duration="9260000" />
     </task>
     <servers />
   </component>
