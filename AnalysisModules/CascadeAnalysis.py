@@ -7,6 +7,10 @@ import scipy.io as sio
 from cascade2p import cascade
 from cascade2p.utils_discrete_spikes import infer_discrete_spikes
 from cascade2p import checks
+import ruamel.yaml as yaml
+import tensorflow as tf
+from tensorflow.python.client import device_lib
+
 checks.check_packages()
 
 
@@ -181,6 +185,73 @@ class CascadeModule:
 
         except RuntimeError:
             print("Unable to load processed inferences. Check supplied path.")
+
+    @classmethod
+    def pullModels(cls, ModelFolder):
+        """
+        Retrieve the latest online models & locally-available models for spike inference
+
+        :param ModelFolder: Folder containing locally-available models
+        :type ModelFolder: str
+        :return: list_of_models
+        :rtype: list
+        """
+        cascade.download_model('update_models', verbose=1, model_folder=ModelFolder)
+        _available_models = ModelFolder + "\\available_models.yaml"
+        yaml_file = open(_available_models)
+        X = yaml.load(yaml_file, Loader=yaml.Loader)
+        list_of_models = list(X.keys())
+        print('\n List of available models: \n')
+        for model in list_of_models:
+            print(model)
+        return list_of_models
+
+    @classmethod
+    def downloadModel(cls, ModelName, ModelFolder):
+        """
+        Downloads online model for local-availability
+
+        See cascade.download_model
+
+        :param ModelName: Name of online model to download
+        :type ModelName: str
+        :param ModelFolder: Name of folder to store model in
+        :type ModelFolder: str
+        :rtype: None
+        """
+        cascade.download_model(ModelName, verbose=1, model_folder=ModelFolder)
+
+    @classmethod
+    def setVerboseGPU(cls):
+        """
+        Set GPU to verbose mode
+
+        See tf.debugging.set_log_device_placement
+
+        :rtype: None
+        """
+        tf.debugging.set_log_device_placement(True)
+
+    @classmethod
+    def confirmGPU(cls):
+        """
+        Confirm that tensorflow was built with CUDA, and that a GPU is available for use
+
+        See :
+        device_lib.list_local_devices
+        tf.test.is_built_with_cuda()
+        tf.test.is_gpu_available()
+
+        :rtype: None
+        """
+        print("Here are the local devices...")
+        print(device_lib.list_local_devices())
+
+        print("Is Tensorflow Built with CUDA...")
+        tf.test.is_built_with_cuda()
+
+        print("Is GPU Available for Use...")
+        tf.test.is_gpu_available()
 
 
 class ProcessedInferences:
