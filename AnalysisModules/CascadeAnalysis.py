@@ -16,8 +16,33 @@ checks.check_packages()
 
 class CascadeModule:
     """
+    Cascade Module
+    --------------
+    A module for CASCADE spike inference
+
+    Self Methods
+    ------------
+    | **load_neurons_x_time** : Loads 2D array of neurons x frames into class
+    | **predictSpikeProb** : Predict spike probability
+    | **inferDiscreteSpikes** : Approximate Discrete Spike Events
+    | **saveSpikeProb** : Save self.spike_prob to a numpy file
+    | **saveSpikeInference** : Save self.spike_time_estimates & self.discrete_approximation
+    | **exportSpikeProb** : Export self.spike_prob to MATLab file
+    | **exportSpikeInference** : Export self.spike_time_estimates to MATLab file
+    | **loadSpikeProb** : Load Spike Probabilities into self.spike_prob
+    | **loadSpikeInference** : Load Spike Inferences into self.spike_time_estimates and self.discrete_approximation
+    | **saveProcessedInferences** : Save Processed Inferences to file
+    | **loadProcessedInferences**: Load Processed Inferences from file
+    Class Methods
+    -------------
+    | **pullModels** : Retrieve the latest online models & locally-available models for spike inference
+    | **downloadModel** : Downloads online model for local-availability
+    | **setVerboseGPU** : Set GPU to verbose mode
+    | **confirmGPU** : Confirm that tensorflow was built with CUDA, and that a GPU is available for use
+
 
     """
+
     def __init__(self, traces, im_freq, **kwargs):
         self.model_folder = kwargs.get('model_folder', "Pretrained_models")
         self.traces = traces
@@ -36,6 +61,9 @@ class CascadeModule:
         described as -> "Custom method to load data as 2d array with shape (neurons, nr_timepoints)"
 
         With this function the returns are automatically integrated into the CascadeModule class
+
+        With Mat Files, variable must be called 'dFoF'
+        With Npy Files, variable must be called 'dF_traces' in a dictionary
 
         :param file_path: Filepath to an array of neurons by frames. Can be .npy or .mat
         :type file_path: str
@@ -59,10 +87,42 @@ class CascadeModule:
         self.frame_rate = framerate
 
     def predictSpikeProb(self):
+        """
+        Predict spike probability
+
+        Simply a wrapper for cascade.predict
+
+        **Requires**
+            | self.model_name
+            | self.traces
+
+        **Modifies**
+            | self.spike_prob
+            | self.ProcessedInferences.utilized_model_name
+
+        :rtype: None
+        """
         self.ProcessedInferences.utilized_model_name = self.model_name
         self.spike_prob = cascade.predict(self.model_name, self.traces, model_folder=self.model_folder)
 
     def inferDiscreteSpikes(self):
+        """
+        Approximate Discrete Spike Events
+
+        Simpy a wrapper for cascade.infer_discrete_spikes
+
+        **Requires**
+            | self.ProcessedInferences.utilized_model_name
+            | self.model_name
+            | self.model_folder
+            | self.spike_prob
+
+        **Modifies**
+            | self.discrete_approximation
+            | self.spike_time_estimates
+
+        :rtype: None
+        """
         if self.ProcessedInferences.utilized_model_name != self.model_name:
             print("Warning! Spike probabilities inferred using " + self.ProcessedInferences.utilized_model_name +
                   ", but user has selected " + self.model_name + " for spike inference.")
@@ -71,22 +131,73 @@ class CascadeModule:
         self.discrete_approximation, self.spike_time_estimates = infer_discrete_spikes(self.spike_prob, self.model_name, model_folder=self.model_folder)
 
     def saveSpikeProb(self, save_path):
+        """
+        Save self.spike_prob to a numpy file
+
+        **Requires**
+            | self.spike_prob
+
+        :param save_path: Path to save file
+        :type save_path: str
+        :rtype: None
+        """
         _filename = save_path + "spike_prob.npy"
         np.save(_filename, self.spike_prob, allow_pickle=True)
 
     def saveSpikeInference(self, save_path):
+        """
+        Save self.spike_time_estimates & self.discrete_approximation
+
+        **Requires**
+            | self.spike_time_estimates
+            | self.discrete_approximation
+
+        :param save_path: Path to save files
+        :type save_path: str
+        :rtype: None
+        """
         _filename = save_path + "spike_times.npy"
         np.save(_filename, self.spike_time_estimates, allow_pickle=True)
         _filename = save_path + "discrete_approximation.npy"
         np.save(_filename, self.discrete_approximation, allow_pickle=True)
 
     def exportSpikeProb(self, save_path):
+        """
+        Export self.spike_prob to MATLab file
+
+        **Requires**
+            |self.spike_prob
+
+        :param save_path: Path to save file
+        :type save_path: str
+        :rtype: None
+        """
         sio.savemat(save_path + 'spike_prob' + '.mat', {'spike_prob': self.spike_prob})
 
     def exportSpikeInference(self, save_path):
+        """
+        Export self.spike_time_estimates to MATLab file
+
+        **Requires**
+            | self.spike_time_estimates
+
+        :param save_path: Path to save file
+        :type save_path: str
+        :rtype: None
+        """
         sio.savemat(save_path + 'spike_times' + '.mat', {'spike_times': self.spike_time_estimates})
 
     def loadSpikeProb(self, **kwargs):
+        """
+        Load Spike Probabilities into self.spike_prob
+
+        **Modifies**
+            | self.spike_prob
+
+        :keyword load_path: Directory containing the file
+        :keyword absolute_path: Absolute filepath
+        :rtype: None
+        """
         _load_path = kwargs.get('load_path', None)
         _absolute_path = kwargs.get('absolute_path', None)
         try:
@@ -110,6 +221,20 @@ class CascadeModule:
             print("Unable to load spike probabilities. Check supplied path.")
 
     def loadSpikeInference(self, **kwargs):
+        """
+        Load Spike Inferences into self.spike_time_estimates and self.discrete_approximation
+
+        **Modifies**
+            | self.spike_time_estimates
+            | self.discrete_approximation
+
+        :keyword load_path: Directory containing the file
+        :keyword absolute_path_spike_times: Absolute filepath
+        :keyword absolute_path_discrete_approx: Absolute filepath
+        :rtype: None
+        :param kwargs:
+        :return:
+        """
         _load_path = kwargs.get('load_path', None)
         _absolute_path_spike_times = kwargs.get('spike_times_file', None)
         _absolute_path_discrete_approx = kwargs.get('discrete_approx_file', None)
@@ -158,6 +283,15 @@ class CascadeModule:
             print("Unable to load Discrete Approximations. Check supplied path.")
 
     def saveProcessedInferences(self, save_path):
+        """
+        Save Processed Inferences to file
+
+        **Requires**
+            | self.ProcessedInferences
+        :param save_path: Path to saved file
+        :type save_path: str
+        :rtype: None
+        """
         print("Saving Processed Inferences...")
         _output_file = save_path + "ProcessedInferences"
         _output_pickle = open(_output_file, 'wb')
@@ -166,6 +300,17 @@ class CascadeModule:
         print("Finished Saving Processed Inferences")
 
     def loadProcessedInferences(self, **kwargs):
+        """
+        Save Processed Inferences to file
+
+        **Requires**
+            | self.ProcessedInferences
+
+        :keyword load_path: Path containing processed inferences
+        :keyword absolute_path: Absolute filepath
+        :rtype: None
+        """
+
         _load_path = kwargs.get('load_path')
         _absolute_path = kwargs.get('absolute_path')
         try:
@@ -255,6 +400,9 @@ class CascadeModule:
 
 
 class ProcessedInferences:
+    """
+    Simple Container for Processed Inferences
+    """
     def __init__(self):
         self.firing_rates = None
         self.burst_events = None
