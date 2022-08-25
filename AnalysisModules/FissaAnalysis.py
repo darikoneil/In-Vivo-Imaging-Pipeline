@@ -83,7 +83,6 @@ class FissaModule:
         Load a Suite2P folder (single-plane only)
 
         :param str _data_folder: Suite2P folder with registered tiffs
-        :return:
         :rtype: None
         """
         self.images = _data_folder + '\\suite2p\\plane0\\reg_tif'
@@ -133,7 +132,7 @@ class FissaModule:
         try:
             self.loadSuite2P_ROIs()
             # Load Suite2P ROI Masks
-        except RuntimeError or AttributeError:
+        except RuntimeError or IndexError or AttributeError:
             print("Could not load Suite2P ROIs")
 
         if self.output_folder is None:

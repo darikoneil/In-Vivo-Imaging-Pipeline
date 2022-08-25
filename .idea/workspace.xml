@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/FissaAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/FissaAnalysis.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/Notebooks/Analysis_of_Imaging_Data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/Notebooks/Analysis_of_Imaging_Data.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DebugData/Debug_Neuronal_Index.csv" beforeDir="false" afterPath="$PROJECT_DIR$/DebugData/Debug_Neuronal_Index.csv" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +52,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/AnalysisModules" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/DebugData/suite2p/plane0" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
@@ -58,6 +60,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DebugData\suite2p\plane0" />
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DebugData" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\AnalysisModules" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -104,7 +108,7 @@
       <workItem from="1661432729715" duration="7171000" />
       <workItem from="1661443119499" duration="8666000" />
       <workItem from="1661452470452" duration="101000" />
-      <workItem from="1661452650906" duration="6820000" />
+      <workItem from="1661452650906" duration="7855000" />
     </task>
     <servers />
   </component>
