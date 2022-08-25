@@ -6,6 +6,38 @@ import pathlib
 
 # /// /// Main Module /// ///
 class FissaModule:
+    """
+    Fissa Module
+    ------------
+    A module for Fissa Signal Extraction & Source-Separation
+
+    Self Methods
+    ------------
+
+    Class Methods
+    -------------
+    **loadDataFolder**
+    **loadSuite2P_ROIs**
+    **loadNeuronalIndex**
+    **deriveNeuronalIndex**
+    **loadFissaPrep**
+    **loadFissaSep**
+    **initializeFissa**
+    **passPrepToFissa**
+    **saveFissaPrep**
+    **saveFissaSep**
+    **saveFissaAll**
+    **saveProcessedTraces**
+    **loadProcessedTraces**
+    **saveAll**
+    **extractTraces**
+    **separateTraces**
+    **passExperimentToPrep**
+    **preserveOriginalExtractions**
+    **preserveOriginalSourceSeparations**
+    **pruneNonNeuronalROIs**
+
+    """
     def __init__(self, **kwargs):
 
         # ///Parse Inputs///
@@ -275,6 +307,9 @@ class FissaModule:
 
 # /// /// Container for Preparation Data /// ///
 class PreparationModule:
+    """
+    Preparation Module
+    """
     def __init__(self, **kwargs):
         _preparation = kwargs.get('preparation', None)
 
@@ -295,6 +330,9 @@ class PreparationModule:
 
 # /// /// Container for Separation Data /// ///
 class SeparationModule:
+    """
+    Separation Module
+    """
     def __init__(self, **kwargs):
         _experiment = kwargs.get('experiment', None)
 
@@ -329,7 +367,9 @@ class SeparationModule:
 # /// /// Container for Processed Traces /// ///
 class ProcessedTracesModule:
     def __init__(self):
-
+        """
+        Simply a container for Processed Traces
+        """
         # /// Pre-Allocation Raw Traces///
         self.original_raw = None # Original Raw Traces
         # ROI x TIFF < - SUB - MASK x FRAME
