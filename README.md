@@ -17,3 +17,5 @@ Additional Dependencies (Optional):
 
 CUDA
 CUTENSOR
+
+conda env create -f [path to environment.yml file]
