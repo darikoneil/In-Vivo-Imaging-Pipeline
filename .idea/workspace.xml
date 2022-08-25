@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/AnalysisModules/TestFreeze.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AnalysisModules/XXX.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AnalysisModules/s.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AnalysisModules/Notebooks/ImageFormatting_and_PreProcessng.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/FissaAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/FissaAnalysis.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/PreprocessingImages.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/PreprocessingImages.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -21,8 +20,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Stub" />
-        <option value="Jupyter Notebook" />
         <option value="Python Script" />
+        <option value="Jupyter Notebook" />
       </list>
     </option>
   </component>
@@ -103,7 +102,9 @@
       <workItem from="1661358254555" duration="5167000" />
       <workItem from="1661367313166" duration="85000" />
       <workItem from="1661367401830" duration="3408000" />
-      <workItem from="1661374290446" duration="842000" />
+      <workItem from="1661374290446" duration="954000" />
+      <workItem from="1661432729715" duration="7171000" />
+      <workItem from="1661443119499" duration="8666000" />
     </task>
     <servers />
   </component>

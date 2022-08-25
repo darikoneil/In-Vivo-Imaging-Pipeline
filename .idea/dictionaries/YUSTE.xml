@@ -2,8 +2,12 @@
   <dictionary name="YUSTE">
     <words>
       <w>blockwise</w>
+      <w>cmap</w>
       <w>covariate</w>
       <w>darkgrid</w>
+      <w>downsample</w>
+      <w>downsampled</w>
+      <w>downsampling</w>
       <w>edgecolor</w>
       <w>edgecolors</w>
       <w>fnames</w>
@@ -16,6 +20,7 @@
       <w>probas</w>
       <w>scatterplot</w>
       <w>shuf</w>
+      <w>sinc</w>
     </words>
   </dictionary>
 </component>

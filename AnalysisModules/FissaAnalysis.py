@@ -45,7 +45,15 @@ class FissaModule:
         self.ProcessedTraces = ProcessedTracesModule()
 
     def loadDataFolder(self, _data_folder):
+        """
+        loadDataFolder
+        --------------
+        Load a Suite2P folder (single-plane only)
 
+        :param str _data_folder: Suite2P folder with registered tiffs
+        :return:
+        :rtype: None
+        """
         self.images = _data_folder + '\\suite2p\\plane0\\reg_tif'
         # Images stored here
 
