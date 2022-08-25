@@ -11,9 +11,12 @@ checks.check_packages()
 
 
 class CascadeModule:
-    def __init__(self, dFoF, im_freq, **kwargs):
+    """
+
+    """
+    def __init__(self, traces, im_freq, **kwargs):
         self.model_folder = kwargs.get('model_folder', "Pretrained_models")
-        self.traces = dFoF
+        self.traces = traces
         self.frame_rate = im_freq
         self.spike_prob = None
         self.model_name = None
@@ -25,7 +28,17 @@ class CascadeModule:
         self.ProcessedInferences = ProcessedInferences()
 
     def load_neurons_x_time(self, file_path, framerate):
-        """Custom method to load data as 2d array with shape (neurons, nr_timepoints)"""
+        """ This function is identical to Cascade's load_neurons x time,
+        described as -> "Custom method to load data as 2d array with shape (neurons, nr_timepoints)"
+
+        With this function the returns are automatically integrated into the CascadeModule class
+
+        :param file_path: Filepath to an array of neurons by frames. Can be .npy or .mat
+        :type file_path: str
+        :param framerate: Imaging Frequency
+        :type framerate: float
+        """
+
 
         if file_path.endswith('.mat'):
             self.traces = sio.loadmat(file_path)['dFoF']

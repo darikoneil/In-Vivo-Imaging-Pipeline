@@ -294,8 +294,6 @@ class PreparationModule:
 
 
 # /// /// Container for Separation Data /// ///
-
-
 class SeparationModule:
     def __init__(self, **kwargs):
         _experiment = kwargs.get('experiment', None)
