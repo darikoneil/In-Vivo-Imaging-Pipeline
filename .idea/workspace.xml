@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/DebugData/Debug_Neuronal_Index.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/Notebooks/Analysis_of_Imaging_Data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/Notebooks/Analysis_of_Imaging_Data.ipynb" afterDir="false" />
     </list>
@@ -105,7 +104,7 @@
       <workItem from="1661432729715" duration="7171000" />
       <workItem from="1661443119499" duration="8666000" />
       <workItem from="1661452470452" duration="101000" />
-      <workItem from="1661452650906" duration="6757000" />
+      <workItem from="1661452650906" duration="6820000" />
     </task>
     <servers />
   </component>
