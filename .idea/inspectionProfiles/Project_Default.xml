@@ -216,6 +216,17 @@
           <option value="AnalysisModules.NewDecoders.LogisticRegressionDecoder.score" />
           <option value="AnalysisModules.ExperimentHierarchy.ExperimentData.mouse_id" />
           <option value="AnalysisModules.ExperimentHierarchy.ExperimentData.directory" />
+          <option value="AnalysisModules.BurrowFearConditioning.FearConditioning._FearConditioning__num_trials" />
+          <option value="AnalysisModules.BurrowFearConditioning.FearConditioning._FearConditioning__trials_per_stim" />
+          <option value="AnalysisModules.BurrowFearConditioning.FearConditioning._FearConditioning__num_stim" />
+          <option value="AnalysisModules.BurrowFearConditioning.FearConditioning._FearConditioning__stage_id" />
+          <option value="AnalysisModules.ExperimentHierarchy.BehavioralStage._BehavioralStage__instance_data" />
+          <option value="AnalysisModules.ExperimentHierarchy.BehavioralStage._BehavioralStage__instance_date" />
+          <option value="AnalysisModules.ExperimentHierarchy.BehavioralStage._BehavioralStage__mouse_id" />
+          <option value="AnalysisModules.ExperimentHierarchy.ExperimentData._ExperimentData__instance_date" />
+          <option value="AnalysisModules.ExperimentHierarchy.ExperimentData._ExperimentData__mouse_id" />
+          <option value="AnalysisModules.ExperimentHierarchy.DataFolder._DataFolder__instance_date" />
+          <option value="AnalysisModules.ExperimentHierarchy.CollectedDataFolder._CollectedDataFolder__instance_date" />
         </list>
       </option>
     </inspection_tool>

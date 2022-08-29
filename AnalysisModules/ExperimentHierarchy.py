@@ -8,19 +8,50 @@ import numpy as np
 class ExperimentData:
     """
     Class for Organizing & Managing Experimental Data Across Sessions
+
+    Class Methods
+    -------------
+    **loadHierarchy** : Function that loads the entire experimental hierarchy
     """
     def __init__(self, **kwargs):
+        # Hidden
+        self._mouse_id_assigned = False # to make sure mouse id only set once
+        # Protected In Practice
+        self._mouse_id = kwargs.get('Mouse', None)
+        self.__instance_date = self.getDate()
+        #
         self.directory = kwargs.get('Directory', None)
-        self.mouse_id = kwargs.get('Mouse', None)
         self.study = kwargs.get('Study', None)
         self.study_mouse = kwargs.get('StudyMouse', None)
-
-        self.instance_date = self.getDate()
         self.modifications = [(self.getDate(), self.getTime())]
         self.stages = []
 
+    @property
+    def mouse_id(self):
+        return self._mouse_id
+
+    @mouse_id.setter
+    def mouse_id(self, ID):
+        if self._mouse_id_assigned is False:
+            self._mouse_id = ID
+            self._mouse_id_assigned = True
+        else:
+            print("Mouse ID can only be set ONCE.")
+
+    @property
+    def instance_date(self):
+        return self._ExperimentData__instance_date
+
     @classmethod
     def loadHierarchy(cls, ExperimentDirectory):
+        """
+        Function that loads the entire experimental hierarchy
+
+        :param ExperimentDirectory: Directory containing the experimental hierarchy pickle file
+        :type ExperimentDirectory: str
+        :return: ExperimentData
+        :rtype: AnalysisModules.ExperimentHierarchy.ExperimentData
+        """
         print("Incomplete Implementation")
         print("Loading Experimental Hierarchy..")
         _input_file = ExperimentDirectory + "\\ExperimentalHierarchy"
@@ -163,7 +194,7 @@ class ExperimentData:
             _read_me.close()
 
     def passMeta(self):
-        return self.directory, self.mouse_id, self.study, self.study_mouse
+        return self.directory, self.mouse_id
 
     def recordMod(self, *args):
         """
@@ -179,7 +210,6 @@ class ExperimentData:
         self.modifications.append((self.getDate(), self.getTime(), *args))
 
     def saveHierarchy(self):
-        print("Incomplete Implementation")
         print("Saving Experimental Hierarchy..")
         _output_file = self.directory + "\\" + "ExperimentalHierarchy"
         _output_pickle = open(_output_file, 'wb')
@@ -198,24 +228,82 @@ class ExperimentData:
 
 
 class BehavioralStage:
-    def __init__(self, Meta):
+    def __init__(self, Meta, Stage):
+        # PROTECTED
+        self.__mouse_id = Meta[1]
+        self.__instance_date = ExperimentData.getDate()
+        #
         self.mouse_directory = Meta[0]
-        self.mouse_id = Meta[1]
-        self.study = Meta[2]
-        self.study_mouse = Meta[3]
-        self.instance_date = ExperimentData.getDate()
         self.modifications = [(ExperimentData.getDate(), ExperimentData.getTime())]
-        self.stage_directory = None
-        self.computation_output_folder = None
-        self.data_input_folder = None
-        self.behavior_folder = None
-        self.index_file = None
-        self.features_file = None
+        self.stage_directory = self.mouse_directory + "\\" + Stage
+        self.folder_dictionary = dict()
+        self.createFolderDictionary()
+
+    @property
+    def mouse_id(self):
+        return self._BehavioralStage__mouse_id
+
+    @property
+    def instance_date(self):
+        return self._BehavioralStage__instance_date
 
     def recordMod(self):
         self.modifications.append((ExperimentData.getDate(), ExperimentData.getTime()))
 
-    def setFolders(self):
-        self.computation_output_folder = self.stage_directory + "\\Computation"
-        self.data_input_folder = self.stage_directory + "\\Imaging"
-        self.behavior_folder = self.stage_directory + "\\Behavior"
+    def createFolderDictionary(self):
+        """
+        Creates a dictionary of locations for specific files
+
+        **Requires**
+            | self.stage_directory
+
+        **Modifies**
+            | self.folder_dictionary
+
+        """
+
+        self.folder_dictionary = {
+            'computation_folder': self.stage_directory + "\\Computation",
+            'imaging_folder': self.stage_directory + "\\Imaging",
+            'behavior_folder': self.stage_directory + "\\Behavior",
+        }
+
+
+class CollectedDataFolder:
+    """
+    This is a class for managing a folder of unorganized
+    """
+    def __init__(self, Path):
+        # Protected In Practice
+        self.__instance_date = ExperimentData.getDate()
+        self._path = str()
+        self._path_assigned = False
+
+        # Properties
+        self._files = []
+        self.path = Path
+        self.files = self.path
+
+    @property
+    def instance_date(self):
+        return self._CollectedDataFolder__instance_date
+
+    @property
+    def path(self):
+        return self._path
+
+    @path.setter
+    def path(self, Path):
+        if self._path_assigned is False:
+            self._path = Path
+            self._path_assigned = True
+        else:
+            print("Path can only be assigned ONCE.")
+
+    @property
+    def files(self):
+        return self._files
+
+    @files.setter
+    def files(self, Path):
+        self._files = os.listdir(Path)

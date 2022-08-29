@@ -1,10 +1,7 @@
 import numpy as np
 import pathlib
 import pickle as pkl
-from AnalysisModules.ExperimentHierarchy import BehavioralStage
-# Functions specific to burrow behaviors
-
-# Trace Fear Burrow Behavior
+from AnalysisModules.ExperimentHierarchy import BehavioralStage, CollectedDataFolder
 
 
 class FearConditioning(BehavioralStage):
@@ -14,6 +11,7 @@ class FearConditioning(BehavioralStage):
     Self Methods
     ------------
     | **self.generateFileID** : Generate a file ID for a particular sort of data
+    | **self.fillFolderDictionary** : Function to index subfolders containing behavioral data
 
     Class Methods
     -------------
@@ -27,18 +25,44 @@ class FearConditioning(BehavioralStage):
     | **convertFromPy27** : Convert a numpy array of strings in byte-form to numpy array of strings in string-form
     """
     def __init__(self, Meta, Stage, **kwargs):
-        super().__init__(Meta)
-        self.stage_directory = self.mouse_directory + "\\" + Stage
-        self.setFolders()
-        self.trials_per_stim = kwargs.get('TrialsPerStim', None)
-        self.num_stim = kwargs.get('NumStim', 2)
-        self.total_trials = self.trials_per_stim * self.num_stim
-        self.stage_id = Stage
+        super().__init__(Meta, Stage)
+        self.fillFolderDictionary()
+
+        # PROTECT ME
+        _trials_per_stim = kwargs.get('TrialsPerStim', 5)
+        _num_stim = kwargs.get('NumStim', 2)
+        _num_trials = _trials_per_stim * _num_stim
+        _stage = Stage
+
+        # PROTECTED
+        self.__trials_per_stim = _trials_per_stim
+        self.__num_stim = _num_stim
+        self.__num_trials = _num_trials
+        self.__stage_id = _stage
+
         self.habituation_data = None
         self.pretrial_data = None
         self.iti_data = None
         self.trial_data = None
+
+
         return
+
+    @property
+    def stage_id(self):
+        return self._FearConditioning__stage_id
+
+    @property
+    def num_trials(self):
+        return self._FearConditioning__num_trials
+
+    @property
+    def trials_per_stim(self):
+        return self._FearConditioning__trials_per_stim
+
+    @property
+    def num_stim(self):
+        return self._FearConditioning__num_stim
 
     @classmethod
     def identifyTrialValence(cls, csIndexFile):
@@ -205,7 +229,7 @@ class FearConditioning(BehavioralStage):
         stateData = FearConditioning.loadStateData(self.generateFileID('State'))
         dictionaryData = FearConditioning.loadDictionaryData(self.generateFileID('Dictionary'))
         # noinspection PyTypeChecker
-        self.habituation_data, self.iti_data, self.pretrial_data, self.trial_data = FearConditioning.OrganizeBehavioralData(analogData, digitalData, stateData, self.total_trials, dictionaryData)
+        self.habituation_data, self.iti_data, self.pretrial_data, self.trial_data = FearConditioning.OrganizeBehavioralData(analogData, digitalData, stateData, self.num_trials, dictionaryData)
 
     def generateFileID(self, SaveType):
         """
@@ -227,8 +251,34 @@ class FearConditioning(BehavioralStage):
         else:
             return print("Unrecognized Behavioral Data Type")
 
-        filename = self.stage_directory + "\\Behavior\\RawBehavioralData\\" + self.stage_id + "_" + self.mouse_id + "_" + str(self.total_trials) + "_of_" + str(self.total_trials) + "_" + _save_type
+        filename = self.stage_directory + "\\Behavior\\RawBehavioralData\\" + self.stage_id + "_" + self.mouse_id + "_" + str(self.num_trials) + "_of_" + str(self.num_trials) + "_" + _save_type
         return filename
+
+    def fillFolderDictionary(self):
+        """
+        Function to index subfolders containing behavioral data
+
+        **Requires**
+            | self.folder_dictionary['behavior_folder']
+
+        **Constructs**
+            | self.folder_dictionary['behavioral_exports']
+            | self.folder_dictionary['deep_lab_cut_data']
+            | self.folder_dictionary['raw_behavioral_data']
+            | self.folder_dictionary['processed_data']
+            | self.folder_dictionary['analog_burrow_data']
+
+        """
+        self.folder_dictionary['behavioral_exports'] = CollectedDataFolder(self.folder_dictionary.get('behavior_folder') +
+                                                                           "\\BehavioralExports")
+        self.folder_dictionary['deep_lab_cut_data'] = CollectedDataFolder(self.folder_dictionary.get('behavior_folder') +
+                                                                          "\\DeepLabCutData")
+        self.folder_dictionary['raw_behavioral_data'] = CollectedDataFolder(self.folder_dictionary.get('behavior_folder') +
+                                                                            "\\RawBehavioralData")
+        self.folder_dictionary['processed_data'] = self.folder_dictionary.get('behavior_folder') + \
+                                                   "\\ProcessedData"
+        self.folder_dictionary['analog_burrow_data'] = self.folder_dictionary.get('behavior_folder') + \
+                                                       "\\AnalogBurrowData"
 
     @staticmethod
     def convertFromPy27(Array):

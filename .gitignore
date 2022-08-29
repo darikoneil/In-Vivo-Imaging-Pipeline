@@ -153,3 +153,12 @@ AnalysisModules/Notebooks/ExperimentalHierarchyExample.ipynb
 AnalysisModules/XXX.py
 AnalysisModules/s.py
 AnalysisModules/personal1.py
+*.mat
+*.npy
+*.csv
+*.csv
+DebugData/Debug_Neuronal_Index.csv
+DebugData/ProcessedInferences
+DebugData/Debug_Neuronal_Index.csv
+DebugData/Debug_Neuronal_Index.csv
+AnalysisModules/EM0121.py
