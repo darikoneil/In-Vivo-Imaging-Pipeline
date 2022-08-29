@@ -9,9 +9,8 @@ class ExperimentData:
     """
     Class for Organizing & Managing Experimental Data Across Sessions
 
-    Class Methods
-    -------------
-    **loadHierarchy** : Function that loads the entire experimental hierarchy
+    **Class Methods**
+        | **loadHierarchy** : Function that loads the entire experimental hierarchy
     """
     def __init__(self, **kwargs):
         # Hidden
@@ -271,11 +270,17 @@ class BehavioralStage:
 
 class CollectedDataFolder:
     """
-    This is a class for managing a folder of unorganized
+    This is a class for managing a folder of unorganized data files
 
-    Static Methods
-    --------------
+**Self Methods**
+        | **searchInFolder** : Search THIS object for the *first* file which matches the description
+        | **reIndex** : Function that indexed the files within folder again
+
+**Static Methods**
         | **fileParts** : Function returns each identifier of a file and its extension
+        | **fileLocator** : Find the file which matches the description
+
+
     """
     def __init__(self, Path):
         # Protected In Practice
@@ -314,14 +319,37 @@ class CollectedDataFolder:
 
     def reIndex(self):
         """
-        Function that indexed the files within again
+        Function that indexed the files within folder again
         """
         self.files = self.path
 
+    def searchInFolder(self, ID):
+        """
+        Search THIS object for the *first* file which matches the description
+
+        :param ID: The description
+        :type ID: str
+        :return: The absolute file path of the matching filename
+        :rtype: str
+        """
+        return self.path + CollectedDataFolder.fileLocator(self.files, ID)
+
     @staticmethod
-    def fileLocator(IDs):
-        locate = 1
-        return locate
+    def fileLocator(files, ID):
+        """
+        Find the *first* file which matches the description
+
+        :param files: A list of files
+        :type files: list
+        :param ID: The description
+        :type ID: str
+        :return: The matching filename
+        :rtype: str
+        """
+        for i in range(len(files)):
+            for _id in CollectedDataFolder.fileParts(files[i]):
+                if ID == _id:
+                    return files[i]
 
     @staticmethod
     def fileParts(file):

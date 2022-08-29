@@ -8,21 +8,18 @@ class FearConditioning(BehavioralStage):
     """
     Instance Factory for Fear Conditioning Data
 
-    Self Methods
-    ------------
-    | **self.generateFileID** : Generate a file ID for a particular sort of data
-    | **self.fillFolderDictionary** : Function to index subfolders containing behavioral data
+    **Self Methods**
+        | **self.generateFileID** : Generate a file ID for a particular sort of data
+        | **self.fillFolderDictionary** : Function to index subfolders containing behavioral data
 
-    Class Methods
-    -------------
-    | **cls.loadAnalogData** : Loads Analog Data from a burrow behavioral session
-    | **cls.loadDigitalData** : Loads Digital Data from a burrow behavioral session
-    | **cls.loadStateData** : Loads State Data from a burrow behavioral session
-    | **cls.loadDictionaryData** :Loads Dictionary Data from a burrow behavioral session
+    **Class Methods**
+        | **cls.loadAnalogData** : Loads Analog Data from a burrow behavioral session
+        | **cls.loadDigitalData** : Loads Digital Data from a burrow behavioral session
+        | **cls.loadStateData** : Loads State Data from a burrow behavioral session
+        | **cls.loadDictionaryData** :Loads Dictionary Data from a burrow behavioral session
 
-    Static Methods
-    --------------
-    | **convertFromPy27** : Convert a numpy array of strings in byte-form to numpy array of strings in string-form
+    **Static Methods**
+        | **convertFromPy27** : Convert a numpy array of strings in byte-form to numpy array of strings in string-form
     """
     def __init__(self, Meta, Stage, **kwargs):
         super().__init__(Meta, Stage)

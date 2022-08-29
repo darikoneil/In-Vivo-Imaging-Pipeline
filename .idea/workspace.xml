@@ -5,6 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/AnalysisModules/EM0122.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
