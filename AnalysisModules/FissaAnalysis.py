@@ -13,26 +13,26 @@ class FissaModule:
 
     Self Methods
     ------------
-    **loadDataFolder** : Load a Suite2P folder (single-plane only) into Class
-    **loadSuite2P_ROIs** : Loads Suite2P ROI Masks into Class
-    **loadNeuronalIndex** : Loads Neuronal Index into Class
-    **deriveNeuronalIndex** : Derives Neuronal Index from Class
-    **loadFissaPrep** : Load saved preparation data into class
-    **loadFissaSep** : Load saved separation data into class
-    **initializeFissa** : Initialize Fissa
-    **passPrepToFissa** : Passes Preparation Data to Use in Separation Process
-    **saveFissaPrep** : Saves Fissa Prep
-    **saveFissaSep** : Saves Fissa Sep
-    **saveFissaAll** : Saves Sep & Prep
-    **saveProcessedTraces** : Saves Processed Traces
-    **loadProcessedTraces** : Loads Processed Traces
-    **saveAll** : Saves All
-    **extractTraces**
-    **separateTraces**
-    **passExperimentToPrep**
-    **preserveOriginalExtractions**
-    **preserveOriginalSourceSeparations**
-    **pruneNonNeuronalROIs**
+    | **loadDataFolder** : Load a Suite2P folder (single-plane only) into Class
+    | **loadSuite2P_ROIs** : Loads Suite2P ROI Masks into Class
+    | **loadNeuronalIndex** : Loads Neuronal Index into Class
+    | **deriveNeuronalIndex** : Derives Neuronal Index from Class
+    | **loadFissaPrep** : Load saved preparation data into class
+    | **loadFissaSep** : Load saved separation data into class
+    | **initializeFissa** : Initialize Fissa
+    | **passPrepToFissa** : Passes Preparation Data to Use in Separation Process
+    | **saveFissaPrep** : Saves Fissa Prep
+    | **saveFissaSep** : Saves Fissa Sep
+    | **saveFissaAll** : Saves Sep & Prep
+    | **saveProcessedTraces** : Saves Processed Traces
+    | **loadProcessedTraces** : Loads Processed Traces
+    | **saveAll** : Saves All
+    | **extractTraces**
+    | **separateTraces**
+    | **passExperimentToPrep**
+    | **preserveOriginalExtractions**
+    | **preserveOriginalSourceSeparations**
+    | **pruneNonNeuronalROIs**
 
     """
     def __init__(self, **kwargs):

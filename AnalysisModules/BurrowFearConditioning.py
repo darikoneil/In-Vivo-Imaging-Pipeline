@@ -8,6 +8,24 @@ from AnalysisModules.ExperimentHierarchy import BehavioralStage
 
 
 class FearConditioning(BehavioralStage):
+    """
+    Instance Factory for Fear Conditioning Data
+
+    Self Methods
+    ------------
+    | **self.generateFileID** : Generate a file ID for a particular sort of data
+
+    Class Methods
+    -------------
+    | **cls.loadAnalogData** : Loads Analog Data from a burrow behavioral session
+    | **cls.loadDigitalData** : Loads Digital Data from a burrow behavioral session
+    | **cls.loadStateData** : Loads State Data from a burrow behavioral session
+    | **cls.loadDictionaryData** :Loads Dictionary Data from a burrow behavioral session
+
+    Static Methods
+    --------------
+    | **convertFromPy27** : Convert a numpy array of strings in byte-form to numpy array of strings in string-form
+    """
     def __init__(self, Meta, Stage, **kwargs):
         super().__init__(Meta)
         self.stage_directory = self.mouse_directory + "\\" + Stage
@@ -124,11 +142,24 @@ class FearConditioning(BehavioralStage):
 
     @classmethod
     def loadAnalogData(cls, Filename):
+        """
+        Loads Analog Data from a burrow behavioral session
+        :param Filename: Numpy file containing analog data
+        :type Filename: str
+        :return: Analog Data
+        """
         analogData = np.load(Filename)
         return analogData
 
     @classmethod
     def loadDigitalData(cls, Filename):
+        """
+        Loads Digital Data from a burrow behavioral session
+        :param Filename: Numpy file containing digital data
+        :type Filename: str
+        :return: Digital Data
+        """
+        # Note that we flip the bit to convert the data such that 1 == gate triggered
         digitalData = np.load(Filename)
         digitalData = digitalData.__abs__()-1
         # noinspection PyUnresolvedReferences
@@ -137,11 +168,25 @@ class FearConditioning(BehavioralStage):
 
     @classmethod
     def loadStateData(cls, Filename):
+        """
+        Loads State Data from a burrow behavioral session
+        :param Filename: Numpy file containing state data
+        :type Filename: str
+        :return: State Data
+        """
         stateData = np.load(Filename)
+        stateData = cls.convertFromPy27(stateData)
         return stateData
 
     @classmethod
     def loadDictionaryData(cls, Filename):
+        """
+        Loads Dictionary Data from a burrow behavioral session
+        :param Filename: Numpy file containing dictionary data
+        :type Filename: str
+        :return: Dictionary Data
+        :rtype: dict
+        """
         with open(Filename, 'r') as f:
             dictionaryData = pkl.load(f)
         return dictionaryData
@@ -163,12 +208,20 @@ class FearConditioning(BehavioralStage):
         self.habituation_data, self.iti_data, self.pretrial_data, self.trial_data = FearConditioning.OrganizeBehavioralData(analogData, digitalData, stateData, self.total_trials, dictionaryData)
 
     def generateFileID(self, SaveType):
+        """
+        Generate a file ID for a particular sort of data
+
+        :param SaveType: Analog, Digital, State, or Dictionary
+        :type SaveType: str
+        :return: Filename containing respective data
+        :rtype: str
+        """
         if SaveType == 'Analog':
             _save_type = 'AnalogData.npy'
         elif SaveType == 'Digital':
-            _save_type = 'DigitalData'
+            _save_type = 'DigitalData.npy'
         elif SaveType == 'State':
-            _save_type = 'State'
+            _save_type = 'StateHistory.npy'
         elif SaveType == 'Dictionary':
             _save_type = 'StimulusInfo.pkl'
         else:
@@ -176,6 +229,20 @@ class FearConditioning(BehavioralStage):
 
         filename = self.stage_directory + "\\Behavior\\RawBehavioralData\\" + self.stage_id + "_" + self.mouse_id + "_" + str(self.total_trials) + "_of_" + str(self.total_trials) + "_" + _save_type
         return filename
+
+    @staticmethod
+    def convertFromPy27(Array):
+        """
+        Convert a numpy array of strings in byte-form to numpy array of strings in string-form
+
+        :param Array: An array of byte strings (e.g., b'Setup')
+        :return: decoded_array
+        """
+        decoded_array = list()
+        for i in range(Array.shape[0]):
+            decoded_array.append("".join([chr(_) for _ in Array[i]]))
+        decoded_array = np.array(decoded_array)
+        return decoded_array
 
 
 class OrganizeBehavior:

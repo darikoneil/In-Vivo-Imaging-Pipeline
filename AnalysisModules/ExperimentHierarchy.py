@@ -6,6 +6,9 @@ import numpy as np
 
 
 class ExperimentData:
+    """
+    Class for Organizing & Managing Experimental Data Across Sessions
+    """
     def __init__(self, **kwargs):
         self.directory = kwargs.get('Directory', None)
         self.mouse_id = kwargs.get('Mouse', None)
@@ -163,6 +166,15 @@ class ExperimentData:
         return self.directory, self.mouse_id, self.study, self.study_mouse
 
     def recordMod(self, *args):
+        """
+        Record modification of experiment (Data, Time, *args)
+
+        **Modifies**
+            | self.modifications
+
+        :param args: A string explaining the modification
+        :rtype: None
+        """
         # noinspection PyTypeChecker
         self.modifications.append((self.getDate(), self.getTime(), *args))
 
