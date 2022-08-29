@@ -272,6 +272,10 @@ class BehavioralStage:
 class CollectedDataFolder:
     """
     This is a class for managing a folder of unorganized
+
+    Static Methods
+    --------------
+        | **fileParts** : Function returns each identifier of a file and its extension
     """
     def __init__(self, Path):
         # Protected In Practice
@@ -307,3 +311,26 @@ class CollectedDataFolder:
     @files.setter
     def files(self, Path):
         self._files = os.listdir(Path)
+
+    def reIndex(self):
+        """
+        Function that indexed the files within again
+        """
+        self.files = self.path
+
+    @staticmethod
+    def fileLocator(IDs):
+        locate = 1
+        return locate
+
+    @staticmethod
+    def fileParts(file):
+        """
+        Function returns each identifier of a file and its extension
+
+        :param file: Filename to be parsed
+        :type file: str
+        :return: stage, animal, ...[unique file identifiers]..., extension
+        :rtype: list
+        """
+        return file.split("_")[0:-1] + file.split("_")[-1].split(".")
