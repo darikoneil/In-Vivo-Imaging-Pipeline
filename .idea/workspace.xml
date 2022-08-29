@@ -6,8 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       <change afterPath="$PROJECT_DIR$/AnalysisModules/ExperimentalHiearchyExample.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+=======
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/Test_of_binning.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/Test_of_binning.py" afterDir="false" />
@@ -94,9 +97,31 @@
       <workItem from="1660861366811" duration="422000" />
       <workItem from="1660861898595" duration="198000" />
       <workItem from="1660933521118" duration="9615000" />
+<<<<<<< Updated upstream
 =======
       <workItem from="1660694030202" duration="15228000" />
       <workItem from="1661006117134" duration="428000" />
+>>>>>>> Stashed changes
+=======
+      <workItem from="1661113827962" duration="2623000" />
+      <workItem from="1661176105477" duration="4171000" />
+      <workItem from="1661187500706" duration="3665000" />
+      <workItem from="1661200139130" duration="5658000" />
+      <workItem from="1661261966239" duration="859000" />
+      <workItem from="1661272922856" duration="2010000" />
+      <workItem from="1661291016379" duration="9465000" />
+      <workItem from="1661357047143" duration="1187000" />
+      <workItem from="1661358254555" duration="5167000" />
+      <workItem from="1661367313166" duration="85000" />
+      <workItem from="1661367401830" duration="3408000" />
+      <workItem from="1661374290446" duration="954000" />
+      <workItem from="1661432729715" duration="7171000" />
+      <workItem from="1661443119499" duration="8666000" />
+      <workItem from="1661452470452" duration="101000" />
+      <workItem from="1661452650906" duration="9260000" />
+      <workItem from="1661526772017" duration="1000" />
+      <workItem from="1661547545212" duration="8039000" />
+      <workItem from="1661786251789" duration="10598000" />
 >>>>>>> Stashed changes
     </task>
     <servers />

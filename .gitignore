@@ -150,3 +150,15 @@ AnalysisModules/__pycache__/PreprocessingImages.cpython-37.pyc
 __pycache__/PreprocessingImages.cpython-37.pyc
 .idea/workspace.xml
 requirements.txt
+AnalysisModules/personal1.py
+DebugData/spike_times.npy
+AnalysisModules/s.py
+AnalysisModules/XXX.py
+DebugData/Debug_Neuronal_Index.csv
+DebugData/discrete_approximation.npy
+DebugData/ProcessedInferences
+DebugData/spike_times.mat
+DebugData/spike_prob.npy
+DebugData/spike_prob.mat
+DebugData/Debug_Neuronal_Index.csv
+AnalysisModules/EM0121.py
