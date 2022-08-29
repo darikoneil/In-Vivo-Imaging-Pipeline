@@ -19,7 +19,8 @@ class FearConditioning(BehavioralStage):
         | **cls.loadDictionaryData** :Loads Dictionary Data from a burrow behavioral session
 
     **Static Methods**
-        | **convertFromPy27** : Convert a numpy array of strings in byte-form to numpy array of strings in string-form
+        | **convertFromPy27_Array** : Convert a numpy array of strings in byte-form to numpy array of strings in string-form
+        | **convertFromPy27_Dict**  : Convert a dictionary pickled in Python 2.7 to a Python 3 dictionary
     """
     def __init__(self, Meta, Stage, **kwargs):
         super().__init__(Meta, Stage)
@@ -169,7 +170,11 @@ class FearConditioning(BehavioralStage):
         :type Filename: str
         :return: Analog Data
         """
-        analogData = np.load(Filename)
+        try:
+            analogData = np.load(Filename)
+        except FileNotFoundError:
+            return "ERROR"
+
         return analogData
 
     @classmethod
@@ -181,7 +186,11 @@ class FearConditioning(BehavioralStage):
         :return: Digital Data
         """
         # Note that we flip the bit to convert the data such that 1 == gate triggered
-        digitalData = np.load(Filename)
+        try:
+            digitalData = np.load(Filename)
+        except FileNotFoundError:
+            return "ERROR"
+
         digitalData = digitalData.__abs__()-1
         # noinspection PyUnresolvedReferences
         digitalData[np.where(digitalData == 255)] = 1
@@ -195,8 +204,12 @@ class FearConditioning(BehavioralStage):
         :type Filename: str
         :return: State Data
         """
-        stateData = np.load(Filename)
-        stateData = cls.convertFromPy27(stateData)
+        try:
+            stateData = np.load(Filename)
+        except FileNotFoundError:
+            return "ERROR"
+
+        stateData = cls.convertFromPy27_Array(stateData)
         return stateData
 
     @classmethod
@@ -208,8 +221,22 @@ class FearConditioning(BehavioralStage):
         :return: Dictionary Data
         :rtype: dict
         """
-        with open(Filename, 'r') as f:
-            dictionaryData = pkl.load(f)
+        try:
+            with open(Filename, 'r') as f:
+                dictionaryData = pkl.load(f)
+        except FileNotFoundError:
+            return "ERROR_FIND"
+        except TypeError:
+            # noinspection PyBroadException
+            try:
+                with open(Filename, 'rb') as f:
+                    dictionaryData = pkl.load(f, encoding='bytes')
+                    dictionaryData = FearConditioning.convertFromPy27_Dict(dictionaryData)
+            except Exception:
+                return "ERROR_READ"
+
+
+
         return dictionaryData
 
     @classmethod
@@ -221,12 +248,39 @@ class FearConditioning(BehavioralStage):
         return HabituationData, PreTrialData, ITIData, TrialData
 
     def loadBehavioralData(self):
-        analogData = FearConditioning.loadAnalogData(self.generateFileID('Analog'))
-        digitalData = FearConditioning.loadDigitalData(self.generateFileID('Digital'))
-        stateData = FearConditioning.loadStateData(self.generateFileID('State'))
-        dictionaryData = FearConditioning.loadDictionaryData(self.generateFileID('Dictionary'))
+        """
+        Master function that loads the following data -> analog, digital, state, dictionary
+        """
+        # Analog
+        _analog_file = self.generateFileID('Analog')
+        _analog_data = FearConditioning.loadAnalogData(_analog_file)
+        if type(_analog_data) == str and _analog_data == "ERROR":
+            return print("Could not find analog data!")
+
+        # Digital
+        _digital_file = self.generateFileID('Digital')
+        _digital_data = FearConditioning.loadDigitalData(_digital_file)
+        if type(_digital_data) == str and _digital_data == "ERROR":
+            return print("Could not find digital data!")
+
+        # State
+        _state_file = self.generateFileID('State')
+        _state_data = FearConditioning.loadStateData(_state_file)
+        if _state_data[0] == "ERROR": # 0 because it's an array of strings so ambiguous str comparison
+            return print("Could not find state data!")
+
+        # Dictionary
+        _dictionary_file = self.generateFileID('Dictionary')
+        _dictionary_data = FearConditioning.loadDictionaryData(_dictionary_file)
+        if _dictionary_data == "ERROR_FIND":
+            return print("Could not find dictionary data!")
+        elif _dictionary_data == "ERROR_READ":
+            return print("Could not read dictionary data!")
+
         # noinspection PyTypeChecker
-        self.habituation_data, self.iti_data, self.pretrial_data, self.trial_data = FearConditioning.OrganizeBehavioralData(analogData, digitalData, stateData, self.num_trials, dictionaryData)
+        self.habituation_data, self.iti_data, self.pretrial_data, self.trial_data = \
+            FearConditioning.OrganizeBehavioralData(_analog_data, _digital_data, _state_data,
+                                                    self.num_trials, _dictionary_data)
 
     def generateFileID(self, SaveType):
         """
@@ -237,6 +291,7 @@ class FearConditioning(BehavioralStage):
         :return: Filename containing respective data
         :rtype: str
         """
+        # Generate file extension
         if SaveType == 'Analog':
             _save_type = 'AnalogData.npy'
         elif SaveType == 'Digital':
@@ -248,7 +303,10 @@ class FearConditioning(BehavioralStage):
         else:
             return print("Unrecognized Behavioral Data Type")
 
-        filename = self.stage_directory + "\\Behavior\\RawBehavioralData\\" + self.stage_id + "_" + self.mouse_id + "_" + str(self.num_trials) + "_of_" + str(self.num_trials) + "_" + _save_type
+        filename = self.folder_dictionary['raw_behavioral_data'].path + "\\" + \
+                   self.stage_id + "_" + self.mouse_id + "_" + str(self.num_trials) + "_of_" +\
+                   str(self.num_trials) + "_" + _save_type
+
         return filename
 
     def fillFolderDictionary(self):
@@ -278,7 +336,7 @@ class FearConditioning(BehavioralStage):
                                                        "\\AnalogBurrowData"
 
     @staticmethod
-    def convertFromPy27(Array):
+    def convertFromPy27_Array(Array):
         """
         Convert a numpy array of strings in byte-form to numpy array of strings in string-form
 
@@ -290,6 +348,24 @@ class FearConditioning(BehavioralStage):
             decoded_array.append("".join([chr(_) for _ in Array[i]]))
         decoded_array = np.array(decoded_array)
         return decoded_array
+
+    @staticmethod
+    def convertFromPy27_Dict(Dict):
+        """
+        Convert a dictionary pickled in Python 2.7 to a Python 3 dictionary
+
+        :param Dict: Dictionary to be converted
+        :type Dict: dict
+        :return: Converted Dictionary
+        :rtype: dict
+        """
+        _allkeys = list(Dict.keys())
+        new_dict = dict()
+
+        for _key in range(len(_allkeys)):
+            new_dict[_allkeys[_key].decode('utf-8')] = Dict.get(_allkeys[_key])
+
+        return new_dict
 
 
 class OrganizeBehavior:

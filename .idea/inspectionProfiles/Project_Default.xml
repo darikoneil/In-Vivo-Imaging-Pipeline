@@ -227,6 +227,9 @@
           <option value="AnalysisModules.ExperimentHierarchy.ExperimentData._ExperimentData__mouse_id" />
           <option value="AnalysisModules.ExperimentHierarchy.DataFolder._DataFolder__instance_date" />
           <option value="AnalysisModules.ExperimentHierarchy.CollectedDataFolder._CollectedDataFolder__instance_date" />
+          <option value="AnalysisModules.ExperimentHierarchy.ExperimentData.PreExposure" />
+          <option value="AnalysisModules.ExperimentHierarchy.ExperimentData.Encoding" />
+          <option value="AnalysisModules.ExperimentHierarchy.ExperimentData.Retrieval" />
         </list>
       </option>
     </inspection_tool>
