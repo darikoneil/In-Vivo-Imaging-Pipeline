@@ -6,6 +6,8 @@ from AnalysisModules.BurrowFearConditioning import FearConditioning
 
 EM0121 = ExperimentData.loadHierarchy("D:\\EM0121")
 
+# EM0121.saveHierarchy()
+
 # EM0121.stages.append("Encoding")
 # EM0121.stages.append("Retrieval")
 # ExperimentData.generateStage(EM0121.directory, Title="Encoding")
@@ -32,6 +34,18 @@ EM0121 = ExperimentData.loadHierarchy("D:\\EM0121")
 # EM0121.Retrieval.loadBehavioralData()
 # EM0121.Retrieval.recordMod()
 # EM0121.recordMod("Added Retrieval Analog Data")
+# EM0121.saveHierarchy()
 
-EM0121.saveHierarchy()
+# EM0121.Retrieval = FearConditioning(EM0121.passMeta(), "Retrieval", TrialsPerStim=5, NumStim=2)
+# EM0121.Retrieval.loadBehavioralData()
+# EM0121.Retrieval.recordMod()
+
+# EM0121.Encoding = FearConditioning(EM0121.passMeta(), "Encoding", TrialsPerStim=10, NumStim=2)
+# EM0121.Encoding.loadBehavioralData()
+# EM0121.Encoding.recordMod()
+
+# EM0121.PreExposure = FearConditioning(EM0121.passMeta(), "PreExposure", TrialsPerStim=5, NumStim=2)
+# EM0121.PreExposure.loadBehavioralData()
+# EM0121.PreExposure.recordMod()
+# EM0121.recordMod("Adjusted Behavioral Stages")
 

@@ -2,6 +2,10 @@ import numpy as np
 import pathlib
 import pickle as pkl
 from AnalysisModules.ExperimentHierarchy import BehavioralStage, CollectedDataFolder
+import matplotlib
+matplotlib.use('Qt5Agg')
+from matplotlib import pyplot as plt
+import seaborn as sns
 
 
 class FearConditioning(BehavioralStage):
@@ -38,13 +42,13 @@ class FearConditioning(BehavioralStage):
         self.__num_trials = _num_trials
         self.__stage_id = _stage
 
-        self.habituation_data = None
-        self.pretrial_data = None
-        self.iti_data = None
-        self.trial_data = None
+        # self.habituation_data = None
+        # self.pretrial_data = None
+        # self.iti_data = None
+        # self.trial_data = None
+        # self.trial_dictionary = dict()
 
-
-        return
+        self.data = dict()
 
     @property
     def stage_id(self):
@@ -241,11 +245,14 @@ class FearConditioning(BehavioralStage):
 
     @classmethod
     def OrganizeBehavioralData(cls, AnalogData, DigitalData, StateData, Trial, Dictionary, **kwargs):
-        HabituationData = OrganizeHabituation('Habituation', AnalogData, DigitalData, StateData, Trial, Dictionary)
-        PreTrialData = OrganizePreTrial('PreTrial', AnalogData, DigitalData, StateData, Trial, Dictionary)
-        ITIData = OrganizeITI('InterTrial',  AnalogData, DigitalData, StateData, Trial, Dictionary)
-        TrialData = OrganizeTrial('Trial',  AnalogData, DigitalData, StateData, Trial, Dictionary)
-        return HabituationData, PreTrialData, ITIData, TrialData
+        _pre_trial_data = OrganizePreTrial('PreTrial', AnalogData, DigitalData, StateData, Trial, Dictionary)
+        _iti_data = OrganizeITI('InterTrial',  AnalogData, DigitalData, StateData, Trial, Dictionary)
+        _trial_data = OrganizeTrial('Trial',  AnalogData, DigitalData, StateData, Trial, Dictionary)
+        dictionary_update = {'pre_trial_data': _pre_trial_data,
+                             'iti_data': _iti_data,
+                             'trial_data': _trial_data,
+                             }
+        return dictionary_update
 
     def loadBehavioralData(self):
         """
@@ -278,9 +285,10 @@ class FearConditioning(BehavioralStage):
             return print("Could not read dictionary data!")
 
         # noinspection PyTypeChecker
-        self.habituation_data, self.iti_data, self.pretrial_data, self.trial_data = \
-            FearConditioning.OrganizeBehavioralData(_analog_data, _digital_data, _state_data,
-                                                    self.num_trials, _dictionary_data)
+        for _trial in range(self.num_trials): # Adjust for Zero Indexing
+            # noinspection PyTypeChecker
+            self.data['Trial ' + str(_trial+1)] = TrialData(FearConditioning.OrganizeBehavioralData(
+                _analog_data, _digital_data, _state_data, _trial, _dictionary_data))
 
     def generateFileID(self, SaveType):
         """
@@ -368,7 +376,25 @@ class FearConditioning(BehavioralStage):
         return new_dict
 
 
+class TrialData:
+    def __init__(self, Dictionary):
+        self.iti_data = None
+        self.pre_trial_data = None
+        self.trial_data = None
+
+        # noinspection PyTypeChecker
+        for _key in self.__dict__.keys():
+            if _key in Dictionary.keys():
+                self.__dict__[_key] = Dictionary[_key]
+
+
 class OrganizeBehavior:
+    """
+    Super-class for organized behavioral data by experimental stage and trial
+
+    **Class Methods**
+        | **cls.indexData** : Function indexes the frames of some sort of task-relevant experimental state within a specified trial
+    """
     def __init__(self, State, AnalogData, DigitalData, StateData, Trial, **kwargs):
         self.imaging_sync_channel = kwargs.get('ImagingSyncChannel', 0)
         self.prop_channel = kwargs.get('PropChannel', 1)
@@ -388,23 +414,25 @@ class OrganizeBehavior:
 
     @classmethod
     def indexData(cls, State, StateData, BufferSize, Trial):
-        _idx = np.where(StateData == State)
-        _dIdx = np.diff(_idx[0])
-        _fIdx = np.where(_dIdx > 1)
-        # since current trial is also the last trial right now, the current index will always be the
-        # last of the fidx to the end of idx
-        # if _fIdx.__len__() > 0 and 1 < currenttrial < totaltrials:
-        #   _indexIdx = range((_fIdx[currenttrial-2]+1), _fIdx[currenttrial-1])
-        #  _idx = _idx[0][_indexIdx]*buffersize
-        # elif _fIdx.__len__() > 0 and currenttrial == totaltrials:
-        # #_indexIdx = range((_fIdx[currenttrial-2]+1), _idx[0].__len__())
-        # #_idx = _idx[0][_indexIdx]*buffersize
-        if _fIdx[0].__len__() > 0:
-            _indexIdx = range((_fIdx[0][Trial-2]+1), _idx[0].__len__())
-            _idx = _idx[0][_indexIdx]*BufferSize
-        else:
-            _idx = _idx[0]*BufferSize
-        return _idx
+        """
+        Function indexes the frames of some sort of task-relevant experimental state within a specified trial
+
+        :param State: The experimental state
+        :type State: str
+        :param StateData: The numpy array containing strings defining the state at any given time
+        :param BufferSize: The size of the DAQ's buffer during recording (Thus x samples are considered one state)
+        :type BufferSize: int
+        :param Trial: The specified trial to index
+        :type Trial: int
+        :return: A numpy array indexing the state/trial specific samples
+        """
+        _idx = np.where(StateData == State)[0]
+        _derivative_idx = np.diff(_idx)
+        # Add beginning
+        _trial_edge_idx = np.append(np.array([0], dtype=np.int64), np.where(_derivative_idx > 1)[0]+1)
+        # Add end
+        _trial_edge_idx = np.append(_trial_edge_idx, _idx.shape[0])
+        return _idx[_trial_edge_idx[Trial]:_trial_edge_idx[Trial+1]]
 
 
 class OrganizeTrial(OrganizeBehavior):
@@ -456,3 +484,28 @@ class OrganizeHabituation(OrganizeBehavior):
         self.habEndTime = Dictionary["habEnd"]
         self.habStartFrames = 0
         self.habEndFrames = int(self.habEndTime[0] - self.habStartTime[0])
+
+
+class BurrowPlots:
+    """
+    Class Containing Methods for Visualizing Burrow Behavior
+    """
+    def __init__(self):
+        return
+
+    @staticmethod
+    def plotTrial(StageData, Trial):
+        _fig = plt.figure(figsize=(12, 6))
+        _ax = _fig.add_subplot(111)
+        _ax.set_title("Trial " + str(Trial))
+        _ax.set_xlabel("Seconds")
+        _ax.set_ylabel("State")
+        burrowX = np.linspace(0, 35, 350)
+        base = np.full((350,), 0, dtype=int)
+        CS = np.full((350,), 0, dtype=int)
+        CS[0:150] = 1
+        _ax.fill_between(burrowX, CS, base, linewidth=2, alpha=0.5, facecolor=[1, 1, 1], edgecolor=[0.65, 0.65, 0.65], label="CS+", hatch="///")
+        _ax.plot(burrowX, StageData['Trial ' + str(Trial)].trial_data.gateData, linewidth=2, color="#ff4e4b", label="Burrow Gate")
+        _ax.plot([25, 25], [0, 1], linewidth=2, linestyle='dashed', color="black", alpha=0.75, label="Expected UCS")
+        plt.figlegend(loc='lower left')
+        plt.ylim(-0.2, 1.2)

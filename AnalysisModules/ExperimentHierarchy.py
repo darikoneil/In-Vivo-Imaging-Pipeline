@@ -51,7 +51,6 @@ class ExperimentData:
         :return: ExperimentData
         :rtype: AnalysisModules.ExperimentHierarchy.ExperimentData
         """
-        print("Incomplete Implementation")
         print("Loading Experimental Hierarchy..")
         _input_file = ExperimentDirectory + "\\ExperimentalHierarchy"
         _input_pickle = open(_input_file, 'rb')
@@ -232,11 +231,11 @@ class BehavioralStage:
         self.__mouse_id = Meta[1]
         self.__instance_date = ExperimentData.getDate()
         #
-        self.mouse_directory = Meta[0]
         self.modifications = [(ExperimentData.getDate(), ExperimentData.getTime())]
-        self.stage_directory = self.mouse_directory + "\\" + Stage
         self.folder_dictionary = dict()
-        self.createFolderDictionary()
+
+        _mouse_directory = Meta[0]
+        self.createFolderDictionary(_mouse_directory, Stage)
 
     @property
     def mouse_id(self):
@@ -249,22 +248,26 @@ class BehavioralStage:
     def recordMod(self):
         self.modifications.append((ExperimentData.getDate(), ExperimentData.getTime()))
 
-    def createFolderDictionary(self):
+    def createFolderDictionary(self, MouseDirectory, Stage):
         """
         Creates a dictionary of locations for specific files
-
-        **Requires**
-            | self.stage_directory
 
         **Modifies**
             | self.folder_dictionary
 
-        """
+        :param MouseDirectory: Directory containing mouse data (passed meta)
+        :type MouseDirectory: str
+        :param Stage: The Stage ID
+        :type Stage: str
 
+        """
+        _stage_directory = MouseDirectory + "\\" + Stage
         self.folder_dictionary = {
-            'computation_folder': self.stage_directory + "\\Computation",
-            'imaging_folder': self.stage_directory + "\\Imaging",
-            'behavior_folder': self.stage_directory + "\\Behavior",
+            'mouse_directory': MouseDirectory,
+            'stage_directory': _stage_directory,
+            'computation_folder': _stage_directory + "\\Computation",
+            'imaging_folder': _stage_directory + "\\Imaging",
+            'behavior_folder': _stage_directory + "\\Behavior",
         }
 
 
