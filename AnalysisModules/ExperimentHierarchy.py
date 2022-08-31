@@ -2,7 +2,7 @@ import os
 from datetime import date, datetime
 import pickle as pkl
 import numpy as np
-
+from IPython import get_ipython
 
 
 class ExperimentData:
@@ -15,7 +15,9 @@ class ExperimentData:
     def __init__(self, **kwargs):
         # Hidden
         self._mouse_id_assigned = False # to make sure mouse id only set once
+        self._log_file_assigned = False # to make sure log file only set once
         # Protected In Practice
+        self._log_file = kwargs.get('LogFile', None)
         self._mouse_id = kwargs.get('Mouse', None)
         self.__instance_date = self.getDate()
         #
@@ -24,6 +26,30 @@ class ExperimentData:
         self.study_mouse = kwargs.get('StudyMouse', None)
         self.modifications = [(self.getDate(), self.getTime())]
         self.stages = []
+
+        # Create log file if one does not exist
+        if self._log_file_assigned is False and self.directory is not None:
+            self.log_file = self.directory + "\\log_file.log"
+            print("Logging file assigned as :" + self.log_file)
+
+        # start logging if log file exists
+        if self._log_file_assigned:
+            self.startLog()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.endLog()
+
+    @property
+    def log_file(self):
+        return self._log_file
+
+    @log_file.setter
+    def log_file(self, LogFile):
+        if self._log_file_assigned is False:
+            self._log_file = LogFile
+            self._log_file_assigned = True
+        else:
+            print("Log file can only be assigned ONCE.")
 
     @property
     def mouse_id(self):
@@ -223,6 +249,22 @@ class ExperimentData:
         pkl.dump(_output_dict, _output_pickle)
         _output_pickle.close()
         print("Finished.")
+
+    # noinspection All
+    def startLog(self):
+        self.IP = get_ipython()
+        _magic_arguments = '-o -r -t ' + self.log_file + ' append'
+        self.IP.run_line_magic('logstart', _magic_arguments)
+        return print("Logging Initiated")
+
+    # noinspection All
+    def endLog():
+        self.IP.run_line_magic('logstop', '')
+
+    # noinspection All
+    def checkLog(self): # noinspection All
+        self.IP.run_line_magic('logstate', '')
+        return
 
 
 class BehavioralStage:

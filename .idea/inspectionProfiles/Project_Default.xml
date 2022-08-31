@@ -230,6 +230,12 @@
           <option value="AnalysisModules.ExperimentHierarchy.ExperimentData.PreExposure" />
           <option value="AnalysisModules.ExperimentHierarchy.ExperimentData.Encoding" />
           <option value="AnalysisModules.ExperimentHierarchy.ExperimentData.Retrieval" />
+          <option value="AnalysisModules.ExperimentHierarchy.append" />
+          <option value="AnalysisModules.ExperimentHierarchy.logstop" />
+          <option value="AnalysisModules.ExperimentHierarchy.logstart" />
+          <option value="AnalysisModules.ExperimentHierarchy.r" />
+          <option value="AnalysisModules.ExperimentHierarchy.o" />
+          <option value="AnalysisModules.ExperimentHierarchy.t" />
         </list>
       </option>
     </inspection_tool>
