@@ -5,11 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ipython_log.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/EM0121.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/PreprocessingImages.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/PreprocessingImages.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +113,7 @@
       <workItem from="1661786251789" duration="8637000" />
       <workItem from="1661870110544" duration="12488000" />
       <workItem from="1661893326288" duration="9000" />
-      <workItem from="1661955281802" duration="4369000" />
+      <workItem from="1661955281802" duration="6409000" />
     </task>
     <servers />
   </component>

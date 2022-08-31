@@ -86,6 +86,9 @@ class ExperimentData:
         for _key in _keys:
             MouseData.__dict__.update(_pickles)
         print("Finished.")
+
+        if MouseData._log_file_assigned:
+            MouseData.startLog()
         return MouseData
 
     @classmethod
@@ -235,6 +238,13 @@ class ExperimentData:
 
     def saveHierarchy(self):
         print("Saving Experimental Hierarchy..")
+        if hasattr('self', '_IP'):
+            # noinspection PyAttributeOutsideInit
+            self._IP = True
+        else:
+            # noinspection PyAttributeOutsideInit
+            self._IP = False
+
         _output_file = self.directory + "\\" + "ExperimentalHierarchy"
         _output_pickle = open(_output_file, 'wb')
 
@@ -250,24 +260,35 @@ class ExperimentData:
         _output_pickle.close()
         print("Finished.")
 
+        if self._IP:
+            # noinspection PyAttributeOutsideInit
+            self._IP = get_ipython()
+
+    def createLogFile(self):
+        self.log_file = self.directory + "\\log_file.log"
+
     # noinspection All
     def startLog(self):
-        self.IP = get_ipython()
+        self._IP = get_ipython()
         _magic_arguments = '-o -r -t ' + self.log_file + ' append'
-        self.IP.run_line_magic('logstart', _magic_arguments)
+        self._IP.run_line_magic('logstart', _magic_arguments)
         return print("Logging Initiated")
 
     # noinspection All
     def endLog():
-        self.IP.run_line_magic('logstop', '')
+        self._IP.run_line_magic('logstop', '')
 
     # noinspection All
     def checkLog(self): # noinspection All
-        self.IP.run_line_magic('logstate', '')
+        self._IP.run_line_magic('logstate', '')
         return
 
 
 class BehavioralStage:
+    """
+    **Self Methods**
+        | **addSamplingFolder** : Generates a folder for containing imaging data of a specific sampling rate
+    """
     def __init__(self, Meta, Stage):
         # PROTECTED
         self.__mouse_id = Meta[1]
@@ -278,6 +299,7 @@ class BehavioralStage:
 
         _mouse_directory = Meta[0]
         self.createFolderDictionary(_mouse_directory, Stage)
+        self.fillImagingFolderDictionary()
 
     @property
     def mouse_id(self):
@@ -311,6 +333,41 @@ class BehavioralStage:
             'imaging_folder': _stage_directory + "\\Imaging",
             'behavior_folder': _stage_directory + "\\Behavior",
         }
+
+    def fillImagingFolderDictionary(self):
+        # RAW
+        _raw_data_folder = self.folder_dictionary['imaging_folder'] + "\\RawImagingData"
+        try:
+            os.makedirs(_raw_data_folder)
+        except FileExistsError:
+            print("Existing Raw Data Folder Detected")
+        self.folder_dictionary['raw_imaging_data'] = _raw_data_folder
+        # META
+        _bruker_meta_folder = self.folder_dictionary['imaging_folder'] + "\\BrukerMetaData"
+        try:
+            os.makedirs(_bruker_meta_folder)
+        except FileExistsError:
+            print("Existing Bruker Meta Data Folder Detected")
+        self.folder_dictionary['bruker_meta_data'] = CollectedDataFolder(_bruker_meta_folder)
+        # COMPILED
+        _compiled_imaging_data_folder = self.folder_dictionary['imaging_folder'] + "\\CompiledImagingData"
+        try:
+            os.makedirs(_compiled_imaging_data_folder)
+        except FileExistsError:
+            print("Existing Compiled Data Folder Detected")
+
+        self.folder_dictionary['compiled_imaging_data_folder'] = CollectedDataFolder(_compiled_imaging_data_folder)
+
+    def addImageSamplingFolder(self, SamplingRate):
+        """
+        Generates a folder for containing imaging data of a specific sampling rate
+
+        :param SamplingRate: Sampling Rate of Dataset in Hz
+        :type SamplingRate: int
+        """
+        _folder_name = self.folder_dictionary['imaging_folder'] + "\\" + SamplingRate + "Hz"
+        os.makedirs(_folder_name)
+        self.folder_dictionary[SamplingRate + "Hz"] = CollectedDataFolder(_folder_name)
 
 
 class CollectedDataFolder:

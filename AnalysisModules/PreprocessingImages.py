@@ -21,29 +21,28 @@ class PreProcessing:
     -------------
     Class containing a variety of static methods for preprocessing images
 
-    Static Methods
-    --------------
-    **loadBrukerTiffs** : Load a sequence of tiff files from a directory.
+    **Static Methods**
+        | **loadBrukerTiffs** : Load a sequence of tiff files from a directory.
 
-    **repackageBrukerTiffs** :  Repackages a sequence of tiff files within a directory to a smaller sequence of tiff stacks.
+        | **repackageBrukerTiffs** :  Repackages a sequence of tiff files within a directory to a smaller sequence of tiff stacks.
 
-    **filterTiff** : Denoise a tiff stack using a multidimensional median filter    
+        | **filterTiff** : Denoise a tiff stack using a multidimensional median filter
 
-    **fastFilterTiff** : GPU-parallelized multidimensional median filter
+        | **fastFilterTiff** : GPU-parallelized multidimensional median filter
 
-    **saveTiff** : Save a numpy array to a single tiff file
+        | **saveTiff** : Save a numpy array to a single tiff file
 
-    **loadTiff** : Load a single tiff file
+        | **loadTiff** : Load a single tiff file
 
-    **loadAllTiffs** : Load a sequence of tiff stacks
+        | **loadAllTiffs** : Load a sequence of tiff stacks
 
-    **blockwiseFastFilterTiff** : Blockwise, GPU-parallelized multidimensional median filter
+        | **blockwiseFastFilterTiff** : Blockwise, GPU-parallelized multidimensional median filter
 
-    **saveTiffStack** : Save a numpy array to a sequence of tiff stacks
+        | **saveTiffStack** : Save a numpy array to a sequence of tiff stacks
 
-    **groupedZProject** : Utilize grouped z-project to downsample data
+        | **groupedZProject** : Utilize grouped z-project to downsample data
 
-    **Visualize** : a numpy array [frames, x pixels, y pixels] as a video
+        | **Visualize** : a numpy array [frames, x pixels, y pixels] as a video
     """
 
     def __init__(self):
