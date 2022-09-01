@@ -142,9 +142,13 @@ class PreProcessing:
             _start_idx = _chunk
             _offset = _start_idx
             _end_idx = _chunk + 7000
-            if _end_idx > _num_frames:
-                _end_idx = _num_frames+1
             _chunk_frames = _end_idx-_start_idx
+            # If this is the last chunk which may not contain a full 7000 frames...
+            if _end_idx > _num_frames:
+                _end_idx = _num_frames
+                _chunk_frames = _end_idx - _start_idx
+                _end_idx += 1
+
             image_chunk = np.full((_chunk_frames, 512, 512), 0, dtype=np.uint16)
             for _fname in tqdm(
                 range(_chunk_frames),
@@ -501,7 +505,7 @@ class PreProcessing:
         ------
         *TiffStack* : numpy array [frames, x pixels, y pixels]
             A numpy array containing a tiff stack
-        *BinSize* : integer or array of integers
+        *BinSize* : integer or tuple of integers
             Size of each bin passed to downsampling function
         *DownsampleFunction* : function
             Downsampling function to run on each bin
@@ -519,8 +523,10 @@ class PreProcessing:
         :param DownsampleFunction: Downsampling function
         :return: downsampled_image
         """
+        print("Downsampling data...")
         downsampled_image = skimage.measure.block_reduce(TiffStack, block_size=BinSize,
                                                          func=DownsampleFunction)
+        print("Finished.")
         return downsampled_image
 
     @staticmethod
@@ -538,6 +544,8 @@ class PreProcessing:
         _cmap = kwargs.get('cmap', "binary_r")
         _interp = kwargs.get('interpolation', "none")
         _fps_multi = kwargs.get('SpeedUp', 1)
+        _vmin = kwargs.get('Vmin', 0)
+        _vmax = kwargs.get('Vmax', 8178)
 
         _new_fps = _fps_multi*fps
 
@@ -553,7 +561,7 @@ class PreProcessing:
         ax2 = plt.subplot2grid((30, 30), (29, 0), colspan=21)
         ax3 = plt.subplot2grid((30, 30), (29, 25), colspan=3)
 
-        block = amp.blocks.Imshow(TiffStack, ax1, cmap=_cmap, interpolation=_interp)
+        block = amp.blocks.Imshow(TiffStack, ax1, cmap=_cmap, vmin=_vmin, vmax=_vmax, interpolation=_interp)
         anim = amp.Animation([block], timeline=_timeline)
         anim.timeline_slider(text='Time', ax=ax2, color="#139fff")
         anim.toggle(ax=ax3)

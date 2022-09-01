@@ -287,7 +287,19 @@ class ExperimentData:
 class BehavioralStage:
     """
     **Self Methods**
-        | **addSamplingFolder** : Generates a folder for containing imaging data of a specific sampling rate
+        | **recordMod** : Records a modification made to the behavioral stage (Date & Time)
+        | **createFolderDictionary** : Creates a dictionary of locations for specific files
+        | **fillImagingDictionary** :  Generates folders and a dictionary of imaging files (Raw, Meta, Compiled)
+        | **addImageSamplingFolder** : Generates a folder for containing imaging data of a specific sampling rate
+        | **addImageProcessingFolder** : Generates a folder for containing processed imaging data
+
+    **Properties**
+        | **mouse_id** : Identifies which mouse this data belongs to
+        | **instance_data** : Identifies when this behavioral stage was created
+
+    **Attributes**
+        | **modifications** : List of modifications made to this behavioral stage
+        | **folder_dictionary** : A dictionary of relevant folders for this behavioral stage
     """
     def __init__(self, Meta, Stage):
         # PROTECTED
@@ -310,6 +322,9 @@ class BehavioralStage:
         return self._BehavioralStage__instance_date
 
     def recordMod(self):
+        """
+        Records a modification made to the behavioral stage (Date & Time)
+        """
         self.modifications.append((ExperimentData.getDate(), ExperimentData.getTime()))
 
     def createFolderDictionary(self, MouseDirectory, Stage):
@@ -335,6 +350,15 @@ class BehavioralStage:
         }
 
     def fillImagingFolderDictionary(self):
+        """
+        Generates folders and a dictionary of imaging files (Raw, Meta, Compiled)
+
+        **Requires**
+            | self.folder_dictionary
+
+        **Modifies**
+            | self.folder_dictionary
+        """
         # RAW
         _raw_data_folder = self.folder_dictionary['imaging_folder'] + "\\RawImagingData"
         try:
@@ -365,9 +389,28 @@ class BehavioralStage:
         :param SamplingRate: Sampling Rate of Dataset in Hz
         :type SamplingRate: int
         """
+        SamplingRate = str(SamplingRate) # Because we know I'll always forget and send an int anyway
         _folder_name = self.folder_dictionary['imaging_folder'] + "\\" + SamplingRate + "Hz"
-        os.makedirs(_folder_name)
+        try:
+            os.makedirs(_folder_name)
+        except FileExistsError:
+            print("The sampling folder already exists. Adding to folder dictionary")
         self.folder_dictionary[SamplingRate + "Hz"] = CollectedDataFolder(_folder_name)
+        ExperimentData.generateSampFreq(_folder_name)
+
+    def addImageProcessingFolder(self, Title):
+        """
+        Generates a folder for containing processed imaging data
+
+        :param Title: The name of the folder
+        :type Title:  str
+        """
+        _folder_name = self.folder_dictionary['imaging_folder'] + "\\" + Title
+        try:
+            os.makedirs(_folder_name)
+        except FileExistsError:
+            print("The image processing folder already exists. Adding to folder dictionary")
+        self.folder_dictionary[Title] = CollectedDataFolder(_folder_name)
 
 
 class CollectedDataFolder:
