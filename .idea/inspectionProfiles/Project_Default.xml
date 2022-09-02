@@ -236,6 +236,8 @@
           <option value="AnalysisModules.ExperimentHierarchy.r" />
           <option value="AnalysisModules.ExperimentHierarchy.o" />
           <option value="AnalysisModules.ExperimentHierarchy.t" />
+          <option value="AnalysisModules.Suite2PAnalysis.Suite2PModule._S2PModule__instance_date" />
+          <option value="AnalysisModules.Suite2PAnalysis.Suite2PModule._Suite2PModule__instance_date" />
         </list>
       </option>
     </inspection_tool>

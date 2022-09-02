@@ -12,6 +12,7 @@ class ExperimentData:
     **Class Methods**
         | **loadHierarchy** : Function that loads the entire experimental hierarchy
     """
+
     def __init__(self, **kwargs):
         # Hidden
         self._mouse_id_assigned = False # to make sure mouse id only set once
@@ -412,6 +413,18 @@ class BehavioralStage:
             print("The image processing folder already exists. Adding to folder dictionary")
         self.folder_dictionary[Title] = CollectedDataFolder(_folder_name)
 
+    def addImagingAnalysis(self, SamplingRate):
+        try:
+            self.folder_dictionary.get(str(SamplingRate) + "Hz")
+        except KeyError:
+            self.addImageProcessingFolder(SamplingRate)
+
+        self.__dict__["imaging_" + str(SamplingRate) + "_Hz"] = {
+            'suite2p': None,
+            'fissa': None,
+            'cascade': None,
+        }
+
 
 class CollectedDataFolder:
     """
@@ -477,7 +490,7 @@ class CollectedDataFolder:
         :return: The absolute file path of the matching filename
         :rtype: str
         """
-        return self.path + CollectedDataFolder.fileLocator(self.files, ID)
+        return self.path + "\\" + CollectedDataFolder.fileLocator(self.files, ID)
 
     @staticmethod
     def fileLocator(files, ID):
@@ -507,3 +520,4 @@ class CollectedDataFolder:
         :rtype: list
         """
         return file.split("_")[0:-1] + file.split("_")[-1].split(".")
+

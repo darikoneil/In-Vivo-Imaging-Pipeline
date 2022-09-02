@@ -18,6 +18,7 @@
       <w>linewidths</w>
       <w>logscale</w>
       <w>multioutput</w>
+      <w>nimg</w>
       <w>probas</w>
       <w>scatterplot</w>
       <w>shuf</w>
