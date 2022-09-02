@@ -5,12 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/AnalysisModules/BrukerMetaModule.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AnalysisModules/DariksSecretFunctions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/EM0121.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/Suite2PAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/Suite2PAnalysis.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +117,7 @@
       <workItem from="1661893326288" duration="9000" />
       <workItem from="1661955281802" duration="25162000" />
       <workItem from="1662054405747" duration="11714000" />
-      <workItem from="1662127342315" duration="5083000" />
+      <workItem from="1662127342315" duration="21504000" />
     </task>
     <servers />
   </component>

@@ -38,17 +38,20 @@ class Suite2PModule:
             'roidetect': True,
         }
         self.ops = {**suite2p.default_ops(), **_ops}
+        self.iscell = None
+        self.stat = None
+
 
     @property
     def instance_date(self):
         return self._Suite2PModule__instance_date
 
     @property
-    def cell_index(self):
+    def cell_index_path(self):
         return self.ops.get('save_path') + "\\" + "iscell.npy"
 
     @property
-    def stat_file(self):
+    def stat_file_path(self):
         return self.ops.get('save_path') + "\\" + "stat.npy"
 
     @property
@@ -58,8 +61,16 @@ class Suite2PModule:
     def run(self):
         self.ops.update(suite2p.run_s2p(self.ops, self.db))
 
+    def load_files(self):
+        self.iscell = np.load(self.cell_index_path, allow_pickle=True)
+        self.stat = np.load(self.stat_file_path, allow_pickle=True)
+
+    def save_files(self):
+        np.save(self.cell_index_path, self.iscell, allow_pickle=True)
+        np.save(self.stat_file_path, self.stat, allow_pickle=True)
+
     def openGUI(self):
-        gui.run(self.stat_file)
+        gui.run(self.stat_file_path)
 
     def motionCorrect(self):
         self.ops['roidetect'] = False
@@ -70,6 +81,17 @@ class Suite2PModule:
     # noinspection PyMethodMayBeStatic
     def replaceTraces(self, NewTraces):
         return "Not Yet Implemented"
+
+    @staticmethod
+    def remove_small_neurons(cells, stats):
+        _num_rois = stats.shape[0]
+        diameters = Suite2PModule.find_diameters(stats)
+
+        _rem_idx = np.where(diameters < 10)[0]
+        cells[_rem_idx, 0] = 0
+        for _roi in range(_num_rois):
+            stats[_roi]['diameter'] = diameters[_roi]
+        return cells, stats
 
     @staticmethod
     def convertToBinary(TiffStack, OutputDirectory):
@@ -98,6 +120,15 @@ class Suite2PModule:
             first_tiffs = np.zeros(0, np.bool)
 
         return files, first_tiffs
+
+    @staticmethod
+    def find_diameters(stats):
+        _num_rois = stats.shape[0]
+        diameters = np.zeros(_num_rois)
+        for _roi in range(_num_rois):
+            diameters[_roi] = stats[_roi].get('radius') * 2
+        return diameters
+
 
 
 

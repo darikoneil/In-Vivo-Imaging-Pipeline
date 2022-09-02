@@ -276,7 +276,7 @@ class ExperimentData:
         return print("Logging Initiated")
 
     # noinspection All
-    def endLog():
+    def endLog(self):
         self._IP.run_line_magic('logstop', '')
 
     # noinspection All
