@@ -4,20 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/AnalysisModules/BurrowPreference.py" afterDir="false" />
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="ignore">
       <change afterPath="$PROJECT_DIR$/RasDataScripts/EM0083.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/RasDataScripts/EM0084.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/RasDataScripts/EM0085.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/RasDataScripts/EM0086.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/RasDataScripts/M337808.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/RasDataScripts/M337809_Analysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/EM0121.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/PreprocessingImages.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/PreprocessingImages.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,8 +123,37 @@
       <workItem from="1662127342315" duration="33694000" />
       <workItem from="1662310570918" duration="2645000" />
       <workItem from="1662385901488" duration="3000" />
-      <workItem from="1663854373198" duration="9106000" />
+      <workItem from="1663854373198" duration="9309000" />
     </task>
+    <task id="LOCAL-00001" summary="ignore">
+      <created>1663863570077</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1663863570077</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Added Modules for BurrowPreference (Incomplete Implementation)">
+      <created>1663863606655</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1663863606655</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Fixed Bug in Preprocessing script that led to incorrect footprint of fast-filtering">
+      <created>1663863707801</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1663863707801</updated>
+    </task>
+    <task id="LOCAL-00004" summary="ignore">
+      <created>1663863739439</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1663863739439</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -149,5 +172,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="Added Modules for BurrowPreference (Incomplete Implementation)" />
+    <MESSAGE value="Fixed Bug in Preprocessing script that led to incorrect footprint of fast-filtering" />
+    <MESSAGE value="ignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="ignore" />
   </component>
 </project>
