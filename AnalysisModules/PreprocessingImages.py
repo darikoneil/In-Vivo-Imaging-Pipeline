@@ -424,13 +424,13 @@ class PreProcessing:
             if _block == 0:
                 _remainder = TiffStack[_blocks[_block + 1] - 500:_blocks[_block + 1], :, :].copy()
                 TiffStack[0:_blocks[_block + 1], :, :] = cupy.asnumpy(PreProcessing.fastFilterTiff(cupy.asarray(
-                    TiffStack[0:_blocks[_block + 1], :, :]), footprint=_footprint))
+                    TiffStack[0:_blocks[_block + 1], :, :]), Footprint=_footprint))
             elif _block == _num_blocks - 1:
 
                 TiffStack[_blocks[_block]:_total_frames, :, :] = \
                     cupy.asnumpy(PreProcessing.fastFilterTiff(
                         cupy.asarray(np.append(_remainder, TiffStack[_blocks[_block]:_total_frames, :, :],
-                                               axis=0)), footprint=_footprint))[_block_buffer_region:, :, :]
+                                               axis=0)), Footprint=_footprint))[_block_buffer_region:, :, :]
 
                 # TiffStack[_blocks[_block]:_total_frames, :, :] = PreProcessing.fastFilterTiff(np.append(_remainder, TiffStack[_blocks[_block]:_total_frames, :, :],
                 # axis=0))[_block_buffer_region:, :, :])
@@ -439,7 +439,7 @@ class PreProcessing:
                 TiffStack[_blocks[_block]:_blocks[_block + 1], :, :] = \
                     cupy.asnumpy(PreProcessing.fastFilterTiff(
                         cupy.asarray(np.append(_remainder, TiffStack[_blocks[_block]:_blocks[_block + 1], :, :],
-                                               axis=0)), footprint=_footprint))[_block_buffer_region:_block_size+_block_buffer_region, :, :]
+                                               axis=0)), Footprint=_footprint))[_block_buffer_region:_block_size+_block_buffer_region, :, :]
                 _remainder = _remainder_new.copy()
 
         return TiffStack
