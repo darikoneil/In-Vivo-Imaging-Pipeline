@@ -17,9 +17,11 @@ class ExperimentData:
         # Hidden
         self._mouse_id_assigned = False # to make sure mouse id only set once
         self._log_file_assigned = False # to make sure log file only set once
+        self._experimental_condition_assigned = False # to make set condition only once
         # Protected In Practice
         self._log_file = kwargs.get('LogFile', None)
         self._mouse_id = kwargs.get('Mouse', None)
+        self._experimental_condition = kwargs.get('Condition', None)
         self.__instance_date = self.getDate()
         #
         self.directory = kwargs.get('Directory', None)
@@ -39,6 +41,23 @@ class ExperimentData:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.endLog()
+
+    @property
+    def experimental_condition(self):
+        """
+        Experiment condition of the mouse
+
+        :rtype: str
+        """
+        return self._experimental_condition
+
+    @experimental_condition.setter
+    def experimental_condition(self, Condition):
+        if self._experimental_condition_assigned is False:
+            self._experimental_condition = Condition
+            self._experimental_condition_assigned = True
+        else:
+            print("Experimental condition can only be assigned ONCE.")
 
     @property
     def log_file(self):
@@ -520,4 +539,3 @@ class CollectedDataFolder:
         :rtype: list
         """
         return file.split("_")[0:-1] + file.split("_")[-1].split(".")
-

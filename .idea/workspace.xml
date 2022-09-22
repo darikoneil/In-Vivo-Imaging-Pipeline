@@ -5,11 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/AnalysisModules/DariksSecretFunctions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AnalysisModules/BurrowPreference.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RasDataScripts/EM0083.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RasDataScripts/EM0084.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RasDataScripts/EM0085.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RasDataScripts/EM0086.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RasDataScripts/M337808.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RasDataScripts/M337809_Analysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/EM0121.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/Suite2PAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/Suite2PAnalysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/PreprocessingImages.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/PreprocessingImages.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,6 +74,7 @@
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\AnalysisModules" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\RasDataScripts" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline" />
     </key>
   </component>
@@ -117,7 +126,10 @@
       <workItem from="1661893326288" duration="9000" />
       <workItem from="1661955281802" duration="25162000" />
       <workItem from="1662054405747" duration="11714000" />
-      <workItem from="1662127342315" duration="21504000" />
+      <workItem from="1662127342315" duration="33694000" />
+      <workItem from="1662310570918" duration="2645000" />
+      <workItem from="1662385901488" duration="3000" />
+      <workItem from="1663854373198" duration="9106000" />
     </task>
     <servers />
   </component>
