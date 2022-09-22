@@ -3,7 +3,7 @@
     <option name="myName" value="Project Default" />
     <inspection_tool class="DuplicatedCode" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <Languages>
-        <language minSize="141" name="Python" />
+        <language minSize="317" name="Python" />
       </Languages>
     </inspection_tool>
     <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -238,6 +238,7 @@
           <option value="AnalysisModules.ExperimentHierarchy.t" />
           <option value="AnalysisModules.Suite2PAnalysis.Suite2PModule._S2PModule__instance_date" />
           <option value="AnalysisModules.Suite2PAnalysis.Suite2PModule._Suite2PModule__instance_date" />
+          <option value="float.__getitem__" />
         </list>
       </option>
     </inspection_tool>

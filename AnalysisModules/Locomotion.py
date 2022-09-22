@@ -8,9 +8,9 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 
 
-class BurrowPreference(BehavioralStage):
+class Locomotion(BehavioralStage):
     """
-    Instance Factory for BurrowPreference Data
+        Instance Factory for Locomotion Data
 
     **Self Methods**
         | **self.generateFileID** : Generate a file ID for a particular sort of data
@@ -41,25 +41,6 @@ class BurrowPreference(BehavioralStage):
             return "ERROR"
 
         return analogData
-
-    @classmethod
-    def loadDigitalData(cls, Filename):
-        """
-        Loads Digital Data from a burrow behavioral session
-        :param Filename: Numpy file containing digital data
-        :type Filename: str
-        :return: Digital Data
-        """
-        # Note that we flip the bit to convert the data such that 1 == gate triggered
-        try:
-            digitalData = np.load(Filename)
-        except FileNotFoundError:
-            return "ERROR"
-
-        digitalData = digitalData.__abs__()-1
-        # noinspection PyUnresolvedReferences
-        digitalData[np.where(digitalData == 255)] = 1
-        return digitalData
 
     @classmethod
     def loadStateData(cls, Filename):
@@ -95,11 +76,9 @@ class BurrowPreference(BehavioralStage):
             try:
                 with open(Filename, 'rb') as f:
                     dictionaryData = pkl.load(f, encoding='bytes')
-                    dictionaryData = BurrowPreference.convertFromPy27_Dict(dictionaryData)
+                    dictionaryData = Locomotion.convertFromPy27_Dict(dictionaryData)
             except Exception:
                 return "ERROR_READ"
-
-
 
         return dictionaryData
 
@@ -118,12 +97,15 @@ class BurrowPreference(BehavioralStage):
             | self.folder_dictionary['analog_burrow_data']
 
         """
-        self.folder_dictionary['behavioral_exports'] = CollectedDataFolder(self.folder_dictionary.get('behavior_folder') +
-                                                                           "\\BehavioralExports")
-        self.folder_dictionary['deep_lab_cut_data'] = CollectedDataFolder(self.folder_dictionary.get('behavior_folder') +
-                                                                          "\\DeepLabCutData")
-        self.folder_dictionary['raw_behavioral_data'] = CollectedDataFolder(self.folder_dictionary.get('behavior_folder') +
-                                                                            "\\RawBehavioralData")
+        self.folder_dictionary['behavioral_exports'] = CollectedDataFolder(
+            self.folder_dictionary.get('behavior_folder') +
+            "\\BehavioralExports")
+        self.folder_dictionary['deep_lab_cut_data'] = CollectedDataFolder(
+            self.folder_dictionary.get('behavior_folder') +
+            "\\DeepLabCutData")
+        self.folder_dictionary['raw_behavioral_data'] = CollectedDataFolder(
+            self.folder_dictionary.get('behavior_folder') +
+            "\\RawBehavioralData")
         self.folder_dictionary['processed_data'] = self.folder_dictionary.get('behavior_folder') + \
                                                    "\\ProcessedData"
         self.folder_dictionary['analog_burrow_data'] = self.folder_dictionary.get('behavior_folder') + \
@@ -138,7 +120,7 @@ class BurrowPreference(BehavioralStage):
         :return: Filename containing respective data
         :rtype: str
         """
-        
+
         # Generate file extension
         if SaveType == 'Analog':
             _save_type = 'analog.npy'
@@ -148,60 +130,48 @@ class BurrowPreference(BehavioralStage):
             _save_type = 'state.npy'
         elif SaveType == 'Behavior Config':
             _save_type = 'behavior_config'
-        elif SaveType == 'Hardware Config':
-            _save_type = 'hardware_config'
         else:
             return print("Unrecognized Behavioral Data Type")
-        
+
         filename = self.folder_dictionary['raw_behavioral_data'].path + "\\" + _save_type
         return filename
-    
+
     def loadBehavioralData(self):
         """
         Master function that loads the following data -> analog, digital, state, behavior config, hardware config
         """
         # Analog
         _analog_file = self.generateFileID('Analog')
-        _analog_data = BurrowPreference.loadAnalogData(_analog_file)
+        _analog_data = Locomotion.loadAnalogData(_analog_file)
         if type(_analog_data) == str and _analog_data == "ERROR":
             return print("Could not find analog data!")
 
-        # Digital
-        _digital_file = self.generateFileID('Digital')
-        _digital_data = BurrowPreference.loadDigitalData(_digital_file)
-        if type(_digital_data) == str and _digital_data == "ERROR":
-            return print("Could not find digital data!")
-
         # State
         _state_file = self.generateFileID('State')
-        _state_data = BurrowPreference.loadStateData(_state_file)
-        if _state_data[0] == "ERROR": # 0 because it's an array of strings so ambiguous str comparison
+        _state_data = Locomotion.loadStateData(_state_file)
+        if _state_data[0] == "ERROR":  # 0 because it's an array of strings so ambiguous str comparison
             return print("Could not find state data!")
 
         # Behavior Config
-       # _behavior_config_file = self.generateFileID('Behavior Config')
-       # _behavior_config_data = BurrowPreference.loadDictionaryData(_behavior_config_file)
-       # if _behavior_config_data == "ERROR_FIND":
-       #     return print("Could not find behavior config data!")
-       # elif _behavior_config_data == "ERROR_READ":
-       #     return print("Could not read behavior config data!")
+        # _behavior_config_file = self.generateFileID('Behavior Config')
+        # _behavior_config_data = Locomotion.loadDictionaryData(_behavior_config_file)
+        # if _behavior_config_data == "ERROR_FIND":
+        #     return print("Could not find behavior config data!")
+        # elif _behavior_config_data == "ERROR_READ":
+        #     return print("Could not read behavior config data!")
 
         # Hardware Config
-       # _hardware_config_file = self.generateFileID('Hardware Config')
-       # _hardware_config_data = BurrowPreference.loadDictionaryData(_hardware_config_file)
-       # if _hardware_config_data == "ERROR_FIND":
-       #     return print("Could not find behavior config data!")
-       # elif _hardware_config_data == "ERROR_READ":
+        # _hardware_config_file = self.generateFileID('Hardware Config')
+        # _hardware_config_data = Locomotion.loadDictionaryData(_hardware_config_file)
+        # if _hardware_config_data == "ERROR_FIND":
+        #     return print("Could not find behavior config data!")
+        # elif _hardware_config_data == "ERROR_READ":
         #    return print("Could not read behavior config data!")
 
         # noinspection PyTypeChecker
-        self.data['Habituation'] = OrganizeBehavior('Habituation', _analog_data, _digital_data, _state_data)
+        self.data['Habituation'] = OrganizeBehavior('Habituation', _analog_data, _state_data)
         # noinspection PyTypeChecker
-        self.data['Release'] = OrganizeBehavior('Release', _analog_data, _digital_data, _state_data)
-        # noinspection PyTypeChecker
-        self.data['Retract'] = OrganizeBehavior('Retract', _analog_data, _digital_data, _state_data)
-        # noinspection PyTypeChecker
-        self.data['PreferenceTest'] = OrganizeBehavior('PreferenceTest', _analog_data, _digital_data, _state_data)
+        self.data['Locomotion'] = OrganizeBehavior('Locomotion', _analog_data, _state_data)
 
     @staticmethod
     def convertFromPy27_Dict(Dict):
@@ -229,16 +199,14 @@ class OrganizeBehavior:
     **Class Methods**
         | **cls.indexData** : Function indexes the frames of some sort of task-relevant experimental state
     """
-    def __init__(self, State, AnalogData, DigitalData, StateData, **kwargs):
-        self.gate_channel = kwargs.get('GateChannel', 1)
+
+    def __init__(self, State, AnalogData, StateData, **kwargs):
+        self.locomotion_channel = kwargs.get('Locomotion', 1)
         self.buffer_size = kwargs.get('BufferSize', 100)
 
         idx = OrganizeBehavior.indexData(State, StateData, self.buffer_size)
 
-        if DigitalData.shape.__len__() == 1:
-            self.gateData = DigitalData[idx[0]:idx[1]]
-        elif DigitalData.shape.__len__() > 1:
-            self.gateData = DigitalData[self.gate_channel, idx[0]:idx[1]]
+        self.locomotion = AnalogData[self.locomotion_channel, idx[0]:idx[1]].copy()
 
     @classmethod
     def indexData(cls, State, StateData, BufferSize):
@@ -250,12 +218,10 @@ class OrganizeBehavior:
         :param StateData: The numpy array containing strings defining the state at any given time
         :param BufferSize: The size of the DAQ's buffer during recording (Thus x samples are considered one state)
         :type BufferSize: int
-        :param Trial: The specified trial to index
-        :type Trial: int
         :return: A numpy array indexing the state/trial specific samples
         """
         _idx = np.where(StateData == State)[0]
-        idx = tuple([_idx[0]*BufferSize, _idx[-1]*BufferSize])
+        idx = tuple([_idx[0] * BufferSize, _idx[-1] * BufferSize])
         return idx
 
 
@@ -263,64 +229,43 @@ class StatsModule:
     """
     Container for all stats-based stuff
     """
+
     def __init__(self):
         return
 
     @staticmethod
-    def calculate_percent_in_burrow(gateData):
+    def cumulative_displacement(AnalogLocomotionSignal):
         """
-        Calculate the percentage of time spent in the burrow
+        Quantify the cumulative displacement of the animal
 
-        :param gateData: a numpy array of the gate / trigger burrow data
-        :return: A tuple containing the percent of time in (0 index) and out (1 index) of the burrow\
-        :rtype: tuple
+        That is, the cumulative sum of the absolute value of the first derivative
+
+        :param AnalogLocomotionSignal:
+        :return: Cumulative Displacement
+        :rtype: float
         """
+        return np.cumsum(np.abs(np.diff(AnalogLocomotionSignal)))
 
-        return tuple([100*(np.sum(gateData)/gateData.shape[0]), 100*(gateData.shape[0]-np.sum(gateData))/gateData.shape[0]])
+    @staticmethod
+    def total_displacement(AnalogLocomotionSignal):
+        return StatsModule.cumulative_displacement(AnalogLocomotionSignal)[-1]
 
 
 class VisualsModule:
     """
     Container for visuals/plotting stuff
     """
+
     def __init__(self):
         return
 
     @staticmethod
-    def pie_chart_comparison(Group1Percentiles, Group2Percentiles, **kwargs):
-        _cmap = kwargs.get("cmap", "Spectral_r")
-        _radius = kwargs.get("radius", 1)
-        _reduction = kwargs.get("reduction", 0.3)
-        _inner_radius = kwargs.get("_inner_radius", _radius - _reduction)
-        _edge_color = kwargs.get("edge_color", "w")
-        _wedge_width = kwargs.get("wedge_width", _reduction)
-        _title = kwargs.get("title", " ")
-        _sub_1 = kwargs.get("sub_1", " ")
-        _sub_2 = kwargs.get("sub_2", " ")
-        _match_colors = kwargs.get("matching_colors", True)
-        _angles = kwargs.get("angles", tuple([0, 0]))
+    def plot_cumulative_displacement(cumulative_displacement, **kwargs):
+        _unit_time = kwargs.get('time_unit', 1/1000)
 
+        _time_vec = np.arange(0, cumulative_displacement.shape[0]*_unit_time, _unit_time)
         fig1 = plt.figure(1)
         ax1 = fig1.add_subplot(111)
+        ax1.plot(_time_vec, cumulative_displacement)
 
-        cmap = plt.colormaps[_cmap]
 
-        if _match_colors:
-            oc = cmap(np.arange(0, 1, 0.25))
-
-            ax1.pie(Group1Percentiles, radius=_radius, colors=oc[[0, 1], :].copy(),
-                    startangle=_angles[0], wedgeprops=dict(width=_wedge_width,
-                                                           edgecolor=_edge_color))
-
-            ax1.pie(Group2Percentiles, radius=_inner_radius, colors=oc[[0, 1], :].copy(),
-                    startangle=_angles[1], wedgeprops=dict(width=_wedge_width,
-                                                           edgecolor=_edge_color))
-
-        else:
-            return print("Not Yet Implemented")
-
-        ax1.set(aspect="equal", title=_title)
-        ax1.text(0, 0, _sub_1, horizontalalignment='center', verticalalignment='center')
-        ax1.text(0.85, 0.85, _sub_2, horizontalalignment='center', verticalalignment='center')
-        ax1.legend(['Explore', 'Hide'], loc=3)
-        return fig1, ax1

@@ -5,12 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="ignore">
+      <change afterPath="$PROJECT_DIR$/AnalysisModules/Locomotion.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/RasDataScripts/EM0083.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/RasDataScripts/EM0084.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/RasDataScripts/EM0085.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/RasDataScripts/EM0086.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/RasDataScripts/M337808.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/RasDataScripts/M337809_Analysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/BurrowPreference.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/BurrowPreference.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/EM0121.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -123,7 +127,8 @@
       <workItem from="1662127342315" duration="33694000" />
       <workItem from="1662310570918" duration="2645000" />
       <workItem from="1662385901488" duration="3000" />
-      <workItem from="1663854373198" duration="9309000" />
+      <workItem from="1663854373198" duration="9352000" />
+      <workItem from="1663864012542" duration="8664000" />
     </task>
     <task id="LOCAL-00001" summary="ignore">
       <created>1663863570077</created>
@@ -153,7 +158,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663863739439</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="ignore">
+      <created>1663863761240</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1663863761240</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
