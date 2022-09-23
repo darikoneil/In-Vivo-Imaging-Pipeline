@@ -239,6 +239,9 @@
           <option value="AnalysisModules.Suite2PAnalysis.Suite2PModule._S2PModule__instance_date" />
           <option value="AnalysisModules.Suite2PAnalysis.Suite2PModule._Suite2PModule__instance_date" />
           <option value="float.__getitem__" />
+          <option value="object.fileLocator" />
+          <option value="object.files" />
+          <option value="object.path" />
         </list>
       </option>
     </inspection_tool>

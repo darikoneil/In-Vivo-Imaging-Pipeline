@@ -1,6 +1,7 @@
 import numpy as np
-import pathlib
 import pickle as pkl
+import pathlib
+import pandas as pd
 from AnalysisModules.ExperimentHierarchy import BehavioralStage, CollectedDataFolder
 import matplotlib
 matplotlib.use('Qt5Agg')
@@ -290,6 +291,22 @@ class FearConditioning(BehavioralStage):
             self.data['Trial ' + str(_trial+1)] = TrialData(FearConditioning.OrganizeBehavioralData(
                 _analog_data, _digital_data, _state_data, _trial, _dictionary_data))
 
+        self.importDeepLabCutData()
+
+    def importDeepLabCutData(self):
+        DLM = DeepLabModule(self.folder_dictionary['deep_lab_cut_data'], self.folder_dictionary['behavioral_exports'])
+        for _trial in range(self.num_trials):
+            # Trial
+            self.data["".join(["Trial ", str(_trial+1)])].trial_data.dlc_raw = \
+                DLM.SegregateTrials(DLM.trial_data, _trial+1)
+            self.data["".join(["Trial ", str(_trial+1)])].trial_data.dlc_physical = \
+                DLM.ConductPostProcessing(self.data["".join(["Trial ", str(_trial+1)])].trial_data.dlc_raw)
+            # Pre Trial
+            self.data["".join(["Trial ", str(_trial+1)])].pre_trial_data.dlc_raw = \
+                DLM.SegregateTrials(DLM.pre_trial_data, _trial+1)
+            self.data["".join(["Trial ", str(_trial+1)])].pre_trial_data.dlc_physical = \
+                DLM.ConductPostProcessing(self.data["".join(["Trial ", str(_trial+1)])].pre_trial_data.dlc_raw)
+
     def generateFileID(self, SaveType):
         """
         Generate a file ID for a particular sort of data
@@ -403,14 +420,14 @@ class OrganizeBehavior:
         self.buffer_size = kwargs.get('BufferSize', 100)
 
         _idx = OrganizeBehavior.indexData(State, StateData, self.buffer_size, Trial)
-        self.imaging_sync = AnalogData[self.imaging_sync_channel, _idx]
-        self.prop_data = AnalogData[self.prop_channel, _idx]
-        self.force_data = AnalogData[self.force_channel, _idx]
+        self.imaging_sync = AnalogData[self.imaging_sync_channel, _idx[0]*self.buffer_size:_idx[-1]*self.buffer_size]
+        self.prop_data = AnalogData[self.prop_channel, _idx[0]*self.buffer_size:_idx[-1]*self.buffer_size]
+        self.force_data = AnalogData[self.force_channel, _idx[0]*self.buffer_size:_idx[-1]*self.buffer_size]
 
         if DigitalData.shape.__len__() == 1:
-            self.gateData = DigitalData[_idx]
+            self.gateData = DigitalData[_idx[0]*self.buffer_size:_idx[-1]*self.buffer_size]
         elif DigitalData.shape.__len__() > 1:
-            self.gateData = DigitalData[self.gate_channel, _idx]
+            self.gateData = DigitalData[self.gate_channel, _idx[0]*self.buffer_size:_idx[-1]*self.buffer_size]
 
     @classmethod
     def indexData(cls, State, StateData, BufferSize, Trial):
@@ -484,6 +501,109 @@ class OrganizeHabituation(OrganizeBehavior):
         self.habEndTime = Dictionary["habEnd"]
         self.habStartFrames = 0
         self.habEndFrames = int(self.habEndTime[0] - self.habStartTime[0])
+
+
+class DeepLabModule:
+    """
+    Module for deep lab cut data in the form of a pandas dataframe
+
+    **Class Methods**
+        | **cls.loadData** : Function loads the deep lab cut data
+    """
+    def __init__(self, DataFolderDLC, DataFolderBehavioralExports):
+        self.pre_trial_data, self.trial_data = \
+            self.loadData(DataFolderDLC, DataFolderBehavioralExports)
+        return
+
+    @classmethod
+    def loadData(cls, DataFolderDLC, DataFolderBehavioralExports):
+        # noinspection GrazieInspection
+        """
+                Load DeepLabCut Data
+
+                :param DataFolderDLC: Collected Data Folder object for deep lab cut folder
+                :param DataFolderBehavioralExports:  Collected Data Folder object for behavioral exports folder
+                :type DataFolderDLC: object
+                :type DataFolderBehavioralExports: object
+                :returns: pre_trial_data, trial_data
+                """
+        # extract paths
+        PathDLC = DataFolderDLC.path
+        PathBE = DataFolderBehavioralExports.path
+        # Find dlc .csv's
+        _dlc_csv_files = []
+        for i in DataFolderDLC.files:
+            if pathlib.Path("".join([PathDLC, "\\", i])).suffix == ".csv":
+                _dlc_csv_files.append(i)
+        # Locate Pre Trial csv
+        _pre_trial_csv = DataFolderDLC.fileLocator(_dlc_csv_files, "PRETRIALSDLC")
+        # Locate Trial csv
+        _trial_csv = DataFolderDLC.fileLocator(_dlc_csv_files, "TRIALSDLC")
+
+        # Find behavioral exports .csv's
+        _be_csv_files = []
+        for i in DataFolderBehavioralExports.files:
+            if pathlib.Path("".join([PathBE, "\\", i])).suffix == ".csv":
+                _be_csv_files.append(i)
+        # Pre Trial Frame IDs
+        _pre_trial_frame_ids_csv = DataFolderBehavioralExports.fileLocator(_be_csv_files, "preTrial")
+        # Trial Frame IDs
+        _trial_frame_ids_csv = DataFolderBehavioralExports.fileLocator(_be_csv_files, "frameIDs")
+
+        # load data
+        pre_trial = pd.read_csv("".join([PathDLC, "\\", _pre_trial_csv]), header=2)
+        trial = pd.read_csv("".join([PathDLC, "\\", _trial_csv]), header=2)
+
+        # load ids
+        _pre_trial_frame_ids = np.genfromtxt("".join([PathBE, "\\", _pre_trial_frame_ids_csv]), delimiter=",").astype(int)
+        _trial_frame_ids = np.genfromtxt("".join([PathBE, "\\", _trial_frame_ids_csv]), delimiter=",").astype(int)
+
+        # attach ids
+        pre_trial.index = _pre_trial_frame_ids
+        trial.index = _trial_frame_ids
+
+        return pre_trial, trial
+
+    @classmethod
+    def ConductPostProcessing(cls, RawData, **kwargs):
+        _old_min = kwargs.get("old min", 0)
+        _old_max = kwargs.get("old max", 800)
+        _markers_idx = kwargs.get("marker_index", tuple([1, 2, 4, 5]))
+        dlc_physical = RawData.copy()
+
+        for _marker in _markers_idx:
+            dlc_physical[dlc_physical.columns[_marker]] = cls.ConvertToPhysicalUnits(dlc_physical[dlc_physical.columns[_marker]].values,
+                                                                                     _old_min, _old_max)
+        return dlc_physical
+
+    @classmethod
+    def SegregateTrials(cls, Data, TrialNumber):
+        """
+        Returns the data for that particular trial
+
+        :param Data: Pandas Dataframe where the index is the trial number
+        :param TrialNumber: the desired trial number
+        :return: Pandas dataframe containing only that trial
+        """
+        return Data.loc[TrialNumber]
+
+    @classmethod
+    def ConvertToPhysicalUnits(cls, fPositions, oldMin, oldMax, **kwargs):
+        """
+        Converts the burrow positions to physical units (mm)
+
+        :param fPositions:
+        :param oldMin:
+        :param oldMax:
+        :return:
+        """
+        _new_max = kwargs.get("new_max", 140)
+        _new_min = kwargs.get("new_min", 0)
+
+        _old_range = oldMax-oldMin
+        _new_range = _new_max - _new_min
+
+        return (((fPositions-oldMin)*_new_range)/_old_range)+_new_min
 
 
 class BurrowPlots:

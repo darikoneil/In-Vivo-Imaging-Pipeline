@@ -5,6 +5,7 @@
       <w>blockwise</w>
       <w>cmap</w>
       <w>covariate</w>
+      <w>csv's</w>
       <w>daq's</w>
       <w>darkgrid</w>
       <w>downsample</w>
@@ -20,12 +21,14 @@
       <w>logscale</w>
       <w>multioutput</w>
       <w>nimg</w>
+      <w>pretrialsdlc</w>
       <w>probas</w>
       <w>scatterplot</w>
       <w>shuf</w>
       <w>sinc</w>
       <w>subfolders</w>
       <w>tiffstack</w>
+      <w>trialsdlc</w>
       <w>vmax</w>
       <w>vmin</w>
     </words>
