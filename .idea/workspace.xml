@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="DeepLabCutModule (partially) ported from matlab">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Partial Implementation of Pandas For Cleanliness of Experimental Hierarchy">
       <change afterPath="$PROJECT_DIR$/AnalysisModules/SF2.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -145,7 +143,7 @@
       <workItem from="1664197543560" duration="12573000" />
       <workItem from="1664218453565" duration="16807000" />
       <workItem from="1664287361724" duration="25877000" />
-      <workItem from="1664380178697" duration="8547000" />
+      <workItem from="1664380178697" duration="8742000" />
     </task>
     <task id="LOCAL-00001" summary="ignore">
       <created>1663863570077</created>
@@ -196,7 +194,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663966927429</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Partial Implementation of Pandas For Cleanliness of Experimental Hierarchy">
+      <created>1664388806392</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1664388806392</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -220,6 +225,7 @@
     <MESSAGE value="ignore" />
     <MESSAGE value="Locomotion Module" />
     <MESSAGE value="DeepLabCutModule (partially) ported from matlab" />
-    <option name="LAST_COMMIT_MESSAGE" value="DeepLabCutModule (partially) ported from matlab" />
+    <MESSAGE value="Partial Implementation of Pandas For Cleanliness of Experimental Hierarchy" />
+    <option name="LAST_COMMIT_MESSAGE" value="Partial Implementation of Pandas For Cleanliness of Experimental Hierarchy" />
   </component>
 </project>

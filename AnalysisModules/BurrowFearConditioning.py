@@ -627,7 +627,6 @@ class MethodsForPandasOrganization:
 
     @staticmethod
     def nest_all_stages_under_trials(StateData, Index, StateCastedDict):
-        # nested_trial_index = np.full(Index.shape[0], '', dtype="<U21")
         nested_trial_index = np.full(Index.shape[0], 69, dtype=np.float64)
         _trial_idx = np.where(StateData == StateCastedDict.get("Trial"))[0]
         _deriv_idx = np.diff(_trial_idx)
@@ -635,22 +634,14 @@ class MethodsForPandasOrganization:
         _trailing_edge = np.append(_trailing_edge, _trial_idx[-1])
         _habituation_trailing_edge = np.where(StateData == StateCastedDict.get("Habituation"))[0][-1]
 
-        # nested_trial_index[_habituation_trailing_edge] = "".join(["Trial Sequence ", "Pre"])
         nested_trial_index[_habituation_trailing_edge] = 0
-        # nested_trial_index[-1] = "".join(["Trial Sequence ", "Post"])
         nested_trial_index[-1] = _trailing_edge.shape[0]+1
 
         for _edge in range(_trailing_edge.shape[0]):
-            # nested_trial_index[_trailing_edge[_edge]*100] = "".join(["Trial Sequence ", str(_edge+1)])
             nested_trial_index[_trailing_edge[_edge]] = _edge+1
 
-        # nested_trial_index[nested_trial_index == ''] = np.nan
-        # nested_trial_index = pd.Series(nested_trial_index, index=Index, dtype="string")
-        # nested_trial_index[nested_trial_index == ''] = np.nan
         nested_trial_index = pd.Series(nested_trial_index, index=Index, dtype=np.float64)
         nested_trial_index[nested_trial_index == 69] = np.nan
-        # double check
-        nested_trial_index[nested_trial_index == np.nan] = np.nan
         nested_trial_index.bfill(inplace=True)
 
         return nested_trial_index
@@ -693,7 +684,7 @@ class MethodsForPandasOrganization:
 
         for _unique_value in range(_unique_states.shape[0]):
             StateCastedDict[_unique_states[_unique_value]] = _unique_value
-            IntegerStateIndex[np.where(StateData == _unique_states[_unique_value])[0]]=_unique_value
+            IntegerStateIndex[np.where(StateData == _unique_states[_unique_value])[0]] = _unique_value
 
         return IntegerStateIndex, StateCastedDict
 
