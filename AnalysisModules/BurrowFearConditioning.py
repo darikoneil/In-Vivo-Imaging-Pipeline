@@ -2,6 +2,7 @@ import numpy as np
 import pickle as pkl
 import pathlib
 import pandas as pd
+from tqdm.auto import tqdm
 from AnalysisModules.ExperimentHierarchy import BehavioralStage, CollectedDataFolder
 import matplotlib
 matplotlib.use('Qt5Agg')
@@ -21,7 +22,8 @@ class FearConditioning(BehavioralStage):
         | **cls.loadAnalogData** : Loads Analog Data from a burrow behavioral session
         | **cls.loadDigitalData** : Loads Digital Data from a burrow behavioral session
         | **cls.loadStateData** : Loads State Data from a burrow behavioral session
-        | **cls.loadDictionaryData** :Loads Dictionary Data from a burrow behavioral session
+        | **cls.loadDictionaryData** : Loads Dictionary Data from a burrow behavioral session
+        | **cls.loadBehavioralData** : Loads Behavioral Data from a burrow behavioral session
 
     **Static Methods**
         | **convertFromPy27_Array** : Convert a numpy array of strings in byte-form to numpy array of strings in string-form
@@ -50,6 +52,10 @@ class FearConditioning(BehavioralStage):
         # self.trial_dictionary = dict()
 
         self.data = dict()
+        self.data_frame = pd.DataFrame()
+        self.state_casted_index = dict()
+        self.multi_index = pd.MultiIndex()
+        self.trial_parameters = dict()
 
     @property
     def stage_id(self):
@@ -255,10 +261,12 @@ class FearConditioning(BehavioralStage):
                              }
         return dictionary_update
 
-    def loadBehavioralData(self):
+    def loadBehavioralData(self, **kwargs):
         """
         Master function that loads the following data -> analog, digital, state, dictionary
+
         """
+        _use_pandas = kwargs.get("use_pandas", True)
         # Analog
         _analog_file = self.generateFileID('Analog')
         _analog_data = FearConditioning.loadAnalogData(_analog_file)
@@ -280,20 +288,35 @@ class FearConditioning(BehavioralStage):
         # Dictionary
         _dictionary_file = self.generateFileID('Dictionary')
         _dictionary_data = FearConditioning.loadDictionaryData(_dictionary_file)
+        self.trial_parameters = _dictionary_data.copy() # For Safety
+
         if _dictionary_data == "ERROR_FIND":
             return print("Could not find dictionary data!")
         elif _dictionary_data == "ERROR_READ":
             return print("Could not read dictionary data!")
 
-        # noinspection PyTypeChecker
-        for _trial in range(self.num_trials): # Adjust for Zero Indexing
-            # noinspection PyTypeChecker
-            self.data['Trial ' + str(_trial+1)] = TrialData(FearConditioning.OrganizeBehavioralData(
-                _analog_data, _digital_data, _state_data, _trial, _dictionary_data))
+        _dlc = DeepLabModule(self.folder_dictionary['deep_lab_cut_data'], self.folder_dictionary['behavioral_exports'])
 
-        self.importDeepLabCutData()
+        # noinspection PyTypeChecker
+        # Segregated Organization
+        if _use_pandas:
+            # noinspection PyTypeChecker
+            # Copies for safety > No-copies for speed (avoid pandas gotchas)
+            self.data_frame, self.state_casted_index, self.multi_index = \
+                MethodsForPandasOrganization.ExportPandasDataFrame(_analog_data.copy(), _digital_data.copy(), _state_data.copy())
+            # merge cs index with data frame
+            # merge deeplabcut with data frame
+        else:
+            for _trial in range(self.num_trials): # Adjust for Zero Indexing
+                # noinspection PyTypeChecker
+                self.data['Trial ' + str(_trial+1)] = TrialData(FearConditioning.OrganizeBehavioralData(
+                    _analog_data, _digital_data, _state_data, _trial, _dictionary_data))
+            self.importDeepLabCutData()
 
     def importDeepLabCutData(self):
+        """
+        Not-Pandas importing
+        """
         DLM = DeepLabModule(self.folder_dictionary['deep_lab_cut_data'], self.folder_dictionary['behavioral_exports'])
         for _trial in range(self.num_trials):
             # Trial
@@ -503,6 +526,178 @@ class OrganizeHabituation(OrganizeBehavior):
         self.habEndFrames = int(self.habEndTime[0] - self.habStartTime[0])
 
 
+class MethodsForPandasOrganization:
+    """
+    Simply a container for methods related to organization of behavioral data through a pandas dataframe
+    """
+    def __init__(self):
+        return
+
+    @ classmethod
+    def ExportPandasDataFrame(cls, AnalogData, DigitalData, StateData, **kwargs):
+        _imaging_sync_channel = kwargs.get("imaging_sync_channel", 0)
+        _motor_position_channel = kwargs.get("motor_position_channel", 1)
+        _force_channel = kwargs.get("force_channel", 2)
+
+        # Generate Indices describing different data acquisitions
+        _time_vector_1000Hz = np.around(np.arange(0, AnalogData.shape[1] * (1 / 1000), 1 / 1000, dtype=np.float64), decimals=3)
+        _time_vector_10Hz = np.around(np.arange(0, StateData.shape[0] * (1 / 10), 1 / 10, dtype=np.float64), decimals=3)
+
+        # Cast State Index to Integers for simplicity & avoiding gotcha's with pandas
+        _integer_state_index, StateCastedDict = MethodsForPandasOrganization.castStateIntoFloat64(StateData)
+
+        StateIndex = MethodsForPandasOrganization.match_data_to_new_index(_integer_state_index, _time_vector_10Hz,
+                                                                                         _time_vector_1000Hz,
+                                                                                         is_string=False)
+
+        # noinspection PyTypeChecker
+        TrialIndex = MethodsForPandasOrganization.nest_all_stages_under_trials(StateIndex.values,
+                                                                               _time_vector_1000Hz,
+                                                                               StateCastedDict)
+
+        # Time = pd.Series(_time_vector_1000Hz, index=_time_vector_1000Hz) # Don't know why added index=var
+
+        # MultiIndex = pd.MultiIndex.from_arrays([StateIndex, TrialIndex, Time], names=["State Index", "Trial Index", "Time"])
+
+        try:
+            OrganizedData = pd.DataFrame(None, index=_time_vector_1000Hz, dtype=np.float64)
+            MultiIndex = pd.MultiIndex.from_arrays([StateIndex.values, TrialIndex.values, _time_vector_1000Hz])
+            OrganizedData.index.name = "Time (s)"
+            AnalogData = AnalogData.T
+            OrganizedData['State Integer'] = StateIndex
+            OrganizedData['Trial Set'] = TrialIndex
+            OrganizedData['Imaging Sync'] = pd.Series(AnalogData[:, _imaging_sync_channel].copy(),
+                                                      index=_time_vector_1000Hz,
+                                                      dtype=np.float64)
+            OrganizedData['Motor Position'] = pd.Series(AnalogData[:, _motor_position_channel].copy(),
+                                                        index=_time_vector_1000Hz)
+            OrganizedData['Force'] = pd.Series(AnalogData[:, _force_channel].copy(),
+                                               index=_time_vector_1000Hz)
+            OrganizedData['Gate'] = pd.Series(DigitalData.copy(), index=_time_vector_1000Hz)
+            return OrganizedData, StateCastedDict, MultiIndex
+
+        except AssertionError:
+            print("Bug: Incorrect Type detected")
+            return
+
+
+
+    @staticmethod
+    def match_data_to_new_index(OriginalVector, OriginalIndex, NewIndex, **kwargs):
+        """
+        Function to match data to a new index
+
+        :param OriginalVector:
+        :param OriginalIndex:
+        :param NewIndex:
+        :return: NewVector
+        """
+        _is_string = kwargs.get("is_string", False)
+        _forward_fill = kwargs.get("forward_fill", True)
+        if _is_string:
+            new_vector = np.full(NewIndex.shape[0], '', dtype="<U21")
+        else:
+            new_vector = np.full(NewIndex.shape[0], 69, dtype=OriginalVector.dtype)
+
+        for _sample in tqdm(
+
+                range(OriginalIndex.shape[0]),
+                total=OriginalIndex.shape[0],
+                desc="Generating New Index",
+                disable=False
+        ):
+            _timestamp = OriginalIndex[_sample]
+            idx = np.where(NewIndex == _timestamp)[0][0]
+            new_vector[idx] = OriginalVector[_sample]
+
+
+        if _is_string:
+            new_vector = pd.Series(new_vector, index=NewIndex, dtype="string")
+            new_vector[new_vector == ''] = np.nan
+        else:
+            new_vector = pd.Series(new_vector, index=NewIndex, dtype=new_vector.dtype)
+            new_vector[new_vector == 69] = np.nan
+
+        if _forward_fill:
+            new_vector.ffill(inplace=True)
+        else:
+            new_vector.bfill(inplace=True)
+
+        return new_vector
+
+    @staticmethod
+    def nest_all_stages_under_trials(StateData, Index, StateCastedDict):
+        # nested_trial_index = np.full(Index.shape[0], '', dtype="<U21")
+        nested_trial_index = np.full(Index.shape[0], 69, dtype=np.float64)
+        _trial_idx = np.where(StateData == StateCastedDict.get("Trial"))[0]
+        _deriv_idx = np.diff(_trial_idx)
+        _trailing_edge = _trial_idx[np.where(_deriv_idx > 1)[0]]
+        _trailing_edge = np.append(_trailing_edge, _trial_idx[-1])
+        _habituation_trailing_edge = np.where(StateData == StateCastedDict.get("Habituation"))[0][-1]
+
+        # nested_trial_index[_habituation_trailing_edge] = "".join(["Trial Sequence ", "Pre"])
+        nested_trial_index[_habituation_trailing_edge] = 0
+        # nested_trial_index[-1] = "".join(["Trial Sequence ", "Post"])
+        nested_trial_index[-1] = _trailing_edge.shape[0]+1
+
+        for _edge in range(_trailing_edge.shape[0]):
+            # nested_trial_index[_trailing_edge[_edge]*100] = "".join(["Trial Sequence ", str(_edge+1)])
+            nested_trial_index[_trailing_edge[_edge]] = _edge+1
+
+        # nested_trial_index[nested_trial_index == ''] = np.nan
+        # nested_trial_index = pd.Series(nested_trial_index, index=Index, dtype="string")
+        # nested_trial_index[nested_trial_index == ''] = np.nan
+        nested_trial_index = pd.Series(nested_trial_index, index=Index, dtype=np.float64)
+        nested_trial_index[nested_trial_index == 69] = np.nan
+        # double check
+        nested_trial_index[nested_trial_index == np.nan] = np.nan
+        nested_trial_index.bfill(inplace=True)
+
+        return nested_trial_index
+
+    @staticmethod
+    def MergeDLCIntoDataFrame(DataFrame, DLC, **kwargs):
+        _individual_series = []
+        _num_trials = kwargs.get("num_trials", np.max(DLC.trial_data.index))
+        fps = kwargs.get("fps", 30)
+
+        for i in range(_num_trials):
+            if i == 0:
+                # Do this to skip the "Habituation" Index
+                continue
+            # Trials
+            _trial = DataFrame.xs(("Trial", i), level=(0, 1), drop_level=False)
+            _dlc = DLC.SegregateTrials(DLC.trial_data, i)
+            _num_frames = _dlc['X1'].shape[0]
+            _old_dlc_index = np.around(np.linspace(_trial['Seconds'].values[0], _trial['Seconds'].values[-1], _num_frames), decimals=3)
+            _new_dlc_index = np.around(_trial['Seconds'].values, decimals=3)
+            _individual_series.append(
+                pd.Series(MethodsForPandasOrganization.match_data_to_new_index(_dlc['X1'].values, _old_dlc_index,
+                                                                               _new_dlc_index), index=_new_dlc_index))
+            # Pre Trials
+            _pre_trial = DataFrame.xs(("PreTrial", i), level=(0, 1), drop_level=False)
+            _dlc = DLC.SegregateTrials(DLC.trial_data, i)
+            _old_dlc_index = np.around(np.arange(0, _dlc['X1'].shape[0] * (1 / fps), (1 / fps)), decimals=3)
+            _adjusted_dlc_index = np.around(_old_dlc_index + _trial['Seconds'].values[0], decimals=3)
+            _new_dlc_index = _trial['Seconds'].values
+            _individual_series.append(
+                pd.Series(MethodsForPandasOrganization.match_data_to_new_index(_dlc['X1'].values, _adjusted_dlc_index,
+                                                                               _new_dlc_index), index=_new_dlc_index))
+            return _individual_series
+
+    @staticmethod
+    def castStateIntoFloat64(StateData):
+        StateCastedDict = dict()
+        IntegerStateIndex = np.full(StateData.shape[0], 0, dtype=np.float64)
+        _unique_states = np.unique(StateData)
+
+        for _unique_value in range(_unique_states.shape[0]):
+            StateCastedDict[_unique_states[_unique_value]] = _unique_value
+            IntegerStateIndex[np.where(StateData == _unique_states[_unique_value])[0]]=_unique_value
+
+        return IntegerStateIndex, StateCastedDict
+
+
 class DeepLabModule:
     """
     Module for deep lab cut data in the form of a pandas dataframe
@@ -560,7 +755,13 @@ class DeepLabModule:
 
         # attach ids
         pre_trial.index = _pre_trial_frame_ids
+        pre_trial.index.name = "Trial"
+        pre_trial.rename(columns={"coords": "Frame", "x": "X1", "y": "Y1", "likelihood": "likelihood1",
+                                  "x.1": "X2", "y.1": "Y2", "likelihood.1": "likelihood2"}, inplace=True)
         trial.index = _trial_frame_ids
+        trial.index.name = "Trial"
+        trial.rename(columns={"coords": "Frame", "x": "X1", "y": "Y1", "likelihood": "likelihood1",
+                                  "x.1": "X2", "y.1": "Y2", "likelihood.1": "likelihood2"}, inplace=True)
 
         return pre_trial, trial
 
@@ -629,3 +830,9 @@ class BurrowPlots:
         _ax.plot([25, 25], [0, 1], linewidth=2, linestyle='dashed', color="black", alpha=0.75, label="Expected UCS")
         plt.figlegend(loc='lower left')
         plt.ylim(-0.2, 1.2)
+
+
+def temp_sort(DataFrame, index_name, subset):
+    DataFrame.set_index(index_name, drop=False, inplace=True)
+    DataFrame.sort_index(inplace=True)
+    return DataFrame.loc[subset].copy(deep=True)

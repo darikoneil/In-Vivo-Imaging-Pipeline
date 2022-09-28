@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Locomotion Module">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="DeepLabCutModule (partially) ported from matlab">
+      <change afterPath="$PROJECT_DIR$/AnalysisModules/SF2.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" afterDir="false" />
     </list>
@@ -57,7 +57,22 @@
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.documentation.PythonDocumentationConfigurable" />
+    <property name="settings.editor.selected.configurable" value="debugger.dataViews" />
+  </component>
+  <component name="PyConsoleOptionsProvider">
+    <option name="myPythonConsoleState">
+      <console-settings module-name="Calcium-Imaging-Analysis-Pipeline" is-module-sdk="true">
+        <option name="myUseModuleSdk" value="true" />
+        <option name="myModuleName" value="Calcium-Imaging-Analysis-Pipeline" />
+      </console-settings>
+    </option>
+    <option name="myShowDebugConsoleByDefault" value="false" />
+    <option name="myShowVariablesByDefault" value="false" />
+  </component>
+  <component name="PyDebuggerOptionsProvider">
+    <option name="mySaveCallSignatures" value="true" />
+    <option name="mySupportGeventDebugging" value="true" />
+    <option name="myDropIntoDebuggerOnFailedTests" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -66,6 +81,7 @@
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\AnalysisModules" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\AnalysisModules" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\RasDataScripts" />
     </key>
@@ -123,7 +139,13 @@
       <workItem from="1662385901488" duration="3000" />
       <workItem from="1663854373198" duration="9352000" />
       <workItem from="1663864012542" duration="8734000" />
-      <workItem from="1663943445663" duration="16340000" />
+      <workItem from="1663943445663" duration="16389000" />
+      <workItem from="1664042191317" duration="3281000" />
+      <workItem from="1664137448727" duration="2606000" />
+      <workItem from="1664197543560" duration="12573000" />
+      <workItem from="1664218453565" duration="16807000" />
+      <workItem from="1664287361724" duration="25877000" />
+      <workItem from="1664380178697" duration="8547000" />
     </task>
     <task id="LOCAL-00001" summary="ignore">
       <created>1663863570077</created>
@@ -167,7 +189,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663880366569</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="DeepLabCutModule (partially) ported from matlab">
+      <created>1663966927429</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1663966927429</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -190,6 +219,7 @@
     <MESSAGE value="Fixed Bug in Preprocessing script that led to incorrect footprint of fast-filtering" />
     <MESSAGE value="ignore" />
     <MESSAGE value="Locomotion Module" />
-    <option name="LAST_COMMIT_MESSAGE" value="Locomotion Module" />
+    <MESSAGE value="DeepLabCutModule (partially) ported from matlab" />
+    <option name="LAST_COMMIT_MESSAGE" value="DeepLabCutModule (partially) ported from matlab" />
   </component>
 </project>
