@@ -303,8 +303,12 @@ class FearConditioning(BehavioralStage):
             # noinspection PyTypeChecker
             # Copies for safety > No-copies for speed (avoid pandas gotchas)
             self.data_frame, self.state_casted_index, self.multi_index = \
-                MethodsForPandasOrganization.ExportPandasDataFrame(_analog_data.copy(), _digital_data.copy(), _state_data.copy())
+                MethodsForPandasOrganization.ExportPandasDataFrame(
+                    _analog_data.copy(), _digital_data.copy(), _state_data.copy())
             # merge cs index with data frame
+            self.data_frame = \
+                MethodsForPandasOrganization.merge_cs_index_into_dataframe(
+                    self.data_frame.copy(), np.array(self.trial_parameters.get("stimulusTypes"), dtype=np.float64))
             # merge deeplabcut with data frame
         else:
             for _trial in range(self.num_trials): # Adjust for Zero Indexing
@@ -533,7 +537,7 @@ class MethodsForPandasOrganization:
     def __init__(self):
         return
 
-    @ classmethod
+    @classmethod
     def ExportPandasDataFrame(cls, AnalogData, DigitalData, StateData, **kwargs):
         _imaging_sync_channel = kwargs.get("imaging_sync_channel", 0)
         _motor_position_channel = kwargs.get("motor_position_channel", 1)
@@ -541,7 +545,7 @@ class MethodsForPandasOrganization:
 
         # Generate Indices describing different data acquisitions
         _time_vector_1000Hz = np.around(np.arange(0, AnalogData.shape[1] * (1 / 1000), 1 / 1000, dtype=np.float64), decimals=3)
-        _time_vector_10Hz = np.around(np.arange(0, StateData.shape[0] * (1 / 10), 1 / 10, dtype=np.float64), decimals=3)
+        _time_vector_10Hz = np.around(np.arange(0, StateData.__len__() * (1 / 10), 1 / 10, dtype=np.float64), decimals=3)
 
         # Cast State Index to Integers for simplicity & avoiding gotcha's with pandas
         _integer_state_index, StateCastedDict = MethodsForPandasOrganization.castStateIntoFloat64(StateData)
@@ -563,9 +567,19 @@ class MethodsForPandasOrganization:
             OrganizedData = pd.DataFrame(None, index=_time_vector_1000Hz, dtype=np.float64)
             MultiIndex = pd.MultiIndex.from_arrays([StateIndex.values, TrialIndex.values, _time_vector_1000Hz])
             OrganizedData.index.name = "Time (s)"
-            AnalogData = AnalogData.T
+
+            assert(StateIndex.values.dtype == np.float64)
             OrganizedData['State Integer'] = StateIndex
+
+            assert(TrialIndex.values.dtype == np.float64)
             OrganizedData['Trial Set'] = TrialIndex
+
+            assert(AnalogData.dtype == np.float64)
+
+            # Check orientation of data
+            if AnalogData.shape[0] < AnalogData.shape[1]:
+                AnalogData = AnalogData.T
+
             OrganizedData['Imaging Sync'] = pd.Series(AnalogData[:, _imaging_sync_channel].copy(),
                                                       index=_time_vector_1000Hz,
                                                       dtype=np.float64)
@@ -573,7 +587,9 @@ class MethodsForPandasOrganization:
                                                         index=_time_vector_1000Hz)
             OrganizedData['Force'] = pd.Series(AnalogData[:, _force_channel].copy(),
                                                index=_time_vector_1000Hz)
-            OrganizedData['Gate'] = pd.Series(DigitalData.copy(), index=_time_vector_1000Hz)
+
+            # No Need To Type Check B/C Type-Casting
+            OrganizedData['Gate'] = pd.Series(DigitalData.copy().astype(np.float64), index=_time_vector_1000Hz)
             return OrganizedData, StateCastedDict, MultiIndex
 
         except AssertionError:
@@ -581,6 +597,26 @@ class MethodsForPandasOrganization:
             return
 
 
+    @staticmethod
+    def merge_cs_index_into_dataframe(DataFrame, CSIndex):
+        # 0  = CS+, 1 = CS-, ..., Unique CS + 1 = Nil
+        _nil_id = np.unique(CSIndex).__len__() # Equivalent to the number cs id + 1 when considering zero-indexing
+        _nan_id = _nil_id + 1
+        _trial_set = DataFrame['Trial Set'].values
+        _cs_column = np.full(_trial_set.__len__(), _nan_id, dtype=np.float64)
+
+        for _cs in range(np.unique(CSIndex).__len__()):
+            _cs_column[np.searchsorted(_trial_set, np.where(CSIndex == _cs)[0]+1)] = _cs
+            # + 1 -> Adjust because trial set is not zero indexed
+        # Enter Nil Start, Maintain NaNs for forward fill
+        _cs_column[0] = _nil_id
+
+        _cs_series = pd.Series(_cs_column)
+        _cs_series[_cs_series == _nan_id] = np.nan
+        _cs_series.ffill(inplace=True)
+        DataFrame["CS"] = _cs_column
+
+        return DataFrame
 
     @staticmethod
     def match_data_to_new_index(OriginalVector, OriginalIndex, NewIndex, **kwargs):
@@ -595,14 +631,14 @@ class MethodsForPandasOrganization:
         _is_string = kwargs.get("is_string", False)
         _forward_fill = kwargs.get("forward_fill", True)
         if _is_string:
-            new_vector = np.full(NewIndex.shape[0], '', dtype="<U21")
+            new_vector = np.full(NewIndex.__len__(), '', dtype="<U21")
         else:
-            new_vector = np.full(NewIndex.shape[0], 69, dtype=OriginalVector.dtype)
+            new_vector = np.full(NewIndex.__len__(), 69, dtype=OriginalVector.dtype)
 
         for _sample in tqdm(
 
-                range(OriginalIndex.shape[0]),
-                total=OriginalIndex.shape[0],
+                range(OriginalIndex.__len__()),
+                total=OriginalIndex.__len__(),
                 desc="Generating New Index",
                 disable=False
         ):
@@ -627,7 +663,7 @@ class MethodsForPandasOrganization:
 
     @staticmethod
     def nest_all_stages_under_trials(StateData, Index, StateCastedDict):
-        nested_trial_index = np.full(Index.shape[0], 69, dtype=np.float64)
+        nested_trial_index = np.full(Index.__len__(), 69, dtype=np.float64)
         _trial_idx = np.where(StateData == StateCastedDict.get("Trial"))[0]
         _deriv_idx = np.diff(_trial_idx)
         _trailing_edge = _trial_idx[np.where(_deriv_idx > 1)[0]]
@@ -635,7 +671,7 @@ class MethodsForPandasOrganization:
         _habituation_trailing_edge = np.where(StateData == StateCastedDict.get("Habituation"))[0][-1]
 
         nested_trial_index[_habituation_trailing_edge] = 0
-        nested_trial_index[-1] = _trailing_edge.shape[0]+1
+        nested_trial_index[-1] = _trailing_edge.__len__()+1
 
         for _edge in range(_trailing_edge.shape[0]):
             nested_trial_index[_trailing_edge[_edge]] = _edge+1
@@ -659,8 +695,9 @@ class MethodsForPandasOrganization:
             # Trials
             _trial = DataFrame.xs(("Trial", i), level=(0, 1), drop_level=False)
             _dlc = DLC.SegregateTrials(DLC.trial_data, i)
-            _num_frames = _dlc['X1'].shape[0]
-            _old_dlc_index = np.around(np.linspace(_trial['Seconds'].values[0], _trial['Seconds'].values[-1], _num_frames), decimals=3)
+            _num_frames = _dlc['X1'].__len__()
+            _old_dlc_index = np.around(
+                np.linspace(_trial['Seconds'].values[0], _trial['Seconds'].values[-1], _num_frames), decimals=3)
             _new_dlc_index = np.around(_trial['Seconds'].values, decimals=3)
             _individual_series.append(
                 pd.Series(MethodsForPandasOrganization.match_data_to_new_index(_dlc['X1'].values, _old_dlc_index,
@@ -668,7 +705,7 @@ class MethodsForPandasOrganization:
             # Pre Trials
             _pre_trial = DataFrame.xs(("PreTrial", i), level=(0, 1), drop_level=False)
             _dlc = DLC.SegregateTrials(DLC.trial_data, i)
-            _old_dlc_index = np.around(np.arange(0, _dlc['X1'].shape[0] * (1 / fps), (1 / fps)), decimals=3)
+            _old_dlc_index = np.around(np.arange(0, _dlc['X1'].__len__() * (1 / fps), (1 / fps)), decimals=3)
             _adjusted_dlc_index = np.around(_old_dlc_index + _trial['Seconds'].values[0], decimals=3)
             _new_dlc_index = _trial['Seconds'].values
             _individual_series.append(
@@ -687,6 +724,48 @@ class MethodsForPandasOrganization:
             IntegerStateIndex[np.where(StateData == _unique_states[_unique_value])[0]] = _unique_value
 
         return IntegerStateIndex, StateCastedDict
+
+    @staticmethod
+    def safe_extract(OldFrame, Commands, *args, **kwargs):
+        _export_time_as_index = kwargs.get("export_time", False)
+        _drop_time_as_index = kwargs.get("drop_time", False)
+
+        NewFrame = OldFrame.copy(deep=True) # Initialize with deep copy for safety
+
+        # Check
+        if _export_time_as_index and (NewFrame.index.name != "Time (s)" or "Time (s)" not in NewFrame.names):
+            raise KeyError("To export time as an index we need to start with a time index or time column")
+
+        # if _drop_time_as_index and (NewFrame.index.name != "Time (s)"):
+        #    raise AssertionError("Warning: time is not the current index so it cannot be dropped")
+
+        # Reset Index & Determine Whether Dropping Time
+        NewFrame.reset_index(drop=_drop_time_as_index, inplace=True)
+
+        if args:
+            if 1 < args.__len__() < 3:
+                _index_tuple = args[0]
+                _levels_scalar_or_tuple = args[1]
+                NewFrame = NewFrame.xs(args[0], args[1], drop_level=False)
+            elif args.__len__() == 3:
+                _index_tuple = args[0]
+                _levels_scalar_or_tuple = args[1]
+                _drop_level = args[2]
+                NewFrame = NewFrame.xs(args[0], args[1], drop_level=_drop_level)
+        else:
+            _index_name = Commands[0]
+            _subset_name = Commands[1]
+            NewFrame.set_index(_index_name, drop=False, inplace=True)
+            NewFrame.sort_index(inplace=True)
+            NewFrame = NewFrame.loc[_subset_name].copy(deep=True)
+
+        if _export_time_as_index:
+            NewFrame.reset_index(drop=True, inplace=True)
+            NewFrame.sort_index(inplace=True)
+            NewFrame.set_index("Time (s)", drop=True, inplace=True)
+
+        return NewFrame.copy(deep=True) # Return a deep copy for safety
+
 
 
 class DeepLabModule:
