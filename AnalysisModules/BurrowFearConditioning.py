@@ -729,6 +729,7 @@ class MethodsForPandasOrganization:
     def safe_extract(OldFrame, Commands, *args, **kwargs):
         _export_time_as_index = kwargs.get("export_time", False)
         _drop_time_as_index = kwargs.get("drop_time", False)
+        _reset_index = kwargs.get("reset", False)
 
         NewFrame = OldFrame.copy(deep=True) # Initialize with deep copy for safety
 
@@ -740,7 +741,8 @@ class MethodsForPandasOrganization:
         #    raise AssertionError("Warning: time is not the current index so it cannot be dropped")
 
         # Reset Index & Determine Whether Dropping Time
-        NewFrame.reset_index(drop=_drop_time_as_index, inplace=True)
+        if _reset_index:
+            NewFrame.reset_index(drop=_drop_time_as_index, inplace=True)
 
         if args:
             if 1 < args.__len__() < 3:
@@ -751,7 +753,7 @@ class MethodsForPandasOrganization:
                 _index_tuple = args[0]
                 _levels_scalar_or_tuple = args[1]
                 _drop_level = args[2]
-                NewFrame = NewFrame.xs(args[0], args[1], drop_level=_drop_level)
+                NewFrame = NewFrame.xs(args[0], level=args[1], drop_level=_drop_level)
         else:
             _index_name = Commands[0]
             _subset_name = Commands[1]
