@@ -3,6 +3,7 @@
     <words>
       <w>allkeys</w>
       <w>blockwise</w>
+      <w>childs</w>
       <w>cmap</w>
       <w>covariate</w>
       <w>csv's</w>
@@ -35,6 +36,7 @@
       <w>upsample</w>
       <w>vmax</w>
       <w>vmin</w>
+      <w>zphysical</w>
     </words>
   </dictionary>
 </component>

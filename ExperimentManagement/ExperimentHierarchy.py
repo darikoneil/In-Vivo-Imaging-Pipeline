@@ -3,6 +3,8 @@ from datetime import date, datetime
 import pickle as pkl
 import numpy as np
 from IPython import get_ipython
+import pathlib
+from ExperimentManagement.BrukerMetaModule import BrukerMeta
 
 
 class ExperimentData:
@@ -257,7 +259,7 @@ class ExperimentData:
         self.modifications.append((self.getDate(), self.getTime(), *args))
 
     def saveHierarchy(self):
-        print("Saving Experimental Hierarchy..")
+        print("Saving Experimental Hierarchy...")
         if hasattr('self', '_IP'):
             # noinspection PyAttributeOutsideInit
             self._IP = True
@@ -328,6 +330,8 @@ class BehavioralStage:
         #
         self.modifications = [(ExperimentData.getDate(), ExperimentData.getTime())]
         self.folder_dictionary = dict()
+        # self.data = pd.DataFrame
+        self.meta_data = None
 
         _mouse_directory = Meta[0]
         self.createFolderDictionary(_mouse_directory, Stage)
@@ -444,6 +448,13 @@ class BehavioralStage:
             'cascade': None,
         }
 
+    def loadBrukerMetaData(self):
+        self.folder_dictionary["bruker_meta_data"].reIndex()
+        _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("xml")
+        self.meta_data = BrukerMeta(_files[0], _files[2], _files[1])
+        self.meta_data.import_meta_data()
+        self.meta_data.creation_date = ExperimentData.getDate()
+
 
 class CollectedDataFolder:
     """
@@ -511,6 +522,13 @@ class CollectedDataFolder:
         """
         return self.path + "\\" + CollectedDataFolder.fileLocator(self.files, ID)
 
+    def find_all_ext(self, ext):
+        _ext = "".join(["*.", ext])
+        Files = list(pathlib.Path(self.path).glob(_ext))
+        for i in range(Files.__len__()):
+            Files[i] = Files[i].__str__()
+        return Files
+
     @staticmethod
     def fileLocator(files, ID):
         """
@@ -527,6 +545,7 @@ class CollectedDataFolder:
             for _id in CollectedDataFolder.fileParts(files[i]):
                 if ID == _id:
                     return files[i]
+        return "Nil"
 
     @staticmethod
     def fileParts(file):

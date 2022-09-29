@@ -242,6 +242,14 @@
           <option value="object.fileLocator" />
           <option value="object.files" />
           <option value="object.path" />
+          <option value="ExperimentManagement.ExperimentHierarchy.ExperimentData._ExperimentData__instance_date" />
+          <option value="ExperimentManagement.ExperimentHierarchy.BehavioralStage._BehavioralStage__mouse_id" />
+          <option value="ExperimentManagement.ExperimentHierarchy.BehavioralStage._BehavioralStage__instance_date" />
+          <option value="ExperimentManagement.ExperimentHierarchy.CollectedDataFolder._CollectedDataFolder__instance_date" />
+          <option value="BehavioralAnalysis.BurrowFearConditioning.FearConditioning._FearConditioning__stage_id" />
+          <option value="BehavioralAnalysis.BurrowFearConditioning.FearConditioning._FearConditioning__num_trials" />
+          <option value="BehavioralAnalysis.BurrowFearConditioning.FearConditioning._FearConditioning__trials_per_stim" />
+          <option value="BehavioralAnalysis.BurrowFearConditioning.FearConditioning._FearConditioning__num_stim" />
         </list>
       </option>
     </inspection_tool>
