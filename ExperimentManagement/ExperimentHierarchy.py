@@ -95,7 +95,7 @@ class ExperimentData:
         :param ExperimentDirectory: Directory containing the experimental hierarchy pickle file
         :type ExperimentDirectory: str
         :return: ExperimentData
-        :rtype: AnalysisModules.ExperimentHierarchy.ExperimentData
+        :rtype: ExperimentManagement.ExperimentHierarchy.ExperimentData
         """
         print("Loading Experimental Hierarchy..")
         _input_file = ExperimentDirectory + "\\ExperimentalHierarchy"

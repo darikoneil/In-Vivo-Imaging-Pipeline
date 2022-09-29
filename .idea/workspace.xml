@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Tidy">
-      <change afterPath="$PROJECT_DIR$/IO/manually_get_some_metadata.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/IO/metadata.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/IO/recursively_read_metadata.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/IO/select_values_gui.py" afterDir="false" />
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Temp-Sam's Bruker IO">
+      <change afterPath="$PROJECT_DIR$/MigrationTools/Converters.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +37,9 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="2DAihSzIaXSKtBLQHVFwdfo70OB" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -83,8 +85,8 @@
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DebugData\suite2p\plane0" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\IO" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline" />
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\IO" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ExperimentManagement" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DarikDataScripts" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ImagingAnalysis" />
@@ -178,7 +180,8 @@
       <workItem from="1664197543560" duration="12573000" />
       <workItem from="1664218453565" duration="16807000" />
       <workItem from="1664287361724" duration="25877000" />
-      <workItem from="1664380178697" duration="30853000" />
+      <workItem from="1664380178697" duration="31362000" />
+      <workItem from="1664472975555" duration="1546000" />
     </task>
     <task id="LOCAL-00001" summary="ignore">
       <created>1663863570077</created>
@@ -271,7 +274,21 @@
       <option name="project" value="LOCAL" />
       <updated>1664471885010</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Temp-Sam's Bruker IO">
+      <created>1664472497292</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1664472497292</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Temp-Sam's Bruker IO">
+      <created>1664472613817</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1664472613817</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -298,7 +315,8 @@
     <MESSAGE value="Partial Implementation of Pandas For Cleanliness of Experimental Hierarchy" />
     <MESSAGE value="Implementation of Pandas For Cleanliness of Experimental Hierarchy.&#10;&#10;Sync of Bruker Analog/Imaging Data still to-be ported from python / written&#10;&#10;Now needs significant refactoring (just removal &amp; locate any lingering references) of old nested dictionary code" />
     <MESSAGE value="Tidy" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tidy" />
+    <MESSAGE value="Temp-Sam's Bruker IO" />
+    <option name="LAST_COMMIT_MESSAGE" value="Temp-Sam's Bruker IO" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Calcium_Imaging_Analysis_Pipeline$a.coverage" NAME="a Coverage Results" MODIFIED="1664464028437" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AnalysisModules" />
