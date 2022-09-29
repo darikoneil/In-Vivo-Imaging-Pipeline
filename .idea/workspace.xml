@@ -4,11 +4,33 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Partial Implementation of Pandas For Cleanliness of Experimental Hierarchy">
-      <change afterPath="$PROJECT_DIR$/AnalysisModules/SF2.py" afterDir="false" />
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Implementation of Pandas For Cleanliness of Experimental Hierarchy.&#10;&#10;Sync of Bruker Analog/Imaging Data still to-be ported from python / written&#10;&#10;Now needs significant refactoring (just removal &amp; locate any lingering references) of old nested dictionary code">
+      <change afterPath="$PROJECT_DIR$/ComputationalAnalysis/__init__.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ExperimentManagement/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/USNAP/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/BurrowPreference.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowPreference.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/CascadeAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/CascadeAnalysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/DecodingAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ComputationalAnalysis/DecodingAnalysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/FissaAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/FissaAnalysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/Locomotion.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/Locomotion.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/ModifiedDecoders.py" beforeDir="false" afterPath="$PROJECT_DIR$/ComputationalAnalysis/ModifiedDecoders.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/NewDecoders.py" beforeDir="false" afterPath="$PROJECT_DIR$/ComputationalAnalysis/NewDecoders.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/Notebooks/Analysis-Encoding-Decoding.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Notebooks/Analysis-Encoding-Decoding.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/Notebooks/Analysis_of_Imaging_Data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/Notebooks/ImageFormatting_and_PreProcessing.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Notebooks/ImageFormatting_and_PreProcessing.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/PlottingFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/PlottingFunctions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/PreprocessingImages.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/StaticPlotting.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/StaticPlotting.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/StaticProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/StaticProcessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/Suite2PAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AnalysisModules/smoothies.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/smoothies.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +74,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/DebugData/suite2p/plane0" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/USNAP" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
@@ -75,14 +97,18 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\USNAP" />
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ComputationalAnalysis" />
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\BehavioralAnalysis" />
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ImagingAnalysis" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DebugData\suite2p\plane0" />
-      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DebugData" />
-      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\AnalysisModules" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\AnalysisModules" />
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ExperimentManagement" />
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DarikDataScripts" />
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ImagingAnalysis" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline" />
-      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\RasDataScripts" />
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\USNAP" />
     </key>
   </component>
   <component name="RunManager">
@@ -173,7 +199,7 @@
       <workItem from="1664197543560" duration="12573000" />
       <workItem from="1664218453565" duration="16807000" />
       <workItem from="1664287361724" duration="25877000" />
-      <workItem from="1664380178697" duration="29303000" />
+      <workItem from="1664380178697" duration="30244000" />
     </task>
     <task id="LOCAL-00001" summary="ignore">
       <created>1663863570077</created>
@@ -252,7 +278,14 @@
       <option name="project" value="LOCAL" />
       <updated>1664402113733</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Implementation of Pandas For Cleanliness of Experimental Hierarchy.&#10;&#10;Sync of Bruker Analog/Imaging Data still to-be ported from python / written&#10;&#10;Now needs significant refactoring (just removal &amp; locate any lingering references) of old nested dictionary code">
+      <created>1664471141618</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1664471141618</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -277,7 +310,8 @@
     <MESSAGE value="Locomotion Module" />
     <MESSAGE value="DeepLabCutModule (partially) ported from matlab" />
     <MESSAGE value="Partial Implementation of Pandas For Cleanliness of Experimental Hierarchy" />
-    <option name="LAST_COMMIT_MESSAGE" value="Partial Implementation of Pandas For Cleanliness of Experimental Hierarchy" />
+    <MESSAGE value="Implementation of Pandas For Cleanliness of Experimental Hierarchy.&#10;&#10;Sync of Bruker Analog/Imaging Data still to-be ported from python / written&#10;&#10;Now needs significant refactoring (just removal &amp; locate any lingering references) of old nested dictionary code" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implementation of Pandas For Cleanliness of Experimental Hierarchy.&#10;&#10;Sync of Bruker Analog/Imaging Data still to-be ported from python / written&#10;&#10;Now needs significant refactoring (just removal &amp; locate any lingering references) of old nested dictionary code" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Calcium_Imaging_Analysis_Pipeline$a.coverage" NAME="a Coverage Results" MODIFIED="1664464028437" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AnalysisModules" />

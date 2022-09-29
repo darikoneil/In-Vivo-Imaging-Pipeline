@@ -1,11 +1,9 @@
 import numpy as np
-import pathlib
 import pickle as pkl
-from AnalysisModules.ExperimentHierarchy import BehavioralStage, CollectedDataFolder
+from ExperimentManagement.ExperimentHierarchy import BehavioralStage, CollectedDataFolder
 import matplotlib
 matplotlib.use('Qt5Agg')
 from matplotlib import pyplot as plt
-import seaborn as sns
 
 
 class Locomotion(BehavioralStage):

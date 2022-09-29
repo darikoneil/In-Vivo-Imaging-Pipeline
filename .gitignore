@@ -106,10 +106,10 @@ inspectionProfiles/profiles_settings.xml
 vcs.xml
 Calcium-Imaging-Analysis-Pipeline.iml
 AnalysisModules/FearConditioningDecoding.py
-AnalysisModules/Notebooks/.ipynb_checkpoints/InferFiringRatesAndApproxSpikes-checkpoint.ipynb
-AnalysisModules/Notebooks/.ipynb_checkpoints/DataDecoding-checkpoint.ipynb
-AnalysisModules/Notebooks/.ipynb_checkpoints/Analysis_of_Imaging_Data-checkpoint.ipynb
-AnalysisModules/Notebooks/.ipynb_checkpoints/DataVisualization-checkpoint.ipynb
+Notebooks/.ipynb_checkpoints/InferFiringRatesAndApproxSpikes-checkpoint.ipynb
+Notebooks/.ipynb_checkpoints/DataDecoding-checkpoint.ipynb
+Notebooks/.ipynb_checkpoints/Analysis_of_Imaging_Data-checkpoint.ipynb
+Notebooks/.ipynb_checkpoints/DataVisualization-checkpoint.ipynb
 DebugData/prepared.npz
 DebugData/ProcessedTraces
 DebugData/separated.npz
@@ -148,8 +148,8 @@ __pycache__/PreprocessingImages.cpython-37.pyc
 .idea/workspace.xml
 requirements.txt
 AnalysisModules/TestFreeze.py
-AnalysisModules/Notebooks/ExperimentalHierarchyExample.ipynb
-AnalysisModules/XXX.py
+Notebooks/ExperimentalHierarchyExample.ipynb
+ImagingAnalysis/XXX.py
 AnalysisModules/s.py
 AnalysisModules/personal1.py
 *.mat
@@ -157,7 +157,7 @@ AnalysisModules/personal1.py
 *.csv
 DebugData/Debug_Neuronal_Index.csv
 DebugData/ProcessedInferences
-AnalysisModules/EM0122.py
+DarikDataScripts/EM0122.py
 ipython_log.py.001~
 ipython_log.py.002~
 ipython_log.py.003~

@@ -2,10 +2,9 @@ import numpy as np
 import suite2p
 from suite2p import gui
 from natsort import natsorted
-from suite2p.io.utils import get_tif_list
 import os
 import glob
-from AnalysisModules.ExperimentHierarchy import ExperimentData
+from ExperimentManagement.ExperimentHierarchy import ExperimentData
 
 
 class Suite2PModule:
