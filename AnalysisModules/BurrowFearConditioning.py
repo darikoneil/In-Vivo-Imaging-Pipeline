@@ -9,6 +9,10 @@ matplotlib.use('Qt5Agg')
 from matplotlib import pyplot as plt
 import seaborn as sns
 
+# Some of this stuff needs some serious refactoring & cleaning out old code
+# To-Do refactor out the indexing that can be done by native functions
+# To-Do refactor out the old behavioral organization such that only the pandas remains for easier maintenance
+
 
 class FearConditioning(BehavioralStage):
     """
@@ -267,6 +271,9 @@ class FearConditioning(BehavioralStage):
 
         """
         _use_pandas = kwargs.get("use_pandas", True)
+        _old_min = kwargs.get("min", 0)
+        _old_max = kwargs.get("max", 800)
+
         # Analog
         _analog_file = self.generateFileID('Analog')
         _analog_data = FearConditioning.loadAnalogData(_analog_file)
@@ -296,6 +303,22 @@ class FearConditioning(BehavioralStage):
             return print("Could not read dictionary data!")
 
         _dlc = DeepLabModule(self.folder_dictionary['deep_lab_cut_data'], self.folder_dictionary['behavioral_exports'])
+        _dlc.trial_data = DeepLabModule.ConvertFullDataFrameToPhysicalUnits(_dlc.trial_data, _old_min, _old_max,
+                                                                                                    ("X1", "X2"))
+        _dlc.pre_trial_data = DeepLabModule.ConvertFullDataFrameToPhysicalUnits(_dlc.pre_trial_data, _old_min, _old_max,
+                                                                                                            ("X1", "X2"))
+        _dlc.trial_data = DeepLabModule.ConvertToMeanZero(_dlc.trial_data, ("Y1", "Y2"))
+        _dlc.pre_trial_data = DeepLabModule.ConvertToMeanZero(_dlc.pre_trial_data, ("Y1", "Y2"))
+
+        # Check Efficacy
+        try:
+            assert(np.min(_dlc.trial_data["likelihood1"].values) > 0.95)
+            assert (np.min(_dlc.trial_data["likelihood2"].values) > 0.95)
+            assert (np.min(_dlc.pre_trial_data["likelihood1"].values) > 0.95)
+            assert (np.min(_dlc.pre_trial_data["likelihood2"].values) > 0.95)
+        except AssertionError:
+            print("Deep Lab Cut model label insufficient. Re-train")
+            return
 
         # noinspection PyTypeChecker
         # Segregated Organization
@@ -310,6 +333,8 @@ class FearConditioning(BehavioralStage):
                 MethodsForPandasOrganization.merge_cs_index_into_dataframe(
                     self.data_frame.copy(), np.array(self.trial_parameters.get("stimulusTypes"), dtype=np.float64))
             # merge deeplabcut with data frame
+            self.data_frame = MethodsForPandasOrganization.merge_dlc_data(self.data_frame, _dlc, self.multi_index,
+                                                                            self.state_casted_index)
         else:
             for _trial in range(self.num_trials): # Adjust for Zero Indexing
                 # noinspection PyTypeChecker
@@ -566,6 +591,7 @@ class MethodsForPandasOrganization:
         try:
             OrganizedData = pd.DataFrame(None, index=_time_vector_1000Hz, dtype=np.float64)
             MultiIndex = pd.MultiIndex.from_arrays([StateIndex.values, TrialIndex.values, _time_vector_1000Hz])
+            MultiIndex.names = ["State Integer", "Trial Set", "Time (s)"]
             OrganizedData.index.name = "Time (s)"
 
             assert(StateIndex.values.dtype == np.float64)
@@ -596,6 +622,90 @@ class MethodsForPandasOrganization:
             print("Bug: Incorrect Type detected")
             return
 
+    @classmethod
+    def merge_dlc_data(cls, DataFrame, DLC, MultiIndex, StateCastDict, **kwargs):
+        _individual_series = []
+        _num_trials = kwargs.get("num_trials", np.max(DLC.trial_data.index))
+        _fps = kwargs.get("fps", 30)
+
+        # Assert MultiIndex & Columns Contain Time
+
+        for i in tqdm(
+                range(_num_trials),
+                total=_num_trials,
+                desc="Merging DLC Data... Trials...",
+                disable=False,
+                ):
+            if i == 0:
+                # Do this to skip the "Habituation" Index
+                continue
+            # Trials
+            _trial = MethodsForPandasOrganization.safe_extract(DataFrame, None, (StateCastDict.get("Trial"), i),
+                                                               (0, 1), False, multi_index=MultiIndex,
+                                                               reset=True, export_time=True)
+            if _trial.index.name != "Time (s)":
+                raise KeyError("The exported index must be time!")
+            _dlc = DLC.SegregateTrials(DLC.trial_data, i)
+            _num_frames = _dlc['X1'].__len__()
+            _old_dlc_index = np.around(
+                np.linspace(_trial.index.values[0], _trial.index.values[-1], _num_frames), decimals=3)
+            _new_dlc_index = np.around(_trial.index.values, decimals=3)
+
+            # for each column add to new index
+            _trial_data = pd.DataFrame(None, index=_new_dlc_index, dtype=np.float64)
+            _trial_data.index.name = "Time (s)"
+            for _column in _dlc.columns.values:
+                _trial_data[_column] = MethodsForPandasOrganization.match_data_to_new_index(_dlc[_column].values,
+                                                                                            _old_dlc_index,
+                                                                                            _new_dlc_index,
+                                                                                            feedback=False)
+            _individual_series.append(_trial_data)
+
+        for i in tqdm(
+                range(_num_trials),
+                total=_num_trials,
+                desc="Merging DLC Data... Pre-Trials...",
+                disable=False,
+                ):
+            if i == 0:
+                # Do this to skip the "Habituation" Index
+                continue
+            # Trials
+            _pre_trial = MethodsForPandasOrganization.safe_extract(DataFrame, None, (StateCastDict.get("PreTrial"), i),
+                                                                   (0, 1), False, multi_index=MultiIndex,
+                                                                    reset=True, export_time=True)
+            if _pre_trial.index.name != "Time (s)":
+                raise KeyError("The exported index must be time!")
+            _dlc = DLC.SegregateTrials(DLC.pre_trial_data, i)
+            _num_frames = _dlc['X1'].__len__()
+            _old_dlc_index = np.floor(np.linspace(0, _pre_trial.index.values.__len__()-1, _num_frames))
+            if _old_dlc_index.__len__() != np.unique(_old_dlc_index).__len__():
+                raise AssertionError("You should probably fix this code now...")
+            _new_dlc_index = np.arange(0, _pre_trial.index.values.__len__(), 1)
+
+            # for each column add to new index
+            _pre_trial_data = pd.DataFrame(None, index=_new_dlc_index, dtype=np.float64)
+            # _pre_trial_data.index.name = "Time (s)"
+            for _column in _dlc.columns.values:
+                _pre_trial_data[_column] = MethodsForPandasOrganization.match_data_to_new_index(_dlc[_column].values,
+                                                                                                _old_dlc_index,
+                                                                                                _new_dlc_index,
+                                                                                                feedback=False)
+            _pre_trial_data.set_index(_pre_trial.index, drop=True, inplace=True)
+            _individual_series.append(_pre_trial_data)
+
+
+        _concat_dataframe = pd.concat(_individual_series)
+        _concat_dataframe.reindex(index=DataFrame.index)
+
+        DataFrame = DataFrame.join(_concat_dataframe)
+        DataFrame["X1"].fillna(value=np.nanmax(DataFrame["X1"].values), inplace=True)
+        DataFrame["X2"].fillna(value=np.nanmax(DataFrame["X2"].values), inplace=True)
+        DataFrame["Y1"].fillna(0, inplace=True)
+        DataFrame["Y2"].fillna(0, inplace=True)
+        DataFrame["likelihood1"].fillna(1, inplace=True)
+        DataFrame["likelihood2"].fillna(1, inplace=True)
+        return DataFrame
 
     @staticmethod
     def merge_cs_index_into_dataframe(DataFrame, CSIndex):
@@ -630,22 +740,28 @@ class MethodsForPandasOrganization:
         """
         _is_string = kwargs.get("is_string", False)
         _forward_fill = kwargs.get("forward_fill", True)
+        _feedback = kwargs.get("feedback", True)
+
         if _is_string:
             new_vector = np.full(NewIndex.__len__(), '', dtype="<U21")
         else:
             new_vector = np.full(NewIndex.__len__(), 69, dtype=OriginalVector.dtype)
 
-        for _sample in tqdm(
-
-                range(OriginalIndex.__len__()),
-                total=OriginalIndex.__len__(),
-                desc="Generating New Index",
-                disable=False
-        ):
-            _timestamp = OriginalIndex[_sample]
-            idx = np.where(NewIndex == _timestamp)[0][0]
-            new_vector[idx] = OriginalVector[_sample]
-
+        if _feedback:
+            for _sample in tqdm(
+                    range(OriginalIndex.__len__()),
+                    total=OriginalIndex.__len__(),
+                    desc="Generating New Index",
+                    disable=False
+            ):
+                _timestamp = OriginalIndex[_sample]
+                idx = np.where(NewIndex == _timestamp)[0][0]
+                new_vector[idx] = OriginalVector[_sample]
+        else:
+            for _sample in range(OriginalIndex.__len__()):
+                _timestamp = OriginalIndex[_sample]
+                idx = np.where(NewIndex == _timestamp)[0][0]
+                new_vector[idx] = OriginalVector[_sample]
 
         if _is_string:
             new_vector = pd.Series(new_vector, index=NewIndex, dtype="string")
@@ -683,37 +799,6 @@ class MethodsForPandasOrganization:
         return nested_trial_index
 
     @staticmethod
-    def MergeDLCIntoDataFrame(DataFrame, DLC, **kwargs):
-        _individual_series = []
-        _num_trials = kwargs.get("num_trials", np.max(DLC.trial_data.index))
-        fps = kwargs.get("fps", 30)
-
-        for i in range(_num_trials):
-            if i == 0:
-                # Do this to skip the "Habituation" Index
-                continue
-            # Trials
-            _trial = DataFrame.xs(("Trial", i), level=(0, 1), drop_level=False)
-            _dlc = DLC.SegregateTrials(DLC.trial_data, i)
-            _num_frames = _dlc['X1'].__len__()
-            _old_dlc_index = np.around(
-                np.linspace(_trial['Seconds'].values[0], _trial['Seconds'].values[-1], _num_frames), decimals=3)
-            _new_dlc_index = np.around(_trial['Seconds'].values, decimals=3)
-            _individual_series.append(
-                pd.Series(MethodsForPandasOrganization.match_data_to_new_index(_dlc['X1'].values, _old_dlc_index,
-                                                                               _new_dlc_index), index=_new_dlc_index))
-            # Pre Trials
-            _pre_trial = DataFrame.xs(("PreTrial", i), level=(0, 1), drop_level=False)
-            _dlc = DLC.SegregateTrials(DLC.trial_data, i)
-            _old_dlc_index = np.around(np.arange(0, _dlc['X1'].__len__() * (1 / fps), (1 / fps)), decimals=3)
-            _adjusted_dlc_index = np.around(_old_dlc_index + _trial['Seconds'].values[0], decimals=3)
-            _new_dlc_index = _trial['Seconds'].values
-            _individual_series.append(
-                pd.Series(MethodsForPandasOrganization.match_data_to_new_index(_dlc['X1'].values, _adjusted_dlc_index,
-                                                                               _new_dlc_index), index=_new_dlc_index))
-            return _individual_series
-
-    @staticmethod
     def castStateIntoFloat64(StateData):
         StateCastedDict = dict()
         IntegerStateIndex = np.full(StateData.shape[0], 0, dtype=np.float64)
@@ -728,32 +813,37 @@ class MethodsForPandasOrganization:
     @staticmethod
     def safe_extract(OldFrame, Commands, *args, **kwargs):
         _export_time_as_index = kwargs.get("export_time", False)
-        _drop_time_as_index = kwargs.get("drop_time", False)
+        _drop_index = kwargs.get("drop_index", False)
         _reset_index = kwargs.get("reset", False)
+        _multi_index = kwargs.get("multi_index", None)
 
         NewFrame = OldFrame.copy(deep=True) # Initialize with deep copy for safety
 
         # Check
-        if _export_time_as_index and (NewFrame.index.name != "Time (s)" or "Time (s)" not in NewFrame.names):
+        if _export_time_as_index and NewFrame.index.name != "Time (s)" and "Time (s)" not in NewFrame.columns.values:
             raise KeyError("To export time as an index we need to start with a time index or time column")
 
-        # if _drop_time_as_index and (NewFrame.index.name != "Time (s)"):
-        #    raise AssertionError("Warning: time is not the current index so it cannot be dropped")
+        if _reset_index and _drop_index and NewFrame.index.name not in NewFrame.columns.values:
+            raise AssertionError("Warning: index is not duplicated in a column and would be forever lost!")
 
         # Reset Index & Determine Whether Dropping Time
         if _reset_index:
-            NewFrame.reset_index(drop=_drop_time_as_index, inplace=True)
+            NewFrame.reset_index(drop=_drop_index, inplace=True)
+
+        if _multi_index is not None:
+            NewFrame.set_index(_multi_index, drop=False, inplace=True)
 
         if args:
             if 1 < args.__len__() < 3:
                 _index_tuple = args[0]
                 _levels_scalar_or_tuple = args[1]
+
                 NewFrame = NewFrame.xs(args[0], args[1], drop_level=False)
             elif args.__len__() == 3:
                 _index_tuple = args[0]
                 _levels_scalar_or_tuple = args[1]
                 _drop_level = args[2]
-                NewFrame = NewFrame.xs(args[0], level=args[1], drop_level=_drop_level)
+                NewFrame = NewFrame.xs(_index_tuple, level=_levels_scalar_or_tuple, drop_level=_drop_level)
         else:
             _index_name = Commands[0]
             _subset_name = Commands[1]
@@ -763,11 +853,10 @@ class MethodsForPandasOrganization:
 
         if _export_time_as_index:
             NewFrame.reset_index(drop=True, inplace=True)
-            NewFrame.sort_index(inplace=True)
             NewFrame.set_index("Time (s)", drop=True, inplace=True)
+            NewFrame.sort_index(inplace=True)
 
         return NewFrame.copy(deep=True) # Return a deep copy for safety
-
 
 
 class DeepLabModule:
@@ -858,7 +947,7 @@ class DeepLabModule:
         :param TrialNumber: the desired trial number
         :return: Pandas dataframe containing only that trial
         """
-        return Data.loc[TrialNumber]
+        return Data.copy(deep=True).loc[TrialNumber]
 
     @classmethod
     def ConvertToPhysicalUnits(cls, fPositions, oldMin, oldMax, **kwargs):
@@ -877,6 +966,23 @@ class DeepLabModule:
         _new_range = _new_max - _new_min
 
         return (((fPositions-oldMin)*_new_range)/_old_range)+_new_min
+
+    @classmethod
+    def ConvertFullDataFrameToPhysicalUnits(cls, DataFrame, oldMin, oldMax, idx, **kwargs):
+        _new_max = kwargs.get("new_max", 140)
+        _new_min = kwargs.get("new_min", 0)
+
+        DataFrame = DataFrame.copy(deep=True)
+        for i in idx:
+            DataFrame[i] = DeepLabModule.ConvertToPhysicalUnits(DataFrame[i].values, oldMin, oldMax)
+        return DataFrame
+
+    @classmethod
+    def ConvertToMeanZero(cls, DataFrame, idx):
+        DataFrame = DataFrame.copy(deep=True)
+        for i in idx:
+            DataFrame[i] = DataFrame[i].values - np.mean(DataFrame[i].values)
+        return DataFrame
 
 
 class BurrowPlots:
@@ -902,9 +1008,3 @@ class BurrowPlots:
         _ax.plot([25, 25], [0, 1], linewidth=2, linestyle='dashed', color="black", alpha=0.75, label="Expected UCS")
         plt.figlegend(loc='lower left')
         plt.ylim(-0.2, 1.2)
-
-
-def temp_sort(DataFrame, index_name, subset):
-    DataFrame.set_index(index_name, drop=False, inplace=True)
-    DataFrame.sort_index(inplace=True)
-    return DataFrame.loc[subset].copy(deep=True)
