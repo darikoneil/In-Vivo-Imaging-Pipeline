@@ -2,6 +2,7 @@ import os
 from datetime import date, datetime
 import pickle as pkl
 import numpy as np
+import pandas as pd
 from IPython import get_ipython
 import pathlib
 from ExperimentManagement.BrukerMetaModule import BrukerMeta
@@ -454,6 +455,15 @@ class BehavioralStage:
         self.meta_data = BrukerMeta(_files[0], _files[2], _files[1])
         self.meta_data.import_meta_data()
         self.meta_data.creation_date = ExperimentData.getDate()
+
+    def loadBrukerAnalogRecordings(self):
+        self.folder_dictionary["bruker_meta_data"].reIndex()
+        _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("csv")
+        return self.load_bruker_analog_recordings(_files[-1])
+
+    @staticmethod
+    def load_bruker_analog_recordings(file):
+        return pd.read_csv(file)
 
 
 class CollectedDataFolder:

@@ -707,6 +707,12 @@ class MethodsForPandasOrganization:
         DataFrame["likelihood2"].fillna(1, inplace=True)
         return DataFrame
 
+    @classmethod
+    def merge_bruker_data(cls, DataFrame, BrukerData, MultiIndex, StateCastDict, **kwargs):
+
+        return
+
+
     @staticmethod
     def merge_cs_index_into_dataframe(DataFrame, CSIndex):
         # 0  = CS+, 1 = CS-, ..., Unique CS + 1 = Nil
@@ -857,6 +863,8 @@ class MethodsForPandasOrganization:
             NewFrame.sort_index(inplace=True)
 
         return NewFrame.copy(deep=True) # Return a deep copy for safety
+
+
 
 
 class DeepLabModule:
