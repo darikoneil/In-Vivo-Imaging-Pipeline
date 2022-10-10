@@ -492,14 +492,13 @@ class BehavioralStage:
         _image_indexed = _image_indexed.reindex(_analog_time)
         _image_indexed.bfill(inplace=True)
         _image_indexed.name = "Imaging Frame"
-        _analog_indexed.columns = ["Trial Indicator", "UCS Indicator"]
+        _channel_names = MetaData.analog_channel_names
+        for _name in range(_channel_names.__len__()):
+            _channel_names[_name] = _channel_names.replace(" ", "")
+        _analog_indexed.columns = _channel_names
         DataFrame = DataFrame.join(_analog_indexed)
         DataFrame = DataFrame.join(_image_indexed)
         return DataFrame
-
-    @staticmethod
-    def sync_bruker_frames(DataFrame, ImageFrames):
-        return
 
 
 class CollectedDataFolder:
