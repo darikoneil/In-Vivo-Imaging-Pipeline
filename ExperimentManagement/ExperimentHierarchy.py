@@ -6,7 +6,7 @@ import pandas as pd
 from IPython import get_ipython
 import pathlib
 from ExperimentManagement.BrukerMetaModule import BrukerMeta
-
+import math
 
 class ExperimentData:
     """
@@ -494,10 +494,43 @@ class BehavioralStage:
         _image_indexed.name = "Imaging Frame"
         _channel_names = MetaData.analog_channel_names
         for _name in range(_channel_names.__len__()):
-            _channel_names[_name] = _channel_names.replace(" ", "")
+            _channel_names[_name] = _channel_names[_name].replace(" ", "")
         _analog_indexed.columns = _channel_names
         DataFrame = DataFrame.join(_analog_indexed)
         DataFrame = DataFrame.join(_image_indexed)
+        return DataFrame
+
+    @staticmethod
+    def sync_downsampled_images(DataFrame, AnalogRecordings, MetaData, **kwargs):
+        _downsample_size = kwargs.get("downsample_multiplier", 3)
+        _relative_zero = np.searchsorted(DataFrame["Imaging Sync"].values, 1.4)
+        _frame_period = MetaData.imaging_metadata.get("framePeriod")
+        _num_frames = MetaData.imaging_metadata.get("relativeTimes").__len__()
+        _relative_times = np.around(np.array(MetaData.imaging_metadata.get("relativeTimes")), decimals=3)
+
+        _crop_idx = DataFrame.shape[0]-_relative_zero
+        _crop_time = np.around(AnalogRecordings["Time(ms)"].values[_crop_idx]*(1/1000), decimals=3)
+        _cropped_analog = AnalogRecordings.iloc[0:_crop_idx].values
+        _image_crop_idx = np.searchsorted(_relative_times, _crop_time)-1
+        _cropped_frames = np.arange(0, _image_crop_idx, 1, dtype=np.float64)
+        _analog_time = np.around(np.arange(0 + _relative_zero*(1/1000), _cropped_analog.shape[0] * (1 / 1000) +
+                                           _relative_zero*(1/1000), 1 / 1000, dtype=np.float64), decimals=3)
+
+        _image_time = np.around(np.arange(0 + _relative_zero*(1/1000), _cropped_frames.shape[0]*_frame_period +
+                                          _relative_zero*(1/1000),
+                                          _frame_period, dtype=np.float64), decimals=3)
+
+        _analog_indexed = pd.DataFrame(_cropped_analog[:, 1:], index=_analog_time)
+        _downsampled_frames = _cropped_frames[0:math.floor(_cropped_frames.shape[0]/_downsample_size)]
+        _downsampled_time = np.around(np.arange(0 + _relative_zero*(1/1000), _downsampled_frames.shape[0]*(
+                _frame_period/_downsample_size) + _relative_zero*(1/1000), _frame_period/_downsample_size,
+                                                dtype=np.float64), decimals=3)
+        _downsampled_indexed = pd.Series(_downsampled_frames, index=_downsampled_time)
+        _downsampled_indexed.sort_index(inplace=True)
+        _downsampled_indexed = _downsampled_indexed.reindex(_analog_time)
+        _downsampled_indexed.bfill(inplace=True)
+        _downsampled_indexed.name = "Downsampled Frame"
+        DataFrame.join(_downsampled_indexed)
         return DataFrame
 
 

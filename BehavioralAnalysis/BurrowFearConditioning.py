@@ -270,7 +270,6 @@ class FearConditioning(BehavioralStage):
         Master function that loads the following data -> analog, digital, state, dictionary
 
         """
-        _use_pandas = kwargs.get("use_pandas", True)
         _old_min = kwargs.get("min", 0)
         _old_max = kwargs.get("max", 800)
 
@@ -320,31 +319,24 @@ class FearConditioning(BehavioralStage):
             print("Deep Lab Cut model label insufficient. Re-train")
             return
 
-        # noinspection PyTypeChecker
-        # Segregated Organization
-        if _use_pandas:
             # noinspection PyTypeChecker
             # Copies for safety > No-copies for speed (avoid pandas gotchas)
-            self.data_frame, self.state_casted_index, self.multi_index = \
-                MethodsForPandasOrganization.ExportPandasDataFrame(
-                    _analog_data.copy(), _digital_data.copy(), _state_data.copy())
-            # merge cs index with data frame
-            self.data_frame = \
-                MethodsForPandasOrganization.merge_cs_index_into_dataframe(
-                    self.data_frame.copy(), np.array(self.trial_parameters.get("stimulusTypes"), dtype=np.float64))
-            # merge deeplabcut with data frame
-            self.data_frame = MethodsForPandasOrganization.merge_dlc_data(self.data_frame, _dlc, self.multi_index,
+        # noinspection PyTypeChecker
+        self.data_frame, self.state_casted_index, self.multi_index = \
+            MethodsForPandasOrganization.ExportPandasDataFrame(
+                _analog_data.copy(), _digital_data.copy(), _state_data.copy())
+        # merge cs index with data frame
+        self.data_frame = \
+            MethodsForPandasOrganization.merge_cs_index_into_dataframe(
+                self.data_frame.copy(), np.array(self.trial_parameters.get("stimulusTypes"), dtype=np.float64))
+        # merge deeplabcut with data frame
+        self.data_frame = MethodsForPandasOrganization.merge_dlc_data(self.data_frame, _dlc, self.multi_index,
                                                                             self.state_casted_index)
-            # merge imaging data
-            _analog_recordings = self.loadBrukerAnalogRecordings()
-            self.data_frame = self.sync_bruker_recordings(self.data_frame.copy(deep=True),
+        # merge imaging data
+        _analog_recordings = self.loadBrukerAnalogRecordings()
+        self.data_frame = self.sync_bruker_recordings(self.data_frame.copy(deep=True),
                                                           _analog_recordings, self.meta_data)
-        else:
-            for _trial in range(self.num_trials): # Adjust for Zero Indexing
-                # noinspection PyTypeChecker
-                self.data['Trial ' + str(_trial+1)] = TrialData(FearConditioning.OrganizeBehavioralData(
-                    _analog_data, _digital_data, _state_data, _trial, _dictionary_data))
-            self.importDeepLabCutData()
+
 
     def importDeepLabCutData(self):
         """
@@ -447,116 +439,6 @@ class FearConditioning(BehavioralStage):
             new_dict[_allkeys[_key].decode('utf-8')] = Dict.get(_allkeys[_key])
 
         return new_dict
-
-
-class TrialData:
-    def __init__(self, Dictionary):
-        self.iti_data = None
-        self.pre_trial_data = None
-        self.trial_data = None
-
-        # noinspection PyTypeChecker
-        for _key in self.__dict__.keys():
-            if _key in Dictionary.keys():
-                self.__dict__[_key] = Dictionary[_key]
-
-
-class OrganizeBehavior:
-    """
-    Super-class for organized behavioral data by experimental stage and trial
-
-    **Class Methods**
-        | **cls.indexData** : Function indexes the frames of some sort of task-relevant experimental state within a specified trial
-    """
-    def __init__(self, State, AnalogData, DigitalData, StateData, Trial, **kwargs):
-        self.imaging_sync_channel = kwargs.get('ImagingSyncChannel', 0)
-        self.prop_channel = kwargs.get('PropChannel', 1)
-        self.force_channel = kwargs.get('ForceChannel', 2)
-        self.gate_channel = kwargs.get('GateChannel', 1)
-        self.buffer_size = kwargs.get('BufferSize', 100)
-
-        _idx = OrganizeBehavior.indexData(State, StateData, self.buffer_size, Trial)
-        self.imaging_sync = AnalogData[self.imaging_sync_channel, _idx[0]*self.buffer_size:_idx[-1]*self.buffer_size]
-        self.prop_data = AnalogData[self.prop_channel, _idx[0]*self.buffer_size:_idx[-1]*self.buffer_size]
-        self.force_data = AnalogData[self.force_channel, _idx[0]*self.buffer_size:_idx[-1]*self.buffer_size]
-
-        if DigitalData.shape.__len__() == 1:
-            self.gateData = DigitalData[_idx[0]*self.buffer_size:_idx[-1]*self.buffer_size]
-        elif DigitalData.shape.__len__() > 1:
-            self.gateData = DigitalData[self.gate_channel, _idx[0]*self.buffer_size:_idx[-1]*self.buffer_size]
-
-    @classmethod
-    def indexData(cls, State, StateData, BufferSize, Trial):
-        """
-        Function indexes the frames of some sort of task-relevant experimental state within a specified trial
-
-        :param State: The experimental state
-        :type State: str
-        :param StateData: The numpy array containing strings defining the state at any given time
-        :param BufferSize: The size of the DAQ's buffer during recording (Thus x samples are considered one state)
-        :type BufferSize: int
-        :param Trial: The specified trial to index
-        :type Trial: int
-        :return: A numpy array indexing the state/trial specific samples
-        """
-        _idx = np.where(StateData == State)[0]
-        _derivative_idx = np.diff(_idx)
-        # Add beginning
-        _trial_edge_idx = np.append(np.array([0], dtype=np.int64), np.where(_derivative_idx > 1)[0]+1)
-        # Add end
-        _trial_edge_idx = np.append(_trial_edge_idx, _idx.shape[0])
-        return _idx[_trial_edge_idx[Trial]:_trial_edge_idx[Trial+1]]
-
-
-class OrganizeTrial(OrganizeBehavior):
-    def __init__(self, State, AnalogData, DigitalData, StateData, Trial, Dictionary, **kwargs):
-        # noinspection PyArgumentList
-        super().__init__(State, AnalogData, DigitalData, StateData, Trial, **kwargs)
-
-        # do stuff unique to this class
-        self.trialStartTime = Dictionary["trialStart"]  # float
-        self.trialEndTime = Dictionary["trialEnd"]  # float
-        self.trialStartFrames = int(0)  # int
-        self.trialEndFrames = int(self.trialEndTime[0] - self.trialStartTime[0])  # int
-        self.csStartTime = Dictionary["csStart"]  # float
-        self.csEndTime = Dictionary["csEnd"]  # float
-        self.csStartFrames = int(self.csStartTime[0]-self.trialStartTime[0])  # int
-        self.csEndFrames = int(self.csEndTime[0]-self.trialStartTime[0])  # int
-        self.ucsStartTime = Dictionary["ucsStart"]  # float
-        self.ucsEndTime = Dictionary["ucsEnd"]  # float
-        self.ucsStartFrames = int(self.ucsStartTime[0] - self.trialStartTime[0])  # int
-        self.ucsEndFrames = int(self.ucsEndTime[0] - self.trialStartTime[0])  # int
-        self.csType = Dictionary["stimulusTypes"][Trial-1]
-
-
-class OrganizeITI(OrganizeBehavior):
-    def __init__(self, State, AnalogData, DigitalData, StateData, Trial, Dictionary, **kwargs):
-        # noinspection PyArgumentList
-        super().__init__(State, AnalogData, DigitalData, StateData, Trial, **kwargs)
-        self.ITIStartTime = Dictionary["interStart"]
-        self.ITIEndTime = Dictionary["interEnd"]
-        self.ITIStartFrames = 0
-        self.ITIEndFrames = int(self.ITIEndTime[0] - self.ITIStartTime[0])
-
-
-class OrganizePreTrial(OrganizeBehavior):
-    def __init__(self, State, AnalogData, DigitalData, StateData, Trial, Dictionary, **kwargs):
-        # noinspection PyArgumentList
-        super().__init__(State, AnalogData, DigitalData, StateData, Trial, **kwargs)
-        self.preStartTime = Dictionary["preStart"]
-        self.preEndTime = Dictionary["preEnd"]
-        self.preStartFrames = 0
-        self.preEndFrames = int(self.preEndTime[0] - self.preStartTime[0])
-
-
-class OrganizeHabituation(OrganizeBehavior):
-    def __init__(self, State, AnalogData, DigitalData, StateData, Trial, Dictionary, **kwargs):
-        # noinspection PyArgumentList
-        super().__init__(State, AnalogData, DigitalData, StateData, Trial, **kwargs)
-        self.habStartTime = Dictionary["habStart"]
-        self.habEndTime = Dictionary["habEnd"]
-        self.habStartFrames = 0
-        self.habEndFrames = int(self.habEndTime[0] - self.habStartTime[0])
 
 
 class MethodsForPandasOrganization:
@@ -994,27 +876,3 @@ class DeepLabModule:
             DataFrame[i] = DataFrame[i].values - np.mean(DataFrame[i].values)
         return DataFrame
 
-
-class BurrowPlots:
-    """
-    Class Containing Methods for Visualizing Burrow Behavior
-    """
-    def __init__(self):
-        return
-
-    @staticmethod
-    def plotTrial(StageData, Trial):
-        _fig = plt.figure(figsize=(12, 6))
-        _ax = _fig.add_subplot(111)
-        _ax.set_title("Trial " + str(Trial))
-        _ax.set_xlabel("Seconds")
-        _ax.set_ylabel("State")
-        burrowX = np.linspace(0, 35, 350)
-        base = np.full((350,), 0, dtype=int)
-        CS = np.full((350,), 0, dtype=int)
-        CS[0:150] = 1
-        _ax.fill_between(burrowX, CS, base, linewidth=2, alpha=0.5, facecolor=[1, 1, 1], edgecolor=[0.65, 0.65, 0.65], label="CS+", hatch="///")
-        _ax.plot(burrowX, StageData['Trial ' + str(Trial)].trial_data.gateData, linewidth=2, color="#ff4e4b", label="Burrow Gate")
-        _ax.plot([25, 25], [0, 1], linewidth=2, linestyle='dashed', color="black", alpha=0.75, label="Expected UCS")
-        plt.figlegend(loc='lower left')
-        plt.ylim(-0.2, 1.2)
