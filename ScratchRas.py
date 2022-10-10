@@ -6,8 +6,6 @@ matplotlib.use('Qt5Agg')
 from matplotlib import pyplot as plt
 import seaborn as sns
 
-ras_path = "I:\\EM0084_Ras_Licking"
-
 
 def convert_to_csv(SyncData, NewFilename, RasPath):
     """
@@ -156,7 +154,31 @@ def sync_video(SyncData, VideoData, **kwargs):
     _fps = kwargs.get("fps", 30)
     _time_vector_full = SyncData.index.values
     _num_trials = np.unique(SyncData["Trial"].values).__len__()
+    _offset = np.around(VideoData[0][0]/10, decimals=3)
+    _video_trial_data = []
+    for _trial in range(_num_trials):
+        _trial_frames_idx = np.where(VideoData[1] == _trial)[0]
+        _true_index = np.where(SyncData["Trial"].values == _trial)
+        _trial_time = SyncData.index.values[_true_index].copy()
+        _start, _end = _trial_time[0], np.around(_trial_time[-1]-(1/30), decimals=3)
+        if _trial == 0:
+            _start += _offset
+        _video_time = np.around(np.linspace(_start, _end, _trial_frames_idx.__len__()), decimals=3)
+        _video_series = pd.Series(np.arange(_trial_frames_idx[0], _trial_frames_idx[-1]+1,
+                                                     1), index=_video_time).reindex(_trial_time)
+        _video_series.sort_index(inplace=True)
+        _video_series.ffill(inplace=True)
+        _video_trial_data.append(_video_series.copy(deep=True))
 
+    _video_trial_data = pd.concat(_video_trial_data)
+    _video_trial_data.sort_index(inplace=True)
+    _video_trial_data.name = "Video Frame"
+
+    SyncData = SyncData.join(_video_trial_data)
+    SyncData.sort_index(inplace=True)
+    SyncData.ffill(inplace=True)
+
+    return SyncData
 
 
 def plot_trial(SyncData, Trial, Keys, **kwargs):
@@ -172,26 +194,62 @@ def plot_trial(SyncData, Trial, Keys, **kwargs):
     :rtype: None
     """
 
-    cmap_id = kwargs.get("cmap", "mako")
+    _cmap_id = kwargs.get("cmap", "rainbow")
+    _alpha = kwargs.get("alpha", 0.9)
+    _face_color = kwargs.get("facecolor", None)
+    _fig_color = kwargs.get("figcolor", None)
+
     _trial_data = np.where(SyncData["Trial"] == Trial)
-    cmap = matplotlib.cm.get_cmap(cmap_id)
-    _colors = cmap(np.arange(0, 1, Keys.__len__()))
+    cmap = matplotlib.cm.get_cmap(_cmap_id)
+    _colors = cmap(np.linspace(0, 1, Keys.__len__()))
+    _colors[:, 3] = _alpha
+    # if Keys.__len__() == 1:
+    #    _subplot_constructor_int = 1
+    #else:
+    #    _subplot_constructor_int = int("".join([str(Keys.__len__()+2), str(11)]))
 
-    _subplot_constructor_int = int("".join([str(Keys.__len__()), str(11)]))
-    fig1 = plt.figure(figsize=(12, 6))
+    _fig = plt.figure(figsize=(16, 8))
+    _gs = _fig.add_gridspec(Keys.__len__()+2, 6)
 
-    for _key_idx in range(Keys.__len__()):
-        _ax = fig1.add_subplot(_subplot_constructor_int)
-        _subplot_constructor_int += 1
-        _ax.plot(SyncData.index.values[_trial_data], SyncData[Keys[_key_idx]].values[_trial_data], color=_colors[_key_idx])
-        _ax.set_xlabel("Time (s)")
-        _ax.set_ylabel(Keys[_key_idx])
-        _ax.title.set_text("".join(["Trial ", str(Trial)]))
+    _custom_legend_handles = []
+    for _key_idx in range(Keys.__len__()+1):
+        if _key_idx < Keys.__len__():
+            _ax = _fig.add_subplot(_gs[_key_idx, :])
+            #_subplot_constructor_int += 1
+            _ax.plot(SyncData.index.values[_trial_data], SyncData[Keys[_key_idx]].values[_trial_data],
+                     color=_colors[_key_idx, :])
+            _ax.set_xlabel("Time (s)")
+            _ax.set_ylabel(Keys[_key_idx])
+            if _face_color is not None:
+                _ax.set_facecolor(_face_color)
+            _custom_legend_handles.append(matplotlib.patches.Patch(facecolor=_colors[_key_idx], label=Keys[_key_idx]))
+        else:
+            _ax = _fig.add_subplot(_gs[Keys.__len__():Keys.__len__()+2, 0:5])
+            # _subplot_constructor_int += 1
+            for _key_idx_inner in range(Keys.__len__()):
+                _ax.plot(SyncData.index.values[_trial_data], SyncData[Keys[_key_idx_inner]].values[_trial_data],
+                     color=_colors[_key_idx_inner, :])
+            _ax.set_xlabel("Time (s)")
+            _ax.set_ylabel("Merged")
+            if _face_color is not None:
+                _ax.set_facecolor(_face_color)
+
+    if _face_color is not None:
+        _fig.patch.set_facecolor(_fig_color)
+    _fig.suptitle("".join(["Trial ", str(Trial)]), fontsize=24)
+    _fig.legend(handles=_custom_legend_handles, loc="lower right")
+    _fig.set_tight_layout("tight")
 
 
-sync_data = load_sync_data(ras_path)
-video_data = load_video(ras_path)
+def main(RasPath):
+    sync_data = load_sync_data(ras_path)
+    video_data = load_video(ras_path)
+    sync_data = sync_video(sync_data, video_data)
+    plot_trial(sync_data, 0,
+               ("Water Lick", "Water Reward", "Sucrose Lick", "Sucrose Reward"))
+               #facecolor="black", figcolor="black")
 
 
-
-
+if __name__ == "__main__":
+    ras_path = "I:\\EM0084_Ras_Licking"
+    main(ras_path)

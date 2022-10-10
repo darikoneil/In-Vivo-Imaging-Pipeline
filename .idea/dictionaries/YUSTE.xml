@@ -16,9 +16,12 @@
       <w>dtype</w>
       <w>edgecolor</w>
       <w>edgecolors</w>
+      <w>facecolor</w>
+      <w>figcolor</w>
       <w>fnames</w>
       <w>gotcha's</w>
       <w>histplot</w>
+      <w>icefire</w>
       <w>lbfgs</w>
       <w>linewidth</w>
       <w>linewidths</w>
