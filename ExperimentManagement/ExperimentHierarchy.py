@@ -536,7 +536,7 @@ class BehavioralStage:
         DataFrame = DataFrame.join(_downsampled_indexed.copy(deep=True))
         _downsampled_indexed.bfill(inplace=True)
         _downsampled_indexed.name = "[BFILL] Downsampled Frame"
-        DataFrame = DataFrame.join(_downsampled_indexed)
+        DataFrame = DataFrame.join(_downsampled_indexed.copy(deep=True))
         return DataFrame
 
 
