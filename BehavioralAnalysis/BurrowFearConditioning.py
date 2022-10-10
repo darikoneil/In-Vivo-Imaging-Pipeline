@@ -682,6 +682,17 @@ class MethodsForPandasOrganization:
 
     @staticmethod
     def safe_extract(OldFrame, Commands, *args, **kwargs):
+        """
+        Function for safe extraction
+
+        :param OldFrame: Original DataFrame
+        :type OldFrame: pd.DataFrame
+        :param Commands: Tuple where Tuple[0] is index name & Tuple[1] is subset name
+        :type Commands: tuple or None
+        :param args: index_tuple, levels_scalar_or_tuple, drop_level in that order
+        :param kwargs:
+        :return:
+        """
         _export_time_as_index = kwargs.get("export_time", False)
         _drop_index = kwargs.get("drop_index", False)
         _reset_index = kwargs.get("reset", False)

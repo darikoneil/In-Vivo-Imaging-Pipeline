@@ -1,21 +1,27 @@
-from ExperimentManagement.ExperimentHierarchy import ExperimentData
-from BehavioralAnalysis.BurrowFearConditioning import FearConditioning
+from ExperimentManagement.ExperimentHierarchy import ExperimentData, CollectedImagingFolder
+from BehavioralAnalysis.BurrowFearConditioning import MethodsForPandasOrganization as MFPO
 import matplotlib
 matplotlib.use('Qt5Agg')
 from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
+import pickle as pkl
 
 EM0121 = ExperimentData.loadHierarchy("D:\\EM0121")
 EM0121.Retrieval.loadBehavioralData()
-EM0121.recordMod("Organized Retrieval Image Frames")
-EM0121.saveHierarchy()
+PI = EM0121.Retrieval.folder_dictionary.get("10Hz").import_proc_inferences()
 
-_analog_file = EM0121.Retrieval.generateFileID('Analog')
-AnalogData = FearConditioning.loadAnalogData(_analog_file)
+from ImagingAnalysis.StaticProcessing import Processing
 
-_digital_file = EM0121.Retrieval.generateFileID('Digital')
-DigitalData = FearConditioning.loadDigitalData(_digital_file)
+NFR = Processing.normalizeSmoothFiringRates(PI.firing_rates, 3)
 
-_state_file = EM0121.Retrieval.generateFileID('State')
-StateData = FearConditioning.loadStateData(_state_file)
+NFR = NFR[:, 0:np.unique(EM0121.Retrieval.data_frame["Downsampled Frame"].values).__len__()-1]
+
+DF = EM0121.Retrieval.data_frame
+MI = EM0121.Retrieval.multi_index
+
+plus_trials = np.where(np.array(EM0121.Retrieval.trial_parameters.get("stimulusTypes")) == 0)[0]
+MI2 = pd.MultiIndex.from_arrays([DF["Trial Set"].values.copy(), DF["CS"].values.copy()])
+CSPlusFrames = MFPO.safe_extract(DF, None, (("Trial Set", "CS"), (0, 1), False), multi_index=MI2)
+CSPlusFrames = CSPlusFrames[~CSPlusFrames["Downsampled Frame"].isnull()]
+

@@ -6,6 +6,7 @@ import pandas as pd
 from IPython import get_ipython
 import pathlib
 from ExperimentManagement.BrukerMetaModule import BrukerMeta
+from MigrationTools.Converters import renamed_load
 import math
 
 
@@ -101,7 +102,7 @@ class ExperimentData:
         :return: ExperimentData
         :rtype: ExperimentManagement.ExperimentHierarchy.ExperimentData
         """
-        print("Loading Experimental Hierarchy..")
+        print("Loading Experimental Hierarchy...")
         _input_file = ExperimentDirectory + "\\ExperimentalHierarchy"
         _input_pickle = open(_input_file, 'rb')
         _pickles = pkl.load(_input_pickle)
@@ -421,7 +422,7 @@ class BehavioralStage:
             os.makedirs(_folder_name)
         except FileExistsError:
             print("The sampling folder already exists. Adding to folder dictionary")
-        self.folder_dictionary[SamplingRate + "Hz"] = CollectedDataFolder(_folder_name)
+        self.folder_dictionary[SamplingRate + "Hz"] = CollectedImagingFolder(_folder_name)
         ExperimentData.generateSampFreq(_folder_name)
 
     def addImageProcessingFolder(self, Title):
@@ -491,14 +492,16 @@ class BehavioralStage:
         _image_indexed = pd.Series(_cropped_frames, index=_image_time)
         _image_indexed.sort_index(inplace=True)
         _image_indexed = _image_indexed.reindex(_analog_time)
-        _image_indexed.bfill(inplace=True)
         _image_indexed.name = "Imaging Frame"
         _channel_names = MetaData.analog_channel_names
         for _name in range(_channel_names.__len__()):
             _channel_names[_name] = _channel_names[_name].replace(" ", "")
         _analog_indexed.columns = _channel_names
         DataFrame = DataFrame.join(_analog_indexed)
-        DataFrame = DataFrame.join(_image_indexed)
+        DataFrame = DataFrame.join(_image_indexed.copy(deep=True))
+        _image_indexed.bfill(inplace=True)
+        _image_indexed.name = "[BFILL] Imaging Frame"
+        DataFrame = DataFrame.join(_image_indexed.copy(deep=True))
         return DataFrame
 
     @staticmethod
@@ -529,10 +532,13 @@ class BehavioralStage:
         _downsampled_indexed = pd.Series(_downsampled_frames, index=_downsampled_time)
         _downsampled_indexed.sort_index(inplace=True)
         _downsampled_indexed = _downsampled_indexed.reindex(_analog_time)
-        _downsampled_indexed.bfill(inplace=True)
         _downsampled_indexed.name = "Downsampled Frame"
+        DataFrame = DataFrame.join(_downsampled_indexed.copy(deep=True))
+        _downsampled_indexed.bfill(inplace=True)
+        _downsampled_indexed.name = "[BFILL] Downsampled Frame"
         DataFrame = DataFrame.join(_downsampled_indexed)
         return DataFrame
+
 
 
 class CollectedDataFolder:
@@ -637,3 +643,75 @@ class CollectedDataFolder:
         :rtype: list
         """
         return file.split("_")[0:-1] + file.split("_")[-1].split(".")
+
+
+class CollectedImagingFolder(CollectedDataFolder):
+    """ this is a super class containing methods for"""
+    def __init__(self, Path):
+        super().__init__(Path)
+
+    def load_fissa(self):
+        return print("Not Yet Implemented")
+
+    def load_cascade(self):
+        return print("Not Yet Implemented")
+
+    def load_suite2p(self):
+        return
+
+    def import_proc_traces(self):
+        return self.load_proc_inferences(absolute_path=self.searchInFolder("ProcessedTraces"))
+
+    def import_proc_inferences(self):
+        try:
+            return self.load_proc_inferences(absolute_path=self.searchInFolder("ProcessedInferences"))
+        except ModuleNotFoundError:
+            print("Detected Deprecated Save. Migrating...")
+            with open(self.searchInFolder("ProcessedInferences"), "rb") as _file:
+                _ = renamed_load(_file)
+            _file.close()
+            with open(self.searchInFolder("ProcessedInferences"), "wb") as _file:
+                pkl.dump(_, _file)
+            _file.close()
+            # noinspection PyBroadException
+            try:
+                return self.load_proc_inferences(absolute_path=self.searchInFolder("ProcessedInferences"))
+            except Exception:
+                print("Migration Unsuccessful")
+                return
+
+    @staticmethod
+    def load_proc_inferences(**kwargs):
+        """
+        Save Processed Inferences to file
+
+        **Requires**
+            | self.ProcessedInferences
+
+        :keyword load_path: Path containing processed inferences
+        :keyword absolute_path: Absolute filepath
+        :rtype: object
+        """
+
+        _load_path = kwargs.get('load_path')
+        _absolute_path = kwargs.get('absolute_path')
+        try:
+            if _load_path is not None:
+                _filename = _load_path + "ProcessedInferences"
+            elif _absolute_path is not None:
+                _filename = _absolute_path
+            else:
+                print("Location of Processed Inferences Not Adequate")
+                raise RuntimeError
+
+            print("Loading Processed Inferences...")
+            _input_pickle = open(_filename, 'rb')
+            ProcessedInferences = pkl.load(_input_pickle)
+            _input_pickle.close()
+            print("Finished Loading Processed Traces.")
+
+        except RuntimeError:
+            print("Unable to load processed inferences. Check supplied path.")
+            return
+
+        return ProcessedInferences

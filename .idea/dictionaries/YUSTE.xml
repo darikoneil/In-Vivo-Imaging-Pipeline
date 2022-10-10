@@ -2,6 +2,7 @@
   <dictionary name="YUSTE">
     <words>
       <w>allkeys</w>
+      <w>bfill</w>
       <w>blockwise</w>
       <w>childs</w>
       <w>cmap</w>
@@ -26,6 +27,7 @@
       <w>linewidth</w>
       <w>linewidths</w>
       <w>logscale</w>
+      <w>mfpo</w>
       <w>multioutput</w>
       <w>nimg</w>
       <w>pretrialsdlc</w>

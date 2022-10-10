@@ -409,3 +409,4 @@ class ProcessedInferences:
         self.high_activity_frames = None
         self.utilized_model_name = None
         self.spike_matrix = None
+

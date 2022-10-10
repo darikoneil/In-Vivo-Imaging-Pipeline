@@ -5,10 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Synchronized Imaging Frames/Bruker Data">
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/CascadeAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/CascadeAnalysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MigrationTools/Converters.py" beforeDir="false" afterPath="$PROJECT_DIR$/MigrationTools/Converters.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -232,7 +235,7 @@
       <workItem from="1664909097266" duration="45000" />
       <workItem from="1664922916274" duration="2294000" />
       <workItem from="1664925231787" duration="92000" />
-      <workItem from="1665409063846" duration="18948000" />
+      <workItem from="1665409063846" duration="26911000" />
     </task>
     <task id="LOCAL-00001" summary="ignore">
       <created>1663863570077</created>
@@ -395,7 +398,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665427299009</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Synchronized Imaging Frames/Bruker Data">
+      <created>1665428751242</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1665428751242</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
