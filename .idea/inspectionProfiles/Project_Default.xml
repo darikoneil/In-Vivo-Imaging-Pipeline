@@ -180,6 +180,7 @@
           <option value="E127" />
           <option value="E261" />
           <option value="E303" />
+          <option value="E128" />
         </list>
       </option>
     </inspection_tool>
