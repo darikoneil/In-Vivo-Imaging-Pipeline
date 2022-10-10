@@ -335,6 +335,10 @@ class FearConditioning(BehavioralStage):
             # merge deeplabcut with data frame
             self.data_frame = MethodsForPandasOrganization.merge_dlc_data(self.data_frame, _dlc, self.multi_index,
                                                                             self.state_casted_index)
+            # merge imaging data
+            _analog_recordings = self.loadBrukerAnalogRecordings()
+            self.data_frame = self.sync_bruker_recordings(self.data_frame.copy(deep=True),
+                                                          _analog_recordings, self.meta_data)
         else:
             for _trial in range(self.num_trials): # Adjust for Zero Indexing
                 # noinspection PyTypeChecker
@@ -863,8 +867,6 @@ class MethodsForPandasOrganization:
             NewFrame.sort_index(inplace=True)
 
         return NewFrame.copy(deep=True) # Return a deep copy for safety
-
-
 
 
 class DeepLabModule:

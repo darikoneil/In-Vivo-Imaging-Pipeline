@@ -462,8 +462,44 @@ class BehavioralStage:
         return self.load_bruker_analog_recordings(_files[-1])
 
     @staticmethod
-    def load_bruker_analog_recordings(file):
-        return pd.read_csv(file)
+    def load_bruker_analog_recordings(File):
+        return pd.read_csv(File)
+
+    @staticmethod
+    def sync_bruker_recordings(DataFrame, AnalogRecordings, MetaData):
+        # this represents first bruker time point
+        _relative_zero = np.searchsorted(DataFrame["Imaging Sync"].values, 1.4)
+        _frame_period = MetaData.imaging_metadata.get("framePeriod")
+        _num_frames = MetaData.imaging_metadata.get("relativeTimes").__len__()
+        _relative_times = np.around(np.array(MetaData.imaging_metadata.get("relativeTimes")), decimals=3)
+
+        _crop_idx = DataFrame.shape[0]-_relative_zero
+        _crop_time = np.around(AnalogRecordings["Time(ms)"].values[_crop_idx]*(1/1000), decimals=3)
+        _cropped_analog = AnalogRecordings.iloc[0:_crop_idx].values
+        _image_crop_idx = np.searchsorted(_relative_times, _crop_time)-1
+        _cropped_frames = np.arange(0, _image_crop_idx, 1, dtype=np.float64)
+
+        _analog_time = np.around(np.arange(0 + _relative_zero*(1/1000), _cropped_analog.shape[0] * (1 / 1000) +
+                                           _relative_zero*(1/1000), 1 / 1000, dtype=np.float64), decimals=3)
+
+        _image_time = np.around(np.arange(0 + _relative_zero*(1/1000), _cropped_frames.shape[0]*_frame_period +
+                                          _relative_zero*(1/1000),
+                                          _frame_period, dtype=np.float64), decimals=3)
+
+        _analog_indexed = pd.DataFrame(_cropped_analog[:, 1:], index=_analog_time)
+        _image_indexed = pd.Series(_cropped_frames, index=_image_time)
+        _image_indexed.sort_index(inplace=True)
+        _image_indexed = _image_indexed.reindex(_analog_time)
+        _image_indexed.bfill(inplace=True)
+        _image_indexed.name = "Imaging Frame"
+        _analog_indexed.columns = ["Trial Indicator", "UCS Indicator"]
+        DataFrame = DataFrame.join(_analog_indexed)
+        DataFrame = DataFrame.join(_image_indexed)
+        return DataFrame
+
+    @staticmethod
+    def sync_bruker_frames(DataFrame, ImageFrames):
+        return
 
 
 class CollectedDataFolder:
