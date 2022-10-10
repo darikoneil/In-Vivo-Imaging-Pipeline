@@ -8,6 +8,7 @@ import pathlib
 from ExperimentManagement.BrukerMetaModule import BrukerMeta
 import math
 
+
 class ExperimentData:
     """
     Class for Organizing & Managing Experimental Data Across Sessions
@@ -530,7 +531,7 @@ class BehavioralStage:
         _downsampled_indexed = _downsampled_indexed.reindex(_analog_time)
         _downsampled_indexed.bfill(inplace=True)
         _downsampled_indexed.name = "Downsampled Frame"
-        DataFrame.join(_downsampled_indexed)
+        DataFrame = DataFrame.join(_downsampled_indexed)
         return DataFrame
 
 

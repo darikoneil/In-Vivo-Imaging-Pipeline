@@ -6,7 +6,6 @@ from tqdm.auto import tqdm
 from ExperimentManagement.ExperimentHierarchy import BehavioralStage, CollectedDataFolder
 import matplotlib
 matplotlib.use('Qt5Agg')
-from matplotlib import pyplot as plt
 
 
 # Some of this stuff needs some serious refactoring & cleaning out old code
@@ -254,17 +253,6 @@ class FearConditioning(BehavioralStage):
 
         return dictionaryData
 
-    @classmethod
-    def OrganizeBehavioralData(cls, AnalogData, DigitalData, StateData, Trial, Dictionary, **kwargs):
-        _pre_trial_data = OrganizePreTrial('PreTrial', AnalogData, DigitalData, StateData, Trial, Dictionary)
-        _iti_data = OrganizeITI('InterTrial',  AnalogData, DigitalData, StateData, Trial, Dictionary)
-        _trial_data = OrganizeTrial('Trial',  AnalogData, DigitalData, StateData, Trial, Dictionary)
-        dictionary_update = {'pre_trial_data': _pre_trial_data,
-                             'iti_data': _iti_data,
-                             'trial_data': _trial_data,
-                             }
-        return dictionary_update
-
     def loadBehavioralData(self, **kwargs):
         """
         Master function that loads the following data -> analog, digital, state, dictionary
@@ -336,24 +324,8 @@ class FearConditioning(BehavioralStage):
         _analog_recordings = self.loadBrukerAnalogRecordings()
         self.data_frame = self.sync_bruker_recordings(self.data_frame.copy(deep=True),
                                                           _analog_recordings, self.meta_data)
-
-
-    def importDeepLabCutData(self):
-        """
-        Not-Pandas importing
-        """
-        DLM = DeepLabModule(self.folder_dictionary['deep_lab_cut_data'], self.folder_dictionary['behavioral_exports'])
-        for _trial in range(self.num_trials):
-            # Trial
-            self.data["".join(["Trial ", str(_trial+1)])].trial_data.dlc_raw = \
-                DLM.SegregateTrials(DLM.trial_data, _trial+1)
-            self.data["".join(["Trial ", str(_trial+1)])].trial_data.dlc_physical = \
-                DLM.ConductPostProcessing(self.data["".join(["Trial ", str(_trial+1)])].trial_data.dlc_raw)
-            # Pre Trial
-            self.data["".join(["Trial ", str(_trial+1)])].pre_trial_data.dlc_raw = \
-                DLM.SegregateTrials(DLM.pre_trial_data, _trial+1)
-            self.data["".join(["Trial ", str(_trial+1)])].pre_trial_data.dlc_physical = \
-                DLM.ConductPostProcessing(self.data["".join(["Trial ", str(_trial+1)])].pre_trial_data.dlc_raw)
+        self.data_frame = self.sync_downsampled_images(self.data_frame.copy(deep=True), _analog_recordings,
+                                                       self.meta_data)
 
     def generateFileID(self, SaveType):
         """
@@ -461,9 +433,15 @@ class MethodsForPandasOrganization:
         # Cast State Index to Integers for simplicity & avoiding gotcha's with pandas
         _integer_state_index, StateCastedDict = MethodsForPandasOrganization.castStateIntoFloat64(StateData)
 
-        StateIndex = MethodsForPandasOrganization.match_data_to_new_index(_integer_state_index, _time_vector_10Hz,
-                                                                                         _time_vector_1000Hz,
-                                                                                         is_string=False)
+        # StateIndex = MethodsForPandasOrganization.match_data_to_new_index(_integer_state_index, _time_vector_10Hz,
+        #                                                                                 _time_vector_1000Hz,
+        #
+        # is_string=False)
+
+        StateIndex = pd.Series(_integer_state_index, index=_time_vector_10Hz)
+        StateIndex.sort_index(inplace=True)
+        StateIndex = StateIndex.reindex(_time_vector_1000Hz)
+        StateIndex.ffill(inplace=True)
 
         # noinspection PyTypeChecker
         TrialIndex = MethodsForPandasOrganization.nest_all_stages_under_trials(StateIndex.values,
@@ -875,4 +853,3 @@ class DeepLabModule:
         for i in idx:
             DataFrame[i] = DataFrame[i].values - np.mean(DataFrame[i].values)
         return DataFrame
-
