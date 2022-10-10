@@ -489,7 +489,7 @@ class BehavioralStage:
                                           _frame_period, dtype=np.float64), decimals=3)
 
         _analog_indexed = pd.DataFrame(_cropped_analog[:, 1:], index=_analog_time)
-        _image_indexed = pd.Series(_cropped_frames, index=_image_time)
+        _image_indexed = pd.Series(_cropped_frames.copy(), index=_image_time)
         _image_indexed.sort_index(inplace=True)
         _image_indexed = _image_indexed.reindex(_analog_time)
         _image_indexed.name = "Imaging Frame"
@@ -525,11 +525,11 @@ class BehavioralStage:
                                           _frame_period, dtype=np.float64), decimals=3)
 
         _analog_indexed = pd.DataFrame(_cropped_analog[:, 1:], index=_analog_time)
-        _downsampled_frames = _cropped_frames[0:math.floor(_cropped_frames.shape[0]/_downsample_size)]
+        _downsampled_frames = _cropped_frames[0:math.floor(_cropped_frames.shape[0]*_downsample_size)]
         _downsampled_time = np.around(np.arange(0 + _relative_zero*(1/1000), _downsampled_frames.shape[0]*(
-                _frame_period/_downsample_size) + _relative_zero*(1/1000), _frame_period/_downsample_size,
+                _frame_period*_downsample_size) + _relative_zero*(1/1000), _frame_period*_downsample_size,
                                                 dtype=np.float64), decimals=3)
-        _downsampled_indexed = pd.Series(_downsampled_frames, index=_downsampled_time)
+        _downsampled_indexed = pd.Series(_downsampled_frames.copy(), index=_downsampled_time)
         _downsampled_indexed.sort_index(inplace=True)
         _downsampled_indexed = _downsampled_indexed.reindex(_analog_time)
         _downsampled_indexed.name = "Downsampled Frame"
