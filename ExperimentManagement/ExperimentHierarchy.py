@@ -335,6 +335,7 @@ class BehavioralStage:
         self.folder_dictionary = dict()
         # self.data = pd.DataFrame
         self.meta_data = None
+        self.sync_key = None
 
         _mouse_directory = Meta[0]
         self.createFolderDictionary(_mouse_directory, Stage)
@@ -468,75 +469,102 @@ class BehavioralStage:
         return pd.read_csv(File)
 
     @staticmethod
-    def sync_bruker_recordings(DataFrame, AnalogRecordings, MetaData):
-        # this represents first bruker time point
-        _relative_zero = np.searchsorted(DataFrame["Imaging Sync"].values, 1.4)
-        _frame_period = MetaData.imaging_metadata.get("framePeriod")
-        _num_frames = MetaData.imaging_metadata.get("relativeTimes").__len__()
-        _relative_times = np.around(np.array(MetaData.imaging_metadata.get("relativeTimes")), decimals=3)
+    def sync_bruker_recordings(DataFrame, AnalogRecordings, MetaData,  StateCastedDict, SyncKey, **kwargs):
+        """
 
-        _crop_idx = DataFrame.shape[0]-_relative_zero
-        _crop_time = np.around(AnalogRecordings["Time(ms)"].values[_crop_idx]*(1/1000), decimals=3)
-        _cropped_analog = AnalogRecordings.iloc[0:_crop_idx].values
-        _image_crop_idx = np.searchsorted(_relative_times, _crop_time)-1
-        _cropped_frames = np.arange(0, _image_crop_idx, 1, dtype=np.float64)
+        :param DataFrame:
+        :type DataFrame: pd.DataFrame
+        :param AnalogRecordings:
+        :type AnalogRecordings: pd.DataFrame
+        :param MetaData:
+        :type MetaData: BrukerMeta
+        :param StateCastedDict:
+        :type StateCastedDict: dict
+        :param SyncKey:
+        :type SyncKey: tuple or None
+        :return:
+        """
+        _fill_method = kwargs.get("fill", "backward")
+        if SyncKey is None:
+            SyncKey = ("State Integer", " TrialIndicator")
+        # Sync by matching first peak of the sync_key columns
+        _DF_signal = DataFrame[SyncKey[0]].values.copy()
+        _AR_signal = AnalogRecordings[SyncKey[1]].values.copy()
+        _first_peak_diff = np.where(_DF_signal == StateCastedDict.get("Trial"))[0][0] - \
+                           np.where(_AR_signal >= 3.3)[0][0]
 
-        _analog_time = np.around(np.arange(0 + _relative_zero*(1/1000), _cropped_analog.shape[0] * (1 / 1000) +
-                                           _relative_zero*(1/1000), 1 / 1000, dtype=np.float64), decimals=3)
+        if _first_peak_diff > 0:
+            print("NOT YET IMPLEMENTED")
+            return
+            # noinspection PyUnreachableCode
+            _AR_signal = np.pad(_AR_signal, (_first_peak_diff, 0), constant_values=0)
+        elif _first_peak_diff < 0:
+            _first_peak_diff *= -1
+            _AR_signal = pd.DataFrame(AnalogRecordings.iloc[_first_peak_diff:, 1:].values,
+                                      index=np.around(
+                                          (AnalogRecordings.index.values[_first_peak_diff:] - _first_peak_diff) /
+                                          int(MetaData.acquisition_rate), decimals=3))
+            _AR_signal.columns = AnalogRecordings.columns[1:]
 
-        _image_time = np.around(np.arange(0 + _relative_zero*(1/1000), _cropped_frames.shape[0]*_frame_period +
-                                          _relative_zero*(1/1000),
-                                          _frame_period, dtype=np.float64), decimals=3)
+            _frames = pd.Series(np.arange(0, MetaData.imaging_metadata.get("relativeTimes").__len__(), 1),
+                                index=np.around(MetaData.imaging_metadata.get("relativeTimes") -
+                                                AnalogRecordings["Time(ms)"].values[_first_peak_diff] / int(
+                                    MetaData.acquisition_rate), decimals=3))
+            _frames = _frames[_frames.index >= 0].copy(deep=True)
+            _frames.name = "Imaging Frame"
+        else:
+            print("Already Synced")
 
-        _analog_indexed = pd.DataFrame(_cropped_analog[:, 1:], index=_analog_time)
-        _image_indexed = pd.Series(_cropped_frames.copy(), index=_image_time)
-        _image_indexed.sort_index(inplace=True)
-        _image_indexed = _image_indexed.reindex(_analog_time)
-        _image_indexed.name = "Imaging Frame"
-        _channel_names = MetaData.analog_channel_names
-        for _name in range(_channel_names.__len__()):
-            _channel_names[_name] = _channel_names[_name].replace(" ", "")
-        _analog_indexed.columns = _channel_names
-        DataFrame = DataFrame.join(_analog_indexed)
-        DataFrame = DataFrame.join(_image_indexed.copy(deep=True))
-        _image_indexed.bfill(inplace=True)
-        _image_indexed.name = "[BFILL] Imaging Frame"
-        DataFrame = DataFrame.join(_image_indexed.copy(deep=True))
+        # Here I just make sure shape-match
+        if _DF_signal.shape[0] < _AR_signal.shape[0]:
+            _AR_signal = _AR_signal.iloc[0:_DF_signal.shape[0], :]
+            _frames = _frames[_frames.index <= DataFrame.index.values[-1]].copy(deep=True)
+            print("Cropped Bruker Signals")
+        elif _DF_signal.shape[0] > _AR_signal.shape[0]:
+            _AR_signal = np.pad(_AR_signal, (0, _DF_signal.shape[0] - _DF_signal.shape[0]),
+                                constant_values=0)
+
+        # Merge/Export Analog
+        DataFrame = DataFrame.join(_AR_signal.copy(deep=True))
+
+        # Merge/Export Images
+        DataFrame = DataFrame.join(_frames.copy(deep=True))
+        # na filling column
+        _frames = pd.DataFrame(_frames).copy(deep=True)
+        _frames = _frames.reindex(DataFrame.index)
+        if _fill_method == "backward":
+            _frames.bfill(inplace=True)
+        elif _fill_method == "forward":
+            _frames.ffill(inplace=True)
+        elif _fill_method == "nearest":
+            _frames.interpolate(method="nearest", inplace=True)
+        _frames = _frames.rename(columns={"Imaging Frame": "[FILLED] Imaging Frame"})
+        DataFrame = DataFrame.join(_frames.copy(deep=True))
         return DataFrame
 
     @staticmethod
-    def sync_downsampled_images(DataFrame, AnalogRecordings, MetaData, **kwargs):
+    def sync_downsampled_images(DataFrame, MetaData, **kwargs):
         _downsample_size = kwargs.get("downsample_multiplier", 3)
-        _relative_zero = np.searchsorted(DataFrame["Imaging Sync"].values, 1.4)
-        _frame_period = MetaData.imaging_metadata.get("framePeriod")
-        _num_frames = MetaData.imaging_metadata.get("relativeTimes").__len__()
-        _relative_times = np.around(np.array(MetaData.imaging_metadata.get("relativeTimes")), decimals=3)
+        _fill_method = kwargs.get("fill", "backward")
 
-        _crop_idx = DataFrame.shape[0]-_relative_zero
-        _crop_time = np.around(AnalogRecordings["Time(ms)"].values[_crop_idx]*(1/1000), decimals=3)
-        _cropped_analog = AnalogRecordings.iloc[0:_crop_idx].values
-        _image_crop_idx = np.searchsorted(_relative_times, _crop_time)-1
-        _cropped_frames = np.arange(0, _image_crop_idx, 1, dtype=np.float64)
-        _analog_time = np.around(np.arange(0 + _relative_zero*(1/1000), _cropped_analog.shape[0] * (1 / 1000) +
-                                           _relative_zero*(1/1000), 1 / 1000, dtype=np.float64), decimals=3)
-
-        _image_time = np.around(np.arange(0 + _relative_zero*(1/1000), _cropped_frames.shape[0]*_frame_period +
-                                          _relative_zero*(1/1000),
-                                          _frame_period, dtype=np.float64), decimals=3)
-
-        _analog_indexed = pd.DataFrame(_cropped_analog[:, 1:], index=_analog_time)
-        _downsampled_frames = _cropped_frames[0:math.floor(_cropped_frames.shape[0]*_downsample_size)]
-        _downsampled_time = np.around(np.arange(0 + _relative_zero*(1/1000), _downsampled_frames.shape[0]*(
-                _frame_period*_downsample_size) + _relative_zero*(1/1000), _frame_period*_downsample_size,
-                                                dtype=np.float64), decimals=3)
-        _downsampled_indexed = pd.Series(_downsampled_frames.copy(), index=_downsampled_time)
-        _downsampled_indexed.sort_index(inplace=True)
-        _downsampled_indexed = _downsampled_indexed.reindex(_analog_time)
-        _downsampled_indexed.name = "Downsampled Frame"
-        DataFrame = DataFrame.join(_downsampled_indexed.copy(deep=True))
-        _downsampled_indexed.bfill(inplace=True)
-        _downsampled_indexed.name = "[BFILL] Downsampled Frame"
-        DataFrame = DataFrame.join(_downsampled_indexed.copy(deep=True))
+        if _fill_method != "backward":
+            print("Not Yet Implemented")
+            return
+        _total_frames = MetaData.imaging_metadata.get("relativeTimes").__len__()
+        _imaging_frames = DataFrame["Imaging Frame"].values.copy()
+        if _fill_method == "backward":
+            _downsample_frames = np.arange(_downsample_size, _total_frames, _downsample_size)
+            _downsample_frames_idx = np.where(np.in1d(_downsample_frames, DataFrame["Imaging Frame"].values))[0]
+            _time_stamps = DataFrame.index.values[np.where(np.in1d(DataFrame["Imaging Frame"].values,
+                                                                   _downsample_frames[_downsample_frames_idx]))[0]]
+            _frames = pd.Series(_downsample_frames_idx, index=_time_stamps)
+            _frames.name = "Downsampled Frame"
+            _frames = _frames.reindex(DataFrame.index)
+            DataFrame = DataFrame.join(_frames.copy(deep=True))
+            _frames = pd.DataFrame(_frames)
+            _frames.bfill(inplace=True)
+            _frames = _frames.rename(columns={"Downsampled Frame": "[FILLED] Downsampled Frame"})
+            DataFrame = DataFrame.join(_frames.copy(deep=True))
         return DataFrame
 
 

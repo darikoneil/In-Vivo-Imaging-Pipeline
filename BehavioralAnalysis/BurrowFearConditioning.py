@@ -323,9 +323,9 @@ class FearConditioning(BehavioralStage):
         # merge imaging data
         _analog_recordings = self.loadBrukerAnalogRecordings()
         self.data_frame = self.sync_bruker_recordings(self.data_frame.copy(deep=True),
-                                                          _analog_recordings, self.meta_data)
-        self.data_frame = self.sync_downsampled_images(self.data_frame.copy(deep=True), _analog_recordings,
-                                                       self.meta_data)
+                                                          _analog_recordings, self.meta_data, self.state_casted_index,
+                                                      ("State Integer", " TrialIndicator"))
+        self.data_frame = self.sync_downsampled_images(self.data_frame.copy(deep=True), self.meta_data)
 
     def generateFileID(self, SaveType):
         """
