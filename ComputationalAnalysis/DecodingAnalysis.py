@@ -34,21 +34,46 @@ from ImagingAnalysis.StaticPlotting import plotROC
 
 
 class DecodingModule:
+    """
+    This a super class passing conserved functions for decoding modules
+
+    **Properties**
+        | **imported_neural_organization** : the structure of the passed neural data
+        | **imported_feature_organization** : the structure of the passed feature data
+    """
     # Generic decoding module super-class with conserved methods, properties,
     # and methods with conserved names but different implementation.
     def __init__(self, **kwargs):
+        """
+
+        :key NeuralData: Neural Data, can be in the form of Neurons x Frames or Trials x Neurons x Frames
+        """
         # parse inputs
         self.neural_data = kwargs.get('NeuralData', None)
         self.feature_data = kwargs.get('FeatureData', None)
         self.label_data = kwargs.get('LabelData', None)
         self.data_splits = kwargs.get('DataSplits', [0.8, 0.2])
         self.covariance_matrix = kwargs.get('CovarianceMatrix', None)
+        self._num_trials = kwargs.get('Trials', None)
+        self.trial_index = kwargs.get('TrialIndex', None)
         _feature_data_file = kwargs.get('FeatureDataFile', None)
         _label_data_file = kwargs.get('LabelDataFile', None)
 
         # load if necessary
         if _feature_data_file is not None or _label_data_file is not None:
             self.loadFeaturesLabels(_feature_data_file, _label_data_file)
+
+        # properties
+        self._imported_neural_data_org = None
+        self.imported_neural_organization = self.neural_data
+        self._imported_feature_data_org = None
+        self.imported_feature_organization = self.feature_data
+
+        # indices
+        self.shuffle_index = None
+        self.trial_order = None
+        if self.num_trials is not None:
+            self.trial_order = np.arange(self.num_trials)
 
         # Initialization
         self.training_x = None
@@ -61,6 +86,9 @@ class DecodingModule:
         self.validation_y = None
         self.predicted_validation_y = None
         self.ModelPerformance = None
+
+        # Verbosity
+        self.structural_report()
 
     def loadFeaturesLabels(self, _feature_data_file, _label_data_file):
         if _feature_data_file is not None and self.feature_data is None:
@@ -105,24 +133,23 @@ class DecodingModule:
                 print("The organization of labels and neural data must match.")
 
     def splitData(self):
-        if self.neural_data_organization == "Matrix Org":
-            _training_frames = int(self.data_splits[0] * self.num_frames)
-            if len(self.data_splits) == 2:
-                print("Splitting data in training & testing sets")
-                print("Data splits are: " +
-                      str(self.data_splits[0]*100) + "% training" +
-                      " vs " + str(self.data_splits[1]*100) + "% testing")
-                self.training_x = self.neural_data[:, 0:_training_frames]
-                self.training_y = self.label_data[0:_training_frames]
-                self.testing_x = self.neural_data[:, _training_frames:self.num_frames+1]
-                self.testing_y = self.label_data[_training_frames:self.num_frames+1]
-            elif len(self.data_splits) == 3:
-                self.training_x = self.neural_data[:, 0:_training_frames]
-                self.training_y = self.neural_data[:, 0:_training_frames]
-                self.testing_x = None
-                self.testing_y = None
-                self.validation_x = None
-                self.validation_y = None
+        _training_frames = int(self.data_splits[0] * self.num_frames)
+        if len(self.data_splits) == 2:
+            print("Splitting data in training & testing sets")
+            print("Data splits are: " +
+                    str(self.data_splits[0]*100) + "% training" +
+                    " vs " + str(self.data_splits[1]*100) + "% testing")
+            self.training_x = self.neural_matrix[:, 0:_training_frames]
+            self.training_y = self.label_data[0:_training_frames]
+            self.testing_x = self.neural_matrix[:, _training_frames:self.num_frames+1]
+            self.testing_y = self.label_data[_training_frames:self.num_frames+1]
+        elif len(self.data_splits) == 3:
+            self.training_x = self.neural_matrix[:, 0:_training_frames]
+            self.training_y = self.neural_matrix[:, 0:_training_frames]
+            self.testing_x = None
+            self.testing_y = None
+            self.validation_x = None
+            self.validation_y = None
 
     def fitModel(self, **kwargs):
         print("1st")
@@ -176,99 +203,167 @@ class DecodingModule:
         print("Finished.")
 
     @property
-    def neural_data_organization(self):
-        if self.neural_data is not None:
-            if self.neural_data.dtype == 'O':
-                return "Tiff Org"
-            else:
-                if len(self.neural_data.shape) == 3:
-                    return "Trial Org"
-                elif len(self.neural_data.shape) == 2:
-                    return "Matrix Org"
-                else:
-                    return "Unknown"
+    def imported_neural_organization(self):
+        """
+        :rtype: str
+        """
+
+        if self._imported_neural_data_org is not None:
+            return self._imported_neural_data_org
         else:
             print("Please import neural data")
+            return ""
+
+
+    @imported_neural_organization.setter
+    def imported_neural_organization(self, value):
+        """
+        :param value: Original Neural Data
+        """
+        if value.shape.__len__() == 2:
+            self._imported_neural_data_org = "Neurons x Frames"
+        elif value.shape.__len__() == 3:
+            self._imported_neural_data_org = "Trials x Neurons x Frames"
+
+    @property
+    def imported_feature_organization(self):
+        """
+        :rtype: str
+        """
+        if self._imported_feature_data_org is not None:
+            return self._imported_feature_data_org
+        else:
+            print("Please import feature data")
+            return ""
+
+    @imported_feature_organization.setter
+    def imported_feature_organization(self, value):
+        """
+        :param value:  Original Feature Data
+        """
+        if value.shape.__len__() == 2:
+            self._imported_feature_data_org = "Features x Frames"
+        elif value.shape.__len__() == 3:
+            self._imported_feature_data_org = "Trials x Features x Frames"
+
+    @property
+    def neural_matrix(self):
+        if self.imported_neural_organization == "Trials x Neurons x Frames":
+            return np.concatenate(self.neural_data, axis=1)
+        elif self.imported_neural_organization == "Neurons x Frames":
+            return self.neural_data
+
+    @property
+    def feature_matrix(self):
+        if self.imported_feature_organization == "Trials x Features x Frames":
+            return np.concatenate(self.feature_data, axis=1)
+        elif self.imported_feature_organization == "Features x Frames":
+            return self.feature_data
+
+    @property
+    def num_trials(self):
+        """
+        :rtype: int
+        """
+
+        if self.imported_neural_organization == "Trials x Neurons x Frames":
+            return self.neural_data.shape[0]
+        elif self._num_trials is not None:
+            return self._num_trials
+        else:
+            print("The number of trials was not specified")
+            return int()
 
     @property
     def num_neurons(self):
         if self.neural_data is not None:
-            return self.neural_data.shape[0]
+            return self.neural_matrix.shape[0]
         else:
             print("Please import neural data")
+            return int()
 
     @property
     def num_frames(self):
         if self.neural_data is not None:
-            if self.neural_data_organization == "Tiff Org":
-                return np.concatenate(self.neural_data[0], axis=1)[0, :].shape[1]
-            elif self.neural_data_organization == "Trial Org":
-                print("Not yet implemented")
-                pass
-            elif self.neural_data_organization == "Matrix Org":
-                return self.neural_data.shape[1]
-
-    @classmethod
-    def shuffleTrials(cls, NeuralActivityInTrialForm, **kwargs):
-        _features = kwargs.get('FeatureData', None)
-        _trial_subset = kwargs.get('TrialSubset', None)
-        try:
-            if len(NeuralActivityInTrialForm.shape) != 3:
-                raise ValueError
-            if _features is not None:
-                if len(NeuralActivityInTrialForm.shape) != len(_features.shape):
-                    raise AssertionError
-        except ValueError:
-            print("Neural Activity must be in trial form")
-            return
-        except AssertionError:
-            print("Neural and Feature Data must be in the same shape")
-            return
-
-        if _trial_subset is not None:
-            _shuffle_index = _trial_subset.copy()
-            np.random.shuffle(_shuffle_index)
+            return self.neural_matrix.shape[1]
         else:
-            _shuffle_index = np.arange(NeuralActivityInTrialForm.shape[0])
-            np.random.shuffle(_shuffle_index)
+            print("Please import neural data")
+            return int()
 
-        if _features is not None:
-            shuffled_features = _features[_shuffle_index, :, :]
-            shuffled_neural_data = NeuralActivityInTrialForm[_shuffle_index, :, :]
-            return shuffled_neural_data, shuffled_features
+    def structural_report(self):
+        print("".join(["\nNeural Data was imported in the form ", self.imported_neural_organization, " and contains ",
+                       str(self.num_neurons), " neurons, ", str(self.num_frames), " frames, and ",
+                       str(self.num_trials), " trials."]))
+
+    def shuffle_trials(self):
+
+        if self.imported_neural_organization == "Trials x Neurons x Frames" \
+                and self.imported_feature_organization == "Trials x Features x Frames":
+            self.shuffle_index, self.trial_order = self.shuffleByTrialIndex(self.neural_data, self.trial_index)
+            _linear_index = np.concatenate(self.shuffle_index, axis=1)
+            _neural_data_matrix = self.neural_matrix
+            self.neural_data = np.reshape(_neural_data_matrix[:, _linear_index], self.neural_data.shape)
         else:
-            shuffled_neural_data = NeuralActivityInTrialForm[_shuffle_index, :, :]
-            return shuffled_neural_data
+            print("Neural and Feature Data must be in the form of Trials x _ x Frames")
+
+    @staticmethod
+    def shuffleByTrialIndex(NeuralActivityInTrialForm, TrialIndex):
+        _num_trials = NeuralActivityInTrialForm.shape[0]
+        _frames_per_trial = NeuralActivityInTrialForm.shape[2]
+        _num_frames = _num_trials * _frames_per_trial
+        _unique_trial_types = np.unique(TrialIndex)
+        _num_trial_types = _unique_trial_types.__len__()
+        _frame_index = np.reshape(np.arange(_num_frames), (_num_trials, 1, _frames_per_trial))
+        shuffle_index = _frame_index.copy()
+
+        _frame_sets = []
+        _trial_sets = []
+        for _trial_type in _unique_trial_types:
+            _trials_of_this_type = [_trial for _trial in range(_num_trials) if TrialIndex[_trial] == _trial_type]
+            np.random.shuffle(_trials_of_this_type)
+            _trial_sets.append(_trials_of_this_type.copy())
+            _frame_sets.append(_frame_index[_trials_of_this_type, :, :])
+        _frame_sets = np.asarray(_frame_sets)
+        _trial_sets = np.asarray(_trial_sets)
+
+        trial_order = []
+        for _group_of_one_trial_each in range(int(_num_trials/_num_trial_types)):
+            _offset = _group_of_one_trial_each*_num_trial_types
+            for _trial_type in range(_num_trial_types):
+                shuffle_index[_trial_type+_offset, :, :] = _frame_sets[_trial_type, _group_of_one_trial_each, :, :]
+                trial_order.append(_trial_sets[_trial_type, _group_of_one_trial_each])
+        trial_order = np.asarray(trial_order)
+        return shuffle_index, trial_order
 
     @classmethod
     def shuffleFrames(cls, DataInMatrixForm, **kwargs):
         _features = kwargs.get('FeatureData', None)
         _labels = kwargs.get('LabelData', None)
-        _shuffle_index = np.arange(DataInMatrixForm.shape[1])
-        np.random.shuffle(_shuffle_index)
-        shuffled_data = DataInMatrixForm[:, _shuffle_index]
+        shuffle_index = np.arange(DataInMatrixForm.shape[1])
+        np.random.shuffle(shuffle_index)
+        shuffled_data = DataInMatrixForm[:, shuffle_index]
         if _labels is None and _features is None:
             return shuffled_data
         elif _features is not None and _labels is None:
-            shuffled_features = _features[:, _shuffle_index]
+            shuffled_features = _features[:, shuffle_index]
             return shuffled_data, shuffled_features
         elif _features is not None and _labels is not None:
-            shuffled_features = _features[:, _shuffle_index]
-            shuffled_labels = _labels[:, _shuffle_index]
+            shuffled_features = _features[:, shuffle_index]
+            shuffled_labels = _labels[:, shuffle_index]
             return shuffled_data, shuffled_features, shuffled_labels
         elif _features is None and _labels is not None:
-            shuffled_labels = _labels[:, _shuffle_index]
+            shuffled_labels = _labels[:, shuffle_index]
             return shuffled_data, shuffled_labels
 
     @classmethod
     def shuffleEachNeuron(cls, NeuralActivityInMatrixForm):
         _num_neurons, _num_frames = NeuralActivityInMatrixForm.shape
         shuffled_neural_data = np.zeros_like(NeuralActivityInMatrixForm).copy() # cuz paranoid
-        _shuffle_index = np.arange(_num_frames)
+        shuffle_index = np.arange(_num_frames)
 
         for _neuron in range(_num_neurons):
-            np.random.shuffle(_shuffle_index)
-            shuffled_neural_data[_neuron, :] = NeuralActivityInMatrixForm[_neuron, _shuffle_index]
+            np.random.shuffle(shuffle_index)
+            shuffled_neural_data[_neuron, :] = NeuralActivityInMatrixForm[_neuron, shuffle_index]
 
         return shuffled_neural_data
 
