@@ -296,18 +296,46 @@ class DecodingModule:
                        str(self.num_trials), " trials."]))
 
     def shuffle_trials(self):
+        if not self.imported_neural_organization == "Trials x Neurons x Frames":
+            raise AssertionError("Neural data must be in the form Trials x Neurons x Frames")
+        if not self.imported_feature_organization == "Trials x Features x Frames":
+            raise AssertionError("Feature data must be in the form Trials x Features x Frames")
 
-        if self.imported_neural_organization == "Trials x Neurons x Frames" \
-                and self.imported_feature_organization == "Trials x Features x Frames":
-            self.shuffle_index, self.trial_order = self.shuffleByTrialIndex(self.neural_data, self.trial_index)
-            _linear_index = np.concatenate(self.shuffle_index, axis=1)
-            _neural_data_matrix = self.neural_matrix
-            self.neural_data = np.reshape(_neural_data_matrix[:, _linear_index], self.neural_data.shape)
-        else:
-            print("Neural and Feature Data must be in the form of Trials x _ x Frames")
+        self.shuffle_index, self.trial_order = self.shuffleByTrialIndex(self.neural_data, self.trial_index)
+        self.neural_data = self.neural_data[self.trial_order, :, :]
+        self.feature_data = self.feature_data[self.trial_order, :, :]
 
     @staticmethod
     def shuffleByTrialIndex(NeuralActivityInTrialForm, TrialIndex):
+        _num_trials = NeuralActivityInTrialForm.shape[0]
+        _frames_per_trial = NeuralActivityInTrialForm.shape[2]
+        _num_frames = _num_trials * _frames_per_trial
+        _unique_trial_types = np.unique(TrialIndex)
+        _num_trial_types = _unique_trial_types.__len__()
+        _frame_index = np.reshape(np.arange(_num_frames), (_num_trials, 1, _frames_per_trial))
+        shuffle_index = _frame_index.copy()
+
+        _frame_sets = []
+        _trial_sets = []
+        for _trial_type in _unique_trial_types:
+            _trials_of_this_type = [_trial for _trial in range(_num_trials) if TrialIndex[_trial] == _trial_type]
+            np.random.shuffle(_trials_of_this_type)
+            _trial_sets.append(_trials_of_this_type.copy())
+            _frame_sets.append(_frame_index[_trials_of_this_type, :, :])
+        _frame_sets = np.asarray(_frame_sets)
+        _trial_sets = np.asarray(_trial_sets)
+
+        trial_order = []
+        for _group_of_one_trial_each in range(int(_num_trials/_num_trial_types)):
+            _offset = _group_of_one_trial_each*_num_trial_types
+            for _trial_type in range(_num_trial_types):
+                # shuffle_index[_trial_type+_offset, :, :] = _frame_sets[_trial_type, _group_of_one_trial_each, :, :]
+                trial_order.append(_trial_sets[_trial_type, _group_of_one_trial_each])
+        trial_order = np.asarray(trial_order)
+        return shuffle_index, trial_order
+
+    @staticmethod
+    def _wrk_shuffleByTrialIndex(NeuralActivityInTrialForm, TrialIndex):
         _num_trials = NeuralActivityInTrialForm.shape[0]
         _frames_per_trial = NeuralActivityInTrialForm.shape[2]
         _num_frames = _num_trials * _frames_per_trial
