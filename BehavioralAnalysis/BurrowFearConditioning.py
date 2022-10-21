@@ -6,7 +6,7 @@ from tqdm.auto import tqdm
 from ExperimentManagement.ExperimentHierarchy import BehavioralStage, CollectedDataFolder
 import matplotlib
 matplotlib.use('Qt5Agg')
-
+from matplotlib import pyplot as plt
 
 # Some of this stuff needs some serious refactoring & cleaning out old code
 # To-Do refactor out the indexing that can be done by native functions
@@ -322,10 +322,14 @@ class FearConditioning(BehavioralStage):
                                                                             self.state_casted_index)
         # merge imaging data
         _analog_recordings = self.loadBrukerAnalogRecordings()
-        self.data_frame = self.sync_bruker_recordings(self.data_frame.copy(deep=True),
+        if self.validate_bruker_recordings_completion(_analog_recordings, self.num_trials)[0]:
+            self.data_frame = self.sync_bruker_recordings(self.data_frame.copy(deep=True),
                                                           _analog_recordings, self.meta_data, self.state_casted_index,
-                                                      ("State Integer", " TrialIndicator"))
-        self.data_frame = self.sync_downsampled_images(self.data_frame.copy(deep=True), self.meta_data)
+                                                          ("State Integer", " TrialIndicator"))
+            self.data_frame = self.sync_downsampled_images(self.data_frame.copy(deep=True), self.meta_data)
+        else:
+            self.mergeAdditionalBruker(_analog_recordings)
+            # self.data_frame = self.sync_downsampled_images(self.data_frame.copy(deep=True), self.meta_data)
 
     def generateFileID(self, SaveType):
         """
@@ -380,6 +384,32 @@ class FearConditioning(BehavioralStage):
         self.folder_dictionary['analog_burrow_data'] = self.folder_dictionary.get('behavior_folder') + \
                                                        "\\AnalogBurrowData"
 
+    def mergeAdditionalBruker(self, AnalogRecordings):
+        """
+        In this function I add a second file to the dataset
+
+        :rtype: None
+        """
+        _tag = 2
+        _, _detected_trials_1 = self.validate_bruker_recordings_completion(AnalogRecordings, self.num_trials)
+        _frames_1 = self.index_trial_subset_for_bruker_sync(self.data_frame, _detected_trials_1,
+                                                            self.num_trials, "Start")
+        _data_frame_1 = self.data_frame.iloc[_frames_1[0]:_frames_1[-1]].copy(deep=True)
+        _data_frame_1 = self.sync_bruker_recordings(_data_frame_1, AnalogRecordings, self.meta_data,
+                                                    self.state_casted_index,  ("State Integer", " TrialIndicator"))
+        _analog_recordings_2 = self.loadAdditionalBrukerAnalogRecordings(2)
+        _meta_data_2 = self.loadAdditionalBrukerMetaData(2)
+        _, _detected_trials_2 = self.validate_bruker_recordings_completion(_analog_recordings_2, self.num_trials)
+        _frames_2 = self.index_trial_subset_for_bruker_sync(self.data_frame, _detected_trials_2,
+                                                            self.num_trials, "End")
+        _data_frame_2 = self.data_frame.iloc[_frames_2[0]:_frames_2[-1]].copy(deep=True)
+        _data_frame_2 = self.sync_bruker_recordings(_data_frame_2, _analog_recordings_2, _meta_data_2,
+                                                    self.state_casted_index, ("State Integer", " TrialIndicator"))
+        _data_frame_concat = pd.concat([_data_frame_1, _data_frame_2])
+        _data_frame_concat = _data_frame_concat[[" TrialIndicator", " UCSIndicator",
+                                                 "Imaging Frame", "[FILLED] Imaging Frame"]]
+        self.data_frame = self.data_frame.join(_data_frame_concat)
+
     @staticmethod
     def validate_bruker_recordings_labels(AnalogRecordings, NumTrials):
         try:
@@ -393,11 +423,22 @@ class FearConditioning(BehavioralStage):
 
     @staticmethod
     def validate_bruker_recordings_completion(AnalogRecordings, NumTrials):
+        detected_trials = np.where(np.diff(AnalogRecordings[" TrialIndicator"].values) > 1)[0].__len__()
         try:
-            assert(np.where(np.diff(AnalogRecordings[" TrialIndicator"].values))[0].__len__() == NumTrials)
-            return True
+            assert(detected_trials == NumTrials)
+            return True, detected_trials
         except AssertionError:
-            return False
+            return False, detected_trials
+
+    @staticmethod
+    def index_trial_subset_for_bruker_sync(DataFrame, Trial, NumTrials, Direction):
+        if Direction == "Start":
+            return np.where(DataFrame["Trial Set"].values <= Trial+1)[0]
+        elif Direction == "End":
+            return np.where(DataFrame["Trial Set"].values >= NumTrials - Trial + 1)[0]
+        else:
+            print("Please specify the direction as Start or End")
+            return
 
     @staticmethod
     def convertFromPy27_Array(Array):
@@ -430,6 +471,29 @@ class FearConditioning(BehavioralStage):
             new_dict[_allkeys[_key].decode('utf-8')] = Dict.get(_allkeys[_key])
 
         return new_dict
+
+    @staticmethod
+    def check_sync_plot(DataFrame):
+        fig1 = plt.figure(1)
+
+        ax1 = fig1.add_subplot(311)
+        ax1.title.set_text("Merge")
+        ax1.plot(DataFrame.index.values, DataFrame["State Integer"].values, color="blue")
+        ax1.plot(DataFrame.index.values, DataFrame[" TrialIndicator"].values, color="orange")
+
+        ax2 = fig1.add_subplot(312)
+        ax2.title.set_text("State Integer")
+        ax2.plot(DataFrame.index.values, DataFrame["State Integer"].values, color="blue")
+        ax2.set_xlabel("Time (s)")
+        ax2.set_ylabel("State")
+
+        ax3 = fig1.add_subplot(313)
+        ax3.title.set_text("Trial Indicator")
+        ax3.plot(DataFrame.index.values, DataFrame[" TrialIndicator"].values, color="orange")
+        ax3.set_xlabel("Time (s)")
+        ax3.set_ylabel("Trial Flag")
+
+        fig1.tight_layout()
 
 
 class MethodsForPandasOrganization:

@@ -334,6 +334,7 @@ class BehavioralStage:
         self.modifications = [(ExperimentData.getDate(), ExperimentData.getTime())]
         self.folder_dictionary = dict()
         # self.data = pd.DataFrame
+        self.data_frame = pd.DataFrame
         self.meta_data = None
         self.sync_key = None
 
@@ -464,11 +465,23 @@ class BehavioralStage:
         _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("csv")
         return self.load_bruker_analog_recordings(_files[-1])
 
-
     def loadAdditionalBrukerAnalogRecordings(self, Tag):
         self.folder_dictionary["".join(["bruker_meta_data_", str(Tag)])].reIndex()
         _files = self.folder_dictionary["".join(["bruker_meta_data_", str(Tag)])].find_all_ext("csv")
         return self.load_bruker_analog_recordings(_files[-1])
+
+    def loadAdditionalBrukerMetaData(self, Tag):
+        self.folder_dictionary["".join(["bruker_meta_data_", str(Tag)])].reIndex()
+        _files = self.folder_dictionary["".join(["bruker_meta_data_", str(Tag)])].find_all_ext("xml")
+        _meta_data = BrukerMeta(_files[0], _files[2], _files[1])
+        _meta_data.import_meta_data()
+        _meta_data.creation_date = ExperimentData.getDate()
+        return _meta_data
+
+    # noinspection PyMethodMayBeStatic
+    def mergeAdditionalBruker(self, AnalogRecordings):
+        print(" Was not overwritten")
+        return
 
     @staticmethod
     def load_bruker_analog_recordings(File):
@@ -497,8 +510,10 @@ class BehavioralStage:
         # Sync by matching first peak of the sync_key columns
         _DF_signal = DataFrame[SyncKey[0]].values.copy()
         _AR_signal = AnalogRecordings[SyncKey[1]].values.copy()
-        _first_peak_diff = np.where(_DF_signal == StateCastedDict.get("Trial"))[0][0] - \
-                           np.where(_AR_signal >= 3.3)[0][0]
+        _AR_first_peak = np.where(np.diff(_AR_signal) > 1.0)[0][0]+1
+        assert(_AR_signal[_AR_first_peak] >= 3.3)
+        _first_peak_diff = np.where(_DF_signal == StateCastedDict.get("Trial"))[0][0] - _AR_first_peak
+
 
         if _first_peak_diff > 0:
             print("NOT YET IMPLEMENTED")
@@ -510,14 +525,14 @@ class BehavioralStage:
             _AR_signal = pd.DataFrame(AnalogRecordings.iloc[_first_peak_diff:, 1:].values,
                                       index=np.around(
                                           (AnalogRecordings.index.values[_first_peak_diff:] - _first_peak_diff) /
-                                          int(MetaData.acquisition_rate), decimals=3))
+                                          int(MetaData.acquisition_rate), decimals=3) + DataFrame.index.values[0])
             _AR_signal.columns = AnalogRecordings.columns[1:]
 
             _frames = pd.Series(np.arange(0, MetaData.imaging_metadata.get("relativeTimes").__len__(), 1),
                                 index=np.around(MetaData.imaging_metadata.get("relativeTimes") -
                                                 AnalogRecordings["Time(ms)"].values[_first_peak_diff] / int(
-                                    MetaData.acquisition_rate), decimals=3))
-            _frames = _frames[_frames.index >= 0].copy(deep=True)
+                                    MetaData.acquisition_rate), decimals=3) + DataFrame.index.values[0])
+            _frames = _frames[_frames.index >= 0 + DataFrame.index.values[0]].copy(deep=True)
             _frames.name = "Imaging Frame"
         else:
             print("Already Synced")
@@ -528,8 +543,11 @@ class BehavioralStage:
             _frames = _frames[_frames.index <= DataFrame.index.values[-1]].copy(deep=True)
             print("Cropped Bruker Signals")
         elif _DF_signal.shape[0] > _AR_signal.shape[0]:
-            _AR_signal = np.pad(_AR_signal, (0, _DF_signal.shape[0] - _DF_signal.shape[0]),
-                                constant_values=0)
+            # _AR_signal.values = np.pad(_AR_signal.values, pad_width=((0, _DF_signal.shape[0] - _AR_signal.shape[0]), (0, 0)),
+                                # mode="constant", constant_values=0)
+
+            _AR_signal = _AR_signal.reindex(DataFrame.index)
+            # _frames = _frames.reindex(DataFrame.index) no need, happens below anyway
 
         # Merge/Export Analog
         # DataFrame = DataFrame.join(_AR_signal.copy(deep=True))
