@@ -330,7 +330,10 @@ class FearConditioning(BehavioralStage):
             self.data_frame = self.sync_downsampled_images(self.data_frame.copy(deep=True), self.meta_data)
         else:
             self.mergeAdditionalBruker(_analog_recordings)
-            # self.data_frame = self.sync_downsampled_images(self.data_frame.copy(deep=True), self.meta_data)
+            # noinspection PyArgumentList
+            self.data_frame = self.sync_downsampled_images(self.data_frame.copy(deep=True), self.meta_data,
+                                                          two_files=True,
+                                                          second_meta=self.loadAdditionalBrukerMetaData(2))
 
     def generateFileID(self, SaveType):
         """

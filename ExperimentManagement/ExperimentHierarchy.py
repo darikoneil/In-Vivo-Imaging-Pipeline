@@ -5,6 +5,8 @@ import numpy as np
 import pandas as pd
 from IPython import get_ipython
 import pathlib
+
+import ExperimentManagement.BrukerMetaModule
 from ExperimentManagement.BrukerMetaModule import BrukerMeta
 from MigrationTools.Converters import renamed_load
 import math
@@ -512,7 +514,7 @@ class BehavioralStage:
         # Sync by matching first peak of the sync_key columns
         _DF_signal = DataFrame[SyncKey[0]].values.copy()
         _AR_signal = AnalogRecordings[SyncKey[1]].values.copy()
-        _AR_first_peak = np.where(np.diff(_AR_signal) > 1.0)[0][0]+1
+        _AR_first_peak = np.where(np.diff(_AR_signal) > 1.0)[0][0]
         assert(_AR_signal[_AR_first_peak] >= 3.3)
         _first_peak_diff = np.where(_DF_signal == StateCastedDict.get("Trial"))[0][0] - _AR_first_peak
 
@@ -574,25 +576,58 @@ class BehavioralStage:
     def sync_downsampled_images(DataFrame, MetaData, **kwargs):
         _downsample_size = kwargs.get("downsample_multiplier", 3)
         _fill_method = kwargs.get("fill", "backward")
+        _two_files = kwargs.get("two_files", False)
+        _meta_data_2 = kwargs.get("second_meta", ExperimentManagement.BrukerMetaModule.BrukerMeta)
 
         if _fill_method != "backward":
             print("Not Yet Implemented")
             return
-        _total_frames = MetaData.imaging_metadata.get("relativeTimes").__len__()
-        _imaging_frames = DataFrame["Imaging Frame"].values.copy()
-        if _fill_method == "backward":
-            _downsample_frames = np.arange(_downsample_size-1, _total_frames, _downsample_size)
-            _downsample_frames_idx = np.where(np.in1d(_downsample_frames, DataFrame["Imaging Frame"].values))[0]
-            _time_stamps = DataFrame.index.values[np.where(np.in1d(np.unique(DataFrame["Imaging Frame"].values),
-                                                                   _downsample_frames[_downsample_frames_idx]))[0]]
-            _frames = pd.Series(_downsample_frames_idx, index=_time_stamps)
-            _frames.name = "Downsampled Frame"
-            _frames = _frames.reindex(DataFrame.index)
-            DataFrame = DataFrame.join(_frames.copy(deep=True))
-            _frames = pd.DataFrame(_frames)
+
+        if _two_files:
+            _total_frames_1 = MetaData.imaging_metadata.get("relativeTimes").__len__()
+            _downsample_frames_1 = np.arange(0, _total_frames_1, _downsample_size)
+            _downsample_frames_idx_1 = np.where(np.in1d(_downsample_frames_1, DataFrame["Imaging Frame"].values))[0]
+            _time_stamps_1 = DataFrame.index.values[np.where(np.in1d(DataFrame["Imaging Frame"].values,
+                                                                   _downsample_frames_1[_downsample_frames_idx_1]))[0]]
+            _frames_1 = pd.Series(_downsample_frames_idx_1, index=_time_stamps_1)
+            _frames_1.name = "Downsampled Frame"
+            _frames_1 = _frames_1.reindex(DataFrame.index)
+
+            _total_frames_2 = _meta_data_2.imaging_metadata.get("relativeTimes").__len__()
+            _downsample_frames_2 = np.arange(0, _total_frames_2, _downsample_size)
+            _downsample_frames_2 += _total_frames_1
+            _downsample_frames_idx_2 = np.where(np.in1d(_downsample_frames_2, DataFrame["Imaging Frame"].values))[0]
+            _time_stamps_2 = DataFrame.index.values[np.where(np.in1d(DataFrame["Imaging Frame"].values,
+                                                                   _downsample_frames_2[_downsample_frames_idx_2]))[0]]
+            _frames_2 = pd.Series(_downsample_frames_idx_2, index=_time_stamps_2)
+            _frames_2.name = "Downsampled Frame"
+            _frames_2 = _frames_2.reindex(DataFrame.index)
+
+            _frames_merged = pd.concat([_frames_1, _frames_2])
+            _frames_merged.name = "Downsampled Frame"
+            DataFrame = DataFrame.join(_frames_merged.copy(deep=True))
+            _frames = pd.DataFrame(_frames_merged)
             _frames.bfill(inplace=True)
-            _frames = _frames.rename(columns={"Downsampled Frame": "[FILLED] Downsampled Frame"})
-            DataFrame = DataFrame.join(_frames.copy(deep=True))
+            _frames = _frames_merged.name = "[FILLED] Downsampled Frame"
+            DataFrame = DataFrame.join(_frames_merged.copy(deep=True))
+
+        else:
+            _total_frames = MetaData.imaging_metadata.get("relativeTimes").__len__()
+            _imaging_frames = DataFrame["Imaging Frame"].values.copy()
+
+            if _fill_method == "backward":
+                _downsample_frames = np.arange(_downsample_size-1, _total_frames, _downsample_size)
+                _downsample_frames_idx = np.where(np.in1d(_downsample_frames, DataFrame["Imaging Frame"].values))[0]
+                _time_stamps = DataFrame.index.values[np.where(np.in1d(DataFrame["Imaging Frame"].values,
+                                                                   _downsample_frames[_downsample_frames_idx]))[0]]
+                _frames = pd.Series(_downsample_frames_idx, index=_time_stamps)
+                _frames.name = "Downsampled Frame"
+                _frames = _frames.reindex(DataFrame.index)
+                DataFrame = DataFrame.join(_frames.copy(deep=True))
+                _frames = pd.DataFrame(_frames)
+                _frames.bfill(inplace=True)
+                _frames = _frames.rename(columns={"Downsampled Frame": "[FILLED] Downsampled Frame"})
+                DataFrame = DataFrame.join(_frames.copy(deep=True))
         return DataFrame
 
 
