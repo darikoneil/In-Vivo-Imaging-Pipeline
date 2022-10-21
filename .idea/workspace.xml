@@ -5,11 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Some things changed while doing some log-reg analysis">
+      <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121_Encoding.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/Scratch.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ScratchProc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ComputationalAnalysis/DecodingAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ComputationalAnalysis/DecodingAnalysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ImagingAnalysis/StaticPlotting.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/StaticPlotting.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -21,8 +23,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Stub" />
-        <option value="Jupyter Notebook" />
         <option value="Python Script" />
+        <option value="Jupyter Notebook" />
       </list>
     </option>
   </component>
@@ -239,7 +241,9 @@
       <workItem from="1665510266807" duration="10584000" />
       <workItem from="1665583792543" duration="31000" />
       <workItem from="1665586281431" duration="3121000" />
-      <workItem from="1665689827557" duration="55398000" />
+      <workItem from="1665689827557" duration="55521000" />
+      <workItem from="1666187870658" duration="26000" />
+      <workItem from="1666302855140" duration="3129000" />
     </task>
     <task id="LOCAL-00001" summary="ignore">
       <created>1663863570077</created>
@@ -444,7 +448,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666120124320</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="Some things changed while doing some log-reg analysis">
+      <created>1666187344541</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1666187344541</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

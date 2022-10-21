@@ -464,6 +464,12 @@ class BehavioralStage:
         _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("csv")
         return self.load_bruker_analog_recordings(_files[-1])
 
+
+    def loadAdditionalBrukerAnalogRecordings(self, Tag):
+        self.folder_dictionary["".join(["bruker_meta_data_", str(Tag)])].reIndex()
+        _files = self.folder_dictionary["".join(["bruker_meta_data_", str(Tag)])].find_all_ext("csv")
+        return self.load_bruker_analog_recordings(_files[-1])
+
     @staticmethod
     def load_bruker_analog_recordings(File):
         return pd.read_csv(File)
@@ -484,6 +490,7 @@ class BehavioralStage:
         :type SyncKey: tuple or None
         :return:
         """
+
         _fill_method = kwargs.get("fill", "backward")
         if SyncKey is None:
             SyncKey = ("State Integer", " TrialIndicator")
@@ -525,7 +532,8 @@ class BehavioralStage:
                                 constant_values=0)
 
         # Merge/Export Analog
-        DataFrame = DataFrame.join(_AR_signal.copy(deep=True))
+        # DataFrame = DataFrame.join(_AR_signal.copy(deep=True))
+        DataFrame = DataFrame.join(_AR_signal)
 
         # Merge/Export Images
         DataFrame = DataFrame.join(_frames.copy(deep=True))
@@ -566,7 +574,6 @@ class BehavioralStage:
             _frames = _frames.rename(columns={"Downsampled Frame": "[FILLED] Downsampled Frame"})
             DataFrame = DataFrame.join(_frames.copy(deep=True))
         return DataFrame
-
 
 
 class CollectedDataFolder:

@@ -381,6 +381,25 @@ class FearConditioning(BehavioralStage):
                                                        "\\AnalogBurrowData"
 
     @staticmethod
+    def validate_bruker_recordings_labels(AnalogRecordings, NumTrials):
+        try:
+            assert(np.where(np.diff(AnalogRecordings[" TrialIndicator"].values) > 1)[0].__len__() <= NumTrials)
+            return AnalogRecordings
+        except AssertionError:
+            print(" Analog Channel Labels are Swapped")
+            AnalogRecordings = AnalogRecordings.rename(
+                columns={" TrialIndicator": " UCSIndicator", " UCSIndicator": " TrialIndicator"})
+            return AnalogRecordings
+
+    @staticmethod
+    def validate_bruker_recordings_completion(AnalogRecordings, NumTrials):
+        try:
+            assert(np.where(np.diff(AnalogRecordings[" TrialIndicator"].values))[0].__len__() == NumTrials)
+            return True
+        except AssertionError:
+            return False
+
+    @staticmethod
     def convertFromPy27_Array(Array):
         """
         Convert a numpy array of strings in byte-form to numpy array of strings in string-form
