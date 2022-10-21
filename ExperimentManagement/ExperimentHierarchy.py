@@ -9,6 +9,8 @@ from ExperimentManagement.BrukerMetaModule import BrukerMeta
 from MigrationTools.Converters import renamed_load
 import math
 
+# yo some dis ugly
+
 
 class ExperimentData:
     """
@@ -579,9 +581,9 @@ class BehavioralStage:
         _total_frames = MetaData.imaging_metadata.get("relativeTimes").__len__()
         _imaging_frames = DataFrame["Imaging Frame"].values.copy()
         if _fill_method == "backward":
-            _downsample_frames = np.arange(_downsample_size, _total_frames, _downsample_size)
+            _downsample_frames = np.arange(_downsample_size-1, _total_frames, _downsample_size)
             _downsample_frames_idx = np.where(np.in1d(_downsample_frames, DataFrame["Imaging Frame"].values))[0]
-            _time_stamps = DataFrame.index.values[np.where(np.in1d(DataFrame["Imaging Frame"].values,
+            _time_stamps = DataFrame.index.values[np.where(np.in1d(np.unique(DataFrame["Imaging Frame"].values),
                                                                    _downsample_frames[_downsample_frames_idx]))[0]]
             _frames = pd.Series(_downsample_frames_idx, index=_time_stamps)
             _frames.name = "Downsampled Frame"

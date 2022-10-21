@@ -11,6 +11,7 @@ from matplotlib import pyplot as plt
 # Some of this stuff needs some serious refactoring & cleaning out old code
 # To-Do refactor out the indexing that can be done by native functions
 # To-Do refactor out the old behavioral organization such that only the pandas remains for easier maintenance
+# Yo some dis ugly
 
 
 class FearConditioning(BehavioralStage):
@@ -397,6 +398,7 @@ class FearConditioning(BehavioralStage):
         _data_frame_1 = self.data_frame.iloc[_frames_1[0]:_frames_1[-1]].copy(deep=True)
         _data_frame_1 = self.sync_bruker_recordings(_data_frame_1, AnalogRecordings, self.meta_data,
                                                     self.state_casted_index,  ("State Integer", " TrialIndicator"))
+        _num_frames_in_first_set = self.meta_data.imaging_metadata.get("relativeTimes").__len__()
         _analog_recordings_2 = self.loadAdditionalBrukerAnalogRecordings(2)
         _meta_data_2 = self.loadAdditionalBrukerMetaData(2)
         _, _detected_trials_2 = self.validate_bruker_recordings_completion(_analog_recordings_2, self.num_trials)
@@ -405,6 +407,8 @@ class FearConditioning(BehavioralStage):
         _data_frame_2 = self.data_frame.iloc[_frames_2[0]:_frames_2[-1]].copy(deep=True)
         _data_frame_2 = self.sync_bruker_recordings(_data_frame_2, _analog_recordings_2, _meta_data_2,
                                                     self.state_casted_index, ("State Integer", " TrialIndicator"))
+        _data_frame_2[["Imaging Frame", "[FILLED] Imaging Frame"]] = \
+            _data_frame_2[["Imaging Frame", "[FILLED] Imaging Frame"]] + _num_frames_in_first_set
         _data_frame_concat = pd.concat([_data_frame_1, _data_frame_2])
         _data_frame_concat = _data_frame_concat[[" TrialIndicator", " UCSIndicator",
                                                  "Imaging Frame", "[FILLED] Imaging Frame"]]
