@@ -22,7 +22,7 @@ class Suite2PModule:
             'tiff_list': _files
         }
         _ops = {
-            'fs': 9.845,
+            'fs': 30,
             'keep_movie_raw': True,
             'nimg_init': 1000,
             'batch_size': 7000,

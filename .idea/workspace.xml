@@ -5,16 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Noted Single Frame De-Sync in Downsampled Pandas DataFrames">
+      <change afterPath="$PROJECT_DIR$/ComputationalAnalysis/LSTMRegression.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ComputationalAnalysis/LinearNonLinearRegression.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ComputationalAnalysis/LinearRegression.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ComputationalAnalysis/SupportVectorMachine.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/.ipynb_checkpoints/EM0121_Encoding-checkpoint.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121_Encoding.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121_PreExposure.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121_Retrieval.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/Scratch.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Scratch'.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/s.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ScratchProc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ComputationalAnalysis/DecodingAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ComputationalAnalysis/DecodingAnalysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ComputationalAnalysis/ModifiedDecoders.py" beforeDir="false" afterPath="$PROJECT_DIR$/ComputationalAnalysis/ModifiedDecoders.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ComputationalAnalysis/NewDecoders.py" beforeDir="false" afterPath="$PROJECT_DIR$/ComputationalAnalysis/LogisticRegression.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ImagingAnalysis/StaticPlotting.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/StaticPlotting.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/StaticProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/StaticProcessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +72,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="I:/" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/DarikDataScripts" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
@@ -84,11 +95,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DarikDataScripts" />
       <recent name="I:\" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\USNAP" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ComputationalAnalysis" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\BehavioralAnalysis" />
-      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ImagingAnalysis" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline" />
@@ -245,7 +256,10 @@
       <workItem from="1665586281431" duration="3121000" />
       <workItem from="1665689827557" duration="55521000" />
       <workItem from="1666187870658" duration="26000" />
-      <workItem from="1666302855140" duration="24227000" />
+      <workItem from="1666302855140" duration="39979000" />
+      <workItem from="1666635974162" duration="9942000" />
+      <workItem from="1666714880628" duration="14530000" />
+      <workItem from="1666878668800" duration="8653000" />
     </task>
     <task id="LOCAL-00001" summary="ignore">
       <created>1663863570077</created>
@@ -478,7 +492,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666379379962</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Noted Single Frame De-Sync in Downsampled Pandas DataFrames">
+      <created>1666389640533</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1666389640533</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

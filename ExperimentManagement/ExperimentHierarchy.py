@@ -514,8 +514,9 @@ class BehavioralStage:
         # Sync by matching first peak of the sync_key columns
         _DF_signal = DataFrame[SyncKey[0]].values.copy()
         _AR_signal = AnalogRecordings[SyncKey[1]].values.copy()
-        _AR_first_peak = np.where(np.diff(_AR_signal) > 1.0)[0][0]
+        _AR_first_peak = np.where(np.diff(_AR_signal) > 1.0)[0][0]+1
         assert(_AR_signal[_AR_first_peak] >= 3.3)
+
         _first_peak_diff = np.where(_DF_signal == StateCastedDict.get("Trial"))[0][0] - _AR_first_peak
 
 
@@ -592,6 +593,7 @@ class BehavioralStage:
             _frames_1 = pd.Series(_downsample_frames_idx_1, index=_time_stamps_1)
             _frames_1.name = "Downsampled Frame"
             _frames_1 = _frames_1.reindex(DataFrame.index)
+            _frames_1 = _frames_1[~_frames_1.isnull()]
 
             _total_frames_2 = _meta_data_2.imaging_metadata.get("relativeTimes").__len__()
             _downsample_frames_2 = np.arange(0, _total_frames_2, _downsample_size)
@@ -601,7 +603,8 @@ class BehavioralStage:
                                                                    _downsample_frames_2[_downsample_frames_idx_2]))[0]]
             _frames_2 = pd.Series(_downsample_frames_idx_2, index=_time_stamps_2)
             _frames_2.name = "Downsampled Frame"
-            _frames_2 = _frames_2.reindex(DataFrame.index)
+            _frames_2.reindex(DataFrame.index)
+            _frames_2 = _frames_2[~_frames_2.isnull()]
 
             _frames_merged = pd.concat([_frames_1, _frames_2])
             _frames_merged.name = "Downsampled Frame"
@@ -750,7 +753,22 @@ class CollectedImagingFolder(CollectedDataFolder):
         return
 
     def import_proc_traces(self):
-        return self.load_proc_inferences(absolute_path=self.searchInFolder("ProcessedTraces"))
+        try:
+            return self.load_proc_inferences(absolute_path=self.searchInFolder("ProcessedTraces"))
+        except ModuleNotFoundError:
+            print("Detected Deprecated Save. Migrating...")
+            with open(self.searchInFolder("ProcessedTraces"), "rb") as _file:
+                _ = renamed_load(_file)
+            _file.close()
+            with open(self.searchInFolder("ProcessedTraces"), "wb") as _file:
+                pkl.dump(_, _file)
+            _file.close()
+            # noinspection PyBroadException
+            try:
+                return self.load_proc_inferences(absolute_path=self.searchInFolder("ProcessedTraces"))
+            except Exception:
+                print("Migration Unsuccessful")
+                return
 
     def import_proc_inferences(self):
         try:

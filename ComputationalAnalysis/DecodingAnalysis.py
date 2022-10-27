@@ -1,29 +1,14 @@
 import numpy as np
 import pickle as pkl
 import pathlib
-# Imports for classes in file organized by class
-# Not sure if I should use conditional imports...
-# More graceful failure if certain package not installed
-# But I don't want many duplicate imports if I make many decoders
-# So right now, let's follow PEP8
 
-# Logistic
-from ComputationalAnalysis.NewDecoders import LogisticRegressionDecoder
-
-# WienerFilterDecoder
-from ComputationalAnalysis.ModifiedDecoders import WienerFilterDecoder
-
-# WienerCascadeDecoder
-from Neural_Decoding.Neural_Decoding.decoders import WienerCascadeDecoder
-
-# Long Short-Term Memory Decoder
-from Neural_Decoding.Neural_Decoding.decoders import LSTMRegression
 
 # Metrics functions from Neural Decoding Package from Joshua Glaser while in Kording Lab
 from Neural_Decoding.Neural_Decoding.metrics import get_R2
 
-# Metrics from sk-learn
+# Generics from sk-learn
 from sklearn import metrics
+from sklearn import model_selection
 
 # Metrics Dictionary Constructor
 import itertools
@@ -133,23 +118,14 @@ class DecodingModule:
                 print("The organization of labels and neural data must match.")
 
     def splitData(self):
-        _training_frames = int(self.data_splits[0] * self.num_frames)
-        if len(self.data_splits) == 2:
-            print("Splitting data in training & testing sets")
-            print("Data splits are: " +
-                    str(self.data_splits[0]*100) + "% training" +
-                    " vs " + str(self.data_splits[1]*100) + "% testing")
-            self.training_x = self.neural_matrix[:, 0:_training_frames]
-            self.training_y = self.label_data[0:_training_frames]
-            self.testing_x = self.neural_matrix[:, _training_frames:self.num_frames+1]
-            self.testing_y = self.label_data[_training_frames:self.num_frames+1]
-        elif len(self.data_splits) == 3:
-            self.training_x = self.neural_matrix[:, 0:_training_frames]
-            self.training_y = self.neural_matrix[:, 0:_training_frames]
-            self.testing_x = None
-            self.testing_y = None
-            self.validation_x = None
-            self.validation_y = None
+        print("Splitting data in training & testing sets")
+        print("Data splits are: " +
+                str(self.data_splits[0]*100) + "% training" +
+                " vs " + str(self.data_splits[1]*100) + "% testing")
+        self.training_x, self.testing_x, self.training_y, self.testing_y = \
+            model_selection.train_test_split(self.neural_matrix.T, self.feature_matrix.T,
+                                                test_size=self.data_splits[1],
+                                                train_size=self.data_splits[0])
 
     def fitModel(self, **kwargs):
         print("1st")
@@ -202,6 +178,12 @@ class DecodingModule:
         _output_pickle.close()
         print("Finished.")
 
+    def validate_data_sets(self):
+        if self.training_x.shape[0] <= self.training_x.shape[1] and self.training_y.shape[0] <= self.training_y.shape[1]:
+            AssertionError("Data splits are in the wrong shape. Check your code.")
+        else:
+            return True
+
     @property
     def imported_neural_organization(self):
         """
@@ -213,7 +195,6 @@ class DecodingModule:
         else:
             print("Please import neural data")
             return ""
-
 
     @imported_neural_organization.setter
     def imported_neural_organization(self, value):
@@ -249,16 +230,30 @@ class DecodingModule:
     @property
     def neural_matrix(self):
         if self.imported_neural_organization == "Trials x Neurons x Frames":
-            return np.concatenate(self.neural_data, axis=1)
+            return np.hstack(self.neural_data)
         elif self.imported_neural_organization == "Neurons x Frames":
             return self.neural_data
 
     @property
+    def neural_tensor(self):
+        if self.imported_neural_organization == "Trials x Neurons x Frames":
+            return self.neural_data
+        elif self.imported_neural_organization == "Neurons x Frames":
+            return np.array(np.hsplit(self.neural_data, self.num_trials))
+
+    @property
     def feature_matrix(self):
         if self.imported_feature_organization == "Trials x Features x Frames":
-            return np.concatenate(self.feature_data, axis=1)
+            return np.hstack(self.feature_data)
         elif self.imported_feature_organization == "Features x Frames":
             return self.feature_data
+
+    @property
+    def feature_tensor(self):
+        if self.imported_feature_organization == "Trials x Features x Frames":
+            return self.feature_data
+        elif self.imported_feature_organization == "Features x Frames":
+            return np.array(np.hsplit(self.feature_data, self.num_trials))
 
     @property
     def num_trials(self):
@@ -303,6 +298,15 @@ class DecodingModule:
 
         self.shuffle_index, self.trial_order = self.shuffleByTrialIndex(self.neural_data, self.trial_index)
         self.neural_data = self.neural_data[self.trial_order, :, :]
+        self.feature_data = self.feature_data[self.trial_order, :, :]
+
+    def shuffle_trial_labels(self):
+        if not self.imported_neural_organization == "Trials x Neurons x Frames":
+            raise AssertionError("Neural data must be in the form Trials x Neurons x Frames")
+        if not self.imported_feature_organization == "Trials x Features x Frames":
+            raise AssertionError("Feature data must be in the form Trials x Features x Frames")
+
+        self.shuffle_index, self.trial_order = self.shuffleByTrialIndex(self.neural_data, self.trial_index)
         self.feature_data = self.feature_data[self.trial_order, :, :]
 
     @staticmethod
@@ -362,6 +366,13 @@ class DecodingModule:
                 trial_order.append(_trial_sets[_trial_type, _group_of_one_trial_each])
         trial_order = np.asarray(trial_order)
         return shuffle_index, trial_order
+
+    @classmethod
+    def shuffleLabels(cls, Labels):
+        assert(Labels.shape.__len__() == 1)
+        _shuffle_index = np.arange(Labels.shape[0])
+        np.random.shuffle(_shuffle_index)
+        return Labels[_shuffle_index]
 
     @classmethod
     def shuffleFrames(cls, DataInMatrixForm, **kwargs):
@@ -435,327 +446,6 @@ class DecodingModule:
             # noinspection PyUnresolvedReferences
         except RuntimeError:
             print("Could not load feature data.")
-
-
-class LogisticRegression(DecodingModule):
-    # Class for easily managing Logistic Regression
-    # Note inheritances from generic Decoder Module class
-    def __init__(self, **kwargs):
-        # noinspection PyArgumentList
-        super().__init__(**kwargs)
-        print("Instanced Logistic Regression")
-        self.internalModel = LogisticRegressionDecoder()
-        self.ModelPerformance = PerformanceMetrics("Classification", len(self.data_splits))
-
-    def fitModel(self, **kwargs):
-        print("Fitting Logistic Regression...")
-        _penalty = kwargs.get('penalty', 'l1')
-        _solver = kwargs.get('solver', 'liblinear')
-        _max_iter = kwargs.get('max_iter', 100000)
-        self.internalModel.fit(self.training_x.T, self.training_y.T, penalty=_penalty,
-                               solver=_solver, max_iter=_max_iter)
-        print("Finished")
-
-    def assessFit(self, **kwargs):
-        _normalize = kwargs.get('normalize', True)
-        self.predicted_training_y = self.makePrediction(observed=self.training_x)
-        self.ModelPerformance[('accuracy', 'training')] = self.internalModel.model.score(self.training_x.T, self.training_y.T)
-        print("Training Classification Accuracy is " + str(self.ModelPerformance[('accuracy', 'training')]))
-
-    # noinspection PyTypeChecker
-    def commonAssessment(self, **kwargs):
-        _flag_valid = kwargs.get('flag_valid', False)
-        _multi = kwargs.get('multi', False)
-
-        # Ensure We have all our predictions already made
-        if self.predicted_training_y is None or self.predicted_testing_y is None:
-            self.makeAllPredictions()
-        if _flag_valid:
-            if self.predicted_validation_y is None:
-                self.makeAllPredictions()
-
-        # Accuracy
-        if self.ModelPerformance[('accuracy', 'training')] is None:
-            self.ModelPerformance[('accuracy', 'training')] = self.internalModel.model.score(self.training_x.T,
-                                                                                             self.training_y.T)
-        if self.ModelPerformance[('accuracy', 'testing')] is None:
-            self.ModelPerformance[('accuracy', 'testing')] = self.internalModel.model.score(self.testing_x.T,
-                                                                                            self.testing_y.T)
-        if _flag_valid:
-            if self.ModelPerformance[('accuracy', 'validation')] is None:
-                self.ModelPerformance[('accuracy', 'validation')] = self.internalModel.model.score(self.validation_x.T,
-                                                                                                   self.validation_y.T)
-
-        # Precision
-        if _multi is not True:
-            if self.ModelPerformance[('precision', 'training')] is None:
-                self.ModelPerformance[('precision', 'training')] = metrics.precision_score(self.training_y,
-                                                                                           self.predicted_training_y)
-            if self.ModelPerformance[('precision', 'testing')] is None:
-                self.ModelPerformance[('precision', 'testing')] = metrics.precision_score(self.testing_y,
-                                                                                          self.predicted_testing_y)
-            if _flag_valid:
-                if self.ModelPerformance[('precision', 'validation')] is None:
-                    self.ModelPerformance[('precision', 'validation')] = metrics.precision_score(self.validation_y,
-                                                                                                 self.predicted_validation_y)
-            # Recall
-            if self.ModelPerformance[('recall', 'training')] is None:
-                self.ModelPerformance[('recall', 'training')] = metrics.recall_score(self.training_y,
-                                                                                           self.predicted_training_y)
-            if self.ModelPerformance[('recall', 'testing')] is None:
-                self.ModelPerformance[('recall', 'testing')] = metrics.recall_score(self.testing_y,
-                                                                                          self.predicted_testing_y)
-            if _flag_valid:
-                if self.ModelPerformance[('recall', 'validation')] is None:
-                    self.ModelPerformance[('recall', 'validation')] = metrics.recall_score(self.validation_y,
-                                                                                           self.predicted_validation_y)
-
-            # f1
-            if self.ModelPerformance[('f1', 'training')] is None:
-                self.ModelPerformance[('f1', 'training')] = metrics.f1_score(self.training_y,
-                                                                                           self.predicted_training_y)
-            if self.ModelPerformance[('f1', 'testing')] is None:
-                self.ModelPerformance[('f1', 'testing')] = metrics.f1_score(self.testing_y, self.predicted_testing_y)
-            if _flag_valid:
-                if self.ModelPerformance[('f1', 'validation')] is None:
-                    self.ModelPerformance[('f1', 'validation')] = metrics.f1_score(self.validation_y,
-                                                                                   self.predicted_validation_y)
-
-        # balanced accuracy
-        if self.ModelPerformance[('balanced_accuracy', 'training')] is None:
-            self.ModelPerformance[('balanced_accuracy', 'training')] = \
-                metrics.balanced_accuracy_score(self.training_y, self.predicted_training_y)
-        if self.ModelPerformance[('balanced_accuracy', 'testing')] is None:
-            self.ModelPerformance[('balanced_accuracy', 'testing')] = \
-                metrics.balanced_accuracy_score(self.testing_y, self.predicted_testing_y)
-
-        if _flag_valid:
-            if self.ModelPerformance[('balanced_accuracy', 'validation')] is None:
-                self.ModelPerformance[('balanced_accuracy', 'validation')] = \
-                    metrics.balanced_accuracy_score(self.validation_y, self.predicted_validation_y)
-
-        if _multi is not True:
-            # AUC of ROC
-            if self.ModelPerformance[('AUC', 'training')] is None:
-                self.ModelPerformance[('AUC', 'training')] = metrics.roc_auc_score(self.training_y,
-                                                                                           self.predicted_training_y)
-            if self.ModelPerformance[('AUC', 'testing')] is None:
-                self.ModelPerformance[('AUC', 'testing')] = metrics.roc_auc_score(self.testing_y,
-                                                                                          self.predicted_testing_y)
-            if _flag_valid:
-                if self.ModelPerformance[('AUC', 'validation')] is None:
-                    self.ModelPerformance[('AUC', 'validation')] = metrics.roc_auc_score(self.validation_y,
-                                                                                         self.predicted_validation_y)
-
-            # AUC of PR
-            if self.ModelPerformance[('AUC_PR', 'training')] is None:
-                self.ModelPerformance[('AUC_PR', 'training')] = metrics.average_precision_score(self.training_y,
-                                                                                                self.predicted_training_y)
-            if self.ModelPerformance[('AUC_PR', 'testing')] is None:
-                self.ModelPerformance[('AUC_PR', 'testing')] = metrics.average_precision_score(self.testing_y,
-                                                                                               self.predicted_testing_y)
-            if _flag_valid:
-                if self.ModelPerformance[('AUC_PR', 'validation')] is None:
-                    self.ModelPerformance[('AUC_PR', 'validation')] = \
-                        metrics.average_precision_score(self.validation_y, self.predicted_validation_y)
-
-            if self.ModelPerformance[('ROC', 'training')] is None:
-                _probas = self.internalModel.model.decision_function(self.training_x.T)
-                self.ModelPerformance[('ROC', 'training')] = metrics.roc_curve(self.training_y, _probas,
-                                                                               drop_intermediate=False)
-
-            if self.ModelPerformance[('ROC', 'testing')] is None:
-                _probas = self.internalModel.model.decision_function(self.testing_x.T)
-                self.ModelPerformance[('ROC', 'testing')] = metrics.roc_curve(self.testing_y, _probas,
-                                                                              drop_intermediate=False)
-
-            if _flag_valid:
-                if self.ModelPerformance[('ROC', 'validation')] is None:
-                    _probas = self.internalModel.model.decision_function(self.validation_x.T)
-                    self.ModelPerformance[('ROC', 'validation')] = metrics.roc_curve(self.validation_y,
-                                                                                     _probas,
-                                                                                     drop_intermediate=False)
-
-            if self.ModelPerformance[('PR', 'training')] is None:
-                _probas = self.internalModel.model.decision_function(self.training_x.T)
-                self.ModelPerformance[('PR', 'training')] = metrics.precision_recall_curve(self.training_y, _probas)
-
-            if self.ModelPerformance[('PR', 'testing')] is None:
-                _probas = self.internalModel.model.decision_function(self.testing_x.T)
-                self.ModelPerformance[('PR', 'testing')] = metrics.precision_recall_curve(self.testing_y,
-                                                                                          _probas)
-
-            if _flag_valid:
-                if self.ModelPerformance[('PR', 'validation')] is None:
-                    _probas = self.internalModel.model.decision_function(self.validation_x.T)
-                    self.ModelPerformance[('PR', 'validation')] = \
-                        metrics.precision_recall_curve(self.validation_y, _probas)
-
-    def fullAssessment(self, **kwargs):
-        print("Not Yet Implemented")
-
-    def makePrediction(self, **kwargs):
-        _observed = kwargs.get('observed', None)
-        if _observed is not None:
-            predicted = self.internalModel.predict(_observed.T)
-            return predicted.T
-        else:
-            print("Error: Please Supply Observed Neural Activity to Generate Predicted Labels")
-
-    def makeAllPredictions(self):
-        self.predicted_testing_y = self.makePrediction(observed=self.testing_x)
-        if len(self.data_splits) == 3:
-            self.predicted_validation_y = self.makePrediction(observed=self.validation_x)
-
-
-class LinearRegression(DecodingModule):
-    # Class for easily managing Wiener Filter Decoding / Linear Regression
-    # Note inheritances from generic Decoder Module class
-    def __init__(self, **kwargs):
-        # noinspection PyArgumentList
-        super().__init__(**kwargs)
-        self.internalModel = WienerFilterDecoder()
-        # Instance Performance Metrics
-        self.ModelPerformance = PerformanceMetrics("Regression", len(self.data_splits))
-        print("Instanced Wiener Filter")
-
-    def fitModel(self, **kwargs):
-        _fit_intercept = kwargs.get('fit_intercept', False)
-        _n_jobs = kwargs.get('n_jobs', None)
-        print("Fitting Wiener Filter...")
-        self.internalModel.fit(self.training_x.T, self.training_y.T, fit_intercept=_fit_intercept, n_jobs=_n_jobs)
-        self.predicted_training_y = self.makePrediction(observed=self.training_x)
-        # noinspection PyArgumentList
-        print("Finished")
-
-    def assessFit(self, **kwargs):
-        _multioutput = kwargs.get('multioutput', "uniform_average")
-        self.ModelPerformance[('r2', 'training')] = metrics.r2_score(self.training_y, self.predicted_training_y, multioutput=_multioutput)
-        print("Training R2 is " + str(self.ModelPerformance[('r2', 'training')]))
-
-    def commonAssessment(self, **kwargs):
-        _flag_valid = kwargs.get('flag_valid', False)
-
-        # R2
-        _multioutput = kwargs.get('multioutput', "uniform_average")
-        if self.ModelPerformance[('r2', 'training')] is None:
-            self.ModelPerformance[('r2', 'training')] = metrics.r2_score(self.training_y,
-                                                                         self.predicted_training_y,
-                                                                         multioutput=_multioutput)
-        if self.ModelPerformance[('r2', 'testing')] is None:
-            self.ModelPerformance[('r2', 'testing')] = metrics.r2_score(self.testing_y,
-                                                                         self.predicted_testing_y,
-                                                                         multioutput=_multioutput)
-        if _flag_valid:
-            if self.ModelPerformance[('r2', 'validation')] is None:
-                self.ModelPerformance[('r2', 'validation')] = metrics.r2_score(self.validation_y,
-                                                                                self.predicted_validation_y,
-                                                                                _multioutput=_multioutput)
-        # mean_absolute_error
-        if self.ModelPerformance[('mean_absolute_error', 'training')] is None:
-            self.ModelPerformance[('mean_absolute_error', 'training')] = metrics.mean_absolute_error(self.training_y,
-                                                                                                self.predicted_training_y)
-        if self.ModelPerformance[('mean_absolute_error', 'testing')] is None:
-            self.ModelPerformance[('mean_absolute_error', 'testing')] = metrics.mean_absolute_error(self.testing_y,
-                                                                                               self.predicted_testing_y)
-        if _flag_valid:
-            if self.ModelPerformance[('mean_absolute_error', 'validation')] is None:
-                self.ModelPerformance[('mean_absolute_error', 'validation')] = metrics.mean_absolute_error(self.validation_y,
-                                                                                                      self.predicted_validation_y)
-
-        # mean_squared_error
-        if self.ModelPerformance[('mean_squared_error', 'training')] is None:
-            self.ModelPerformance[('mean_squared_error', 'training')] = metrics.mean_squared_error(self.training_y,
-                                                                                                    self.predicted_training_y)
-        if self.ModelPerformance[('mean_squared_error', 'testing')] is None:
-            self.ModelPerformance[('mean_squared_error', 'testing')] = metrics.mean_squared_error(self.testing_y,
-                                                                                                   self.predicted_testing_y)
-        if _flag_valid:
-            if self.ModelPerformance[('mean_squared_error', 'validation')] is None:
-                self.ModelPerformance[('mean_squared_error', 'validation')] = metrics.mean_squared_error(self.validation_y,
-                                                                                                          self.predicted_validation_y)
-
-    def fullAssessment(self, **kwargs):
-        print("Not Yet Implemented")
-
-    def makePrediction(self, **kwargs):
-        _observed = kwargs.get('observed', None)
-        if _observed is not None:
-            predicted = self.internalModel.predict(_observed.T)
-            return predicted.T
-        else:
-            print("Error: Please Supply Observed Neural Activity to Generate Predicted Labels")
-
-    def makeAllPredictions(self):
-        self.predicted_testing_y = self.makePrediction(observed=self.testing_x)
-        if len(self.data_splits) == 3:
-            self.predicted_validation_y = self.makePrediction(observed=self.validation_x)
-
-
-class LinearNonLinearRegression(DecodingModule):
-    # Class for easily managing Wiener Filter Decoding
-    # The Wiener Filter is imported from the Neural Decoding package
-    # from Joshua Glaser while in Kording Lab
-    # Note inheritances from generic Decoder Module class
-    def __init__(self, **kwargs):
-        # noinspection PyArgumentList
-        super().__init__(**kwargs)
-        _degrees = kwargs.get("degree", 3)
-        self.ModelPerformance = PerformanceMetrics("Regression", len(self.data_splits))
-        self.internalModel = WienerCascadeDecoder(degree=_degrees)
-        print("Instanced Wiener Cascade with a degree of " + _degrees)
-
-    def fitModel(self, **kwargs):
-        print("Fitting Wiener Cascade...")
-        self.internalModel.fit(self.training_x, self.training_y)
-        print("Finished")
-
-    def assessFit(self, **kwargs):
-        _compare_testing = kwargs.get('testing', True)
-        _compare_validation = kwargs.get('validation', False)
-        if _compare_testing:
-            self.ModelPerformance.r2 = get_R2(self.testing_y, self.predicted_testing_y)
-        if _compare_validation:
-            self.ModelPerformance.r2 = get_R2(self.validation_y, self.predicted_validation_y)
-
-    def makePrediction(self, **kwargs):
-        _observed = kwargs.get('observed', None)
-        if _observed is not None:
-            predicted = self.internalModel.predict(_observed)
-            return predicted
-        else:
-            print("Error: Please Supply Observed Neural Activity to Generate Predicted Labels")
-
-
-class LongShortTermMemoryRegression(DecodingModule):
-    # Class for easily managing LSTM Regression
-    # Note inheritances from generic Decoder Module class
-    def __init__(self, **kwargs):
-        # noinspection PyArgumentList
-        super().__init__(**kwargs)
-        self.internalModel = LSTMRegression()
-        # Instance Performance Metrics
-        self.ModelPerformance = PerformanceMetrics("Regression", len(self.data_splits))
-        print("Instanced LSTM")
-
-    def fitModel(self, **kwargs):
-        print("Fitting LSTM")
-        self.internalModel.fit(self.training_x, self.training_y)
-        print("Finished"
-              )
-
-    def makePrediction(self, **kwargs):
-        _observed = kwargs.get('observed', None)
-        if _observed is not None:
-            predicted = self.internalModel.predict(_observed)
-            return predicted
-        else:
-            print("Error: Please Supply Observed Neural Activity to Generate Predicted Labels")
-
-    def makeAllPredictions(self, **kwargs):
-        self.predicted_testing_y = self.makePrediction(observed=self.testing_x)
-        if len(self.data_splits) == 3:
-            self.predicted_validation_y = self.makePrediction(observed=self.validation_x)
 
 
 def PerformanceMetrics(Type, NumberOfSplits):

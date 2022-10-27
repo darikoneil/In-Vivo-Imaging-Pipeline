@@ -19,11 +19,13 @@ def plotROC(TPR, FPR, **kwargs):
     _auc = kwargs.get('AUC', None)
     _ax = kwargs.get('ax', None)
     _color = kwargs.get('color', "#139fff")
+    _ls = kwargs.get('ls', "-")
+    _alpha = kwargs.get('alpha', 0.95)
 
     if _ax is None:
         fig = plt.figure(figsize=(12, 6))
         ax1 = fig.add_subplot(111)
-        ax1.plot(TPR, FPR, color=_color, lw=1, alpha=0.95)
+        ax1.plot(TPR, FPR, color=_color, lw=1, alpha=0.95, ls=_ls)
         ax1.set_title("Receiver Operating Characteristic")
         ax1.set_xlabel("False Positive Rate")
         ax1.set_ylabel("True Positive Rate")
@@ -31,10 +33,10 @@ def plotROC(TPR, FPR, **kwargs):
         ax1.set_ylim([-0.01, 1.01])
 
         # Baseline
-        ax1.plot([0, 1], [0, 1], color="black", lw=1, alpha=0.95, ls="--")
+        ax1.plot([0, 1], [0, 1], color="black", lw=1, alpha=_alpha, ls="--")
         plt.show()
     else:
-        _ax.plot(TPR, FPR, color=_color, lw=3, alpha=0.95)
+        _ax.plot(TPR, FPR, color=_color, lw=3, ls=_ls, alpha=_alpha)
         _ax.set_xlim([-0.01, 1.01])
         _ax.set_ylim([-0.01, 1.01])
 
@@ -200,4 +202,37 @@ def stinky(ok):
     plt.show()
     ax1.set_xlabel("Time (s)")
     ax1.set_ylabel("Neuron (#)")
+
+
+def temp(MINUS, PLUS):
+    tx = np.arange(0, 35, 35/345)
+    FIG = plt.figure(figsize=(16, 8))
+
+    AX1 = FIG.add_subplot(211)
+    P = sns.heatmap(PLUS, ax=AX1, cmap="Spectral_r")
+    AX1.set_title("Median Firing Rate: CS+")
+    AX1.set_xticks(range(0, 35, 5))
+
+    AX2 = FIG.add_subplot(211)
+    M = sns.heatmap(MINUS, ax=AX1, cmap="Spectral_r", vmin=0, vmax=0.5)
+    AX2.set_title("Median Firing Rate: CS-")
+    AX2.set_xticks(range(0, 345, 7), labels=(range(0, 35, 5)))
+
+
+def temp2(PlusActivity, MinusActivity):
+    FIG1 = plt.figure(figsize=(16, 8))
+    FIG2 = plt.figure(figsize=(16, 8))
+    _plots = PlusActivity.shape[0]
+    _plots = int("".join([str(_plots), str(10)]))
+    for i in range(PlusActivity.shape[0]):
+        _plots += 1
+        _ax = FIG1.add_subplot(_plots)
+        _hm = sns.heatmap(PlusActivity[i, :, :], ax=_ax, cmap="Spectral_r", vmin=0, vmax=0.5)
+        _ax.set_title("CS+")
+        _ax.set_xticks(range(0, 345, 50), labels=(range(0, 35, 5)))
+
+        _ax = FIG2.add_subplot(_plots)
+        _hm = sns.heatmap(MinusActivity[i, :, :], ax=_ax, cmap="Spectral_r", vmin=0, vmax=0.5)
+        _ax.set_title("CS-")
+        _ax.set_xticks(range(0, 345, 50), labels=(range(0, 35, 5)))
 
