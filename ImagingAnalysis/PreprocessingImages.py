@@ -100,33 +100,14 @@ class PreProcessing:
         repackageBrukerTiffs
         --------------------
         Repackages a sequence of tiff files within a directory to a smaller sequence
-        of tiff stacks.
-
-        Designed to compile the outputs of a certain imaging utility
+        of tiff stacks. Designed to compile the outputs of a certain imaging utility
         that exports recordings such that each frame is saved as a single tiff.
-
-        Inputs
-        ------
-        *VideoDirectory* : string
-            Directory containing a sequence of single frame tiff files
-
-        *OutputDirectory* : string
-            Empty directory where tiff stacks will be saved
-
-        See Also
-        --------
-        *loadBrukerTiffs* : Load a sequence of tiff files from a directory.
-
-        Example
-        -------
-        repackageBrukerTiffs(
-            "D:\\MyVideoDirectory", "D:\\NewVideoDirectory"
-                )
 
         :param VideoDirectory: Directory containing a sequence of single frame tiff files
         :type VideoDirectory: str
         :param OutputDirectory: Empty directory where tiff stacks will be saved
         :type OutputDirectory: str
+        :rtype: None
 
         """
         print("Repackaging...")
@@ -362,6 +343,27 @@ class PreProcessing:
             _last_frame += _num_frames[_fname]
 
         return complete_image
+
+    @staticmethod
+    def saveRawBinary(Video, VideoDirectory):
+        """
+        This function saves a tiff stack as a binary file
+
+        :param Video: Video to be saved
+        :type Video: np.ndarray
+        :param VideoDirectory: Directory to save video in
+        :type VideoDirectory: str
+        :rtype: None
+        """
+        _meta_file = "".join([VideoDirectory, "\\video_meta.txt"])
+        _video_file = "".join([VideoDirectory, "\\binary_video"])
+
+        with open(_meta_file, 'w') as f:
+            f.writelines([str(Video.shape[0]), ",", str(Video.shape[1]), ",",
+                          str(Video.shape[2]), ",", str(Video.dtype)])
+
+        Video.tofile(_video_file)
+        print("Finished saving video as a binary.")
 
     @staticmethod
     def blockwiseFastFilterTiff(TiffStack, **kwargs):
