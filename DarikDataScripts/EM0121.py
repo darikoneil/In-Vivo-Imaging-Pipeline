@@ -4,25 +4,61 @@ from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
 import pickle as pkl
+import seaborn as sns
+
 
 from ExperimentManagement.ExperimentHierarchy import ExperimentData
-import sklearn.svm
+from ImagingAnalysis.StaticProcessing import Processing
+from ComputationalAnalysis.SupportVectorMachine import SVM
 
 EM0121 = ExperimentData.loadHierarchy("D:\\EM0121")
-
-ProcessedInferences = EM0121.PreExposure.folder_dictionary.get("10Hz").import_proc_inferences()
-ProcessedTraces = EM0121.PreExposure.folder_dictionary.get("10Hz").import_proc_traces()
-Firing_Rates = ProcessedInferences.firing_rates
-DataFrame = EM0121.PreExposure.data_frame.copy(deep=True)
-cs_ids = EM0121.PreExposure.trial_parameters.get("stimulusTypes")
-NFR = Processing.normalizeSmoothFiringRates(Firing_Rates, 5) # 5 is roughly half a second
-NeuralData_Matrix = Processing.trial_matrix_org(DataFrame, NFR)
-NeuralData_Tensor = np.array(np.hsplit(NeuralData_Matrix, 10))
-FeatureData_Tensor, FeatureData_Labels = Processing.generate_features(345, 10, EM0121.PreExposure.trial_parameters)
+SpikeTimes = EM0121.Retrieval.folder_dictionary.get("10Hz").load_cascade_exports()[0]
+SpikeTimes = Processing.generateSpikeMatrix(SpikeTimes, 26352)
+SpikeTimes_Matrix = Processing.trial_matrix_org(EM0121.Retrieval.data_frame.copy(deep=True), SpikeTimes)
+TrialIndex = EM0121.Retrieval.trial_parameters.get("stimulusTypes")
+SpikeTimes_Tensor = np.array(np.hsplit(SpikeTimes_Matrix, 10))
+FeatureData_Tensor, FeatureData_Labels = Processing.generate_features(345, 10, EM0121.Retrieval.trial_parameters)
 FeatureData_Matrix = np.hstack(FeatureData_Tensor)
 
+binned_spike_tensor = Processing.bin_data(SpikeTimes_Tensor, 10)
+binned_feature_tensor = Processing.bin_data(FeatureData_Tensor, 10)
 
-Features = FeatureData_Matrix[4, :].copy()
-Samples = NeuralData_Matrix.copy()
-SVM = sklearn.svm.SVC()
-SVM.fit(Samples.T, Features.T)
+binned_spike_tensor = binned_spike_tensor[:, :, 0:30]
+binned_feature_tensor = binned_feature_tensor[:, :, 0:30]
+binned_feature_tensor[binned_feature_tensor > 1] = 1
+
+svm_model = SVM(NeuralData=binned_spike_tensor, FeatureData=binned_feature_tensor, Trials=10,
+                TrialIndex=TrialIndex, kernel="linear")
+svm_model.shuffle_trials()
+svm_model.testing_y = svm_model.testing_y[:, 0]
+svm_model.training_y = svm_model.training_y[:, 0]
+svm_model.fitModel()
+svm_model.assessFit()
+svm_model.makeAllPredictions()
+svm_model.commonAssessment()
+svm_model.plotROCs()
+
+svm_model2 = SVM(NeuralData=binned_spike_tensor, FeatureData=binned_feature_tensor, Trials=10,
+                TrialIndex=TrialIndex, kernel="linear")
+svm_model2.shuffle_trials()
+svm_model2.testing_y = svm_model2.testing_y[:, 1]
+svm_model2.training_y = svm_model2.training_y[:, 1]
+svm_model2.fitModel()
+svm_model2.assessFit()
+svm_model2.makeAllPredictions()
+svm_model2.commonAssessment()
+svm_model2.plotROCs()
+
+
+fig1 = plt.figure()
+gs = fig1.add_gridspec(5, 2)
+PlusTrials = np.where(np.array(TrialIndex) == 0)[0]
+MinusTrials = np.where(np.array(TrialIndex) == 1)[0]
+for i in range(PlusTrials.__len__()):
+    _ax = fig1.add_subplot(gs[i, 0])
+    _ax.plot(np.sum(binned_spike_tensor[PlusTrials[i], :, :], axis=0))
+for i in range(MinusTrials.__len__()):
+    _ax = fig1.add_subplot(gs[i, 1])
+    _ax.plot(np.sum(binned_spike_tensor[MinusTrials[i], :, :], axis=0))
+
+

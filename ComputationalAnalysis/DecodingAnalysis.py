@@ -36,17 +36,20 @@ class DecodingModule:
         # parse inputs
         self.neural_data = kwargs.get('NeuralData', None)
         self.feature_data = kwargs.get('FeatureData', None)
-        self.label_data = kwargs.get('LabelData', None)
         self.data_splits = kwargs.get('DataSplits', [0.8, 0.2])
-        self.covariance_matrix = kwargs.get('CovarianceMatrix', None)
         self._num_trials = kwargs.get('Trials', None)
         self.trial_index = kwargs.get('TrialIndex', None)
         _feature_data_file = kwargs.get('FeatureDataFile', None)
-        _label_data_file = kwargs.get('LabelDataFile', None)
+
+
+        # clean keys from kwargs to handle unexpected keyword arguments downstream
+        self.kwargs = dict() # Paper Trail
+        self.kwargs.update(kwargs)
+        self.cleanKwargs()
 
         # load if necessary
-        if _feature_data_file is not None or _label_data_file is not None:
-            self.loadFeaturesLabels(_feature_data_file, _label_data_file)
+        if _feature_data_file is not None:
+            self.loadFeaturesFile(_feature_data_file)
 
         # properties
         self._imported_neural_data_org = None
@@ -75,49 +78,13 @@ class DecodingModule:
         # Verbosity
         self.structural_report()
 
-    def loadFeaturesLabels(self, _feature_data_file, _label_data_file):
-        if _feature_data_file is not None and self.feature_data is None:
-            try:
-                _feature_file_ext = pathlib.Path(_feature_data_file).suffix
-                if _feature_file_ext == ".npy" or _feature_file_ext == ".npz":
-                    self.feature_data = np.load(_feature_data_file, allow_pickle=True)
-                elif _feature_file_ext == ".csv":
-                    self.feature_data = np.genfromtxt(_feature_data_file, dtype=int, delimiter=",")
-                else:
-                    print("Features data in unexpected file type.")
-                if self.feature_data.shape[1] != self.neural_data.shape[1] and self.neural_data is not None:
-                    raise AssertionError
-                # noinspection PyUnresolvedReferences
-                if len(self.feature_data.shape) != len(self.neural_data.shape) and self.neural_data is not None:
-                    raise ValueError
-            except RuntimeError:
-                print("Could not load feature data.")
-            except AssertionError:
-                print("The number of features samples must match the number of neural data samples.")
-            except ValueError:
-                print('The organization of features and neural data must match.')
-        if _label_data_file is not None and self.label_data is None:
-            try:
-                _label_file_ext = pathlib.Path(_label_data_file).suffix
-                if _label_file_ext == ".npy" or _label_file_ext == ".npz":
-                    self.label_data = np.load(_label_data_file, allow_pickle=True)
-                elif _label_file_ext == ".csv":
-                    self.label_data = np.genfromtxt(_label_data_file, dtype=int, delimiter=",")
-                else:
-                    print("Labels data in unexpected file type.")
-                if self.label_data.shape[1] != self.neural_data.shape[1] and self.neural_data is not None:
-                    raise AssertionError
-                # noinspection PyUnresolvedReferences
-                if len(self.label_data.shape) != len(self.neural_data.shape) and self.neural_data is not None:
-                    raise ValueError
-            except RuntimeError:
-                print("Could not load label data.")
-            except AssertionError:
-                print('The number of label samples must match the number of neural data samples')
-            except ValueError:
-                print("The organization of labels and neural data must match.")
+    def splitData(self, **kwargs):
+        _shuffle = kwargs.get("shuffle", True)
+        _stratify = kwargs.get("stratify", None)
 
-    def splitData(self):
+        if _shuffle is None and _stratify is not None:
+            AssertionError("If shuffle is False then stratify must be None")
+
         print("Splitting data in training & testing sets")
         print("Data splits are: " +
                 str(self.data_splits[0]*100) + "% training" +
@@ -178,11 +145,45 @@ class DecodingModule:
         _output_pickle.close()
         print("Finished.")
 
+    def loadFeaturesFile(self, _feature_data_file):
+        if _feature_data_file is not None and self.feature_data is None:
+            try:
+                _feature_file_ext = pathlib.Path(_feature_data_file).suffix
+                if _feature_file_ext == ".npy" or _feature_file_ext == ".npz":
+                    self.feature_data = np.load(_feature_data_file, allow_pickle=True)
+                elif _feature_file_ext == ".csv":
+                    self.feature_data = np.genfromtxt(_feature_data_file, dtype=int, delimiter=",")
+                else:
+                    print("Features data in unexpected file type.")
+                if self.feature_data.shape[1] != self.neural_data.shape[1] and self.neural_data is not None:
+                    raise AssertionError
+                # noinspection PyUnresolvedReferences
+                if len(self.feature_data.shape) != len(self.neural_data.shape) and self.neural_data is not None:
+                    raise ValueError
+            except RuntimeError:
+                print("Could not load feature data.")
+            except AssertionError:
+                print("The number of features samples must match the number of neural data samples.")
+            except ValueError:
+                print('The organization of features and neural data must match.')
+
     def validate_data_sets(self):
         if self.training_x.shape[0] <= self.training_x.shape[1] and self.training_y.shape[0] <= self.training_y.shape[1]:
             AssertionError("Data splits are in the wrong shape. Check your code.")
         else:
             return True
+
+    # noinspection PyMethodMayBeStatic
+    def cleanKwargs(self):
+        self.kwargs.pop("NeuralData", None)
+        self.kwargs.pop("FeatureData", None)
+        self.kwargs.pop("LabelData", None)
+        self.kwargs.pop("DataSplits", None)
+        self.kwargs.pop("CovarianceMatrix", None)
+        self.kwargs.pop("Trials", None)
+        self.kwargs.pop("TrialIndex", None)
+        self.kwargs.pop("FeatureDataFile", None)
+        self.kwargs.pop("LabelDataFile", None)
 
     @property
     def imported_neural_organization(self):
@@ -222,7 +223,9 @@ class DecodingModule:
         """
         :param value:  Original Feature Data
         """
-        if value.shape.__len__() == 2:
+        if value.shape.__len__() == 1:
+            self._imported_feature_data_org = "Features x Frames"
+        elif value.shape.__len__() == 2:
             self._imported_feature_data_org = "Features x Frames"
         elif value.shape.__len__() == 3:
             self._imported_feature_data_org = "Trials x Features x Frames"
@@ -290,7 +293,7 @@ class DecodingModule:
                        str(self.num_neurons), " neurons, ", str(self.num_frames), " frames, and ",
                        str(self.num_trials), " trials."]))
 
-    def shuffle_trials(self):
+    def dep_shuffle_trials(self):
         if not self.imported_neural_organization == "Trials x Neurons x Frames":
             raise AssertionError("Neural data must be in the form Trials x Neurons x Frames")
         if not self.imported_feature_organization == "Trials x Features x Frames":
@@ -300,6 +303,24 @@ class DecodingModule:
         self.neural_data = self.neural_data[self.trial_order, :, :]
         self.feature_data = self.feature_data[self.trial_order, :, :]
 
+        self.validate_data_sets()
+
+    def shuffle_trials(self):
+        _trial_groups = self.shuffled_trials_by_group(self.num_trials, self.trial_index)
+        self.training_x, self.testing_x, self.training_y, self.testing_y = self.split_by_trials(
+            self.neural_tensor, self.feature_tensor, self.data_splits, _trial_groups)
+
+        # End with shuffling the training data in case any particular method is vulnerable to sample order
+        _frame_shuffle_index = np.arange(0, self.training_x.shape[0], 1)
+        np.random.shuffle(_frame_shuffle_index)
+        self.training_x = self.training_x[_frame_shuffle_index, :]
+        if self.training_y.shape.__len__() == 1:
+            self.training_y = self.training_y[_frame_shuffle_index]
+        else:
+            self.training_y = self.training_y[_frame_shuffle_index, :]
+
+        self.validate_data_sets()
+
     def shuffle_trial_labels(self):
         if not self.imported_neural_organization == "Trials x Neurons x Frames":
             raise AssertionError("Neural data must be in the form Trials x Neurons x Frames")
@@ -308,6 +329,49 @@ class DecodingModule:
 
         self.shuffle_index, self.trial_order = self.shuffleByTrialIndex(self.neural_data, self.trial_index)
         self.feature_data = self.feature_data[self.trial_order, :, :]
+
+    @classmethod
+    def split_by_trials(cls, NeuralDataTensor, FeatureDataTensor, DataSplits, TrialGroups):
+        assert(NeuralDataTensor.shape[0] == FeatureDataTensor.shape[0] ==
+               TrialGroups[0].__len__() * TrialGroups.__len__())
+
+        _training_groups = TrialGroups.__len__() * DataSplits[0]
+
+        if not isinstance(_training_groups, int):
+            _training_groups = int(_training_groups)
+        _training_group_index = list(sum(TrialGroups[0:_training_groups], ()))
+        _testing_group_index = list(sum(TrialGroups[_training_groups:], ()))
+
+        training_x, testing_x = NeuralDataTensor[_training_group_index, :, :],  NeuralDataTensor[
+                                                                                _testing_group_index, :, :]
+
+        if FeatureDataTensor.shape.__len__() == 2:
+            training_y, testing_y = FeatureDataTensor[_training_group_index, :], FeatureDataTensor[
+                                                                                    _testing_group_index, :]
+        else:
+            training_y, testing_y = FeatureDataTensor[_training_group_index, :, :], FeatureDataTensor[
+                                                                                 _testing_group_index, :, ]
+        training_x = np.hstack(training_x).T
+        testing_x = np.hstack(testing_x).T
+        training_y = np.hstack(training_y).T
+        testing_y = np.hstack(testing_y).T
+        return training_x, testing_x, training_y, testing_y
+
+    @staticmethod
+    def shuffled_trials_by_group(NumTrials, TrialIndex):
+        _unique_trial_types = np.unique(TrialIndex)
+        _num_trial_types = _unique_trial_types.__len__()
+        _num_trial_groups = NumTrials/_num_trial_types
+        _trial_type_index = []
+        for _type in range(_num_trial_types):
+            _trial_type_index.append(np.where(TrialIndex == _unique_trial_types[_type])[0])
+            np.random.shuffle(_trial_type_index[_type])
+        trial_groups = list(zip(*[_trial_set for _trial_set in _trial_type_index]))
+        return trial_groups
+
+    @staticmethod
+    def createTrialIndicator(NumTrials, FramesPerTrial):
+        return [np.full((1, FramesPerTrial), i, dtype=int) for i in range(NumTrials)]
 
     @staticmethod
     def shuffleByTrialIndex(NeuralActivityInTrialForm, TrialIndex):
@@ -334,35 +398,6 @@ class DecodingModule:
             _offset = _group_of_one_trial_each*_num_trial_types
             for _trial_type in range(_num_trial_types):
                 # shuffle_index[_trial_type+_offset, :, :] = _frame_sets[_trial_type, _group_of_one_trial_each, :, :]
-                trial_order.append(_trial_sets[_trial_type, _group_of_one_trial_each])
-        trial_order = np.asarray(trial_order)
-        return shuffle_index, trial_order
-
-    @staticmethod
-    def _wrk_shuffleByTrialIndex(NeuralActivityInTrialForm, TrialIndex):
-        _num_trials = NeuralActivityInTrialForm.shape[0]
-        _frames_per_trial = NeuralActivityInTrialForm.shape[2]
-        _num_frames = _num_trials * _frames_per_trial
-        _unique_trial_types = np.unique(TrialIndex)
-        _num_trial_types = _unique_trial_types.__len__()
-        _frame_index = np.reshape(np.arange(_num_frames), (_num_trials, 1, _frames_per_trial))
-        shuffle_index = _frame_index.copy()
-
-        _frame_sets = []
-        _trial_sets = []
-        for _trial_type in _unique_trial_types:
-            _trials_of_this_type = [_trial for _trial in range(_num_trials) if TrialIndex[_trial] == _trial_type]
-            np.random.shuffle(_trials_of_this_type)
-            _trial_sets.append(_trials_of_this_type.copy())
-            _frame_sets.append(_frame_index[_trials_of_this_type, :, :])
-        _frame_sets = np.asarray(_frame_sets)
-        _trial_sets = np.asarray(_trial_sets)
-
-        trial_order = []
-        for _group_of_one_trial_each in range(int(_num_trials/_num_trial_types)):
-            _offset = _group_of_one_trial_each*_num_trial_types
-            for _trial_type in range(_num_trial_types):
-                shuffle_index[_trial_type+_offset, :, :] = _frame_sets[_trial_type, _group_of_one_trial_each, :, :]
                 trial_order.append(_trial_sets[_trial_type, _group_of_one_trial_each])
         trial_order = np.asarray(trial_order)
         return shuffle_index, trial_order

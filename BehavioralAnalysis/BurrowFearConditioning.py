@@ -174,10 +174,6 @@ class FearConditioning(BehavioralStage):
         return NeuralActivity_TrialOrg, FeatureIndex, FeatureData_TrialOrg
 
     @classmethod
-    def generateTimeBins(cls):
-        return
-
-    @classmethod
     def loadAnalogData(cls, Filename):
         """
         Loads Analog Data from a burrow behavioral session

@@ -5,6 +5,7 @@ from fissa.deltaf import findBaselineF0
 from obspy.signal.detrend import polynomial
 import itertools
 import scipy.ndimage
+import pandas as pd
 
 
 class Processing:
@@ -431,3 +432,17 @@ class Processing:
             Features[_trial, 5, :] = 1
 
         return Features, FeaturesLabels
+
+    @staticmethod
+    def bin_data(NeuralDataTensorForm, BinSizeInFrames):
+        _num_trials, _num_neurons, _num_frames_per_trial = NeuralDataTensorForm.shape
+
+        _intervals = pd.interval_range(0, _num_frames_per_trial, freq=BinSizeInFrames)
+        BinnedData = np.full((_num_trials, _num_neurons, len(_intervals)), 0, dtype=np.float64)
+        for _neuron in range(_num_neurons):
+            for _trial in range(_num_trials):
+                for _interval in range(len(_intervals)):
+                    BinnedData[_trial, _neuron, _interval] = np.sum(
+                        NeuralDataTensorForm[_trial, _neuron,
+                        int(_intervals.values[_interval].left):int(_intervals.values[_interval].right)])
+        return BinnedData
