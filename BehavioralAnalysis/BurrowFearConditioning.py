@@ -662,7 +662,6 @@ class MethodsForPandasOrganization:
 
         return
 
-
     @staticmethod
     def merge_cs_index_into_dataframe(DataFrame, CSIndex):
         # 0  = CS+, 1 = CS-, ..., Unique CS + 1 = Nil
