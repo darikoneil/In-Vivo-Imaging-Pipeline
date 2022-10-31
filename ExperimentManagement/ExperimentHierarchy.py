@@ -222,10 +222,12 @@ class ExperimentData:
         _fissa = SampFreqDirectory + "\\fissa"
         _roi_sorting = SampFreqDirectory + "\\sorting"
         _denoised = SampFreqDirectory + "\\denoised"
+        _cascade = SampFreqDirectory + "\\cascade"
         os.makedirs(_suite2p)
         os.makedirs(_fissa)
         os.makedirs(_denoised)
         os.makedirs(_roi_sorting)
+        os.makedirs(_cascade)
         cls.generateReadMe(_roi_sorting+"\\ReadMe.txt", "Read-Me for ROI Sorting")
 
     @classmethod
@@ -423,39 +425,13 @@ class BehavioralStage:
         :type SamplingRate: int
         """
         SamplingRate = str(SamplingRate) # Because we know I'll always forget and send an int anyway
-        _folder_name = self.folder_dictionary['imaging_folder'] + "\\" + SamplingRate + "Hz"
+        _folder_name = "".join([self.folder_dictionary['imaging_folder'], "\\", SamplingRate, "Hz"])
         try:
             os.makedirs(_folder_name)
         except FileExistsError:
             print("The sampling folder already exists. Adding to folder dictionary")
-        self.folder_dictionary[SamplingRate + "Hz"] = CollectedImagingFolder(_folder_name)
+        setattr(self, "".join(["Imaging_", SamplingRate, "Hz"]), CollectedImagingFolder(_folder_name))
         ExperimentData.generateSampFreq(_folder_name)
-
-    def addImageProcessingFolder(self, Title):
-        """
-        Generates a folder for containing processed imaging data
-
-        :param Title: The name of the folder
-        :type Title:  str
-        """
-        _folder_name = self.folder_dictionary['imaging_folder'] + "\\" + Title
-        try:
-            os.makedirs(_folder_name)
-        except FileExistsError:
-            print("The image processing folder already exists. Adding to folder dictionary")
-        self.folder_dictionary[Title] = CollectedDataFolder(_folder_name)
-
-    def addImagingAnalysis(self, SamplingRate):
-        try:
-            self.folder_dictionary.get(str(SamplingRate) + "Hz")
-        except KeyError:
-            self.addImageProcessingFolder(SamplingRate)
-
-        self.__dict__["imaging_" + str(SamplingRate) + "_Hz"] = {
-            'suite2p': None,
-            'fissa': None,
-            'cascade': None,
-        }
 
     def loadBrukerMetaData(self):
         self.folder_dictionary["bruker_meta_data"].reIndex()
@@ -742,6 +718,7 @@ class CollectedImagingFolder(CollectedDataFolder):
     """ this is a super class containing methods for"""
     def __init__(self, Path):
         super().__init__(Path)
+        self.current_stage = "Instanced"
 
     def load_fissa_exports(self):
         """
