@@ -10,9 +10,7 @@
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121_Retrieval.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DarikDataScripts/s.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -246,7 +244,9 @@
       <workItem from="1666302855140" duration="39979000" />
       <workItem from="1666635974162" duration="9942000" />
       <workItem from="1666714880628" duration="14530000" />
-      <workItem from="1666878668800" duration="38617000" />
+      <workItem from="1666878668800" duration="41102000" />
+      <workItem from="1667226603928" duration="317000" />
+      <workItem from="1667238722333" duration="703000" />
     </task>
     <task id="LOCAL-00001" summary="ignore">
       <created>1663863570077</created>
@@ -507,7 +507,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666993921233</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="Added Videos -&gt; Binary File Function">
+      <created>1666994192002</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1666994192002</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
