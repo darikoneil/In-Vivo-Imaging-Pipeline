@@ -345,6 +345,14 @@ class PreProcessing:
         return complete_image
 
     @staticmethod
+    def loadRawBinary(fname, meta_file):
+        _num_frames, _x_pixels, _y_pixels, _type = np.genfromtxt(meta_file, delimiter=",", dtype="str")
+        _num_frames = int(_num_frames)
+        _x_pixels = int(_x_pixels)
+        _y_pixels = int(_y_pixels)
+        return np.reshape(np.fromfile(fname, dtype=_type), (_num_frames, _x_pixels, _y_pixels))
+
+    @staticmethod
     def saveRawBinary(Video, VideoDirectory):
         """
         This function saves a tiff stack as a binary file
@@ -364,6 +372,29 @@ class PreProcessing:
 
         Video.tofile(_video_file)
         print("Finished saving video as a binary.")
+
+    @staticmethod
+    def removeShuttleArtifact(Video, **kwargs):
+        """
+        Function to remove the shuttle artifacts present at the initial imaging frames
+
+        :param Video: Video array with shape Z x X x Y
+        :param kwargs:
+        :return: Video
+        """
+        if Video.shape[0] <= Video.shape[1] or Video.shape[0] <= Video.shape[2]:
+            AssertionError("Video must be in the form Z x X x Y")
+
+        _shuttle_artifact_length = kwargs.get("artifact_length", 1000)
+        _chunk_size = kwargs.get("chunk_size", 7000)
+        _num_frames = Video.shape[0]
+        _crop_idx = _num_frames % _chunk_size
+        if _crop_idx >= _shuttle_artifact_length:
+            return Video[_crop_idx:, :, :]
+        else:
+            _num_frames -= _shuttle_artifact_length
+            _crop_idx = _num_frames % _chunk_size
+            return Video[_shuttle_artifact_length+_crop_idx:, :, :]
 
     @staticmethod
     def blockwiseFastFilterTiff(TiffStack, **kwargs):
