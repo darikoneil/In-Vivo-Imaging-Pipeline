@@ -426,12 +426,14 @@ class BehavioralStage:
         """
         SamplingRate = str(SamplingRate) # Because we know I'll always forget and send an int anyway
         _folder_name = "".join([self.folder_dictionary['imaging_folder'], "\\", SamplingRate, "Hz"])
+        _attr_name = "".join(["Imaging_", SamplingRate, "Hz"])
         try:
             os.makedirs(_folder_name)
         except FileExistsError:
             print("The sampling folder already exists. Adding to folder dictionary")
-        setattr(self, "".join(["Imaging_", SamplingRate, "Hz"]), CollectedImagingFolder(_folder_name))
+        setattr(self, _attr_name, CollectedImagingFolder(_folder_name))
         ExperimentData.generateSampFreq(_folder_name)
+        self.__dict__.get(_attr_name).reIndex()
 
     def loadBrukerMetaData(self):
         self.folder_dictionary["bruker_meta_data"].reIndex()
@@ -719,6 +721,7 @@ class CollectedImagingFolder(CollectedDataFolder):
     def __init__(self, Path):
         super().__init__(Path)
         self.current_stage = "Instanced"
+        self.Suite2PModule = None
 
     def load_fissa_exports(self):
         """

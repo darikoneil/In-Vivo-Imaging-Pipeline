@@ -2,6 +2,7 @@
   <dictionary name="YUSTE">
     <words>
       <w>allkeys</w>
+      <w>badframes</w>
       <w>bfill</w>
       <w>blockwise</w>
       <w>childs</w>
@@ -29,9 +30,12 @@
       <w>logscale</w>
       <w>mfpo</w>
       <w>multioutput</w>
+      <w>nframes</w>
       <w>nimg</w>
       <w>pretrialsdlc</w>
       <w>probas</w>
+      <w>rmax</w>
+      <w>rmin</w>
       <w>scatterplot</w>
       <w>shuf</w>
       <w>sinc</w>

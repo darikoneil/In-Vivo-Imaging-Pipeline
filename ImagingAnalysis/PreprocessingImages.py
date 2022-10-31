@@ -600,5 +600,16 @@ class PreProcessing:
         anim.toggle(ax=ax3)
         plt.show()
 
+    @staticmethod
+    def load_binary_meta(File):
+        """
+        Loads meta file for binary video
 
+        :param File: The meta file (.txt ext)
+        :type File: str
+        :return: A tuple containing the number of frames, x pixels, and y pixels
+        :rtype: tuple[int, int, int, str]
+        """
+        _num_frames, _x_pixels, _y_pixels, _type = np.genfromtxt(File, delimiter=",", dtype="str")
+        return tuple([int(_num_frames), int(_x_pixels), int(_y_pixels), _type])
 
