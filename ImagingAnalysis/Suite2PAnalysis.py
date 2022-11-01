@@ -5,6 +5,7 @@ from natsort import natsorted
 import os
 import glob
 from ExperimentManagement.ExperimentHierarchy import ExperimentData
+from ImagingAnalysis.PreprocessingImages import PreProcessing
 
 
 class Suite2PModule:
@@ -37,9 +38,20 @@ class Suite2PModule:
             self.db = {**self.db, **{"tiff_list": Suite2PModule.make_list_tiffs(File_Directory)[0]}}
         elif self.file_type == "binary":
             if _meta is None and _meta_file is None:
-                AssertionError("Using binary is impossible with shape and endianness")
+                try: # Try to infer the file location
+                    _meta = self.load_binary_meta("".join([File_Directory, "\\video_meta.txt"]))
+                except FileNotFoundError:
+                    AssertionError("Using binary is impossible with shape and endianness")
             elif _meta is None and _meta_file is not None:
                 _meta = self.load_binary_meta(_meta_file)
+
+            if _video_file is None:
+                try: # Try to infer the file location
+                    os.path.isfile("".join([File_Directory, "\\binary_video"]))
+                    _video_file = "".join([File_Directory, "\\binary_video"])
+                except FileNotFoundError:
+                    AssertionError("Unable to locate a valid binary file")
+
             _db = {
                 "input_format": "binary",
                 "raw_file": _video_file,
@@ -72,12 +84,16 @@ class Suite2PModule:
         return "".join([self.ops.get('save_path'), "\\stat.npy"])
 
     @property
+    def ops_file_path(self):
+        return "".join([self.ops.get("save_path"), "\\ops.npy"])
+
+    @property
     def reg_tiff_path(self):
         return "".join([self.ops.get('save_path'), "\\reg_tif"])
 
     @property
     def reg_binary_path(self):
-        return self.ops.get("f_reg")
+        return self.ops.get("reg_file")
 
     def run(self):
         self.ops.update(suite2p.run_s2p(self.ops, self.db))
@@ -89,6 +105,7 @@ class Suite2PModule:
     def save_files(self):
         np.save(self.cell_index_path, self.iscell, allow_pickle=True)
         np.save(self.stat_file_path, self.stat, allow_pickle=True)
+        np.save(self.ops_file_path, self.ops, allow_pickle=True)
 
     def openGUI(self):
         gui.run(self.stat_file_path)
@@ -115,7 +132,7 @@ class Suite2PModule:
         self.ops["reg_file"] = "".join([self.ops.get("save_path0"), "\\suite2p\\plane0\\registered_data.bin"])
         # Read in raw tif corresponding to our example tif
         f_raw = suite2p.io.BinaryRWFile(Ly=self.ops.get("Ly"), Lx=self.ops.get("Lx"), filename=self.ops.get("raw_file"))
-        f_reg = suite2p.io.BinaryRWFile(Ly=self.ops.get("Ly"), Lx=self.ops.get("Lx"), filename="registered_data.bin")
+        f_reg = suite2p.io.BinaryRWFile(Ly=self.ops.get("Ly"), Lx=self.ops.get("Lx"), filename=self.ops.get("reg_file"))
 
         refImg, rmin, rmax, meanImg, rigid_offsets, \
         nonrigid_offsets, zest, meanImg_chan2, badframes, \
@@ -137,6 +154,16 @@ class Suite2PModule:
                             "xrange": xrange,
                         }
                     }
+
+    @classmethod
+    def exportCroppedCorrection(cls, ops):
+        _xrange = ops.get("xrange")
+        _yrange = ops.get("yrange")
+        _images = cls.load_suite2p_binary(ops.get("reg_file"))
+        _images = np.reshape(_images, (-1, ops.get("Ly"), ops.get("Lx")))
+        _images = _images[:, _yrange[0]:_yrange[-1], _xrange[0]:_xrange[-1]]
+        PreProcessing.saveRawBinary(_images, ops.get("save_path"))
+        return print("Exported Cropped Motion-Corrected Video")
 
     # noinspection PyMethodMayBeStatic
     def replaceTraces(self, NewTraces):
@@ -214,5 +241,5 @@ class Suite2PModule:
         return ops
 
     @staticmethod
-    def exportCroppedCorrection():
-        return print("Exported Cropped Motion-Corrected Video")
+    def load_suite2p_binary(File):
+        return np.fromfile(File, dtype=np.int16)

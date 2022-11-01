@@ -4,17 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Added function fo removing shutter artifacts &amp; loading raw binary videos">
-      <change afterPath="$PROJECT_DIR$/DarikDataScripts/.ipynb_checkpoints/EM0121_Encoding-checkpoint.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121_Encoding.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121_PreExposure.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121_Retrieval.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DarikDataScripts/registered_data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Added function for motion correction for binary videos">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" afterDir="false" />
     </list>
@@ -93,11 +84,11 @@
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\BehavioralAnalysis" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DebugData\suite2p\plane0" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DarikDataScripts" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\IO" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ExperimentManagement" />
-      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ImagingAnalysis" />
     </key>
   </component>
   <component name="RunManager" selected="Python.ScratchRas">
@@ -252,7 +243,7 @@
       <workItem from="1666714880628" duration="14530000" />
       <workItem from="1666878668800" duration="41102000" />
       <workItem from="1667226603928" duration="317000" />
-      <workItem from="1667238722333" duration="12130000" />
+      <workItem from="1667238722333" duration="19523000" />
     </task>
     <task id="LOCAL-00001" summary="ignore">
       <created>1663863570077</created>
@@ -579,7 +570,8 @@
     <MESSAGE value="Updated Decoding, some sync adjustments" />
     <MESSAGE value="Added Videos -&gt; Binary File Function" />
     <MESSAGE value="Added function fo removing shutter artifacts &amp; loading raw binary videos" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added function fo removing shutter artifacts &amp; loading raw binary videos" />
+    <MESSAGE value="Added function for motion correction for binary videos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added function for motion correction for binary videos" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
