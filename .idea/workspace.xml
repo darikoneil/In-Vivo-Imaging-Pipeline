@@ -6,11 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="gitignore">
       <change afterPath="$PROJECT_DIR$/DebugData/suite2p/plane0/Goobs/video_meta.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/Denoiser.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/dunc.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/Denoising.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/buildingblocks.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/data_process.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/model_3DUnet.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/network.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ImagingAnalysis/script.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/train.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/utils.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ScratchDenoise.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/para.yaml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pth/ModelForPytorch/E_10_Iter_3500.pth" afterDir="false" />
@@ -83,7 +85,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/ImagingAnalysis" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
@@ -106,11 +108,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ImagingAnalysis" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DarikDataScripts" />
       <recent name="I:\" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\USNAP" />
-      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ComputationalAnalysis" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline" />
@@ -275,6 +277,7 @@
       <workItem from="1667238722333" duration="19589000" />
       <workItem from="1667399847515" duration="47000" />
       <workItem from="1667401040226" duration="16945000" />
+      <workItem from="1667420149522" duration="53000" />
     </task>
     <task id="LOCAL-00001" summary="ignore">
       <created>1663863570077</created>
@@ -577,7 +580,28 @@
       <option name="project" value="LOCAL" />
       <updated>1667399875736</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="gitignore2">
+      <created>1667420008519</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1667420008519</updated>
+    </task>
+    <task id="LOCAL-00045" summary="Implemented Denoising">
+      <created>1667420044896</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1667420044896</updated>
+    </task>
+    <task id="LOCAL-00046" summary="gitignore">
+      <created>1667420065456</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1667420065456</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -617,7 +641,10 @@
     <MESSAGE value="Added function fo removing shutter artifacts &amp; loading raw binary videos" />
     <MESSAGE value="Added function for motion correction for binary videos" />
     <MESSAGE value="Updated environment.yml" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated environment.yml" />
+    <MESSAGE value="gitignore2" />
+    <MESSAGE value="Implemented Denoising" />
+    <MESSAGE value="gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="gitignore" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
