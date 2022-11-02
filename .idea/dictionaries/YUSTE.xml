@@ -47,6 +47,7 @@
       <w>upsample</w>
       <w>vmax</w>
       <w>vmin</w>
+      <w>vram</w>
       <w>zphysical</w>
     </words>
   </dictionary>

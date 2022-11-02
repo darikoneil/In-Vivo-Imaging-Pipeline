@@ -40,11 +40,9 @@ class DenoisingModule:
         else:
             print("Warning: Unable to interface with CUDA. Debug PyTorch installation.")
 
-    def runDenoising(self, *args):
-        if len(args) >= 1:
-            _verbose = True
-        else:
-            _verbose = False
+    def runDenoising(self):
+
+        _verbose = self.opt.verbose
 
         _model_path, _model_list = self.retrieve_models(self.opt)
 
@@ -101,7 +99,8 @@ class DenoisingModule:
                     _input_img = np.zeros(_noise_img.shape)
 
                     _test_data = testset(_name_list, _coordinate_list, _noise_img)
-                    _testloader = DataLoader(_test_data, batch_size=self.opt.batch_size, shuffle=False, num_workers=4)
+                    _testloader = DataLoader(_test_data, batch_size=self.opt.batch_size, shuffle=False,
+                                             num_workers=self.opt.workers)
                     for _iteration, (_noise_patch, _single_coordinate) in enumerate(_testloader):
                         _noise_patch = _noise_patch.cuda()
                         _real_A = _noise_patch
@@ -166,7 +165,7 @@ class DenoisingModule:
                                 = _bbbb
 
                     _output_img = _denoise_img.squeeze().astype(np.float32) * self.opt.normalize_factor
-                    del _denoise_img
+                    _denoise_img = None
                     _output_img = _output_img - _output_img.min()
                     _output_img = _output_img / _output_img.max() * 65535
                     _output_img = np.clip(_output_img, 0, 65535).astype('uint16')
@@ -175,6 +174,8 @@ class DenoisingModule:
 
                     _result_name = "".join([self.opt.output_dir, "\\", _model.replace(".pth", ""), _image])
                     Preprocessing.saveRawBinary(_output_img, _result_name)
+                    _output_img = None
+
 
     @classmethod
     def retrieve_images(cls, opt):
@@ -301,7 +302,15 @@ class DenoisingModule:
         _image_type = "".join(["--image_type=", kwargs.get("image_type", "binary")])
         parsed_inputs.append(_image_type)
 
+        _num_workers = "".join(["--workers=", kwargs.get("workers", 4)])
+        parsed_inputs.append(_num_workers)
+
         _vram = "".join(["--VRAM=", str(kwargs.get("vram", 24))])
+        parsed_inputs.append(_vram)
+
+        _verbose = "".join(["--verbose=", kwargs.get("verbose", True)])
+        parsed_inputs.append(_verbose)
+
         return parsed_inputs
 
     @staticmethod
@@ -335,6 +344,8 @@ class DenoisingModule:
         # Let's add my stuff
         parser.add_argument('--image_type', type=str, default="binary", help="type/ext of image files")
         parser.add_argument('--VRAM', type=int, default=24, help="amount of VRAM in GPU")
+        parser.add_argument('--workers', type=int, default=4, help="number of multiprocessing workers")
+        parser.add_argument('--verbose', type=bool, default=True, help="Verbosity boolean")
         return parser
 
     @staticmethod
