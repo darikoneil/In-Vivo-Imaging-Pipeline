@@ -12,7 +12,7 @@ from ImagingAnalysis.utils import save_yaml, read_yaml
 from ImagingAnalysis.data_process import test_preprocess_lessMemoryNoTail_feedImage, \
     testset, multibatch_test_save, singlebatch_test_save
 from skimage import io
-from ImagingAnalysis.PreprocessingImages import Preprocessing
+from ImagingAnalysis.PreprocessingImages import PreProcessing
 
 # Make sure to  edit the forking pickler to use protocol 4 in multiprocessing library
 
@@ -73,7 +73,7 @@ class DenoisingModule:
             print('\033[1;31mUsing {} GPU for testing -----> \033[0m'.format(torch.cuda.device_count()))
 
         self.denoiser = self.denoiser.cuda()
-        self.denoiser = nn.DataParallel(self.denoiser, device_ids=torch.cuda.device_count())
+        self.denoiser = nn.DataParallel(self.denoiser, device_ids=range(torch.cuda.device_count()))
         # noinspection DuplicatedCode,PyUnusedLocal
         Tensor = torch.cuda.FloatTensor
 
@@ -92,9 +92,9 @@ class DenoisingModule:
                 self.denoiser.cuda()
 
                 # Iterate
-                for _image in range(len(img_list)):
+                for _image in range(len(_img_list)):
                     _name_list, _noise_img, _coordinate_list = \
-                        test_preprocess_lessMemoryNoTail_feedImage(self.opt, np.array(img_list[_image]))
+                        test_preprocess_lessMemoryNoTail_feedImage(self.opt, np.array(_img_list[_image]))
                     _prev_time = time.time()
                     _time_start = time.time()
                     _denoise_img = np.zeros(_noise_img.shape)
@@ -102,7 +102,7 @@ class DenoisingModule:
 
                     _test_data = testset(_name_list, _coordinate_list, _noise_img)
                     _testloader = DataLoader(_test_data, batch_size=self.opt.batch_size, shuffle=False, num_workers=4)
-                    for _iteration, (_noise_patch, _single_coordinate) in enumerate(testloader):
+                    for _iteration, (_noise_patch, _single_coordinate) in enumerate(_testloader):
                         _noise_patch = _noise_patch.cuda()
                         _real_A = _noise_patch
                         _real_A = Variable(_real_A)
@@ -173,7 +173,7 @@ class DenoisingModule:
                     _output_img = _output_img - _output_img.min()
                     _output_img = _output_img.astype('int16')
 
-                    _result_name = "".join([self.opt.output_dir, "\\", _model.replace(".pth"), _image])
+                    _result_name = "".join([self.opt.output_dir, "\\", _model.replace(".pth", ""), _image])
                     Preprocessing.saveRawBinary(_output_img, _result_name)
 
     @classmethod

@@ -3,6 +3,7 @@
     <words>
       <w>allkeys</w>
       <w>badframes</w>
+      <w>bbbb</w>
       <w>bfill</w>
       <w>blockwise</w>
       <w>childs</w>
@@ -40,6 +41,7 @@
       <w>shuf</w>
       <w>sinc</w>
       <w>subfolders</w>
+      <w>testloader</w>
       <w>tiffstack</w>
       <w>trialsdlc</w>
       <w>upsample</w>
