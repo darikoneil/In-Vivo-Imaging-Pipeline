@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="git ignore update">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Keyword for denoising multiprocessor">
       <change afterPath="$PROJECT_DIR$/DebugData/suite2p/plane0/Goobs/video_meta.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ScratchDenoise.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/para.yaml" afterDir="false" />
@@ -31,7 +31,6 @@
       <change afterPath="$PROJECT_DIR$/pth/ex/E_17_Iter_1008.pth" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pth/ex/E_18_Iter_1008.pth" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pth/ex/E_19_Iter_1008.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Denoising.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Denoising.py" afterDir="false" />
     </list>
@@ -274,14 +273,8 @@
       <workItem from="1667401040226" duration="16945000" />
       <workItem from="1667420149522" duration="1116000" />
       <workItem from="1667421357562" duration="1515000" />
-      <workItem from="1667424838095" duration="563000" />
-    </task>
-    <task id="LOCAL-00001" summary="ignore">
-      <created>1663863570077</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1663863570077</updated>
+      <workItem from="1667424838095" duration="597000" />
+      <workItem from="1667425592540" duration="1477000" />
     </task>
     <task id="LOCAL-00002" summary="Added Modules for BurrowPreference (Incomplete Implementation)">
       <created>1663863606655</created>
@@ -619,7 +612,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667424869310</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="Keyword for denoising multiprocessor">
+      <created>1667425423878</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1667425423878</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -638,7 +638,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Fixed Bug in Preprocessing script that led to incorrect footprint of fast-filtering" />
     <MESSAGE value="ignore" />
     <MESSAGE value="Locomotion Module" />
     <MESSAGE value="DeepLabCutModule (partially) ported from matlab" />
@@ -663,7 +662,8 @@
     <MESSAGE value="gitignore" />
     <MESSAGE value="Denoising Implementation" />
     <MESSAGE value="git ignore update" />
-    <option name="LAST_COMMIT_MESSAGE" value="git ignore update" />
+    <MESSAGE value="Keyword for denoising multiprocessor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Keyword for denoising multiprocessor" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

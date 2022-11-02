@@ -13,6 +13,7 @@ from ImagingAnalysis.data_process import test_preprocess_lessMemoryNoTail_feedIm
     testset, multibatch_test_save, singlebatch_test_save
 from skimage import io
 from ImagingAnalysis.PreprocessingImages import PreProcessing
+import pprint
 
 # Make sure to  edit the forking pickler to use protocol 4 in multiprocessing library
 
@@ -63,6 +64,10 @@ class DenoisingModule:
         if _verbose:
             print('\033[1;31mStacks for processing -----> \033[0m')
             print('Total number -----> ', len(_img_list))
+
+        if _verbose:
+            print("\nDenoising Parameters:")
+            pprint.pprint(self.opt.__dict__, width=1)
 
         self.denoiser = Network_3D_Unet(in_channels=1, out_channels=1, f_maps=self.opt.fmap,
                                         final_sigmoid=True)
@@ -175,7 +180,6 @@ class DenoisingModule:
                     _result_name = "".join([self.opt.output_dir, "\\", _model.replace(".pth", ""), _image])
                     Preprocessing.saveRawBinary(_output_img, _result_name)
                     _output_img = None
-
 
     @classmethod
     def retrieve_images(cls, opt):
@@ -302,13 +306,13 @@ class DenoisingModule:
         _image_type = "".join(["--image_type=", kwargs.get("image_type", "binary")])
         parsed_inputs.append(_image_type)
 
-        _num_workers = "".join(["--workers=", kwargs.get("workers", 4)])
+        _num_workers = "".join(["--workers=", str(kwargs.get("workers", 4))])
         parsed_inputs.append(_num_workers)
 
         _vram = "".join(["--VRAM=", str(kwargs.get("vram", 24))])
         parsed_inputs.append(_vram)
 
-        _verbose = "".join(["--verbose=", kwargs.get("verbose", True)])
+        _verbose = "".join(["--verbose=", str(kwargs.get("verbose", True))])
         parsed_inputs.append(_verbose)
 
         return parsed_inputs
