@@ -4,9 +4,39 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Added function for motion correction for binary videos">
-      <change afterPath="$PROJECT_DIR$/DebugData/suite2p/plane0/Goobs/binary_video" afterDir="false" />
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="gitignore">
       <change afterPath="$PROJECT_DIR$/DebugData/suite2p/plane0/Goobs/video_meta.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/Denoiser.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/dunc.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/script.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/train.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ScratchDenoise.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/para.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ModelForPytorch/E_10_Iter_3500.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ModelForPytorch/para.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/TrainingInhibitory/E_20_Iter_1008.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/TrainingInhibitory/para.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ex/E_01_Iter_1008.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ex/E_02_Iter_1008.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ex/E_03_Iter_1008.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ex/E_04_Iter_1008.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ex/E_05_Iter_1008.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ex/E_06_Iter_1008.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ex/E_07_Iter_1008.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ex/E_08_Iter_1008.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ex/E_09_Iter_1008.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ex/E_10_Iter_1008.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ex/E_11_Iter_1008.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ex/E_12_Iter_1008.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ex/E_13_Iter_1008.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ex/E_14_Iter_1008.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ex/E_15_Iter_1008.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ex/E_16_Iter_1008.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ex/E_17_Iter_1008.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ex/E_18_Iter_1008.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pth/ex/E_19_Iter_1008.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,8 +47,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Stub" />
-        <option value="Python Script" />
         <option value="Jupyter Notebook" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -53,7 +83,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/DarikDataScripts" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
@@ -76,18 +106,18 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DarikDataScripts" />
       <recent name="I:\" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\USNAP" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ComputationalAnalysis" />
-      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\BehavioralAnalysis" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline" />
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ImagingAnalysis" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DebugData\suite2p\plane0" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DarikDataScripts" />
-      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\IO" />
-      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ExperimentManagement" />
     </key>
   </component>
   <component name="RunManager" selected="Python.ScratchRas">
@@ -243,6 +273,8 @@
       <workItem from="1666878668800" duration="41102000" />
       <workItem from="1667226603928" duration="317000" />
       <workItem from="1667238722333" duration="19589000" />
+      <workItem from="1667399847515" duration="47000" />
+      <workItem from="1667401040226" duration="16945000" />
     </task>
     <task id="LOCAL-00001" summary="ignore">
       <created>1663863570077</created>
@@ -538,7 +570,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667319535734</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="Updated environment.yml">
+      <created>1667399875736</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1667399875736</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -577,7 +616,8 @@
     <MESSAGE value="Added Videos -&gt; Binary File Function" />
     <MESSAGE value="Added function fo removing shutter artifacts &amp; loading raw binary videos" />
     <MESSAGE value="Added function for motion correction for binary videos" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added function for motion correction for binary videos" />
+    <MESSAGE value="Updated environment.yml" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated environment.yml" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
