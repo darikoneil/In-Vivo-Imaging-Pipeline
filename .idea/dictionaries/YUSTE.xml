@@ -3,6 +3,7 @@
     <words>
       <w>allkeys</w>
       <w>badframes</w>
+      <w>batchsize</w>
       <w>bbbb</w>
       <w>bfill</w>
       <w>blockwise</w>
@@ -22,6 +23,7 @@
       <w>facecolor</w>
       <w>figcolor</w>
       <w>fnames</w>
+      <w>goob</w>
       <w>gotcha's</w>
       <w>histplot</w>
       <w>icefire</w>
@@ -29,6 +31,7 @@
       <w>linewidth</w>
       <w>linewidths</w>
       <w>logscale</w>
+      <w>memmap</w>
       <w>mfpo</w>
       <w>multioutput</w>
       <w>nframes</w>

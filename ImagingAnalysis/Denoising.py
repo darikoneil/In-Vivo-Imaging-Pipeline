@@ -60,7 +60,7 @@ class DenoisingModule:
 
         if _verbose:
             print("\nLoading Images...")
-        _img_list = self.retrieve_images(self.opt)
+        _img_list, _mapped_output = self.retrieve_images(self.opt)
         if _verbose:
             print('\033[1;31mStacks for processing -----> \033[0m')
             print('Total number -----> ', len(_img_list))
@@ -94,6 +94,7 @@ class DenoisingModule:
                     self.denoiser.eval()
                 self.denoiser.cuda()
 
+
                 # Iterate
                 for _image in range(len(_img_list)):
                     _name_list, _noise_img, _coordinate_list = \
@@ -104,7 +105,7 @@ class DenoisingModule:
                     _input_img = np.zeros(_noise_img.shape)
 
                     _test_data = testset(_name_list, _coordinate_list, _noise_img)
-                    _testloader = DataLoader(_test_data, batch_size=self.opt.batch_size, shuffle=False,
+                    _testloader = DataLoader(_test_data, batch_size=self.opt.batch_size2, shuffle=False,
                                              num_workers=self.opt.workers)
                     for _iteration, (_noise_patch, _single_coordinate) in enumerate(_testloader):
                         _noise_patch = _noise_patch.cuda()
@@ -177,9 +178,17 @@ class DenoisingModule:
                     _output_img = _output_img - _output_img.min()
                     _output_img = _output_img.astype('int16')
 
-                    _result_name = "".join([self.opt.output_dir, "\\", _model.replace(".pth", ""), _image])
-                    Preprocessing.saveRawBinary(_output_img, _result_name)
+                    if len(_model_list) > 1:
+                        _result_name = "".join([self.opt.output_path, "\\", _model_name.replace(".pth", ""), str(_image)])
+                        PreProcessing.saveRawBinary(_output_img, _result_name)
+                    else:
+                        _mapped_output[_image*_output_img.shape[0]:_image*_output_img.shape[0]+_output_img.shape[0],
+                            :, :] = _output_img
+
                     _output_img = None
+        if len(_model_list) <= 1:
+            del _mapped_output # close the memmap file
+        print("Finished Denoising")
 
     @classmethod
     def retrieve_images(cls, opt):
@@ -201,15 +210,20 @@ class DenoisingModule:
             _images = np.memmap(_image_file, mode="r", shape=(_num_frames, _y_pixels, _x_pixels), dtype=_type)
             if not cls.validate_size_limit(opt, _y_pixels, _x_pixels):
                 AssertionError("Tensors too large for GPU")
+                print("Tensors too large for GPU")
                 return
 
-            _chunk_size = cls.calculate_chunk_size(_num_frames, opt.test_datasize)
-            _indices = np.arange(0, _num_frames+1, _num_frames/_chunk_size)
-            img_list = []
-            for i in range(_indices.shape[0]-1):
-                img_list.append(_images[_indices[i].astype(int):_indices[i+1].astype(int), :, :])
+            if _num_frames <= opt.test_datasize:
+                img_list = [_images]
+            else:
+                _chunk_size = cls.calculate_chunk_size(_num_frames, opt.test_datasize)
+                _indices = np.arange(0, _num_frames+1, _num_frames/_chunk_size)
+                img_list = []
+                for i in range(_indices.shape[0]-1):
+                    img_list.append(_images[_indices[i].astype(int):_indices[i+1].astype(int), :, :])
 
-            return img_list
+            mapped_output = cls.create_memmap_binary(_images, opt.output_path)
+            return img_list, mapped_output
 
     @staticmethod
     def extract_training_params(model_list):
@@ -272,12 +286,14 @@ class DenoisingModule:
         _model = "".join(["--denoise_model=", ModelName])
         parsed_inputs.append(_model)
 
-        _output_path = "".join(["--output_dir=", kwargs.get("output_path", os.getcwd())])
+        _output_dir = "".join(["--output_dir=", kwargs.get("output_path", os.getcwd())])
+        _output_path = "".join(["--output_path=", kwargs.get("output_path", os.getcwd())])
         try:
             os.path.exists(_output_path)
         except FileNotFoundError:
             print("Could not located specified output path")
             return
+        parsed_inputs.append(_output_dir)
         parsed_inputs.append(_output_path)
 
         # note data path string variable name change
@@ -315,6 +331,9 @@ class DenoisingModule:
         _verbose = "".join(["--verbose=", str(kwargs.get("verbose", True))])
         parsed_inputs.append(_verbose)
 
+        _batch_size = "".join(["--batch_size2=", str(kwargs.get("batch_size", 1))])
+        parsed_inputs.append(_batch_size)
+
         return parsed_inputs
 
     @staticmethod
@@ -335,7 +354,7 @@ class DenoisingModule:
         parser.add_argument("--b2", type=float, default=0.999, help="Adam: bata2")
         parser.add_argument('--normalize_factor', type=int, default=1, help='normalize factor')
         parser.add_argument('--fmap', type=int, default=16, help='number of feature maps')
-        parser.add_argument('--output_dir', type=str, default='./results', help="output directory")
+        parser.add_argument('--output_dir', type=str, default="D:\\", help="output directory")
         parser.add_argument('--datasets_path', type=str, default='datasets', help="dataset root path")
         parser.add_argument('--pth_path', type=str, default='pth', help="pth file root path")
         parser.add_argument('--datasets_folder', type=str, default='test',
@@ -350,6 +369,9 @@ class DenoisingModule:
         parser.add_argument('--VRAM', type=int, default=24, help="amount of VRAM in GPU")
         parser.add_argument('--workers', type=int, default=4, help="number of multiprocessing workers")
         parser.add_argument('--verbose', type=bool, default=True, help="Verbosity boolean")
+        parser.add_argument('--output_path', type=str, default="D:\\", help="output_path")
+        parser.add_argument('--batch_size2', type=int, default=1, help="batch_size real")
+
         return parser
 
     @staticmethod
@@ -382,3 +404,20 @@ class DenoisingModule:
             return True
         else:
             return False
+
+    @staticmethod
+    def create_memmap_binary(Image, Path):
+        _meta_file = "".join([Path, "\\video_meta.txt"])
+
+        try:
+            with open(_meta_file, 'w') as f:
+                f.writelines([str(Image.shape[0]), ",", str(Image.shape[1]), ",",
+                              str(Image.shape[2]), ",", str(Image.dtype)])
+        except FileNotFoundError:
+            _meta_path = _meta_file.replace("\\video_meta.txt", "")
+            os.makedirs(_meta_path)
+            with open(_meta_file, 'w') as f:
+                f.writelines([str(Image.shape[0]), ",", str(Image.shape[1]), ",",
+                              str(Image.shape[2]), ",", str(Image.dtype)])
+
+        return np.memmap("".join([Path, "\\binary_video"]), dtype=Image.dtype, mode="w+", shape=Image.shape)

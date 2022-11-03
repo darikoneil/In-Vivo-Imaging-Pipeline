@@ -367,9 +367,16 @@ class PreProcessing:
         _meta_file = "".join([VideoDirectory, "\\video_meta.txt"])
         _video_file = "".join([VideoDirectory, "\\binary_video"])
 
-        with open(_meta_file, 'w') as f:
-            f.writelines([str(Video.shape[0]), ",", str(Video.shape[1]), ",",
-                          str(Video.shape[2]), ",", str(Video.dtype)])
+        try:
+            with open(_meta_file, 'w') as f:
+                f.writelines([str(Video.shape[0]), ",", str(Video.shape[1]), ",",
+                            str(Video.shape[2]), ",", str(Video.dtype)])
+        except FileNotFoundError:
+            _meta_path = _meta_file.replace("\\video_meta.txt", "")
+            os.makedirs(_meta_path)
+            with open(_meta_file, 'w') as f:
+                f.writelines([str(Video.shape[0]), ",", str(Video.shape[1]), ",",
+                            str(Video.shape[2]), ",", str(Video.dtype)])
 
         Video.tofile(_video_file)
         print("Finished saving video as a binary.")
@@ -579,10 +586,10 @@ class PreProcessing:
         _interp = kwargs.get('interpolation', "none")
         _fps_multi = kwargs.get('SpeedUp', 1)
         _vmin = kwargs.get('Vmin', 0)
-        _vmax = kwargs.get('Vmax', 8178)
+        _vmax = kwargs.get('Vmax', 32000)
 
         _new_fps = _fps_multi*fps
-
+        TiffStack = TiffStack.astype(np.uint16)
         frames = TiffStack.shape[0]
         _start = 0
         _stop = (1/fps)*frames
@@ -600,6 +607,7 @@ class PreProcessing:
         anim.timeline_slider(text='Time', ax=ax2, color="#139fff")
         anim.toggle(ax=ax3)
         plt.show()
+        return [fig1, ax1, ax2, ax3, block, anim]
 
     @staticmethod
     def load_binary_meta(File):
