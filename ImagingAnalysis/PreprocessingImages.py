@@ -22,26 +22,27 @@ class PreProcessing:
     Class containing a variety of static methods for preprocessing images
 
     **Static Methods**
+        |
         | **loadBrukerTiffs** : Load a sequence of tiff files from a directory.
-
+        |
         | **repackageBrukerTiffs** :  Repackages a sequence of tiff files within a directory to a smaller sequence of tiff stacks.
-
+        |
         | **filterTiff** : Denoise a tiff stack using a multidimensional median filter
-
+        |
         | **fastFilterTiff** : GPU-parallelized multidimensional median filter
-
+        |
         | **saveTiff** : Save a numpy array to a single tiff file
-
+        |
         | **loadTiff** : Load a single tiff file
-
+        |
         | **loadAllTiffs** : Load a sequence of tiff stacks
-
+        |
         | **blockwiseFastFilterTiff** : Blockwise, GPU-parallelized multidimensional median filter
-
+        |
         | **saveTiffStack** : Save a numpy array to a sequence of tiff stacks
-
+        |
         | **groupedZProject** : Utilize grouped z-project to downsample data
-
+        |
         | **Visualize** : a numpy array [frames, x pixels, y pixels] as a video
     """
 
@@ -58,28 +59,9 @@ class PreProcessing:
         Designed to compile the outputs of a certain imaging utility
         that exports recordings such that each frame is saved as a single tiff.
 
-        Inputs
-        ------
-        *VideoDirectory* : string
-            Directory containing a sequence of single frame tiff files
-
-        Outputs
-        -------
-        *complete_image* : numpy array [frames, y pixels, x pixels]
-            All tiff files in the directory compiled into a single array
-
-        See Also
-        --------
-        *loadTiff* : Load a tiff file
-        *loadAllTiffs* : Load a sequence of tiff stacks`
-
-        Example
-        -------
-        complete_image = loadBrukerTiffs("D:\\MyVideoDirectory")
-
         :param VideoDirectory: Directory containing a sequence of single frame tiff files
         :type VideoDirectory: str
-        :return: complete_image:  All tiff files in the directory compiled into a single array
+        :return: complete_image:  All tiff files in the directory compiled into a single array (Z x Y x X, uint16)
         """
         _fnames = os.listdir(VideoDirectory)
         _num_frames = len(_fnames)
@@ -97,8 +79,7 @@ class PreProcessing:
     @staticmethod
     def repackageBrukerTiffs(VideoDirectory, OutputDirectory):
         """
-        repackageBrukerTiffs
-        --------------------
+
         Repackages a sequence of tiff files within a directory to a smaller sequence
         of tiff stacks. Designed to compile the outputs of a certain imaging utility
         that exports recordings such that each frame is saved as a single tiff.
@@ -148,39 +129,19 @@ class PreProcessing:
     @staticmethod
     def filterTiff(Tiff, **kwargs):
         """
-        filterTiff
-        ----------
         Denoise a tiff stack using a multidimensional median filter
 
         This function simply calls scipy.ndimage.median_filter
 
-        Inputs
-        ------
-        *Tiff* : numpy array [frames, y pixels, x pixels]
-            Tiff stack to be filtered
-
         Keyword Arguments
         -----------------
-        *Footprint* : numpy array [z pixels, x pixels, y pixels]
+        *Footprint* : numpy array [z pixels, y pixels, x pixels]
             Mask indicating the footprint of the median filter
                 Default -> 3 x 3 x 3
                     Example -> np.ones((3, 3, 3))
 
-        Outputs
-        -------
-        *filtered_tiff* : numpy array [frames, y pixels, x pixels]
-
-        See Also
-        --------
-        *fastFilterTiff* : GPU-parallelized multidimensional median filter
-        *blockwiseFastFilterTiff* : Blockwise, GPU-parallelized multidimensional median filter
-
-        Example
-        -------
-        filterTiff(MyTiff, Footprint=np.ones((3, 3, 3)))
-
-        :param Tiff: Tiff stack to be filtered
-        :return: filtered_tiff
+        :param Tiff: Tiff stack to be filtered [Z x Y x X]
+        :return: filtered_tiff [Z x Y x X]
         :keyword Footprint: Mask of the median filter
         """
         _footprint = kwargs.get('Footprint', np.ones((3, 3, 3)))
@@ -193,14 +154,7 @@ class PreProcessing:
     @staticmethod
     def fastFilterTiff(Tiff, **kwargs):
         """
-        fastFilterTiff
-        --------------
         GPU-parallelized multidimensional median filter
-
-        Inputs
-        ------
-        *Tiff* : numpy array [frames, y pixels, x pixels]
-            Tiff stack to be filtered
 
         Keyword Arguments
         -----------------
@@ -209,21 +163,8 @@ class PreProcessing:
                 Default -> 3 x 3 x 3
                     Example -> np.ones((3, 3, 3))
 
-        Outputs
-        -------
-        *filtered_tiff* : numpy array [frames, x pixels, y pixels]
-
-        See Also
-        --------
-        *filterTiff* : Denoise a tiff stack using multidimensional median filter
-        *blockwiseFastFilterTiff* : Blockwise, GPU-parallelized multidimensional median filter
-
-        Example
-        -------
-        fastFilterTiff(MyTiff, Footprint=np.ones((3, 3, 3)))
-
-        :param Tiff: Tiff stack to be filtered
-        :return: filtered_tiff
+        :param Tiff: Tiff stack to be filtered [Z x Y x X]
+        :return: filtered_tiff [Z x Y x X]
         :keyword Footprint: Mask of the median filter
         """
         _footprint = kwargs.get('Footprint', np.ones((3, 3, 3)))
@@ -234,27 +175,12 @@ class PreProcessing:
     @staticmethod
     def saveTiff(Tiff, fname):
         """
-        saveTiff
-        --------
         Save a numpy array to a single tiff file
-
-        Inputs
-        ------
-        *Tiff* : numpy array [frames, y pixels, x pixels]
-        *fname* : str
-            filename
-
-        See Also
-        --------
-        *saveTiffStack* : Save a numpy array to a sequence of tiff stacks
-
-        Example
-        -------
-        saveTiff(MyTiff, "D:\\MyTiff.tif")
 
         :param Tiff: numpy array [frames, y pixels, x pixels]
         :param fname: filename
         :type fname: str
+        :rtype: None
         """
         with tifffile.TiffWriter(fname) as tif:
             for frame in np.floor(Tiff).astype(np.int16):
@@ -263,66 +189,26 @@ class PreProcessing:
     @staticmethod
     def loadTiff(fname, num_frames):
         """
-        loadTiff
-        --------
         Load a single tiff file
-
-        Inputs
-        ------
-        *fname* : str
-            filename
-        *num_frames* : int
-            num_frames
-
-        Outputs
-        -------
-        numpy array
-
-        See Also
-        --------
-        *loadAllTiffs* : Load a sequence of tiff stacks
-        *loadBrukerTiffs : Load a sequence of tiff files from a directory
-
-        Example
-        -------
-        loadTiff("D:\\MyTiff.tiff", 7000)
 
         :param fname: filename
         :param num_frames: number of frames
         :type fname: str
         :type num_frames: int
-        :return: numpy array
+        :return: numpy array [Z x Y x X]
+        :rtype: Any
         """
         return tifffile.imread(fname, key=range(0, num_frames, 1))
 
     @staticmethod
     def loadAllTiffs(VideoDirectory):
         """
-        loadAllTiffs
-        ------------
         Load a sequence of tiff stacks
 
-        Inputs
-        ------
-        *VideoDirectory* : str
-            Directory containing a sequence of tiff stacks
-
-        Outputs
-        -------
-        *complete_image* : numpy array [frames, y pixels, x pixels]
-            A numpy array containing a sequence of tiff stacks
-
-        See Also
-        --------
-        *loadTiff* : Load a single tiff file
-        *loadBrukerTiffs* : Load a sequence of tiff files from a directory.
-
-        Example
-        -------
-        complete_image = loadAllTiffs("D:\\MyTiffDirectory")
-
         :param VideoDirectory: Directory containing a sequence of tiff stacks
-        :return: complete_image numpy array [frames, y pixels, x pixels]
+        :type VideoDirectory: str
+        :return: complete_image numpy array [Z x Y x X]
+        :rtype: Any
         """
         _fnames = os.listdir(VideoDirectory)
         x_pix, y_pix = tifffile.TiffFile(VideoDirectory + "\\" + _fnames[0]).pages[0].shape
@@ -345,7 +231,25 @@ class PreProcessing:
         return complete_image
 
     @staticmethod
-    def loadRawBinary(fname, meta_file):
+    def loadRawBinary(fname, meta_file, *args):
+        """
+        Loads a raw binary file
+
+        Enter the path to autofill (assumes fname & meta are Path + binary_video, video_meta.txt)
+
+        :param fname: filename for binary video
+        :type fname: str
+        :param meta_file: filename for meta file
+        :type meta_file: str
+        :param args: Path
+        :type args: str
+        :return: numpy array [Z x Y x X]
+        :rtype: Any
+        """
+        if len(args) == 0:
+            fname = "".join([args[0], "\\binary_video"])
+            meta_file = "".join([args[0], "\\video_meta.txt"])
+
         _num_frames, _y_pixels, _x_pixels, _type = np.genfromtxt(meta_file, delimiter=",", dtype="str")
         _num_frames = int(_num_frames)
         _x_pixels = int(_x_pixels)
@@ -357,7 +261,7 @@ class PreProcessing:
         """
         This function saves a tiff stack as a binary file
 
-        :param Video: Video to be saved
+        :param Video: Video to be saved [Z x Y x X]
         :type Video: np.ndarray
         :param VideoDirectory: Directory to save video in
         :type VideoDirectory: str
@@ -386,9 +290,13 @@ class PreProcessing:
         """
         Function to remove the shuttle artifacts present at the initial imaging frames
 
-        :param Video: Video array with shape Z x X x Y
+        :param Video: Video array with shape Z x Y x X
+        :type Video: Any
         :param kwargs:
+        :keyword artifact_length: number of frames considered artifact (int)
+        :keyword chunk_size: number of frames per chunk_size (makes divisible by value) (int)
         :return: Video
+        :rtype: Any
         """
         if Video.shape[0] <= Video.shape[1] or Video.shape[0] <= Video.shape[2]:
             AssertionError("Video must be in the form Z x X x Y")
@@ -407,16 +315,9 @@ class PreProcessing:
     @staticmethod
     def blockwiseFastFilterTiff(TiffStack, **kwargs):
         """
-        blockwiseFastFilterTiff
-        --------------
         GPU-parallelized multidimensional median filter performed in overlapping blocks.
 
         Designed for use on arrays larger than the available memory capacity.
-
-        Inputs
-        ------
-        *Tiff* : numpy array [frames, y pixels, x pixels]
-            Tiff stack to be filtered
 
         Keyword Arguments
         -----------------
@@ -431,22 +332,13 @@ class PreProcessing:
             Integer indicating the size of the overlapping region between blocks
                 Default -> 500
 
-        Outputs
-        -------
-        *filtered_tiff* : numpy array [frames, y pixels, x pixels]
-
-        See Also
-        --------
-        *filterTiff* : Denoise a tiff stack using multidimensional median filter
-        *fastFilterTiff* : GPU-parallelized multidimensional median filter
-
-        Example
-        -------
-        blockwiseFastFilterTiff(MyTiff, Footprint=np.ones((3, 3, 3)), BlockSize=21000, BlockBufferRegion=500)
-
         :param TiffStack: Tiff stack to be filtered
-        :param kwargs:
-        :return: TiffStack: numpy array [frames, y pixels, x pixels]
+        :type TiffStack: Any
+        :keyword Footprint:  Mask indicating the footprint of the median filter (np.ndarray)
+        :keyword BlockSize:   Integer indicating the size of each block. Must fit within memory. (int)
+        :keyword BlockBufferRegion: Integer indicating the size of the overlapping region between blocks (int)
+        :return: TiffStack: numpy array [Z x Y x X]
+        :rtype: Any
         """
         _block_size = kwargs.get('BlockSize', int(21000))
         _block_buffer_region = kwargs.get('BlockBufferRegion', int(500))
@@ -488,28 +380,13 @@ class PreProcessing:
     @staticmethod
     def saveTiffStack(TiffStack, OutputDirectory):
         """
-        saveTiffStack
-        -------------
         Save a numpy array to a sequence of tiff stacks
 
-        Inputs
-        ------
-        *TiffStack* : numpy array [frames, y pixels, x pixels]
-            A numpy array containing a tiff stack
-        *OutputDirectory* : str
-            A directory to save the sequence of tiff stacks in
-
-        See Also
-        --------
-        *saveTiff* : Save a numpy array to a single tiff file
-
-        Example
-        -------
-        saveTiffStack(MyTiffStack, "D:\\MyTiffStackDirectory")
-
-        :param TiffStack: A numpy array containing a tiff stack
+        :param TiffStack: A numpy array containing a tiff stack [Z x Y x X]
+        :type TiffStack: Any
         :param OutputDirectory: A directory to save the sequence of tiff stacks in
         :type OutputDirectory: str
+        :rtype: None
         """
         _num_frames = TiffStack.shape[0]
 
@@ -538,31 +415,16 @@ class PreProcessing:
     @staticmethod
     def groupedZProject(TiffStack, BinSize, DownsampleFunction):
         """
-        groupedZProject
-        ---------------
         Utilize grouped z-project to downsample data
 
-        Inputs
-        ------
-        *TiffStack* : numpy array [frames, y pixels, x pixels]
-            A numpy array containing a tiff stack
-        *BinSize* : integer or tuple of integers
-            Size of each bin passed to downsampling function
-        *DownsampleFunction* : function
-            Downsampling function to run on each bin
-
-        Outputs
-        -------
-        *TiffStack* : numpy array [frames, y pixels, x pixels]
-
-        Example
-        -------
-        groupedZProject(MyTiffStack, (3, 1, 1), np.mean)
-
-        :param TiffStack: A numpy array containing a tiff stack
+        :param TiffStack: A numpy array containing a tiff stack [Z x Y x X]
+        :type TiffStack: Any
         :param BinSize:  Size of each bin passed to downsampling function
+        :type BinSize: int
         :param DownsampleFunction: Downsampling function
-        :return: downsampled_image
+        :type DownsampleFunction: Any
+        :return: downsampled_image [Z x Y x X]
+        :rtype: Any
         """
         print("Downsampling data...")
         downsampled_image = skimage.measure.block_reduce(TiffStack, block_size=BinSize,
@@ -571,16 +433,22 @@ class PreProcessing:
         return downsampled_image
 
     @staticmethod
-    def viewImage(TiffStack, fps, **kwargs):
+    def viewImage(Video, fps, **kwargs):
         """
-        viewImage
-        ---------
-        Visualize a numpy array [frames, y pixels, x pixels] as a video
-        :param TiffStack: A numpy array containing a tiff stack [frames, y pixels, x pixels]
+        Visualize a numpy array [Z x Y x X] as a video
+
+        :param Video: A numpy array [Z x Y x X]
+        :type Video: Any
         :param fps: Frames Per Second
         :type fps: float
-        :param kwargs:
-        :return: Animation
+        :keyword cmap: colormap (str)
+        :keyword interpolation: interpolation method (str)
+        :keyword SpeedUp: fps multiplier (int)
+        :keyword  Vmin: minimum value of colormap (int)
+        :keyword Vmax: maximum value of colormap (int)
+        :return: Figure Animation
+        :rtype: list[matplotlib.pyplot.figure, matplotlib.pyplot.axes, matplotlib.pyplot.axes,
+        matplotlib.pyplot.axes, Any, Any]
         """
         _cmap = kwargs.get('cmap', "binary_r")
         _interp = kwargs.get('interpolation', "none")
@@ -589,7 +457,7 @@ class PreProcessing:
         _vmax = kwargs.get('Vmax', 32000)
 
         _new_fps = _fps_multi*fps
-        TiffStack = TiffStack.astype(np.uint16)
+        TiffStack = Video.astype(np.uint16)
         frames = TiffStack.shape[0]
         _start = 0
         _stop = (1/fps)*frames
@@ -616,7 +484,7 @@ class PreProcessing:
 
         :param File: The meta file (.txt ext)
         :type File: str
-        :return: A tuple containing the number of frames, y pixels, and x pixels
+        :return: A tuple containing the number of frames, y pixels, and x pixels [Z x Y x X]
         :rtype: tuple[int, int, int, str]
         """
         _num_frames, _y_pixels, _x_pixels, _type = np.genfromtxt(File, delimiter=",", dtype="str")

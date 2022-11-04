@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Keyword for denoising batchsize &amp; memmory mapped images">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="S2P analysis">
       <change afterPath="$PROJECT_DIR$/DebugData/suite2p/plane0/Goob/binary2" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ImagingAnalysis/a.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ScratchDenoise.py" afterDir="false" />
@@ -32,9 +32,8 @@
       <change afterPath="$PROJECT_DIR$/pth/ex/E_17_Iter_1008.pth" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pth/ex/E_18_Iter_1008.pth" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pth/ex/E_19_Iter_1008.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -281,14 +280,7 @@
       <workItem from="1667427455191" duration="456000" />
       <workItem from="1667427960482" duration="1355000" />
       <workItem from="1667431416735" duration="8913000" />
-      <workItem from="1667491167700" duration="13244000" />
-    </task>
-    <task id="LOCAL-00004" summary="ignore">
-      <created>1663863739439</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1663863739439</updated>
+      <workItem from="1667491167700" duration="15472000" />
     </task>
     <task id="LOCAL-00005" summary="ignore">
       <created>1663863761240</created>
@@ -626,7 +618,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667491094533</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="S2P analysis">
+      <created>1667582497644</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1667582497644</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -645,7 +644,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Locomotion Module" />
     <MESSAGE value="DeepLabCutModule (partially) ported from matlab" />
     <MESSAGE value="Partial Implementation of Pandas For Cleanliness of Experimental Hierarchy" />
     <MESSAGE value="Implementation of Pandas For Cleanliness of Experimental Hierarchy.&#10;&#10;Sync of Bruker Analog/Imaging Data still to-be ported from python / written&#10;&#10;Now needs significant refactoring (just removal &amp; locate any lingering references) of old nested dictionary code" />
@@ -670,7 +668,8 @@
     <MESSAGE value="git ignore update" />
     <MESSAGE value="Keyword for denoising multiprocessor" />
     <MESSAGE value="Keyword for denoising batchsize &amp; memmory mapped images" />
-    <option name="LAST_COMMIT_MESSAGE" value="Keyword for denoising batchsize &amp; memmory mapped images" />
+    <MESSAGE value="S2P analysis" />
+    <option name="LAST_COMMIT_MESSAGE" value="S2P analysis" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
