@@ -37,13 +37,21 @@ class PreProcessing:
         |
         | **loadAllTiffs** : Load a sequence of tiff stacks
         |
+        | **loadRawBinary** : Loads a raw binary file
+        |
+        | **saveRawBinary** : This function saves a tiff stack as a binary file
+        |
+        | **removeShutterArtifact** : Function to remove the shuttle artifacts present at the initial imaging frames
+        |
         | **blockwiseFastFilterTiff** : Blockwise, GPU-parallelized multidimensional median filter
         |
         | **saveTiffStack** : Save a numpy array to a sequence of tiff stacks
         |
         | **groupedZProject** : Utilize grouped z-project to downsample data
         |
-        | **Visualize** : a numpy array [frames, x pixels, y pixels] as a video
+        | **viewImage** :  Visualize a numpy array [Z x Y x X] as a video
+        |
+        | **loadBinaryMeta** : Loads meta file for binary video
     """
 
     def __init__(self):
@@ -489,4 +497,3 @@ class PreProcessing:
         """
         _num_frames, _y_pixels, _x_pixels, _type = np.genfromtxt(File, delimiter=",", dtype="str")
         return tuple([int(_num_frames), int(_y_pixels), int(_x_pixels), _type])
-

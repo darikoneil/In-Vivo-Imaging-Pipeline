@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="S2P analysis">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="docstrings">
       <change afterPath="$PROJECT_DIR$/DebugData/suite2p/plane0/Goob/binary2" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ImagingAnalysis/a.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Sc.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ScratchDenoise.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/para.yaml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pth/ModelForPytorch/E_10_Iter_3500.pth" afterDir="false" />
@@ -280,14 +281,7 @@
       <workItem from="1667427455191" duration="456000" />
       <workItem from="1667427960482" duration="1355000" />
       <workItem from="1667431416735" duration="8913000" />
-      <workItem from="1667491167700" duration="15472000" />
-    </task>
-    <task id="LOCAL-00005" summary="ignore">
-      <created>1663863761240</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1663863761240</updated>
+      <workItem from="1667491167700" duration="15800000" />
     </task>
     <task id="LOCAL-00006" summary="Locomotion Module">
       <created>1663880366569</created>
@@ -625,7 +619,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667582497644</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="docstrings">
+      <created>1667584726000</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1667584726000</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -644,7 +645,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="DeepLabCutModule (partially) ported from matlab" />
     <MESSAGE value="Partial Implementation of Pandas For Cleanliness of Experimental Hierarchy" />
     <MESSAGE value="Implementation of Pandas For Cleanliness of Experimental Hierarchy.&#10;&#10;Sync of Bruker Analog/Imaging Data still to-be ported from python / written&#10;&#10;Now needs significant refactoring (just removal &amp; locate any lingering references) of old nested dictionary code" />
     <MESSAGE value="Tidy" />
@@ -669,7 +669,8 @@
     <MESSAGE value="Keyword for denoising multiprocessor" />
     <MESSAGE value="Keyword for denoising batchsize &amp; memmory mapped images" />
     <MESSAGE value="S2P analysis" />
-    <option name="LAST_COMMIT_MESSAGE" value="S2P analysis" />
+    <MESSAGE value="docstrings" />
+    <option name="LAST_COMMIT_MESSAGE" value="docstrings" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
