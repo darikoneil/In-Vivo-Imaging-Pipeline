@@ -8,6 +8,7 @@
       <w>bfill</w>
       <w>blockwise</w>
       <w>childs</w>
+      <w>classfile</w>
       <w>cmap</w>
       <w>covariate</w>
       <w>csv's</w>
@@ -23,6 +24,7 @@
       <w>facecolor</w>
       <w>figcolor</w>
       <w>fnames</w>
+      <w>fneu</w>
       <w>goob</w>
       <w>gotcha's</w>
       <w>histplot</w>
@@ -34,8 +36,10 @@
       <w>memmap</w>
       <w>mfpo</w>
       <w>multioutput</w>
+      <w>neucoeff</w>
       <w>nframes</w>
       <w>nimg</w>
+      <w>prctile</w>
       <w>pretrialsdlc</w>
       <w>probas</w>
       <w>rmax</w>
@@ -43,6 +47,7 @@
       <w>scatterplot</w>
       <w>shuf</w>
       <w>sinc</w>
+      <w>spks</w>
       <w>subfolders</w>
       <w>testloader</w>
       <w>tiffstack</w>

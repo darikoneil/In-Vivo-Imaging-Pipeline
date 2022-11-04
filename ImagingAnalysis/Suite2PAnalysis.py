@@ -26,9 +26,17 @@ class Suite2PModule:
             'save_path0': Output_Directory,
             "save_path": "".join([Output_Directory, "\\suite2p\\plane0"])
         }
-        os.makedirs(self.db.get("save_path"))
+        try:
+            os.makedirs(self.db.get("save_path"))
+        except FileExistsError:
+            print("Warning Folder Already Exists and Wil be Overwritten")
+            pass
+
         self.iscell = None
         self.stat = None
+        self.F = None
+        self.Fneu = None
+        self.spks = None
 
         # Protected
         self.__instance_date = ExperimentData.getDate()
@@ -98,14 +106,24 @@ class Suite2PModule:
     def run(self):
         self.ops.update(suite2p.run_s2p(self.ops, self.db))
 
+    def save_stats(self):
+        np.save(self.stat_file_path, self.stat, allow_pickle=True)
+
+    def save_ops(self):
+        np.save(self.ops_file_path, self.ops, allow_pickle=True)
+
+    def save_cells(self):
+        np.save(self.cell_index_path, self.iscell, allow_pickle=True)
+
     def load_files(self):
         self.iscell = np.load(self.cell_index_path, allow_pickle=True)
         self.stat = np.load(self.stat_file_path, allow_pickle=True)
+        self.ops = np.load(self.ops_file_path, allow_pickle=True).item()
 
     def save_files(self):
-        np.save(self.cell_index_path, self.iscell, allow_pickle=True)
-        np.save(self.stat_file_path, self.stat, allow_pickle=True)
-        np.save(self.ops_file_path, self.ops, allow_pickle=True)
+        self.save_stats()
+        self.save_ops()
+        self.save_cells()
 
     def openGUI(self):
         gui.run(self.stat_file_path)
@@ -154,6 +172,46 @@ class Suite2PModule:
                             "xrange": xrange,
                         }
                     }
+
+    def roiDetection(self):
+        self.ops = {**self.ops, **self.db}
+        self.ops["reg_file"] = "".join([self.ops.get("data_path"), "\\binary_video"])
+        f_reg = suite2p.io.BinaryRWFile(Ly=self.ops.get("Ly"), Lx=self.ops.get("Lx"),
+                                        filename=self.ops.get("reg_file"))
+        self.ops, self.stat = suite2p.detection_wrapper(f_reg=f_reg, ops=self.ops,
+                                                        classfile=suite2p.classification.builtin_classfile)
+
+    def extractTraces(self, *args):
+        if len(args) == 0:
+            f_reg = suite2p.io.BinaryRWFile(Ly=self.ops.get("Ly"), Lx=self.ops.get("Lx"),
+                                            filename=self.ops.get("reg_file"))
+        else:
+            f_reg = args[0]
+
+        self.stat, self.F, self.Fneu, _, _ = suite2p.extraction_wrapper(self.stat, f_reg, f_reg_chan2=None, ops=self.ops)
+
+        # Save F, Fneu
+        np.save("".join([self.ops.get("save_path"), "\\F.npy"]), self.F, allow_pickle=True)
+        np.save("".join([self.ops.get("save_path"), "\\Fneu.npy"]), self.Fneu, allow_pickle=True)
+
+    def classifyROIs(self):
+        self.iscell = suite2p.classify(stat=self.stat, classfile=suite2p.classification.builtin_classfile)
+
+    def spikeExtraction(self):
+        dF = self.F.copy() - self.ops["neucoeff"]*self.Fneu
+        # Apply preprocessing step for deconvolution
+        dF = suite2p.extraction.preprocess(
+            F=dF,
+            baseline=self.ops['baseline'],
+            win_baseline=self.ops['win_baseline'],
+            sig_baseline=self.ops['sig_baseline'],
+            fs=self.ops['fs'],
+            prctile_baseline=self.ops['prctile_baseline']
+        )
+        # Identify spikes
+        self.spks = suite2p.extraction.oasis(F=dF, batch_size=self.ops['batch_size'], tau=self.ops['tau'],
+                                             fs=self.ops['fs'])
+        np.save("".join([self.ops.get("save_path"), "\\spks.npy"]), self.spks, allow_pickle=True)
 
     @classmethod
     def exportCroppedCorrection(cls, ops):
