@@ -176,7 +176,7 @@ class DenoisingModule:
                     _output_img = _output_img / _output_img.max() * 65535
                     _output_img = np.clip(_output_img, 0, 65535).astype('uint16')
                     _output_img = _output_img - _output_img.min()
-                    _output_img = _output_img.astype('int16')
+                    # _output_img = _output_img.astype('int16')
 
                     if len(_model_list) > 1:
                         _result_name = "".join([self.opt.output_path, "\\", _model_name.replace(".pth", ""), str(_image)])
@@ -412,7 +412,7 @@ class DenoisingModule:
         try:
             with open(_meta_file, 'w') as f:
                 f.writelines([str(Image.shape[0]), ",", str(Image.shape[1]), ",",
-                              str(Image.shape[2]), ",", str(Image.dtype)])
+                              str(Image.shape[2]), ",", str(np.uint16)])
         except FileNotFoundError:
             _meta_path = _meta_file.replace("\\video_meta.txt", "")
             os.makedirs(_meta_path)

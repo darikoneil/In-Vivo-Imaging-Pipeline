@@ -254,7 +254,7 @@ class PreProcessing:
         :return: numpy array [Z x Y x X]
         :rtype: Any
         """
-        if len(args) == 0:
+        if len(args) == 1:
             fname = "".join([args[0], "\\binary_video"])
             meta_file = "".join([args[0], "\\video_meta.txt"])
 
