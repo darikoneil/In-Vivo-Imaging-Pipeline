@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="docstrings">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="changed denoising to uint16">
       <change afterPath="$PROJECT_DIR$/DebugData/suite2p/plane0/Goob/binary2" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ImagingAnalysis/a.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ScratchDenoise.py" afterDir="false" />
@@ -32,9 +32,7 @@
       <change afterPath="$PROJECT_DIR$/pth/ex/E_17_Iter_1008.pth" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pth/ex/E_18_Iter_1008.pth" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pth/ex/E_19_Iter_1008.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Denoising.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Denoising.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -281,14 +279,7 @@
       <workItem from="1667427455191" duration="456000" />
       <workItem from="1667427960482" duration="1355000" />
       <workItem from="1667431416735" duration="8913000" />
-      <workItem from="1667491167700" duration="16446000" />
-    </task>
-    <task id="LOCAL-00007" summary="DeepLabCutModule (partially) ported from matlab">
-      <created>1663966927429</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1663966927429</updated>
+      <workItem from="1667491167700" duration="16838000" />
     </task>
     <task id="LOCAL-00008" summary="Partial Implementation of Pandas For Cleanliness of Experimental Hierarchy">
       <created>1664388806392</created>
@@ -626,7 +617,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667585068618</updated>
     </task>
-    <option name="localTasksCounter" value="56" />
+    <task id="LOCAL-00056" summary="changed denoising to uint16">
+      <created>1667585840671</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1667585840671</updated>
+    </task>
+    <option name="localTasksCounter" value="57" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -645,7 +643,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Partial Implementation of Pandas For Cleanliness of Experimental Hierarchy" />
     <MESSAGE value="Implementation of Pandas For Cleanliness of Experimental Hierarchy.&#10;&#10;Sync of Bruker Analog/Imaging Data still to-be ported from python / written&#10;&#10;Now needs significant refactoring (just removal &amp; locate any lingering references) of old nested dictionary code" />
     <MESSAGE value="Tidy" />
     <MESSAGE value="Temp-Sam's Bruker IO" />
@@ -670,7 +667,8 @@
     <MESSAGE value="Keyword for denoising batchsize &amp; memmory mapped images" />
     <MESSAGE value="S2P analysis" />
     <MESSAGE value="docstrings" />
-    <option name="LAST_COMMIT_MESSAGE" value="docstrings" />
+    <MESSAGE value="changed denoising to uint16" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed denoising to uint16" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
