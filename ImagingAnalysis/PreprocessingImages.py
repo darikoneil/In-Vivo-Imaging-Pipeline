@@ -13,6 +13,7 @@ import matplotlib
 matplotlib.use('Qt5Agg')
 from matplotlib import pyplot as plt
 import seaborn as sns
+from typing import Callable, List, Tuple, Sequence
 
 
 class PreProcessing:
@@ -58,7 +59,7 @@ class PreProcessing:
         return
 
     @staticmethod
-    def loadBrukerTiffs(VideoDirectory: str) -> np.ndarray(np.uint16):
+    def loadBrukerTiffs(VideoDirectory: str) -> np.ndarray:
         """
         loadBrukerTiffs
         ---------------
@@ -427,7 +428,8 @@ class PreProcessing:
         return print("Finished Saving Tiffs")
 
     @staticmethod
-    def groupedZProject(TiffStack: np.ndarray, BinSize: int, DownsampleFunction: function) -> np.ndarray:
+    def groupedZProject(TiffStack: np.ndarray, BinSize: int, DownsampleFunction: Callable[[np.ndarray], np.ndarray]) \
+            -> np.ndarray:
         """
         Utilize grouped z-project to downsample data
 
@@ -448,7 +450,7 @@ class PreProcessing:
 
     @staticmethod
     def viewImage(Video: np.ndarray, fps: float, **kwargs) -> \
-            Tuple[plt.figure, plt.axes, plt.axes, plt.axes, object, object]:
+            List[object]:
         """
         Visualize a numpy array [Z x Y x X] as a video
 
@@ -492,6 +494,7 @@ class PreProcessing:
         plt.show()
         return [fig1, ax1, ax2, ax3, block, anim]
 
+    # noinspection PyTypeChecker
     @staticmethod
     def load_binary_meta(File: str) -> Tuple[int, int, int, str]:
         """
@@ -503,4 +506,4 @@ class PreProcessing:
         :rtype: tuple[int, int, int, str]
         """
         _num_frames, _y_pixels, _x_pixels, _type = np.genfromtxt(File, delimiter=",", dtype="str")
-        return tuple([int(_num_frames), int(_y_pixels), int(_x_pixels), _type])
+        return tuple([int(_num_frames), int(_y_pixels), int(_x_pixels), str(_type)])

@@ -8,6 +8,7 @@ import os
 import glob
 from ExperimentManagement.ExperimentHierarchy import ExperimentData
 from ImagingAnalysis.PreprocessingImages import PreProcessing
+from typing import Tuple, List, Sequence
 
 
 class Suite2PModule:
@@ -108,7 +109,7 @@ class Suite2PModule:
     def reg_binary_path(self) -> str:
         return self.ops.get("reg_file")
 
-    def run(self) -> None:
+    def run(self) -> Self:
         """
         Runs a Full Suite2P Analysis
 
@@ -144,7 +145,7 @@ class Suite2PModule:
         """
         np.save(self.cell_index_path, self.iscell, allow_pickle=True)
 
-    def load_files(self) -> None:
+    def load_files(self) -> Self:
         """
         Loads S2P iscell, stat, and ops files
 
@@ -175,7 +176,7 @@ class Suite2PModule:
         """
         gui.run(self.stat_file_path)
 
-    def _motionCorrect(self) -> None:
+    def _motionCorrect(self) -> Self:
         """
         DEPRECATED
 
@@ -187,7 +188,7 @@ class Suite2PModule:
         self.ops['neuropil_extract'] = False
         self.ops.update(suite2p.run_s2p(self.ops, self.db))
 
-    def motionCorrect(self) -> None:
+    def motionCorrect(self) -> Self:
         """
         Function simply runs suite2p motion correction
         Note that it assumes you have already converted video to binary
@@ -224,7 +225,7 @@ class Suite2PModule:
                         }
                     }
 
-    def roiDetection(self) -> None:
+    def roiDetection(self) -> Self:
         """
         Runs Suite2P ROI Detection
 
@@ -242,7 +243,7 @@ class Suite2PModule:
         self.ops, self.stat = suite2p.detection_wrapper(f_reg=f_reg, ops=self.ops,
                                                         classfile=suite2p.classification.builtin_classfile)
 
-    def extractTraces(self, *args) -> None:
+    def extractTraces(self, *args) -> Self:
         """
         Extracts Traces
 
@@ -264,7 +265,7 @@ class Suite2PModule:
         np.save("".join([self.ops.get("save_path"), "\\F.npy"]), self.F, allow_pickle=True)
         np.save("".join([self.ops.get("save_path"), "\\Fneu.npy"]), self.Fneu, allow_pickle=True)
 
-    def classifyROIs(self) -> None:
+    def classifyROIs(self) -> Self:
         """
         Classify ROIs
 
@@ -274,7 +275,7 @@ class Suite2PModule:
 
         self.iscell = suite2p.classify(stat=self.stat, classfile=suite2p.classification.builtin_classfile)
 
-    def spikeExtraction(self) -> None:
+    def spikeExtraction(self) -> Self:
         """
         Suite2P Spike Extraction by OASIS... Necessary for GUI
 
@@ -377,6 +378,7 @@ class Suite2PModule:
             diameters[_roi] = stats[_roi].get('radius') * 2
         return diameters
 
+    # noinspection PyTypeChecker
     @staticmethod
     def load_binary_meta(File: str) -> Tuple[int, int, int, str]:
         """
