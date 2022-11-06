@@ -1,3 +1,4 @@
+from __future__ import annotations
 import sys
 
 import numpy as np
@@ -8,7 +9,7 @@ import os
 import glob
 from ExperimentManagement.ExperimentHierarchy import ExperimentData
 from ImagingAnalysis.PreprocessingImages import PreProcessing
-from typing import Tuple, List, Sequence
+from typing import Tuple, List
 
 
 class Suite2PModule:
