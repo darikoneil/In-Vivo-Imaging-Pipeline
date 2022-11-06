@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 import suite2p
 from suite2p import gui
@@ -12,7 +14,10 @@ class Suite2PModule:
     """
     Helper Module for Suite2P Analysis
     """
-    def __init__(self, File_Directory, Output_Directory, **kwargs):
+    def __init__(self, File_Directory: str, Output_Directory: str, **kwargs):
+        """
+        Instances A Suite2P Analysis
+        """
 
         _meta_file = kwargs.get("meta_file", None)
         _meta = kwargs.get("meta", None)
@@ -80,69 +85,115 @@ class Suite2PModule:
         self.ops = {**self.ops, **self.db}
 
     @property
-    def instance_date(self):
+    def instance_date(self) -> str:
         return self._Suite2PModule__instance_date
 
     @property
-    def cell_index_path(self):
+    def cell_index_path(self) -> str:
         return "".join([self.ops.get('save_path'), "\\iscell.npy"])
 
     @property
-    def stat_file_path(self):
+    def stat_file_path(self) -> str:
         return "".join([self.ops.get('save_path'), "\\stat.npy"])
 
     @property
-    def ops_file_path(self):
+    def ops_file_path(self) -> str:
         return "".join([self.ops.get("save_path"), "\\ops.npy"])
 
     @property
-    def reg_tiff_path(self):
+    def reg_tiff_path(self) -> str:
         return "".join([self.ops.get('save_path'), "\\reg_tif"])
 
     @property
-    def reg_binary_path(self):
+    def reg_binary_path(self) -> str:
         return self.ops.get("reg_file")
 
-    def run(self):
+    def run(self) -> None:
+        """
+        Runs a Full Suite2P Analysis
+
+        :return: None
+        :rtype: None
+        """
         self.ops.update(suite2p.run_s2p(self.ops, self.db))
 
-    def save_stats(self):
+    def save_stats(self) -> None:
+        """
+        Saves stat file
+
+        :return: None
+        :rtype: None
+        """
         np.save(self.stat_file_path, self.stat, allow_pickle=True)
 
-    def save_ops(self):
+    def save_ops(self) -> None:
+        """
+        Save ops file
+
+        :return: None
+        :rtype: None
+        """
         np.save(self.ops_file_path, self.ops, allow_pickle=True)
 
-    def save_cells(self):
+    def save_cells(self) -> None:
+        """
+        Saves iscell file
+
+        :return: None
+        :rtype: None
+        """
         np.save(self.cell_index_path, self.iscell, allow_pickle=True)
 
-    def load_files(self):
+    def load_files(self) -> None:
+        """
+        Loads S2P iscell, stat, and ops files
+
+        :return: None
+        :rtype: None
+        """
         self.iscell = np.load(self.cell_index_path, allow_pickle=True)
         self.stat = np.load(self.stat_file_path, allow_pickle=True)
         self.ops = np.load(self.ops_file_path, allow_pickle=True).item()
 
-    def save_files(self):
+    def save_files(self) -> None:
+        """
+        Saves S2P stat, ops, iscell files
+
+        :return: None
+        :rtype: None
+        """
         self.save_stats()
         self.save_ops()
         self.save_cells()
 
-    def openGUI(self):
+    def openGUI(self) -> None:
+        """
+        Opens Suite2P GUI
+
+        :return: None
+        :rtype: None
+        """
         gui.run(self.stat_file_path)
 
-    def _motionCorrect(self):
+    def _motionCorrect(self) -> None:
         """
         DEPRECATED
 
-        :return:
+        :return: None
+        :rtype: None
         """
         self.ops['roidetect'] = False
         self.ops['spikedetect'] = False
         self.ops['neuropil_extract'] = False
         self.ops.update(suite2p.run_s2p(self.ops, self.db))
 
-    def motionCorrect(self):
+    def motionCorrect(self) -> None:
         """
         Function simply runs suite2p motion correction
         Note that it assumes you have already converted video to binary
+
+        :return: None
+        :rtype: None
         """
         # Ingest ops (parameters)
         self.ops = {**self.ops, **self.db}
@@ -173,15 +224,34 @@ class Suite2PModule:
                         }
                     }
 
-    def roiDetection(self):
+    def roiDetection(self) -> None:
+        """
+        Runs Suite2P ROI Detection
+
+        :return: None
+        :rtype: None
+        """
         self.ops = {**self.ops, **self.db}
-        self.ops["reg_file"] = "".join([self.ops.get("data_path"), "\\binary_video"])
+        try:
+            "reg_file" in self.ops
+        except KeyError:
+            self.ops["reg_file"] = "".join([self.ops.get("data_path"), "\\binary_video"])
+
         f_reg = suite2p.io.BinaryRWFile(Ly=self.ops.get("Ly"), Lx=self.ops.get("Lx"),
                                         filename=self.ops.get("reg_file"))
         self.ops, self.stat = suite2p.detection_wrapper(f_reg=f_reg, ops=self.ops,
                                                         classfile=suite2p.classification.builtin_classfile)
 
-    def extractTraces(self, *args):
+    def extractTraces(self, *args) -> None:
+        """
+        Extracts Traces
+
+        :param args: Registration Binary np.ndarray or filepath
+        :return: None
+        :rtype: None
+        """
+
+
         if len(args) == 0:
             f_reg = suite2p.io.BinaryRWFile(Ly=self.ops.get("Ly"), Lx=self.ops.get("Lx"),
                                             filename=self.ops.get("reg_file"))
@@ -194,10 +264,23 @@ class Suite2PModule:
         np.save("".join([self.ops.get("save_path"), "\\F.npy"]), self.F, allow_pickle=True)
         np.save("".join([self.ops.get("save_path"), "\\Fneu.npy"]), self.Fneu, allow_pickle=True)
 
-    def classifyROIs(self):
+    def classifyROIs(self) -> None:
+        """
+        Classify ROIs
+
+        :return: None
+        :rtype: None
+        """
+
         self.iscell = suite2p.classify(stat=self.stat, classfile=suite2p.classification.builtin_classfile)
 
-    def spikeExtraction(self):
+    def spikeExtraction(self) -> None:
+        """
+        Suite2P Spike Extraction by OASIS... Necessary for GUI
+
+        :return: None
+        :rtype: None
+        """
         dF = self.F.copy() - self.ops["neucoeff"]*self.Fneu
         # Apply preprocessing step for deconvolution
         dF = suite2p.extraction.preprocess(
@@ -214,7 +297,14 @@ class Suite2PModule:
         np.save("".join([self.ops.get("save_path"), "\\spks.npy"]), self.spks, allow_pickle=True)
 
     @classmethod
-    def exportCroppedCorrection(cls, ops):
+    def exportCroppedCorrection(cls, ops: dict) -> sys.stdout:
+        """
+        Export Binary File Cropped According to Motion Correction
+
+        :param ops: Suite2P "ops"
+        :type ops: dict
+        :return: None
+        """
         _xrange = ops.get("xrange")
         _yrange = ops.get("yrange")
         _images = cls.load_suite2p_binary(ops.get("reg_file"))
@@ -223,12 +313,22 @@ class Suite2PModule:
         PreProcessing.saveRawBinary(_images, ops.get("save_path"))
         return print("Exported Cropped Motion-Corrected Video")
 
-    # noinspection PyMethodMayBeStatic
+    # noinspection PyMethodMayBeStatic,PyUnusedLocal
     def replaceTraces(self, NewTraces):
         return "Not Yet Implemented"
 
     @staticmethod
-    def remove_small_neurons(cells, stats):
+    def remove_small_neurons(cells: np.ndarray, stats: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+        """
+        Remove small diameter neurons
+
+        :param cells: Suite2P "iscell"
+        :type cells: Any
+        :param stats: Suite2P "stat"
+        :type stats: Any
+        :return: modified cells, stats
+        :rtype: Any
+        """
         _num_rois = stats.shape[0]
         diameters = Suite2PModule.find_diameters(stats)
 
@@ -239,7 +339,16 @@ class Suite2PModule:
         return cells, stats
 
     @staticmethod
-    def make_list_tiffs(Directory):
+    def make_list_tiffs(Directory: str) -> Tuple[List[str], np.ndarray]:
+        """
+        Returns a list of tiffs in directory
+
+        :param Directory: Directory Path
+        :type Directory: str
+        :return: files, first_tiffs
+        :rtype: Any
+        """
+
         _pathPlusExt = os.path.join(Directory, "*.tif")
         files = []
         files.extend(glob.glob(_pathPlusExt))
@@ -253,7 +362,15 @@ class Suite2PModule:
         return files, first_tiffs
 
     @staticmethod
-    def find_diameters(stats):
+    def find_diameters(stats: np.ndarray[np.ndarray]) -> np.ndarray:
+        """
+        Return roi diameters
+
+        :param stats: Suite2P "stats"
+        :type stats: Any
+        :return: roi diameters
+        :rtype: Any
+        """
         _num_rois = stats.shape[0]
         diameters = np.zeros(_num_rois)
         for _roi in range(_num_rois):
@@ -261,22 +378,22 @@ class Suite2PModule:
         return diameters
 
     @staticmethod
-    def load_binary_meta(File):
+    def load_binary_meta(File: str) -> Tuple[int, int, int, str]:
         """
         Loads meta file for binary video
 
         :param File: The meta file (.txt ext)
         :type File: str
-        :return: A tuple containing the number of frames, x pixels, and y pixels
+        :return: A tuple containing the number of frames, y pixels, and x pixels
         :rtype: tuple[int, int, int, str]
         """
-        _num_frames, _x_pixels, _y_pixels, _type = np.genfromtxt(File, delimiter=",", dtype="str")
-        return tuple([int(_num_frames), int(_x_pixels), int(_y_pixels), _type])
+        _num_frames, _y_pixels, _x_pixels, _type = np.genfromtxt(File, delimiter=",", dtype="str")
+        return tuple([int(_num_frames), int(_y_pixels), int(_x_pixels), _type])
 
     @staticmethod
-    def my_default_ops():
+    def my_default_ops() -> dict:
         """
-        Returns my default settings
+        Returns default ops settings
 
         :return:  ops
         :rtype: dict
@@ -299,5 +416,12 @@ class Suite2PModule:
         return ops
 
     @staticmethod
-    def load_suite2p_binary(File):
+    def load_suite2p_binary(File: str) -> np.ndarray:
+        """
+        Loads suite2p binary file
+
+        :param File: File path
+        :type File: str
+        :return: np.ndarray containing images data [Z x Y x X] [int16]
+        """
         return np.fromfile(File, dtype=np.int16)

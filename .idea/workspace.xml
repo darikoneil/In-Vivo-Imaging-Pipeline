@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="changed denoising to uint16">
+      <change afterPath="$PROJECT_DIR$/Colorizer.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DebugData/suite2p/plane0/Goob/binary2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/a.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ScratchDenoise.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/para.yaml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pth/ModelForPytorch/E_10_Iter_3500.pth" afterDir="false" />
@@ -32,7 +32,8 @@
       <change afterPath="$PROJECT_DIR$/pth/ex/E_17_Iter_1008.pth" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pth/ex/E_18_Iter_1008.pth" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pth/ex/E_19_Iter_1008.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -279,14 +280,7 @@
       <workItem from="1667427455191" duration="456000" />
       <workItem from="1667427960482" duration="1355000" />
       <workItem from="1667431416735" duration="8913000" />
-      <workItem from="1667491167700" duration="16838000" />
-    </task>
-    <task id="LOCAL-00008" summary="Partial Implementation of Pandas For Cleanliness of Experimental Hierarchy">
-      <created>1664388806392</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1664388806392</updated>
+      <workItem from="1667491167700" duration="30815000" />
     </task>
     <task id="LOCAL-00009" summary="Partial Implementation of Pandas For Cleanliness of Experimental Hierarchy">
       <created>1664388970909</created>
@@ -624,7 +618,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667585840671</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="changed denoising to uint16">
+      <created>1667586114658</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1667586114658</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
