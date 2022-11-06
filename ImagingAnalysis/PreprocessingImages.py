@@ -58,7 +58,7 @@ class PreProcessing:
         return
 
     @staticmethod
-    def loadBrukerTiffs(VideoDirectory):
+    def loadBrukerTiffs(VideoDirectory: str) -> np.ndarray(np.uint16):
         """
         loadBrukerTiffs
         ---------------
@@ -70,6 +70,7 @@ class PreProcessing:
         :param VideoDirectory: Directory containing a sequence of single frame tiff files
         :type VideoDirectory: str
         :return: complete_image:  All tiff files in the directory compiled into a single array (Z x Y x X, uint16)
+        :rtype: Any
         """
         _fnames = os.listdir(VideoDirectory)
         _num_frames = len(_fnames)
@@ -85,7 +86,7 @@ class PreProcessing:
         return complete_image
 
     @staticmethod
-    def repackageBrukerTiffs(VideoDirectory, OutputDirectory):
+    def repackageBrukerTiffs(VideoDirectory: str, OutputDirectory: str) -> None:
         """
 
         Repackages a sequence of tiff files within a directory to a smaller sequence
@@ -135,7 +136,7 @@ class PreProcessing:
         return print("Finished Repackaging Bruker Tiffs")
 
     @staticmethod
-    def filterTiff(Tiff, **kwargs):
+    def filterTiff(Tiff: np.ndarray, **kwargs) -> np.ndarray:
         """
         Denoise a tiff stack using a multidimensional median filter
 
@@ -149,7 +150,9 @@ class PreProcessing:
                     Example -> np.ones((3, 3, 3))
 
         :param Tiff: Tiff stack to be filtered [Z x Y x X]
+        :type Tiff: Any
         :return: filtered_tiff [Z x Y x X]
+        :rtype: Any
         :keyword Footprint: Mask of the median filter
         """
         _footprint = kwargs.get('Footprint', np.ones((3, 3, 3)))
@@ -160,7 +163,7 @@ class PreProcessing:
         return filtered_tiff
 
     @staticmethod
-    def fastFilterTiff(Tiff, **kwargs):
+    def fastFilterTiff(Tiff: np.ndarray, **kwargs) -> np.ndarray:
         """
         GPU-parallelized multidimensional median filter
 
@@ -172,7 +175,9 @@ class PreProcessing:
                     Example -> np.ones((3, 3, 3))
 
         :param Tiff: Tiff stack to be filtered [Z x Y x X]
+        :type Tiff: Any
         :return: filtered_tiff [Z x Y x X]
+        :rtype: Any
         :keyword Footprint: Mask of the median filter
         """
         _footprint = kwargs.get('Footprint', np.ones((3, 3, 3)))
@@ -181,11 +186,12 @@ class PreProcessing:
         return filtered_tiff
 
     @staticmethod
-    def saveTiff(Tiff, fname):
+    def saveTiff(Tiff: np.ndarray, fname: str) -> None:
         """
         Save a numpy array to a single tiff file
 
         :param Tiff: numpy array [frames, y pixels, x pixels]
+        :type Tiff: Any
         :param fname: filename
         :type fname: str
         :rtype: None
@@ -195,7 +201,7 @@ class PreProcessing:
                 tif.save(frame)
 
     @staticmethod
-    def loadTiff(fname, num_frames):
+    def loadTiff(fname: str, num_frames: int) -> np.ndarray:
         """
         Load a single tiff file
 
@@ -209,7 +215,7 @@ class PreProcessing:
         return tifffile.imread(fname, key=range(0, num_frames, 1))
 
     @staticmethod
-    def loadAllTiffs(VideoDirectory):
+    def loadAllTiffs(VideoDirectory: str) -> np.ndarray:
         """
         Load a sequence of tiff stacks
 
@@ -239,7 +245,7 @@ class PreProcessing:
         return complete_image
 
     @staticmethod
-    def loadRawBinary(fname, meta_file, *args):
+    def loadRawBinary(fname: str, meta_file: str, *args) -> np.ndarray:
         """
         Loads a raw binary file
 
@@ -265,7 +271,7 @@ class PreProcessing:
         return np.reshape(np.fromfile(fname, dtype=_type), (_num_frames, _y_pixels, _x_pixels))
 
     @staticmethod
-    def saveRawBinary(Video, VideoDirectory):
+    def saveRawBinary(Video: np.ndarray, VideoDirectory: str) -> None:
         """
         This function saves a tiff stack as a binary file
 
@@ -294,7 +300,7 @@ class PreProcessing:
         print("Finished saving video as a binary.")
 
     @staticmethod
-    def removeShuttleArtifact(Video, **kwargs):
+    def removeShuttleArtifact(Video: np.ndarray, **kwargs) -> np.ndarray:
         """
         Function to remove the shuttle artifacts present at the initial imaging frames
 
@@ -321,7 +327,7 @@ class PreProcessing:
             return Video[_shuttle_artifact_length+_crop_idx:, :, :]
 
     @staticmethod
-    def blockwiseFastFilterTiff(TiffStack, **kwargs):
+    def blockwiseFastFilterTiff(TiffStack: np.ndarray, **kwargs) -> np.ndarray:
         """
         GPU-parallelized multidimensional median filter performed in overlapping blocks.
 
@@ -386,7 +392,7 @@ class PreProcessing:
         return TiffStack
 
     @staticmethod
-    def saveTiffStack(TiffStack, OutputDirectory):
+    def saveTiffStack(TiffStack: str, OutputDirectory: str) -> None:
         """
         Save a numpy array to a sequence of tiff stacks
 
@@ -421,7 +427,7 @@ class PreProcessing:
         return print("Finished Saving Tiffs")
 
     @staticmethod
-    def groupedZProject(TiffStack, BinSize, DownsampleFunction):
+    def groupedZProject(TiffStack: np.ndarray, BinSize: int, DownsampleFunction: function) -> np.ndarray:
         """
         Utilize grouped z-project to downsample data
 
@@ -441,7 +447,8 @@ class PreProcessing:
         return downsampled_image
 
     @staticmethod
-    def viewImage(Video, fps, **kwargs):
+    def viewImage(Video: np.ndarray, fps: float, **kwargs) -> \
+            Tuple[plt.figure, plt.axes, plt.axes, plt.axes, object, object]:
         """
         Visualize a numpy array [Z x Y x X] as a video
 
@@ -486,7 +493,7 @@ class PreProcessing:
         return [fig1, ax1, ax2, ax3, block, anim]
 
     @staticmethod
-    def load_binary_meta(File):
+    def load_binary_meta(File: str) -> Tuple[int, int, int, str]:
         """
         Loads meta file for binary video
 
