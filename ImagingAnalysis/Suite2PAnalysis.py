@@ -314,8 +314,8 @@ class Suite2PModule:
         return print("Exported Cropped Motion-Corrected Video")
 
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
-    def replaceTraces(self, NewTraces):
-        return "Not Yet Implemented"
+    def replaceTraces(self, NewTraces: Any) -> sys.stdout:
+        return print("Not Yet Implemented")
 
     @staticmethod
     def remove_small_neurons(cells: np.ndarray, stats: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
