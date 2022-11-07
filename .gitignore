@@ -171,47 +171,49 @@ AnalysisModules/EM0121.py
 pth/
 para.yaml
 DebugData/suite2p/plane0/Goob/binary2
-!/pth/
-!/pth/ex/E_01_Iter_1008.pth
 
-!/pth/ex/E_02_Iter_1008.pth
+pth
 
-!/pth/ex/E_03_Iter_1008.pth
+/pth/ex/E_01_Iter_1008.pth
 
-!/pth/ex/E_04_Iter_1008.pth
+/pth/ex/E_02_Iter_1008.pth
 
-!/pth/ex/E_05_Iter_1008.pth
+/pth/ex/E_03_Iter_1008.pth
 
-!/pth/ex/E_06_Iter_1008.pth
+/pth/ex/E_04_Iter_1008.pth
 
-!/pth/ex/E_07_Iter_1008.pth
+/pth/ex/E_05_Iter_1008.pth
 
-!/pth/ex/E_08_Iter_1008.pth
+/pth/ex/E_06_Iter_1008.pth
 
-!/pth/ex/E_09_Iter_1008.pth
+/pth/ex/E_07_Iter_1008.pth
 
-!/pth/ex/E_10_Iter_1008.pth
+/pth/ex/E_08_Iter_1008.pth
 
-!/pth/ex/E_11_Iter_1008.pth
+/pth/ex/E_09_Iter_1008.pth
 
-!/pth/ex/E_12_Iter_1008.pth
+/pth/ex/E_10_Iter_1008.pth
 
-!/pth/ex/E_13_Iter_1008.pth
+/pth/ex/E_11_Iter_1008.pth
 
-!/pth/ex/E_14_Iter_1008.pth
+/pth/ex/E_12_Iter_1008.pth
 
-!/pth/ex/E_15_Iter_1008.pth
+/pth/ex/E_13_Iter_1008.pth
 
-!/pth/ex/E_16_Iter_1008.pth
+/pth/ex/E_14_Iter_1008.pth
 
-!/pth/ex/E_17_Iter_1008.pth
+/pth/ex/E_15_Iter_1008.pth
 
-!/pth/ex/E_18_Iter_1008.pth
+/pth/ex/E_16_Iter_1008.pth
 
-!/pth/ex/E_19_Iter_1008.pth
-!/pth/ModelForPytorch/
+/pth/ex/E_17_Iter_1008.pth
 
-!/pth/ModelForPytorch/E_10_Iter_3500.pth
+/pth/ex/E_18_Iter_1008.pth
 
-!/pth/ModelForPytorch/para.yaml
-!/pth/TrainingInhibitory/
+/pth/ex/E_19_Iter_1008.pth
+/pth/ModelForPytorch/
+
+/pth/ModelForPytorch/E_10_Iter_3500.pth
+
+/pth/ModelForPytorch/para.yaml
+/pth/TrainingInhibitory/
