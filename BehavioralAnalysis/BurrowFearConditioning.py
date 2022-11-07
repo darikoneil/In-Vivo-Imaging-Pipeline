@@ -1,8 +1,11 @@
+from __future__ import annotations
 import numpy as np
 import pickle as pkl
 import pathlib
 import pandas as pd
 from tqdm.auto import tqdm
+from typing import Tuple
+import ExperimentManagement.ExperimentHierarchy
 from ExperimentManagement.ExperimentHierarchy import BehavioralStage, CollectedDataFolder
 import matplotlib
 matplotlib.use('Qt5Agg')
@@ -279,7 +282,10 @@ class FearConditioning(BehavioralStage):
         # Dictionary
         _dictionary_file = self.generateFileID('Dictionary')
         _dictionary_data = FearConditioning.loadDictionaryData(_dictionary_file)
-        self.trial_parameters = _dictionary_data.copy() # For Safety
+        try:
+            self.trial_parameters = _dictionary_data.copy() # For Safety
+        except AttributeError:
+            print(_dictionary_data)
 
         if _dictionary_data == "ERROR_FIND":
             return print("Could not find dictionary data!")
@@ -325,11 +331,14 @@ class FearConditioning(BehavioralStage):
                                                           ("State Integer", " TrialIndicator"))
             self.data_frame = self.sync_downsampled_images(self.data_frame.copy(deep=True), self.meta_data)
         else:
-            self.mergeAdditionalBruker(_analog_recordings)
-            # noinspection PyArgumentList
-            self.data_frame = self.sync_downsampled_images(self.data_frame.copy(deep=True), self.meta_data,
+            try:
+                self.mergeAdditionalBruker(_analog_recordings)
+                # noinspection PyArgumentList
+                self.data_frame = self.sync_downsampled_images(self.data_frame.copy(deep=True), self.meta_data,
                                                           two_files=True,
                                                           second_meta=self.loadAdditionalBrukerMetaData(2))
+            except KeyError:
+                print("Only one of multiple bruker datasets loaded")
 
     def generateFileID(self, SaveType):
         """
@@ -830,15 +839,17 @@ class DeepLabModule:
     Module for deep lab cut data in the form of a pandas dataframe
 
     **Class Methods**
+        |
         | **cls.loadData** : Function loads the deep lab cut data
+        |
     """
-    def __init__(self, DataFolderDLC, DataFolderBehavioralExports):
+    def __init__(self, DataFolderDLC: CollectedDataFolder, DataFolderBehavioralExports: CollectedDataFolder):
         self.pre_trial_data, self.trial_data = \
             self.loadData(DataFolderDLC, DataFolderBehavioralExports)
         return
 
     @classmethod
-    def loadData(cls, DataFolderDLC, DataFolderBehavioralExports):
+    def loadData(cls, DataFolderDLC: CollectedDataFolder, DataFolderBehavioralExports: CollectedDataFolder) -> Tuple[pd.DataFrame, pd.DataFrame]:
         # noinspection GrazieInspection
         """
                 Load DeepLabCut Data
@@ -848,6 +859,7 @@ class DeepLabModule:
                 :type DataFolderDLC: object
                 :type DataFolderBehavioralExports: object
                 :returns: pre_trial_data, trial_data
+                :rtype: tuple[pd.DataFrame, pd.DataFrame]
                 """
         # extract paths
         PathDLC = DataFolderDLC.path

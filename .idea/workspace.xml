@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Updated Docstrings">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Type Conversion for Suite2P">
       <change afterPath="$PROJECT_DIR$/DebugData/suite2p/plane0/Goob/binary2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/Visualization.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/a.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MigrationTools/dos2unix.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ScratchDenoise.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/para.yaml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pth/ModelForPytorch/E_10_Iter_3500.pth" afterDir="false" />
@@ -31,10 +34,14 @@
       <change afterPath="$PROJECT_DIR$/pth/ex/E_17_Iter_1008.pth" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pth/ex/E_18_Iter_1008.pth" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pth/ex/E_19_Iter_1008.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ImagingAnalysis/FissaAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/FissaAnalysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/PlottingFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/PlottingFunctions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -281,14 +288,7 @@
       <workItem from="1667427455191" duration="456000" />
       <workItem from="1667427960482" duration="1355000" />
       <workItem from="1667431416735" duration="8913000" />
-      <workItem from="1667491167700" duration="38885000" />
-    </task>
-    <task id="LOCAL-00014" summary="Temp-Sam's Bruker IO">
-      <created>1664472497292</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1664472497292</updated>
+      <workItem from="1667491167700" duration="53711000" />
     </task>
     <task id="LOCAL-00015" summary="Temp-Sam's Bruker IO">
       <created>1664472613817</created>
@@ -626,7 +626,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667771260417</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary="Type Conversion for Suite2P">
+      <created>1667833611813</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1667833611813</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -645,7 +652,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Added Bruker Meta Data Loading" />
     <MESSAGE value="Partial Implementation of Bruker Analog Recording &amp; Sync" />
     <MESSAGE value="Some incomplete stuff" />
     <MESSAGE value="Synchronized Imaging Frames/Bruker Data" />
@@ -670,7 +676,8 @@
     <MESSAGE value="Updated Docstrings for Image PreProcessing" />
     <MESSAGE value="Updated Docstrings for Suite2P" />
     <MESSAGE value="Updated Docstrings" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated Docstrings" />
+    <MESSAGE value="Type Conversion for Suite2P" />
+    <option name="LAST_COMMIT_MESSAGE" value="Type Conversion for Suite2P" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

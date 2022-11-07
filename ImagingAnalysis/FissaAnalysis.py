@@ -1,9 +1,13 @@
 from __future__ import annotations
+
+import os.path
+
 import numpy as np
 import pickle as pkl
 import fissa
 import pathlib
 from typing import Tuple, List
+from ImagingAnalysis.PreprocessingImages import PreProcessing
 
 
 # /// /// Main Module /// ///
@@ -61,6 +65,7 @@ class FissaModule:
         # ///Parse Inputs///
         _data_folder = kwargs.get('data_folder', None)
         _index_file = kwargs.get('index_file', None)
+        _video_folder = kwargs.get('video_folder', None)
         self.neuronal_index = kwargs.get('neuronal_index', None)
         self.frame_rate = kwargs.get('frame_rate', None)
         self.prep_file = kwargs.get('prep_file', None)
@@ -79,7 +84,10 @@ class FissaModule:
 
         # /// Load Data (Suite2P & FISSA) ///
         if _data_folder is not None:
-            self.loadDataFolder(_data_folder)
+            if _video_folder is None:
+                self.loadDataFolder(_data_folder)
+            else:
+                self.loadDataFolder(_data_folder, _video_folder)
             # Load Neuronal Index if specified or derive
             if _index_file is not None:
                 self.index_path = _index_file
@@ -94,7 +102,7 @@ class FissaModule:
         self.preparation = PreparationModule() # Store Fissa Preparation Data
         self.ProcessedTraces = ProcessedTracesModule()
 
-    def loadDataFolder(self, _data_folder: str) -> Self:
+    def loadDataFolder(self, _data_folder: str, *args) -> Self:
         """
         loadDataFolder
         --------------
@@ -116,8 +124,19 @@ class FissaModule:
         :type _data_folder: str
         :rtype: None
         """
-        self.images = _data_folder + '\\suite2p\\plane0\\reg_tif'
-        # Images stored here
+
+        if len(args) > 0:
+            _video_folder = args[0]
+        else:
+            _video_folder = _data_folder
+
+
+        if os.path.exists("".join([_video_folder, "\\plane0\\reg_tif"])):
+            self.images = _video_folder + '\\suite2p\\plane0\\reg_tif'
+            # Images stored here
+        else:
+            print("\nLoading and Splitting Images\n")
+            self.images = self.split_binary_images(PreProcessing.loadRawBinary("", "", _video_folder))
 
         try:
             self.ops = np.load((_data_folder + '\\suite2p\\plane0\\ops.npy'),
@@ -476,6 +495,44 @@ class FissaModule:
         self.s2p_rois = [self.s2p_rois[i] for i in self.neuronal_index]
         self.iscell = self.iscell[self.neuronal_index, :]
 
+    @staticmethod
+    def split_binary_images(BinaryVideo: np.ndarray) -> List[np.ndarray]:
+        """
+        This Function splits binary image into stacks for multiprocessing
+
+        :param BinaryVideo: Binary Video in numpy array [Z x Y x X]
+        :type BinaryVideo: Any
+        :return: List of Binary Videos
+        :rtype: list
+        """
+
+        def determine_split_size(ImageLength: int, SizeLimit: int) -> int:
+            """
+            Function determines chunk size for evenly sized stacks
+            :param ImageLength: Number of Frames
+            :type ImageLength: int
+            :param SizeLimit: Chunk Limit
+            :type SizeLimit: int
+            :return: Chunk Size for Evenly Sized Stacks
+            :rtype: int
+            """
+
+            if ImageLength % 2 == 0 and ImageLength / 2 <= SizeLimit:
+                return 2
+            chunk_size = 3
+            while chunk_size * chunk_size <= ImageLength:
+                if ImageLength % chunk_size == 0 and ImageLength / chunk_size <= SizeLimit:
+                    return chunk_size
+                chunk_size += 1
+
+        _num_frames = BinaryVideo.shape[0]
+        _chunk_size = determine_split_size(_num_frames, 8000)
+        _idx = np.arange(0, _num_frames+1, _num_frames/_chunk_size)
+        img_list = []
+        for i in range(_idx.shape[0] - 1):
+            img_list.append(BinaryVideo[_idx[i].astype(int):_idx[i + 1].astype(int), :, :])
+        return img_list
+
 
 # /// /// Container for Preparation Data /// ///
 class PreparationModule:
@@ -573,4 +630,3 @@ class ProcessedTracesModule:
         # ROI x FRAME
         self.detrended_dFoF_result = None # detrended
         # ROI x TIFF < - SUB - MASK x FRAME
-

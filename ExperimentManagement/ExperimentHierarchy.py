@@ -470,7 +470,8 @@ class BehavioralStage:
         return pd.read_csv(File)
 
     @staticmethod
-    def sync_bruker_recordings(DataFrame, AnalogRecordings, MetaData,  StateCastedDict, SyncKey, **kwargs):
+    def sync_bruker_recordings(DataFrame: pd.DataFrame, AnalogRecordings: pd.DataFrame, MetaData,  StateCastedDict,
+                               SyncKey, **kwargs) -> pd.DataFrame:
         """
 
         :param DataFrame:
