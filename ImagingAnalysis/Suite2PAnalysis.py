@@ -234,13 +234,37 @@ class Suite2PModule:
         :rtype: None
         """
         self.ops = {**self.ops, **self.db}
+
         try:
-            "reg_file" in self.ops
+            if not isinstance(self.ops.get("reg_file"), str):
+                self.ops["reg_file"] = "".join([self.ops.get("data_path"), "\\binary_video"])
         except KeyError:
             self.ops["reg_file"] = "".join([self.ops.get("data_path"), "\\binary_video"])
+        # This was not elegant, but it does work
+
+        try:
+            _video_meta = self.load_binary_meta("".join([self.ops.get("data_path"), "\\video_meta.txt"]))
+            if _video_meta[-1] != "int16":
+                _binary_video = PreProcessing.loadRawBinary("", "", self.ops.get("data_path"))
+                _binary_video = self.convert_binary(_binary_video)
+                _new_data_path = "".join([self.ops.get("data_path"), "\\converted"])
+                self.ops["data_path"] = _new_data_path
+                self.db["data_path"] = _new_data_path
+                self.ops["reg_file"] = "".join([self.ops.get("data_path"), "\\binary_video"])
+                # Db overwrites, this to prevent using converted some places and not others
+                os.makedirs(_new_data_path, exist_ok=True)
+                PreProcessing.saveRawBinary(_binary_video, _new_data_path)
+                del _binary_video
+                del _video_meta
+                # collect garbage
+
+        except FileNotFoundError:
+            print("Could not find meta file. Proceeding anyway...")
+        # This was not elegant, but it does work
 
         f_reg = suite2p.io.BinaryRWFile(Ly=self.ops.get("Ly"), Lx=self.ops.get("Lx"),
                                         filename=self.ops.get("reg_file"))
+
         self.ops, self.stat = suite2p.detection_wrapper(f_reg=f_reg, ops=self.ops,
                                                         classfile=suite2p.classification.builtin_classfile)
 
@@ -428,3 +452,22 @@ class Suite2PModule:
         :return: np.ndarray containing images data [Z x Y x X] [int16]
         """
         return np.fromfile(File, dtype=np.int16)
+
+    @staticmethod
+    def convert_binary(BinaryVideo: np.ndarray) -> np.ndarray:
+        """
+        Converts binary to match the form of suite2p binaries
+
+        :param BinaryVideo: Numpy array containing binary video [Z x Y x X]
+        :type BinaryVideo: Any
+        :return: Binary Video Numpy Array [Int 16]
+        :rtype: Any
+        """
+
+        if BinaryVideo.dtype.type == np.uint16:
+            return (BinaryVideo // 2).astype(np.int16)
+        elif BinaryVideo.dtype.type == np.int16:
+            print("No conversion was necessary!!!")
+            return BinaryVideo
+        else:
+            return BinaryVideo.astype(np.int16)

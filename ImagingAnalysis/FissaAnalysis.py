@@ -1,7 +1,9 @@
+from __future__ import annotations
 import numpy as np
 import pickle as pkl
 import fissa
 import pathlib
+from typing import Tuple, List
 
 
 # /// /// Main Module /// ///
@@ -14,24 +16,43 @@ class FissaModule:
     Self Methods
     ------------
     | **loadDataFolder** : Load a Suite2P folder (single-plane only) into Class
+    |
     | **loadSuite2P_ROIs** : Loads Suite2P ROI Masks into Class
+    |
     | **loadNeuronalIndex** : Loads Neuronal Index into Class
+    |
     | **deriveNeuronalIndex** : Derives Neuronal Index from Class
+    |
     | **loadFissaPrep** : Load saved preparation data into class
+    |
     | **loadFissaSep** : Load saved separation data into class
+    |
     | **initializeFissa** : Initialize Fissa
+    |
     | **passPrepToFissa** : Passes Preparation Data to Use in Separation Process
+    |
     | **saveFissaPrep** : Saves Fissa Prep
+    |
     | **saveFissaSep** : Saves Fissa Sep
+    |
     | **saveFissaAll** : Saves Sep & Prep
+    |
     | **saveProcessedTraces** : Saves Processed Traces
+    |
     | **loadProcessedTraces** : Loads Processed Traces
+    |
     | **saveAll** : Saves All
+    |
     | **extractTraces**
+    |
     | **separateTraces**
+    |
     | **passExperimentToPrep**
+    |
     | **preserveOriginalExtractions**
+    |
     | **preserveOriginalSourceSeparations**
+    |
     | **pruneNonNeuronalROIs**
 
     """
@@ -73,7 +94,7 @@ class FissaModule:
         self.preparation = PreparationModule() # Store Fissa Preparation Data
         self.ProcessedTraces = ProcessedTracesModule()
 
-    def loadDataFolder(self, _data_folder):
+    def loadDataFolder(self, _data_folder: str) -> Self:
         """
         loadDataFolder
         --------------
@@ -167,7 +188,7 @@ class FissaModule:
             self.sep_file = _data_folder + "\\separated.npz"
             # Location of Fissa Separation File
 
-    def loadSuite2P_ROIs(self):
+    def loadSuite2P_ROIs(self) -> Self:
         """
         Loads Suite2P ROI Masks into Class
 
@@ -201,7 +222,7 @@ class FissaModule:
             rois[i][ypix, xpix] = 1
         self.s2p_rois = rois
 
-    def loadNeuronalIndex(self):
+    def loadNeuronalIndex(self) -> Self:
         """
         Loads Neuronal Index into Class
 
@@ -236,7 +257,7 @@ class FissaModule:
         if ".csv" in self.index_path:
             print("Adjusting from 1-to-0 indexing")
 
-    def deriveNeuronalIndex(self):
+    def deriveNeuronalIndex(self) -> Self:
         """
         Derives Neuronal Index from Class
 
@@ -253,7 +274,7 @@ class FissaModule:
         self.neuronal_index = self.neuronal_index*range(self.neuronal_index.shape[0])
         self.neuronal_index = self.neuronal_index[~np.isnan(self.neuronal_index)]
 
-    def loadFissaPrep(self):
+    def loadFissaPrep(self) -> Self:
         """
         Load saved preparation data into class
 
@@ -271,7 +292,7 @@ class FissaModule:
         self.preparation = PreparationModule(preparation=_prep)
         print('Finished Loading Fissa Prep')
 
-    def loadFissaSep(self):
+    def loadFissaSep(self) -> Self:
         """
         Load saved separation data into class
 
@@ -290,7 +311,7 @@ class FissaModule:
         self.experiment = SeparationModule(experiment=_sep)
         print('Finished Loading Fissa Sep')
 
-    def initializeFissa(self):
+    def initializeFissa(self) -> Self:
         """
         Initialize Fissa
 
@@ -308,7 +329,7 @@ class FissaModule:
         self.experiment._adopt_default_parameters(only_preparation=False, force=False)
         print("Initialized Fissa")
 
-    def passPrepToFissa(self):
+    def passPrepToFissa(self) -> Self:
         """
         Passes Preparation Data to Use in Separation Process
 
@@ -325,7 +346,7 @@ class FissaModule:
         self.experiment.nRegions = self.preparation.nRegions
         self.experiment.raw = self.preparation.raw
 
-    def saveFissaPrep(self):
+    def saveFissaPrep(self) -> Self:
         """
         Saves Fissa Prep
 
@@ -339,7 +360,7 @@ class FissaModule:
         self.experiment.save_prep(destination=self.output_folder+"prepared.npz")
         print("Finished Saving Prep")
 
-    def saveFissaSep(self):
+    def saveFissaSep(self) -> Self:
         """
         Saves Fissa Sep
 
@@ -352,7 +373,7 @@ class FissaModule:
         """
         self.experiment.save_separated(destination=self.output_folder+"separated.npz")
 
-    def saveFissaAll(self):
+    def saveFissaAll(self) -> Self:
         """
         Saves Fissa Sep & Prep
 
@@ -366,7 +387,7 @@ class FissaModule:
         self.saveFissaPrep()
         self.saveFissaSep()
 
-    def saveProcessedTraces(self):
+    def saveProcessedTraces(self) -> Self:
         """
         Saves Processed Traces
 
@@ -383,7 +404,7 @@ class FissaModule:
         _output_pickle.close()
         print("Finished Saving Processed Traces.")
 
-    def loadProcessedTraces(self):
+    def loadProcessedTraces(self) -> Self:
         """
         Loads Processed Traces
 
@@ -403,7 +424,7 @@ class FissaModule:
         _input.close()
         print("Finished Loading Processed Traces.")
 
-    def saveAll(self):
+    def saveAll(self) -> Self:
         """
         Saves All
 
@@ -419,7 +440,7 @@ class FissaModule:
         self.saveFissaSep()
         self.saveProcessedTraces()
 
-    def extractTraces(self):
+    def extractTraces(self) -> Self:
         self.experiment.separation_prep()
         print("Passing traces between modules.")
         self.passExperimentToPrep()
@@ -427,7 +448,7 @@ class FissaModule:
         print("Finished module-passing.")
         print("Ready for post-processing or source-separation.")
 
-    def separateTraces(self):
+    def separateTraces(self) -> Self:
         print('Passing prepared traces to fissa.')
         self.passPrepToFissa()
         print('Initiating fissa source-separation')
@@ -437,20 +458,20 @@ class FissaModule:
         print("Finished module-passing.")
         print("Ready for further analysis.")
 
-    def passExperimentToPrep(self):
+    def passExperimentToPrep(self) -> Self:
         self.preparation.raw = self.experiment.raw
         self.preparation.roi_polys = self.experiment.roi_polys
         self.preparation.expansion = self.experiment.expansion
         self.preparation.nRegions = self.experiment.nRegions
         self.preparation.means = self.experiment.means
 
-    def preserveOriginalExtractions(self):
+    def preserveOriginalExtractions(self) -> Self:
         self.ProcessedTraces.original_raw = self.preparation.raw
 
-    def preserveOriginalSourceSeparations(self):
+    def preserveOriginalSourceSeparations(self) -> Self:
         self.ProcessedTraces.original_result = self.experiment.result
 
-    def pruneNonNeuronalROIs(self):
+    def pruneNonNeuronalROIs(self) -> Self:
         self.stat = self.stat[self.neuronal_index]
         self.s2p_rois = [self.s2p_rois[i] for i in self.neuronal_index]
         self.iscell = self.iscell[self.neuronal_index, :]
