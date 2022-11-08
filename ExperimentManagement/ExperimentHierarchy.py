@@ -1,3 +1,5 @@
+from __future__ import annotations
+from typing import Union, Tuple, List, Optional
 import os
 from datetime import date, datetime
 import pickle as pkl
@@ -52,7 +54,7 @@ class ExperimentData:
         self.endLog()
 
     @property
-    def experimental_condition(self):
+    def experimental_condition(self) -> str:
         """
         Experiment condition of the mouse
 
@@ -61,7 +63,7 @@ class ExperimentData:
         return self._experimental_condition
 
     @experimental_condition.setter
-    def experimental_condition(self, Condition):
+    def experimental_condition(self, Condition: str) -> Self:
         if self._experimental_condition_assigned is False:
             self._experimental_condition = Condition
             self._experimental_condition_assigned = True
@@ -69,11 +71,11 @@ class ExperimentData:
             print("Experimental condition can only be assigned ONCE.")
 
     @property
-    def log_file(self):
+    def log_file(self) -> str:
         return self._log_file
 
     @log_file.setter
-    def log_file(self, LogFile):
+    def log_file(self, LogFile: str) -> Self:
         if self._log_file_assigned is False:
             self._log_file = LogFile
             self._log_file_assigned = True
@@ -81,11 +83,11 @@ class ExperimentData:
             print("Log file can only be assigned ONCE.")
 
     @property
-    def mouse_id(self):
+    def mouse_id(self) -> str:
         return self._mouse_id
 
     @mouse_id.setter
-    def mouse_id(self, ID):
+    def mouse_id(self, ID: str) -> Self:
         if self._mouse_id_assigned is False:
             self._mouse_id = ID
             self._mouse_id_assigned = True
@@ -93,11 +95,11 @@ class ExperimentData:
             print("Mouse ID can only be set ONCE.")
 
     @property
-    def instance_date(self):
+    def instance_date(self) -> str:
         return self._ExperimentData__instance_date
 
     @classmethod
-    def loadHierarchy(cls, ExperimentDirectory):
+    def loadHierarchy(cls, ExperimentDirectory: str) -> ExperimentData:
         """
         Function that loads the entire experimental hierarchy
 
@@ -129,11 +131,11 @@ class ExperimentData:
         return datetime.now().strftime("%H:%M:%S")
 
     @classmethod
-    def checkPath(cls, Path):
+    def checkPath(cls, Path: str) -> bool:
         return os.path.exists(Path)
 
     @classmethod
-    def generateDirectoryHierarchy(cls, MouseDirectory, **kwargs):
+    def generateDirectoryHierarchy(cls, MouseDirectory: str, **kwargs) -> None:
         _gen_histology = kwargs.get('Histology', True)
         _gen_roi_matching_index = kwargs.get('ROIMatchingIndex', True)
         _gen_stage = kwargs.get('Stage', True)
@@ -149,7 +151,7 @@ class ExperimentData:
             os.makedirs(MouseDirectory + "\\LabNotebook")
 
     @classmethod
-    def generateHistology(cls, MouseDirectory, **kwargs):
+    def generateHistology(cls, MouseDirectory: str, **kwargs) -> None:
         _visual_hist_title = kwargs.get('Title', None)
         _base_hist_dir = MouseDirectory + "\\Histology"
         if _visual_hist_title is not None:
@@ -165,7 +167,7 @@ class ExperimentData:
         cls.generateReadMe(_read_me_file, "Read-Me for Associated Histological Data")
 
     @classmethod
-    def generateROIMatchingIndex(cls, MouseDirectory):
+    def generateROIMatchingIndex(cls, MouseDirectory: str) -> None:
         _roi_matching_index_dir = MouseDirectory + "\\ROIMatchingIndex"
         _roi_matching_index_read_me = _roi_matching_index_dir + "\\ReadMe.txt"
 
@@ -174,7 +176,7 @@ class ExperimentData:
                            "Read-Me for Index of Longitudinally-Matched ROIs")
 
     @classmethod
-    def generateStage(cls, MouseDirectory, **kwargs):
+    def generateStage(cls, MouseDirectory: str, **kwargs) -> None:
         _include_behavior = kwargs.get('Behavior', True)
         _include_imaging = kwargs.get('Imaging', True)
         _include_computation = kwargs.get('Computation', True)
@@ -189,7 +191,7 @@ class ExperimentData:
             cls.generateComputation(_stage_directory)
 
     @classmethod
-    def generateBehavior(cls, StageDirectory):
+    def generateBehavior(cls, StageDirectory: str) -> None:
         _base_behav_dir = StageDirectory + "\\Behavior"
         _raw_behavioral_data = _base_behav_dir + "\\RawBehavioralData"
         _behavioral_exports = _base_behav_dir + "\\BehavioralExports"
@@ -204,7 +206,7 @@ class ExperimentData:
         os.makedirs(_analog_burrow_data)
 
     @classmethod
-    def generateImaging(cls, StageDirectory, **kwargs):
+    def generateImaging(cls, StageDirectory: str, **kwargs) -> None:
         _sample_frequency = kwargs.get('SampleFrequency', 30)
         _sample_frequency_string = str(_sample_frequency) + "Hz"
         _base_image_dir = StageDirectory + "\\Imaging"
@@ -217,7 +219,7 @@ class ExperimentData:
         cls.generateSampFreq(_sample_frequency_dir)
 
     @classmethod
-    def generateSampFreq(cls, SampFreqDirectory):
+    def generateSampFreq(cls, SampFreqDirectory: str) -> None:
         _suite2p = SampFreqDirectory + "\\suite2p"
         _fissa = SampFreqDirectory + "\\fissa"
         _roi_sorting = SampFreqDirectory + "\\sorting"
@@ -231,7 +233,7 @@ class ExperimentData:
         cls.generateReadMe(_roi_sorting+"\\ReadMe.txt", "Read-Me for ROI Sorting")
 
     @classmethod
-    def generateComputation(cls, StageDirectory, **kwargs):
+    def generateComputation(cls, StageDirectory: str, **kwargs) -> None:
         _analysis_title = kwargs.get('Title', 'AnalysisTechnique')
         _base_comp_dir = StageDirectory + "\\Computational"
         _neural_data_dir = _base_comp_dir + "\\NeuralData"
@@ -240,21 +242,21 @@ class ExperimentData:
         os.makedirs(_neural_data_dir)
 
     @classmethod
-    def generateAnalysisTechnique(cls, BaseCompDirectory, AnalysisTitle):
+    def generateAnalysisTechnique(cls, BaseCompDirectory: str, AnalysisTitle: str) -> None:
         _analysis_dir = BaseCompDirectory+"\\"+AnalysisTitle
         os.makedirs(_analysis_dir)
         cls.generateReadMe(_analysis_dir+"\\ReadMe.txt", "Read-Me for Analysis Technique")
 
     @staticmethod
-    def generateReadMe(AbsoluteFilePath, Text):
+    def generateReadMe(AbsoluteFilePath: str, Text: str) -> None:
         with open(AbsoluteFilePath, 'w') as _read_me:
             _read_me.write(Text)
             _read_me.close()
 
-    def passMeta(self):
+    def passMeta(self) -> Tuple[str, str]:
         return self.directory, self.mouse_id
 
-    def recordMod(self, *args):
+    def recordMod(self, *args: str) -> Self:
         """
         Record modification of experiment (Data, Time, *args)
 
@@ -267,7 +269,7 @@ class ExperimentData:
         # noinspection PyTypeChecker
         self.modifications.append((self.getDate(), self.getTime(), *args))
 
-    def saveHierarchy(self):
+    def saveHierarchy(self) -> Self:
         print("Saving Experimental Hierarchy...")
         if hasattr('self', '_IP'):
             # noinspection PyAttributeOutsideInit
@@ -295,24 +297,23 @@ class ExperimentData:
             # noinspection PyAttributeOutsideInit
             self._IP = get_ipython()
 
-    def createLogFile(self):
+    def createLogFile(self) -> Self:
         self.log_file = self.directory + "\\log_file.log"
 
     # noinspection All
-    def startLog(self):
+    def startLog(self) -> Self:
         self._IP = get_ipython()
         _magic_arguments = '-o -r -t ' + self.log_file + ' append'
         self._IP.run_line_magic('logstart', _magic_arguments)
-        return print("Logging Initiated")
+        print("Logging Initiated")
 
     # noinspection All
-    def endLog(self):
+    def endLog(self) -> Self:
         self._IP.run_line_magic('logstop', '')
 
     # noinspection All
-    def checkLog(self): # noinspection All
+    def checkLog(self) -> Self: # noinspection All
         self._IP.run_line_magic('logstate', '')
-        return
 
 
 class BehavioralStage:
@@ -349,7 +350,7 @@ class BehavioralStage:
         self.fillImagingFolderDictionary()
 
     @property
-    def mouse_id(self):
+    def mouse_id(self) -> str:
         return self._BehavioralStage__mouse_id
 
     @property
@@ -501,6 +502,7 @@ class BehavioralStage:
 
         if _first_peak_diff > 0:
             print("NOT YET IMPLEMENTED")
+            # noinspection PyTypeChecker
             return
             # noinspection PyUnreachableCode
             _AR_signal = np.pad(_AR_signal, (_first_peak_diff, 0), constant_values=0)
@@ -528,7 +530,7 @@ class BehavioralStage:
             print("Cropped Bruker Signals")
         elif _DF_signal.shape[0] > _AR_signal.shape[0]:
             # _AR_signal.values = np.pad(_AR_signal.values, pad_width=((0, _DF_signal.shape[0] - _AR_signal.shape[0]), (0, 0)),
-                                # mode="constant", constant_values=0)
+            # mode="constant", constant_values=0)
 
             _AR_signal = _AR_signal.reindex(DataFrame.index)
             # _frames = _frames.reindex(DataFrame.index) no need, happens below anyway
