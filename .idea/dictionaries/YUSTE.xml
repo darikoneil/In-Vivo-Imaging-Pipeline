@@ -37,6 +37,9 @@
       <w>memmap</w>
       <w>mfpo</w>
       <w>multioutput</w>
+      <w>mvblue</w>
+      <w>mvgreen</w>
+      <w>mvred</w>
       <w>neucoeff</w>
       <w>nframes</w>
       <w>nimg</w>
@@ -54,6 +57,7 @@
       <w>testloader</w>
       <w>tiffstack</w>
       <w>trialsdlc</w>
+      <w>unflat</w>
       <w>upsample</w>
       <w>vmax</w>
       <w>vmin</w>

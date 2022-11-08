@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Type Conversion for Suite2P">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="IGNORE">
       <change afterPath="$PROJECT_DIR$/DebugData/suite2p/plane0/Goob/binary2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/Visualization.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/a.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MigrationTools/dos2unix.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ScratchDenoise.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/para.yaml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pth/ModelForPytorch/E_10_Iter_3500.pth" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pth/ModelForPytorch/para.yaml" afterDir="false" />
@@ -36,11 +32,8 @@
       <change afterPath="$PROJECT_DIR$/pth/ex/E_19_Iter_1008.pth" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/FissaAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/FissaAnalysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/PlottingFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/PlottingFunctions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Colorizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Colorizer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/a.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -288,42 +281,8 @@
       <workItem from="1667427455191" duration="456000" />
       <workItem from="1667427960482" duration="1355000" />
       <workItem from="1667431416735" duration="8913000" />
-      <workItem from="1667491167700" duration="53711000" />
-    </task>
-    <task id="LOCAL-00015" summary="Temp-Sam's Bruker IO">
-      <created>1664472613817</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1664472613817</updated>
-    </task>
-    <task id="LOCAL-00016" summary="Added Migration Tools">
-      <created>1664475354283</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1664475354283</updated>
-    </task>
-    <task id="LOCAL-00017" summary="Added Bruker Meta Data Loading">
-      <created>1664483085914</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1664483085914</updated>
-    </task>
-    <task id="LOCAL-00018" summary="Partial Implementation of Bruker Analog Recording &amp; Sync">
-      <created>1664544706454</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1664544706454</updated>
-    </task>
-    <task id="LOCAL-00019" summary="Partial Implementation of Bruker Analog Recording &amp; Sync">
-      <created>1665411479404</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1665411479404</updated>
+      <workItem from="1667491167700" duration="60321000" />
+      <workItem from="1667861502946" duration="24777000" />
     </task>
     <task id="LOCAL-00020" summary="Some incomplete stuff">
       <created>1665418747069</created>
@@ -633,7 +592,42 @@
       <option name="project" value="LOCAL" />
       <updated>1667833611813</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="Slight">
+      <created>1667854008427</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1667854008427</updated>
+    </task>
+    <task id="LOCAL-00065" summary="IGNORE">
+      <created>1667859031952</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1667859031952</updated>
+    </task>
+    <task id="LOCAL-00066" summary="IGNORE">
+      <created>1667859116076</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1667859116076</updated>
+    </task>
+    <task id="LOCAL-00067" summary="IGNORE">
+      <created>1667859186795</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1667859186795</updated>
+    </task>
+    <task id="LOCAL-00068" summary="IGNORE">
+      <created>1667860386241</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1667860386241</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -652,8 +646,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Partial Implementation of Bruker Analog Recording &amp; Sync" />
-    <MESSAGE value="Some incomplete stuff" />
     <MESSAGE value="Synchronized Imaging Frames/Bruker Data" />
     <MESSAGE value="Some things changed while doing some log-reg analysis" />
     <MESSAGE value="Noted Single Frame De-Sync in Downsampled Pandas DataFrames" />
@@ -677,7 +669,9 @@
     <MESSAGE value="Updated Docstrings for Suite2P" />
     <MESSAGE value="Updated Docstrings" />
     <MESSAGE value="Type Conversion for Suite2P" />
-    <option name="LAST_COMMIT_MESSAGE" value="Type Conversion for Suite2P" />
+    <MESSAGE value="Slight" />
+    <MESSAGE value="IGNORE" />
+    <option name="LAST_COMMIT_MESSAGE" value="IGNORE" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
