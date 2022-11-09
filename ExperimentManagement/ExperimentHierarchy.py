@@ -72,7 +72,7 @@ class ExperimentData:
         |
         | **log_file** : Log File Path
         |
-        | **experimental_condition: Experiment condition of the mouse
+        | **experimental_condition** : Experiment condition of the mouse
         |
         | **instance_data** : Date when this experimental hierarchy was created
         |
