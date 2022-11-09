@@ -542,22 +542,46 @@ class ExperimentData:
 
 class BehavioralStage:
     """
+    Data Container for a generic stage or day of a behavioral task
     **Self Methods**
+        |
         | **recordMod** : Records a modification made to the behavioral stage (Date & Time)
+        |
         | **createFolderDictionary** : Creates a dictionary of locations for specific files
+        |
         | **fillImagingDictionary** :  Generates folders and a dictionary of imaging files (Raw, Meta, Compiled)
+        |
         | **addImageSamplingFolder** : Generates a folder for containing imaging data of a specific sampling rate
+        |
         | **addImageProcessingFolder** : Generates a folder for containing processed imaging data
+        |
 
     **Properties**
+        |
         | **mouse_id** : Identifies which mouse this data belongs to
+        |
         | **instance_data** : Identifies when this behavioral stage was created
 
     **Attributes**
+        |
         | **modifications** : List of modifications made to this behavioral stage
+        |
         | **folder_dictionary** : A dictionary of relevant folders for this behavioral stage
+        |
+        | **data_frame** : Pandas dataframe of synced data
+        |
+        | **meta_data** : bruker meta data
+        |
+        | **sync_key** : key indicator for syncing data
+        |
     """
-    def __init__(self, Meta, Stage):
+    def __init__(self, Meta: Tuple[str, str], Stage: str):
+        """
+        :param Meta: Passed Meta from experimental hierarchy
+        :type Meta: tuple[str, str]
+        :param Stage: Title of Stage
+        :type Stage: str
+        """
         # PROTECTED
         self.__mouse_id = Meta[1]
         self.__instance_date = ExperimentData.getDate()
@@ -575,30 +599,39 @@ class BehavioralStage:
 
     @property
     def mouse_id(self) -> str:
+        """
+        ID of mouse
+        
+        :rtype: str
+        """
         return self._BehavioralStage__mouse_id
 
     @property
-    def instance_date(self):
+    def instance_date(self) -> str:
+        """
+        Date created
+        
+        :rtype: str
+        """
         return self._BehavioralStage__instance_date
 
-    def recordMod(self):
+    def recordMod(self) -> Self:
         """
         Records a modification made to the behavioral stage (Date & Time)
+        
+        :rtype: Any 
         """
         self.modifications.append((ExperimentData.getDate(), ExperimentData.getTime()))
 
-    def createFolderDictionary(self, MouseDirectory, Stage):
+    def createFolderDictionary(self, MouseDirectory: str, Stage: str) -> Self:
         """
         Creates a dictionary of locations for specific files
-
-        **Modifies**
-            | self.folder_dictionary
 
         :param MouseDirectory: Directory containing mouse data (passed meta)
         :type MouseDirectory: str
         :param Stage: The Stage ID
         :type Stage: str
-
+        :rtype: Any
         """
         _stage_directory = MouseDirectory + "\\" + Stage
         self.folder_dictionary = {
@@ -609,15 +642,11 @@ class BehavioralStage:
             'behavior_folder': _stage_directory + "\\Behavior",
         }
 
-    def fillImagingFolderDictionary(self):
+    def fillImagingFolderDictionary(self) -> Self:
         """
         Generates folders and a dictionary of imaging files (Raw, Meta, Compiled)
-
-        **Requires**
-            | self.folder_dictionary
-
-        **Modifies**
-            | self.folder_dictionary
+        
+        :rtype: Any
         """
         # RAW
         _raw_data_folder = self.folder_dictionary['imaging_folder'] + "\\RawImagingData"
@@ -642,12 +671,13 @@ class BehavioralStage:
 
         self.folder_dictionary['compiled_imaging_data_folder'] = CollectedDataFolder(_compiled_imaging_data_folder)
 
-    def addImageSamplingFolder(self, SamplingRate):
+    def addImageSamplingFolder(self, SamplingRate: int) -> Self:
         """
         Generates a folder for containing imaging data of a specific sampling rate
 
         :param SamplingRate: Sampling Rate of Dataset in Hz
         :type SamplingRate: int
+        :rtype: Any
         """
         SamplingRate = str(SamplingRate) # Because we know I'll always forget and send an int anyway
         _folder_name = "".join([self.folder_dictionary['imaging_folder'], "\\", SamplingRate, "Hz"])
@@ -660,14 +690,26 @@ class BehavioralStage:
         ExperimentData.generateSampFreq(_folder_name)
         self.__dict__.get(_attr_name).reIndex()
 
-    def loadBrukerMetaData(self):
+    def loadBrukerMetaData(self) -> Self:
+        """
+        Loads Bruker Meta Data
+        
+        :rtype: Any
+        """
         self.folder_dictionary["bruker_meta_data"].reIndex()
         _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("xml")
         self.meta_data = BrukerMeta(_files[0], _files[2], _files[1])
         self.meta_data.import_meta_data()
         self.meta_data.creation_date = ExperimentData.getDate()
 
-    def loadBrukerAnalogRecordings(self):
+    def loadBrukerAnalogRecordings(self) -> pd.DataFrame:
+        """
+        Loads Bruker Analog Recordings
+        
+        :returns: Analog Recording
+        :rtype: pd.DataFrame
+        """
+        
         self.folder_dictionary["bruker_meta_data"].reIndex()
         _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("csv")
         return self.load_bruker_analog_recordings(_files[-1])
