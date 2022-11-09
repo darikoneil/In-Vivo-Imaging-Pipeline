@@ -561,6 +561,7 @@ class BehavioralStage:
         | **mouse_id** : Identifies which mouse this data belongs to
         |
         | **instance_data** : Identifies when this behavioral stage was created
+        |
 
     **Attributes**
         |
@@ -714,12 +715,28 @@ class BehavioralStage:
         _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("csv")
         return self.load_bruker_analog_recordings(_files[-1])
 
-    def loadAdditionalBrukerAnalogRecordings(self, Tag):
+    def loadAdditionalBrukerAnalogRecordings(self, Tag: str) -> pd.DataFrame:
+        """
+        Loads Additional Bruker Analog Recordings
+        
+        :param Tag: Tag for additional recordings
+        :type Tag: str
+        :returns: Analog Recording
+        :rtype: pd.DataFrame
+        """
         self.folder_dictionary["".join(["bruker_meta_data_", str(Tag)])].reIndex()
         _files = self.folder_dictionary["".join(["bruker_meta_data_", str(Tag)])].find_all_ext("csv")
         return self.load_bruker_analog_recordings(_files[-1])
 
-    def loadAdditionalBrukerMetaData(self, Tag):
+    def loadAdditionalBrukerMetaData(self, Tag: str) -> BrukerMeta:
+        """
+        Load additional bruker meta data
+        
+        :param Tag: Tag for additional data
+        :type Tag: str
+        :return: Bruker meta data
+        :rtype : BrukerMeta
+        """
         self.folder_dictionary["".join(["bruker_meta_data_", str(Tag)])].reIndex()
         _files = self.folder_dictionary["".join(["bruker_meta_data_", str(Tag)])].find_all_ext("xml")
         _meta_data = BrukerMeta(_files[0], _files[2], _files[1])
@@ -728,17 +745,31 @@ class BehavioralStage:
         return _meta_data
 
     # noinspection PyMethodMayBeStatic
-    def mergeAdditionalBruker(self, AnalogRecordings):
+    def mergeAdditionalBruker(self, AnalogRecordings: pd.DataFrame) -> None:
+        """
+        Generic function to merge bruker, overwritten during inheritance
+        :param AnalogRecordings: Analog Recordings
+        :type AnalogRecordings: pd.DataFrame
+        :rtype: None
+        """
         print(" Was not overwritten")
         return
 
     @staticmethod
-    def load_bruker_analog_recordings(File):
+    def load_bruker_analog_recordings(File: str) -> pd.DataFrame:
+        """
+        Method to load bruker analog recordings
+        
+        :param File: filepath
+        :type File: str
+        :return: analog recordings
+        :rtype: pd.DataFrame
+        """
         return pd.read_csv(File)
 
     @staticmethod
-    def sync_bruker_recordings(DataFrame: pd.DataFrame, AnalogRecordings: pd.DataFrame, MetaData,  StateCastedDict,
-                               SyncKey, **kwargs) -> pd.DataFrame:
+    def sync_bruker_recordings(DataFrame: pd.DataFrame, AnalogRecordings: pd.DataFrame, MetaData: BrukerMeta,  StateCastedDict: dict,
+                               SyncKey: Optional[Tuple[str, str]], **kwargs) -> pd.DataFrame:
         """
 
         :param DataFrame:
@@ -751,7 +782,8 @@ class BehavioralStage:
         :type StateCastedDict: dict
         :param SyncKey:
         :type SyncKey: tuple or None
-        :return:
+        :return: Sync Data
+        :rtype: pd.DataFrame
         """
 
         _fill_method = kwargs.get("fill", "backward")
@@ -821,7 +853,7 @@ class BehavioralStage:
         return DataFrame
 
     @staticmethod
-    def sync_downsampled_images(DataFrame, MetaData, **kwargs):
+    def sync_downsampled_images(DataFrame: pd.DataFrame, MetaData: BrukerMeta, **kwargs) -> pd.DataFrame:
         _downsample_size = kwargs.get("downsample_multiplier", 3)
         _fill_method = kwargs.get("fill", "backward")
         _two_files = kwargs.get("two_files", False)
