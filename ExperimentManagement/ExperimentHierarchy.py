@@ -21,10 +21,82 @@ class ExperimentData:
     Class for Organizing & Managing Experimental Data Across Sessions
 
     **Class Methods**
+        |
         | **loadHierarchy** : Function that loads the entire experimental hierarchy
+        |
+        | **getDate**: Function returns date
+        |
+        | **getTime** : Function returns time
+        |
+        | **checkPath** : Checks Path
+        |
+        | **generateDirectoryHierarchy** : Generates the Directory Structure (The structured folders where data stored)
+        |
+        | **generateHistology** :  Generates Histology Folder
+        |
+        | **generateROIMatchingIndex** : Generate ROI Matching Folder
+        |
+        | **generateStage** : Generate Behavioral Stage Folder
+        |
+        | **generateBehavior** : Generate Behavioral Folder
+        |
+        | **generateImaging** : Generate Imaging Folder
+        |
+        | **generateSampFreq** : Generate Sample Frequency Folder Innards
+        |
+        | **generateComputation** : Generate Computation Folder
+        |
+        | **generateAnalysisTechnique** : Generate Analysis Technqique
+        |
+    **Static Methods**
+        |
+        | **generateReadMe** : Generate a read me file
+        |
+    **Self Methods**
+        |
+        | **passMeta** : Passes directory/mouse id
+        |
+        | *recordMod** : Record modification of experiment
+        |
+        | **saveHierarchy** : Saves Hierarchy to pickle
+        |
+        | **createLogFile** : Creates log file
+        |
+        | **startLog** : Starts Log
+        |
+        | **checkLog** : Checks Log Status
+        |
+    **Properties**
+        |
+        | **mouse_id** : ID of Mouse
+        |
+        | **log_file** : Log File Path
+        |
+        | **experimental_condition: Experiment condition of the mouse
+        |
+        | **instance_data** : Date when this experimental hierarchy was created
+        |
+    **Attributes**
+        |
+        | **directory** : Experimental Hierarchy Directory
+        |
+        | **study** : Study
+        |
+        | **study_mouse: ID of mouse in study
+        |
+        | **modifications** : modifications made to this file
+        |
     """
 
     def __init__(self, **kwargs):
+        """
+        :keyword LogFile: Path to existing log file (str, default None)
+        :keyword Mouse: Mouse ID (str, default None)
+        :keyword Condition: Experimental Condition (str, default None)
+        :keyword Directory: Directory for hierarchy (str, default None)
+        :keyword Study: Study (str, default None)
+        :keyword StudyMouse: Study ID (str, default None)
+        """
         # Hidden
         self._mouse_id_assigned = False # to make sure mouse id only set once
         self._log_file_assigned = False # to make sure log file only set once
@@ -72,6 +144,11 @@ class ExperimentData:
 
     @property
     def log_file(self) -> str:
+        """
+        Log File Path
+
+        :rtype: str
+        """
         return self._log_file
 
     @log_file.setter
@@ -84,6 +161,11 @@ class ExperimentData:
 
     @property
     def mouse_id(self) -> str:
+        """
+        ID of Mouse
+
+        :rtype: str
+        """
         return self._mouse_id
 
     @mouse_id.setter
@@ -96,6 +178,11 @@ class ExperimentData:
 
     @property
     def instance_date(self) -> str:
+        """
+        Date when this experimental hierarchy was created
+
+        :rtype: str
+        """
         return self._ExperimentData__instance_date
 
     @classmethod
@@ -136,6 +223,24 @@ class ExperimentData:
 
     @classmethod
     def generateDirectoryHierarchy(cls, MouseDirectory: str, **kwargs) -> None:
+        """
+        Generates the Directory Structure (The structured folders where data stored)
+
+         Keyword Arguments
+        -----------------
+        *Histology* : Generate histology Folder (bool, default True)
+        *ROIMatchingIndex* : Generate ROI Matching Folder (bool, default True)
+        *Stage* :Generate Behavioral Stage Folder(bool, default True)
+        *LabNotebook* : Generate Lab Notebook Folder (bool, default True)
+
+        :param MouseDirectory: Directory to generate folders in
+        :type MouseDirectory: str
+        :keyword Histology: Generate histology Folder
+        :keyword ROIMatchingindex: Generate ROI Matching Folder
+        :keyword Stage: Generate Behavioral Stage Folder
+        :keyword: LabNotebook: Generate Lab Notebook Folder
+        :rtype: None
+        """
         _gen_histology = kwargs.get('Histology', True)
         _gen_roi_matching_index = kwargs.get('ROIMatchingIndex', True)
         _gen_stage = kwargs.get('Stage', True)
@@ -152,6 +257,19 @@ class ExperimentData:
 
     @classmethod
     def generateHistology(cls, MouseDirectory: str, **kwargs) -> None:
+        """
+        Generates Histology Folder
+
+        Keyword Arguments
+        -----------------
+        *Title* : Title of Histology Experiment (str, default None)
+
+        :param MouseDirectory: Directory to generate folders in
+        :type MouseDirectory: str
+        :keyword Title: Title of Histology Experiment
+        :rtype: None
+        """
+
         _visual_hist_title = kwargs.get('Title', None)
         _base_hist_dir = MouseDirectory + "\\Histology"
         if _visual_hist_title is not None:
@@ -168,6 +286,11 @@ class ExperimentData:
 
     @classmethod
     def generateROIMatchingIndex(cls, MouseDirectory: str) -> None:
+        """
+        Generate ROI Matching Folder
+
+        :rtype: None
+        """
         _roi_matching_index_dir = MouseDirectory + "\\ROIMatchingIndex"
         _roi_matching_index_read_me = _roi_matching_index_dir + "\\ReadMe.txt"
 
@@ -177,6 +300,17 @@ class ExperimentData:
 
     @classmethod
     def generateStage(cls, MouseDirectory: str, **kwargs) -> None:
+        """
+        Generate Behavioral Stage Folder
+
+        Keyword Arguments
+        -----------------
+        *Behavior* : Include Behavioral Folder (bool, default True)
+        *Imaging* : Include Imaging Folder (bool, default True)
+        *Computation* : Include Computation Folder (bool, default True)
+        *Title* : Title of Behavioral Stage (str, default Stage)
+        :rtype: None
+        """
         _include_behavior = kwargs.get('Behavior', True)
         _include_imaging = kwargs.get('Imaging', True)
         _include_computation = kwargs.get('Computation', True)
@@ -192,6 +326,14 @@ class ExperimentData:
 
     @classmethod
     def generateBehavior(cls, StageDirectory: str) -> None:
+        """
+        Generate Behavioral Folder
+
+        :param StageDirectory: Directory for folder creation
+        :type StageDirectory: str
+        :rtype: None
+        """
+
         _base_behav_dir = StageDirectory + "\\Behavior"
         _raw_behavioral_data = _base_behav_dir + "\\RawBehavioralData"
         _behavioral_exports = _base_behav_dir + "\\BehavioralExports"
@@ -207,6 +349,19 @@ class ExperimentData:
 
     @classmethod
     def generateImaging(cls, StageDirectory: str, **kwargs) -> None:
+        """
+        Generate Imaging Folder
+
+        Keyword Arguments
+        -----------------
+        *SampleFrequency* : Image frequency (int, default 30)
+
+        :param StageDirectory: Directory for folder creation
+        :type StageDirectory: str
+        :keyword SampleFrequency: Image frequency
+        :rtype: None
+        """
+
         _sample_frequency = kwargs.get('SampleFrequency', 30)
         _sample_frequency_string = str(_sample_frequency) + "Hz"
         _base_image_dir = StageDirectory + "\\Imaging"
@@ -220,6 +375,13 @@ class ExperimentData:
 
     @classmethod
     def generateSampFreq(cls, SampFreqDirectory: str) -> None:
+        """
+        Generate Sample Frequency Folder Innards
+
+        :param StageDirectory: Directory for folder creation
+        :type StageDirectory: str
+        :rtype: None
+        """
         _suite2p = SampFreqDirectory + "\\suite2p"
         _fissa = SampFreqDirectory + "\\fissa"
         _roi_sorting = SampFreqDirectory + "\\sorting"
@@ -234,6 +396,18 @@ class ExperimentData:
 
     @classmethod
     def generateComputation(cls, StageDirectory: str, **kwargs) -> None:
+        """
+        Generate Computation Folder
+
+        Keyword Arguments
+        -----------------
+        *Title* : Computational Analysis Title (str, default AnalysisTechnique)
+
+        :param StageDirectory: Directory for folder creation
+        :type StageDirectory: str
+        :keyword Title: Computational Analysis Title
+        :rtype: None
+        """
         _analysis_title = kwargs.get('Title', 'AnalysisTechnique')
         _base_comp_dir = StageDirectory + "\\Computational"
         _neural_data_dir = _base_comp_dir + "\\NeuralData"
@@ -243,33 +417,63 @@ class ExperimentData:
 
     @classmethod
     def generateAnalysisTechnique(cls, BaseCompDirectory: str, AnalysisTitle: str) -> None:
+        """
+        Generate Analysis Technqique
+
+        :param BaseCompDirectory: Base Directory for Computation
+        :type BaseCompDirectory: str
+        :param AnalysisTitle: Title for Analysis
+        :type AnalysisTitle: str
+        :rtype: None
+        """
         _analysis_dir = BaseCompDirectory+"\\"+AnalysisTitle
         os.makedirs(_analysis_dir)
         cls.generateReadMe(_analysis_dir+"\\ReadMe.txt", "Read-Me for Analysis Technique")
 
     @staticmethod
     def generateReadMe(AbsoluteFilePath: str, Text: str) -> None:
+        """
+        Generate a read me file
+
+        :param AbsoluteFilePath: File path
+        :type AbsoluteFilePath: str
+        :param Text: Text inside
+        :type Text: str
+        :rtype: None
+        """
         with open(AbsoluteFilePath, 'w') as _read_me:
             _read_me.write(Text)
             _read_me.close()
 
     def passMeta(self) -> Tuple[str, str]:
+        """
+        Passes directory/mouse id
+
+        :returns: directory/mouse id
+        :rtype: tuple[str, str]
+        """
+
         return self.directory, self.mouse_id
 
     def recordMod(self, *args: str) -> Self:
         """
         Record modification of experiment (Data, Time, *args)
 
-        **Modifies**
-            | self.modifications
 
         :param args: A string explaining the modification
-        :rtype: None
+        :type args: str
+        :rtype: Any
         """
         # noinspection PyTypeChecker
         self.modifications.append((self.getDate(), self.getTime(), *args))
 
     def saveHierarchy(self) -> Self:
+        """
+        Saves Hierarchy to pickle
+
+        :rtype: Any
+        """
+
         print("Saving Experimental Hierarchy...")
         if hasattr('self', '_IP'):
             # noinspection PyAttributeOutsideInit
@@ -298,10 +502,20 @@ class ExperimentData:
             self._IP = get_ipython()
 
     def createLogFile(self) -> Self:
+        """
+        Creates log file
+
+        :rtype: Any
+        """
         self.log_file = self.directory + "\\log_file.log"
 
     # noinspection All
     def startLog(self) -> Self:
+        """
+        Starts Log
+
+        :rtype: Any
+        """
         self._IP = get_ipython()
         _magic_arguments = '-o -r -t ' + self.log_file + ' append'
         self._IP.run_line_magic('logstart', _magic_arguments)
@@ -309,10 +523,20 @@ class ExperimentData:
 
     # noinspection All
     def endLog(self) -> Self:
+        """
+        Ends Logging
+
+        :rtype: Any
+        """
         self._IP.run_line_magic('logstop', '')
 
     # noinspection All
     def checkLog(self) -> Self: # noinspection All
+    """
+    Checks log status
+
+    :rtype: Any
+    """
         self._IP.run_line_magic('logstate', '')
 
 
