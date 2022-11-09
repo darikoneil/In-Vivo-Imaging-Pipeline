@@ -82,7 +82,7 @@ class ExperimentData:
         |
         | **study** : Study
         |
-        | **study_mouse: ID of mouse in study
+        | **study_mouse** : ID of mouse in study
         |
         | **modifications** : modifications made to this file
         |
