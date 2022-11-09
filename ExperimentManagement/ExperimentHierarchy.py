@@ -918,16 +918,28 @@ class CollectedDataFolder:
     This is a class for managing a folder of unorganized data files
 
 **Self Methods**
+        |
         | **searchInFolder** : Search THIS object for the *first* file which matches the description
+        |
         | **reIndex** : Function that indexed the files within folder again
+        |
 
 **Static Methods**
+        |
         | **fileParts** : Function returns each identifier of a file and its extension
+        |
         | **fileLocator** : Find the file which matches the description
-
-
+        |
+**Properties**
+        |
+        | **instance_data** : Data created
+        |
+        | **path** : path to folder
+        |
+        | **files** : List of files in folder
+        |
     """
-    def __init__(self, Path):
+    def __init__(self, Path: str):
         # Protected In Practice
         self.__instance_date = ExperimentData.getDate()
         self._path = str()
@@ -939,15 +951,25 @@ class CollectedDataFolder:
         self.files = self.path
 
     @property
-    def instance_date(self):
+    def instance_date(self) -> str:
+        """
+        Date Created
+        
+        :rtype: str
+        """
         return self._CollectedDataFolder__instance_date
 
     @property
-    def path(self):
+    def path(self) -> str:
+        """
+        Path to folder
+        
+        :rtype: str
+        """
         return self._path
 
     @path.setter
-    def path(self, Path):
+    def path(self, Path: str) -> Self:
         if self._path_assigned is False:
             self._path = Path
             self._path_assigned = True
@@ -955,20 +977,20 @@ class CollectedDataFolder:
             print("Path can only be assigned ONCE.")
 
     @property
-    def files(self):
+    def files(self) -> List[str]:
         return self._files
 
     @files.setter
-    def files(self, Path):
+    def files(self, Path: str) -> Self:
         self._files = os.listdir(Path)
 
-    def reIndex(self):
+    def reIndex(self) -> Self:
         """
         Function that indexed the files within folder again
         """
         self.files = self.path
 
-    def searchInFolder(self, ID):
+    def searchInFolder(self, ID: str) -> Union[str, None]:
         """
         Search THIS object for the *first* file which matches the description
 
@@ -979,7 +1001,16 @@ class CollectedDataFolder:
         """
         return self.path + "\\" + CollectedDataFolder.fileLocator(self.files, ID)
 
-    def find_all_ext(self, ext):
+    def find_all_ext(self, ext: str) -> Union[List[str], None]:
+        """
+        Finds all files with specific extension
+        
+        :param ext: File extension
+        :type ext: str
+        :return: List of files
+        :rtype: List[str]
+        """
+        
         _ext = "".join(["*.", ext])
         Files = list(pathlib.Path(self.path).glob(_ext))
         for i in range(Files.__len__()):
@@ -987,7 +1018,7 @@ class CollectedDataFolder:
         return Files
 
     @staticmethod
-    def fileLocator(files, ID):
+    def fileLocator(files: str, ID: str) -> Union[str, None]:
         """
         Find the *first* file which matches the description
 
@@ -1002,10 +1033,9 @@ class CollectedDataFolder:
             for _id in CollectedDataFolder.fileParts(files[i]):
                 if ID == _id:
                     return files[i]
-        return "Nil"
 
     @staticmethod
-    def fileParts(file):
+    def fileParts(file: str) -> List[str]:
         """
         Function returns each identifier of a file and its extension
 
@@ -1019,16 +1049,17 @@ class CollectedDataFolder:
 
 class CollectedImagingFolder(CollectedDataFolder):
     """ this is a super class containing methods for"""
-    def __init__(self, Path):
+    def __init__(self, Path: str):
         super().__init__(Path)
         self.current_stage = "Instanced"
         self.Suite2PModule = None
 
-    def load_fissa_exports(self):
+    def load_fissa_exports(self) -> Tuple[np.ndarray, np.ndarray]:
         """
         This function loads the prepared and separated files exported from Fissa
 
         :return: Prepared, Separated
+        :rtype: tuple[Any, Any]
         """
 
         try:
@@ -1045,11 +1076,12 @@ class CollectedImagingFolder(CollectedDataFolder):
 
         return Prepared, Separated
 
-    def load_cascade_exports(self):
+    def load_cascade_exports(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """
         This function loads the Spike Times, Spike Prob, and Discrete Approximation files exported from Cascade
 
         :return: SpikeTimes, SpikeProb, DiscreteApproximation
+        :rtype: tuple[Any, Any, Any]
         """
 
         try:
