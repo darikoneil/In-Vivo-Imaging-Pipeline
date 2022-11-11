@@ -12,23 +12,6 @@ import imageio as iio
 import cv2
 
 
-# Video = PreProcessing.loadRawBinary("", "", "D:\\EM0122\\Encoding\\Imaging\\30Hz\\denoised")[0:1000]
-# Stat = np.load("D:\\EM0122\\Encoding\\Imaging\\30Hz\\suite2p\\plane0\\stat.npy", allow_pickle=True)
-# IsCell = np.load("D:\\EM0122\\Encoding\\Imaging\\30Hz\\suite2p\\plane0\\iscell.npy", allow_pickle=True)
-Video = PreProcessing.loadTiff(
-     "H:\\DEM_Excitatory_Study\\DEM2\\Retrieval\\Imaging\\30Hz\\Denoised\\DEM2_RET_DN_stx_03.tif", 7000)
-Stat = np.load(
-    "H:\\DEM_Excitatory_Study\\DEM2\\Retrieval\\Imaging\\30Hz\\Suite2P\\plane0\\stat.npy", allow_pickle=True)
-IsCell = np.load(
-    "H:\\DEM_Excitatory_Study\\DEM2\\Retrieval\\Imaging\\30Hz\\Suite2P\\plane0\\iscell.npy", allow_pickle=True)
-neurons = np.where(IsCell[:, 0] == 1)[0].astype(int)
-
-Images = Video
-del Video
-Stats = Stat
-del Stat
-
-
 # noinspection PyShadowingNames
 def _colorize(Images: np.ndarray, Stats: np.ndarray, *args: Optional[Tuple[np.ndarray, str]]) -> np.ndarray:
     """
@@ -232,7 +215,7 @@ def colorize_rois(Images: np.ndarray, Stats: np.ndarray, ROIs: Optional[List[int
         cmap = "binary"
 
     if ROIs is None:
-        ROIs = np.arange(0, Stats.shape[0]+1, 1)
+        ROIs = np.array(range(Stats.shape[0]))
 
     ColorImage = colorize(Images, cmap)
     _y = []
@@ -309,18 +292,112 @@ def rescale_images(Images: np.ndarray, LowCut: float, HighCut: float) -> np.ndar
     return _linearized_image
 
 
-def generate_alpha_map(Images: np.ndarray) -> np.ndarray:
+def _generate_alpha_map(Images: np.ndarray) -> np.ndarray:
     return np.uint8(normalize_image(Images)*255)/255
 
 
-# noinspection PyRedeclaration
-ImagesB = rescale_images(Images, 1.0, 99.75)
-Images = rescale_images(Images, 1.0, 99.75)
-ImagesB = ImagesB[0:1000, :, :]
-Images = Images[0:1000, :, :]
-custom_map = generate_custom_map([(0, 0, 0), (0, 0, 0), (0.0745, 0.6235, 1)])
-Background = convert_grayscale_to_color(ImagesB)
-ColorizedVideo = colorize_rois(Images, Stats, neurons, custom_map)
-NewVideo = overlay_colorized_rois(Background, ColorizedVideo)
-write_video(NewVideo, "C:\\Users\\YUSTE\\Desktop\\Test10.mp4")
+def merge_background(Background: np.ndarray, NewVideo: np.ndarray, PixelPairs: Tuple[Tuple[int, int]]) -> np.ndarray:
+    for _pair in PixelPairs:
+        Background[:, _pair[0], _pair[1], :] = NewVideo[:, _pair[0], _pair[1], :]
+    return Background
 
+
+def generate_pixel_pairs(Stats: np.ndarray, ROIs: List[int]) -> Tuple[Tuple[int, int]]:
+    """
+    Generates a tuple containing a list of each pixel pair from every ROI
+
+    :param Stats: Suite2P Stats
+    :type Stats: Any
+    :param ROIs: List of ROIs
+    :type ROIs: list[int]
+    :return: List of each pixel for every ROI
+    :rtype: tuple[tuple[int, int]]
+    """
+    def flatten(list_of_zips):
+        return tuple([item for zips in list_of_zips for item in zips])
+
+    PixelPairs = []
+    for _roi in ROIs:
+        PixelPairs.append(zip(list(Stats[_roi].get("ypix")[Stats[_roi].get("soma_crop")]),
+                     list(Stats[_roi].get("xpix")[Stats[_roi].get("soma_crop")])))
+    PixelPairs = flatten(PixelPairs)
+    # noinspection PyTypeChecker
+    return PixelPairs
+
+
+def colorize_video(Images: np.ndarray, Stats: np.ndarray, ROIs: Optional[List[int]] = None,
+                   Cutoffs: Optional[Tuple[float, float, float, float]] = None, **kwargs) -> np.ndarray:
+
+    _cmap = kwargs.get("cmap", None)
+    _colors = kwargs.get("colors", None)
+    _include_background = kwargs.get("background", True)
+    _white_background = kwargs.get("white_background", False)
+    _alpha = kwargs.get("alpha", 0.5)
+    _write = kwargs.get("write", False)
+    _filename = kwargs.get("filename", None)
+
+    if ROIs is None:
+        ROIs = np.array(range(Stats.shape[0]))
+
+    if Cutoffs is None:
+        Cutoffs = tuple([1.0, 99.75, 1.0, 99.75])
+    elif len(Cutoffs) == 2:
+        Cutoffs = tuple([*Cutoffs, *Cutoffs])
+
+    if _colors is not None and _cmap is None:
+        _cmap = generate_custom_map(_colors)
+    elif _colors is None and _cmap is not None:
+        try:
+            _cmap = plt.cm.get_cmap(_cmap)
+        except ValueError:
+            print("".join(["Unable to locate ", _cmap, " colormap. Reverting to jet."]))
+            _cmap = plt.cm.get_cmap("jet")
+    elif _colors is not None and _cmap is not None:
+        print("".join(["Cmap specified as ", _cmap, " but colors additional specified. Reverting to jet."]))
+        _cmap = plt.cm.get_cmap("jet")
+    else:
+        _cmap = plt.cm.get_cmap("jet")
+
+    _color_image = rescale_images(Images, Cutoffs[2], Cutoffs[3])
+    ColorizedVideo = colorize_rois(_color_image, Stats, ROIs, _cmap)
+
+    _background_image = rescale_images(Images, Cutoffs[0], Cutoffs[1])
+    _background_image = convert_grayscale_to_color(_background_image)
+
+    # dumb but works
+    if not _include_background:
+        _background_image[:, :, :, :] = 0
+        if _white_background:
+            _background_image[:, :, :, :] = 255
+
+    # not include alpha right now... debug
+    ColorizedVideo = overlay_colorized_rois(_background_image.copy(), ColorizedVideo)
+    ColorizedVideo = merge_background(_background_image, ColorizedVideo, generate_pixel_pairs(Stats, ROIs))
+
+    if _write and _filename is not None:
+        write_video(ColorizedVideo, _filename)
+    elif _write and _filename is None:
+        write_video(ColorizedVideo, "".join([os.getcwd(), "\\colorized_video.mp4"]))
+
+    return ColorizedVideo
+
+
+# Video = PreProcessing.loadRawBinary("", "", "D:\\EM0122\\Encoding\\Imaging\\30Hz\\denoised")[0:1000]
+# Stat = np.load("D:\\EM0122\\Encoding\\Imaging\\30Hz\\suite2p\\plane0\\stat.npy", allow_pickle=True)
+# IsCell = np.load("D:\\EM0122\\Encoding\\Imaging\\30Hz\\suite2p\\plane0\\iscell.npy", allow_pickle=True)
+Video = PreProcessing.loadRawBinary("", "", "D:\\EM0122\\Encoding\\Imaging\\30Hz\\denoised\\converted")[0:1000]
+Stat = np.load(
+    "D:\\EM0122\\Encoding\\Imaging\\30Hz\\suite2p\\plane0\\stat.npy", allow_pickle=True)
+IsCell = np.load(
+    "D:\\EM0122\\Encoding\\Imaging\\30Hz\\suite2P\\plane0\\iscell.npy", allow_pickle=True)
+# neurons = np.where(IsCell[:, 0] == 1)[0].astype(int)
+
+neurons = [0, 121, 267, 273, 315]
+
+CV = colorize_video(Video, Stat, neurons, colors=[(1, 1, 1), (0.0745, 0.6234, 1.000),
+                                                              (0.0745, 0.6234, 1.000)], write=True,
+                    background=True, white_background=False, filename="C:\\Users\\YUSTE\\Desktop\\Test_11_11_22_03.mp4")
+
+F1 = plt.figure(1)
+A1 = F1.add_subplot(111)
+A1.imshow(CV[0, :, :, :])
