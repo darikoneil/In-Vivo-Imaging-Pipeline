@@ -917,7 +917,10 @@ class BehavioralStage:
 
 class CollectedDataFolder:
     """
-    This is a class for managing a folder of unorganized data files
+This is a class for managing a folder of unorganized data files
+
+**Required Inputs**
+    | *Path* : path to folder
 
 **Self Methods**
         | *searchInFolder* : Search THIS object for the *first* file which matches the description
