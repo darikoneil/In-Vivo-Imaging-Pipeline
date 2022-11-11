@@ -21,6 +21,14 @@ class ExperimentData:
     """
     Class for Organizing & Managing Experimental Data Across Sessions
 
+    **Keyword Arguments**
+        | *Logfile* : Path to existing log file (str, default None)
+        | *Mouse* : Mouse ID (str, default None)
+        | *Condition* : Experimental Condition (str, default None)
+        | *Directory* : Directory for hierarchy (str, default None)
+        | *Study* : Study (str, default None)
+        | *StudyMouse* : Study ID (str, default None)
+
     **Class Methods**
         | *loadHierarchy* : Function that loads the entire experimental hierarchy
         | *getDate*: Function returns date
@@ -511,12 +519,19 @@ class ExperimentData:
         :rtype: Any
         """
 
-    self._IP.run_line_magic('logstate', '')
+        self._IP.run_line_magic('logstate', '')
 
 
 class BehavioralStage:
     """
-    Data Container for a generic stage or day of a behavioral task
+    Data Class for a generic stage or day of a behavioral task
+
+    **Required Inputs**
+        | *Meta* : Passed meta from experimental hierarchy
+        | *Stage* : Title of Stage
+
+    **Positional Arguments**
+        | *SyncID* : Sync ID (ID of columns used for syncing data)
 
     **Self Methods**
         | *recordMod* : Records a modification made to the behavioral stage (Date & Time)
@@ -532,17 +547,20 @@ class BehavioralStage:
     **Attributes**
         | *modifications* : List of modifications made to this behavioral stage
         | *folder_dictionary* : A dictionary of relevant folders for this behavioral stage
-        | *data_frame* : Pandas dataframe of synced data
-        | *meta_data* : bruker metadata|
-        | *sync_key* : key indicator for syncing data
+        | *data* : Pandas dataframe of synced data
+        | *meta* : bruker metadata
+        | *state_index* : index of states
+        | *sync_id* : key indicator for syncing data
     """
 
-    def __init__(self, Meta: Tuple[str, str], Stage: str):
+    def __init__(self, Meta: Tuple[str, str], Stage: str, *args: Tuple[str, str]):
         """
         :param Meta: Passed Meta from experimental hierarchy
         :type Meta: tuple[str, str]
         :param Stage: Title of Stage
         :type Stage: str
+        :param args: Sync ID (ID of columns used for syncing data)
+        :type args: Tuple[str, str]
         """
         # PROTECTED
         self.__mouse_id = Meta[1]
@@ -551,9 +569,15 @@ class BehavioralStage:
         self.modifications = [(ExperimentData.getDate(), ExperimentData.getTime())]
         self.folder_dictionary = dict()
         # self.data = pd.DataFrame
-        self.data_frame = pd.DataFrame
-        self.meta_data = None
-        self.sync_key = None
+        self.data = None
+        self.meta = None
+        self.state_index = None
+
+        if len(args) >= 1:
+            self.sync_id = args[0]
+            assert(isinstance(self.sync_id, tuple))
+        else:
+            self.sync_id = None
 
         _mouse_directory = Meta[0]
         self.createFolderDictionary(_mouse_directory, Stage)
@@ -643,14 +667,15 @@ class BehavioralStage:
         """
         SamplingRate = str(SamplingRate)  # Because we know I'll always forget and send an int anyway
         _folder_name = "".join([self.folder_dictionary['imaging_folder'], "\\", SamplingRate, "Hz"])
-        _attr_name = "".join(["Imaging_", SamplingRate, "Hz"])
+        _key_name = "".join(["imaging_", SamplingRate, "Hz"])
         try:
             os.makedirs(_folder_name)
         except FileExistsError:
             print("The sampling folder already exists. Adding to folder dictionary")
-        setattr(self, _attr_name, CollectedImagingFolder(_folder_name))
+        # setattr(self, _attr_name, CollectedImagingFolder(_folder_name)) changing to be in folder dictionary
+        self.folder_dictionary[_key_name] = CollectedImagingFolder(_folder_name)
         ExperimentData.generateSampFreq(_folder_name)
-        self.__dict__.get(_attr_name).reIndex()
+        self.folder_dictionary.get(_attr_name).reIndex()
 
     def loadBrukerMetaData(self) -> Self:
         """
@@ -660,9 +685,9 @@ class BehavioralStage:
         """
         self.folder_dictionary["bruker_meta_data"].reIndex()
         _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("xml")
-        self.meta_data = BrukerMeta(_files[0], _files[2], _files[1])
-        self.meta_data.import_meta_data()
-        self.meta_data.creation_date = ExperimentData.getDate()
+        self.meta = BrukerMeta(_files[0], _files[2], _files[1])
+        self.meta.import_meta_data()
+        self.meta.creation_date = ExperimentData.getDate()
 
     def loadBrukerAnalogRecordings(self) -> pd.DataFrame:
         """
@@ -715,6 +740,20 @@ class BehavioralStage:
         """
         print(" Was not overwritten")
         return
+
+    def update_folder_dictionary(self) -> Self:
+        """
+        This function reindexes all folders in the folder dictionary
+
+        :rtype: Any
+        """
+
+        # noinspection PyTypeChecker
+        for _key in self.folder_dictionary.keys():
+            if isinstance(self.folder_dictionary.get(_key), CollectedDataFolder):
+                self.folder_dictionary.get(_key).reIndex()
+            elif isinstance(self.folder_dictionary.get(_key), CollectedImagingFolder):
+                self.folder_dictionary.get(_key).reIndex()
 
     @staticmethod
     def load_bruker_analog_recordings(File: str) -> pd.DataFrame:
@@ -1022,7 +1061,6 @@ class CollectedImagingFolder(CollectedDataFolder):
     def __init__(self, Path: str):
         super().__init__(Path)
         self.current_stage = "Instanced"
-        self.Suite2PModule = None
 
     def load_fissa_exports(self) -> Tuple[np.ndarray, np.ndarray]:
         """
