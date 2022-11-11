@@ -281,7 +281,6 @@ def generate_pixel_pairs(Stats: np.ndarray, ROIs: List[int]) -> Tuple[Tuple[int,
     return PixelPairs
 
 
-
 def generate_custom_map(Colors: List[str]) -> plt.cm.colors.Colormap:
     """
     Generates a custom linearized colormap
