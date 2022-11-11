@@ -8,6 +8,8 @@
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_Retrieval.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Colorizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Colorizer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -261,14 +263,7 @@
       <workItem from="1667948828470" duration="92000" />
       <workItem from="1667950144175" duration="643000" />
       <workItem from="1668177219727" duration="14944000" />
-      <workItem from="1668195481001" duration="4692000" />
-    </task>
-    <task id="LOCAL-00029" summary="Some things changed while doing some log-reg analysis">
-      <created>1666120124320</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1666120124320</updated>
+      <workItem from="1668195481001" duration="7464000" />
     </task>
     <task id="LOCAL-00030" summary="Some things changed while doing some log-reg analysis">
       <created>1666187344541</created>
@@ -606,7 +601,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668201972633</updated>
     </task>
-    <option name="localTasksCounter" value="78" />
+    <task id="LOCAL-00078" summary="namespace changes">
+      <created>1668203503220</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1668203503220</updated>
+    </task>
+    <option name="localTasksCounter" value="79" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -651,17 +653,6 @@
     <MESSAGE value="Colorizer Functions Added" />
     <MESSAGE value="namespace changes" />
     <option name="LAST_COMMIT_MESSAGE" value="namespace changes" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py</url>
-          <line>19</line>
-          <option name="timeStamp" value="17" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Calcium_Imaging_Analysis_Pipeline$a.coverage" NAME="a Coverage Results" MODIFIED="1664464028437" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AnalysisModules" />

@@ -24,8 +24,8 @@ class FearConditioning(BehavioralStage):
     See BehavioralStage for more information
 
     **Keyword Arguments**
-        | *TrialsPerStim* : Number of trials per stimulus
-        | *NumStim* : Number of stimuli
+        | *TrialsPerStim* : Number of trials per stimulus (int, default 5)
+        | *NumStim* : Number of stimuli (int, default 2)
 
     **Self Methods**
         | *self.generateFileID* : Generate a file ID for a particular sort of data

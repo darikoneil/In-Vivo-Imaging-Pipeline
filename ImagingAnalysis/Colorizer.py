@@ -19,26 +19,17 @@ def colorize_video(Images: np.ndarray, Stats: np.ndarray, ROIs: Optional[List[in
     in which the ROIs or subsets of ROIs utilize a different colormap
 
      **Keyword Arguments**
-    -----------------
-     *cmap* : str
-        Colormap to use on ROIs
-            Default -> None
-    *colors* : Tuple of Tupled Floats
-        colors which will be used to generate custom colormap
-            Default -> None
-                Example -> ((0, 0, 0), (0.074, 0.624, 1.000), (0.074, 0.624, 1.000))
-    *background* : bool
-        boolean indicating whether to overlay on a blank image or the background of input image
-            Default -> True
-    *white_background* : bool
-        boolean indicating whether to use a white or black background
-            Default -> False
-    *write* : bool
-        boolean indicating whether to write video to file
-            Default -> False
-    *filename* : str
-        file path for saving video
-            Default -> None
+        | *cmap* : Colormap to use on ROIs (str, default None)
+        | *colors* : colors which will be used to generate custom colormap
+        | (tuple[tuple[float]], default None)
+        | Example -> ((0, 0, 0), (0.074, 0.624, 1.000), (0.074, 0.624, 1.000))
+        | *background* : boolean indicating whether to overlay on a blank image
+        | or the background of input image (bool , default True)
+        | *white_background* : boolean indicating whether to use a white or black background
+        | (bool, default False)
+        | *write* : boolean indicating whether to write video to file
+        | (bool, default False)
+        | *filename* : file path for saving video (str, default None)
 
     :param Images: The images to be colorized
     :type Images: Any

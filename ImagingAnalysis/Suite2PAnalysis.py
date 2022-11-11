@@ -9,16 +9,39 @@ import os
 import glob
 from ExperimentManagement.ExperimentHierarchy import ExperimentData
 from ImagingAnalysis.PreprocessingImages import PreProcessing
-from typing import Tuple, List
+from typing import Tuple, List, Union, Optional
 
 
 class Suite2PModule:
     """
     Helper Module for Suite2P Analysis
+
+    **Required Inputs**
+        | *File_Directory* : Images Directory
+        | *Output_Directory* : Directory to save in
+
+    **Keyword Arguments**
+        | *meta_file* : file containing binary metadata (str, default None)
+        | *meta* : binary metadata (tuple[int, int, int, str], default None)
+        | *video* : images (np.ndarray, default None)
+        | *file_type* :  video file type (str [tiff or binary], default "tiff")
+        | *ops* : Suite2P ops (dict, default None)
+
+
     """
     def __init__(self, File_Directory: str, Output_Directory: str, **kwargs):
         """
         Instances A Suite2P Analysis
+
+        :param File_Directory: directory containing binary metadata
+        :type File_Directory: str
+        :param Output_Directory: directory to save in
+        :type Output_Directory: str
+        :keyword meta_file: file containing binary metadata (str, default None)
+        :keyword meta: binary metadata (tuple[int, int, int,str], default None)
+        :keyword video: images (np.ndarray, default None)
+        :keyword file_type: video file type (str, default None)
+        :keyword ops: suite2p ops (dict, default None)
         """
 
         _meta_file = kwargs.get("meta_file", None)
