@@ -4,7 +4,7 @@ import pickle as pkl
 import pathlib
 import pandas as pd
 from tqdm.auto import tqdm
-from typing import Tuple
+from typing import Tuple, List, Optional, Union
 import ExperimentManagement.ExperimentHierarchy
 from ExperimentManagement.ExperimentHierarchy import BehavioralStage, CollectedDataFolder
 import matplotlib
@@ -21,22 +21,30 @@ class FearConditioning(BehavioralStage):
     """
     Instance Factory for Fear Conditioning Data
 
+    See BehavioralStage for more information
+
+    **Keyword Arguments**
+        | *TrialsPerStim* : Number of trials per stimulus
+        | *NumStim* : Number of stimuli
+
     **Self Methods**
-        | **self.generateFileID** : Generate a file ID for a particular sort of data
-        | **self.fillFolderDictionary** : Function to index subfolders containing behavioral data
+        | *self.generateFileID* : Generate a file ID for a particular sort of data
+        | *self.fillFolderDictionary* : Function to index subfolders containing behavioral data
 
     **Class Methods**
-        | **cls.loadAnalogData** : Loads Analog Data from a burrow behavioral session
-        | **cls.loadDigitalData** : Loads Digital Data from a burrow behavioral session
-        | **cls.loadStateData** : Loads State Data from a burrow behavioral session
-        | **cls.loadDictionaryData** : Loads Dictionary Data from a burrow behavioral session
-        | **cls.loadBehavioralData** : Loads Behavioral Data from a burrow behavioral session
+        | *cls.loadAnalogData* : Loads Analog Data from a burrow behavioral session
+        | *cls.loadDigitalData* : Loads Digital Data from a burrow behavioral session
+        | *cls.loadStateData* : Loads State Data from a burrow behavioral session
+        | *cls.loadDictionaryData* : Loads Dictionary Data from a burrow behavioral session
+        | *cls.loadBehavioralData* : Loads Behavioral Data from a burrow behavioral session
 
     **Static Methods**
-        | **convertFromPy27_Array** : Convert a numpy array of strings in byte-form to numpy array of strings in string-form
-        | **convertFromPy27_Dict**  : Convert a dictionary pickled in Python 2.7 to a Python 3 dictionary
+        | *convertFromPy27_Array* : Convert a numpy array of strings in byte-form to numpy array of strings in string-form
+        | *convertFromPy27_Dict*  : Convert a dictionary pickled in Python 2.7 to a Python 3 dictionary
     """
-    def __init__(self, Meta, Stage, **kwargs):
+    def __init__(self, Meta: Tuple[str, str], Stage: str, **kwargs):
+
+
         super().__init__(Meta, Stage)
         self.fillFolderDictionary()
 
@@ -52,32 +60,23 @@ class FearConditioning(BehavioralStage):
         self.__num_trials = _num_trials
         self.__stage_id = _stage
 
-        # self.habituation_data = None
-        # self.pretrial_data = None
-        # self.iti_data = None
-        # self.trial_data = None
-        # self.trial_dictionary = dict()
-
-        self.data = dict()
-        self.data_frame = pd.DataFrame()
-        self.state_casted_index = dict()
-        self.multi_index = pd.MultiIndex()
-        self.trial_parameters = dict()
+        self.multi_index = None
+        self.trial_parameters = None
 
     @property
-    def stage_id(self):
+    def stage_id(self) -> str:
         return self._FearConditioning__stage_id
 
     @property
-    def num_trials(self):
+    def num_trials(self) -> int:
         return self._FearConditioning__num_trials
 
     @property
-    def trials_per_stim(self):
+    def trials_per_stim(self) -> int:
         return self._FearConditioning__trials_per_stim
 
     @property
-    def num_stim(self):
+    def num_stim(self) -> int:
         return self._FearConditioning__num_stim
 
     @classmethod
@@ -89,6 +88,7 @@ class FearConditioning(BehavioralStage):
 
     @classmethod
     def reorganizeData(cls, NeuralActivity, TrialFeatures, ImFreq, **kwargs):
+        print("Maybe Deprecated? Warning!")
         _iti_time = kwargs.get('ITILength', 90)
         _retract_time = kwargs.get('RetractLength', 5)
         _release_time = kwargs.get('ReleaseLength', 5)
@@ -313,30 +313,30 @@ class FearConditioning(BehavioralStage):
             # noinspection PyTypeChecker
             # Copies for safety > No-copies for speed (avoid pandas gotchas)
         # noinspection PyTypeChecker
-        self.data_frame, self.state_casted_index, self.multi_index = \
+        self.data, self.state_index, self.multi_index = \
             MethodsForPandasOrganization.ExportPandasDataFrame(
                 _analog_data.copy(), _digital_data.copy(), _state_data.copy())
         # merge cs index with data frame
-        self.data_frame = \
+        self.data = \
             MethodsForPandasOrganization.merge_cs_index_into_dataframe(
-                self.data_frame.copy(), np.array(self.trial_parameters.get("stimulusTypes"), dtype=np.float64))
+                self.data.copy(), np.array(self.trial_parameters.get("stimulusTypes"), dtype=np.float64))
         # merge deeplabcut with data frame
-        self.data_frame = MethodsForPandasOrganization.merge_dlc_data(self.data_frame, _dlc, self.multi_index,
-                                                                            self.state_casted_index)
+        self.data = MethodsForPandasOrganization.merge_dlc_data(self.data, _dlc, self.multi_index,
+                                                                            self.state_index)
         # merge imaging data
         _analog_recordings = self.loadBrukerAnalogRecordings()
         if self.validate_bruker_recordings_completion(_analog_recordings, self.num_trials)[0]:
-            self.data_frame = self.sync_bruker_recordings(self.data_frame.copy(deep=True),
-                                                          _analog_recordings, self.meta_data, self.state_casted_index,
+            self.data = self.sync_bruker_recordings(self.data.copy(deep=True),
+                                                          _analog_recordings, self.meta, self.state_index,
                                                           ("State Integer", " TrialIndicator"))
-            self.data_frame = self.sync_downsampled_images(self.data_frame.copy(deep=True), self.meta_data)
+            self.data = self.sync_downsampled_images(self.data.copy(deep=True), self.meta)
         else:
             try:
                 self.mergeAdditionalBruker(_analog_recordings)
                 # noinspection PyArgumentList
-                self.data_frame = self.sync_downsampled_images(self.data_frame.copy(deep=True), self.meta_data,
+                self.data = self.sync_downsampled_images(self.data.copy(deep=True), self.meta,
                                                           two_files=True,
-                                                          second_meta=self.loadAdditionalBrukerMetaData(2))
+                                                          second_meta=self.loadAdditionalBrukerMetaData(str(2)))
             except KeyError:
                 print("Only one of multiple bruker datasets loaded")
 
@@ -401,26 +401,26 @@ class FearConditioning(BehavioralStage):
         """
         _tag = 2
         _, _detected_trials_1 = self.validate_bruker_recordings_completion(AnalogRecordings, self.num_trials)
-        _frames_1 = self.index_trial_subset_for_bruker_sync(self.data_frame, _detected_trials_1,
+        _frames_1 = self.index_trial_subset_for_bruker_sync(self.data, _detected_trials_1,
                                                             self.num_trials, "Start")
-        _data_frame_1 = self.data_frame.iloc[_frames_1[0]:_frames_1[-1]].copy(deep=True)
-        _data_frame_1 = self.sync_bruker_recordings(_data_frame_1, AnalogRecordings, self.meta_data,
-                                                    self.state_casted_index,  ("State Integer", " TrialIndicator"))
-        _num_frames_in_first_set = self.meta_data.imaging_metadata.get("relativeTimes").__len__()
-        _analog_recordings_2 = self.loadAdditionalBrukerAnalogRecordings(2)
-        _meta_data_2 = self.loadAdditionalBrukerMetaData(2)
+        _data_frame_1 = self.data.iloc[_frames_1[0]:_frames_1[-1]].copy(deep=True)
+        _data_frame_1 = self.sync_bruker_recordings(_data_frame_1, AnalogRecordings, self.meta,
+                                                    self.state_index,  ("State Integer", " TrialIndicator"))
+        _num_frames_in_first_set = self.meta.imaging_metadata.get("relativeTimes").__len__()
+        _analog_recordings_2 = self.loadAdditionalBrukerAnalogRecordings(str(2))
+        _meta_data_2 = self.loadAdditionalBrukerMetaData(str(2))
         _, _detected_trials_2 = self.validate_bruker_recordings_completion(_analog_recordings_2, self.num_trials)
-        _frames_2 = self.index_trial_subset_for_bruker_sync(self.data_frame, _detected_trials_2,
+        _frames_2 = self.index_trial_subset_for_bruker_sync(self.data, _detected_trials_2,
                                                             self.num_trials, "End")
-        _data_frame_2 = self.data_frame.iloc[_frames_2[0]:_frames_2[-1]].copy(deep=True)
+        _data_frame_2 = self.data.iloc[_frames_2[0]:_frames_2[-1]].copy(deep=True)
         _data_frame_2 = self.sync_bruker_recordings(_data_frame_2, _analog_recordings_2, _meta_data_2,
-                                                    self.state_casted_index, ("State Integer", " TrialIndicator"))
+                                                    self.state_index, ("State Integer", " TrialIndicator"))
         _data_frame_2[["Imaging Frame", "[FILLED] Imaging Frame"]] = \
             _data_frame_2[["Imaging Frame", "[FILLED] Imaging Frame"]] + _num_frames_in_first_set
         _data_frame_concat = pd.concat([_data_frame_1, _data_frame_2])
         _data_frame_concat = _data_frame_concat[[" TrialIndicator", " UCSIndicator",
                                                  "Imaging Frame", "[FILLED] Imaging Frame"]]
-        self.data_frame = self.data_frame.join(_data_frame_concat)
+        self.data = self.data.join(_data_frame_concat)
 
     @staticmethod
     def validate_bruker_recordings_labels(AnalogRecordings, NumTrials):
