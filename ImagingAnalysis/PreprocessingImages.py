@@ -23,36 +23,21 @@ class PreProcessing:
     Class containing a variety of static methods for preprocessing images
 
     **Static Methods**
-        |
-        | **loadBrukerTiffs** : Load a sequence of tiff files from a directory.
-        |
-        | **repackageBrukerTiffs** :  Repackages a sequence of tiff files within a directory to a smaller sequence of tiff stacks.
-        |
-        | **filterTiff** : Denoise a tiff stack using a multidimensional median filter
-        |
-        | **fastFilterTiff** : GPU-parallelized multidimensional median filter
-        |
-        | **saveTiff** : Save a numpy array to a single tiff file
-        |
-        | **loadTiff** : Load a single tiff file
-        |
-        | **loadAllTiffs** : Load a sequence of tiff stacks
-        |
-        | **loadRawBinary** : Loads a raw binary file
-        |
-        | **saveRawBinary** : This function saves a tiff stack as a binary file
-        |
-        | **removeShutterArtifact** : Function to remove the shuttle artifacts present at the initial imaging frames
-        |
-        | **blockwiseFastFilterTiff** : Blockwise, GPU-parallelized multidimensional median filter
-        |
-        | **saveTiffStack** : Save a numpy array to a sequence of tiff stacks
-        |
-        | **groupedZProject** : Utilize grouped z-project to downsample data
-        |
-        | **viewImage** :  Visualize a numpy array [Z x Y x X] as a video
-        |
-        | **loadBinaryMeta** : Loads meta file for binary video
+        | *loadBrukerTiffs* : Load a sequence of tiff files from a directory.
+        | *repackageBrukerTiffs* :  Repackages a sequence of tiff files within a directory to a smaller sequence of tiff stacks.
+        | *filterTiff* : Denoise a tiff stack using a multidimensional median filter
+        | *fastFilterTiff* : GPU-parallelized multidimensional median filter
+        | *saveTiff* : Save a numpy array to a single tiff file
+        | *loadTiff* : Load a single tiff file
+        | *loadAllTiffs* : Load a sequence of tiff stacks
+        | *loadRawBinary* : Loads a raw binary file
+        | *saveRawBinary* : This function saves a tiff stack as a binary file
+        | *removeShutterArtifact* : Function to remove the shuttle artifacts present at the initial imaging frames
+        | *blockwiseFastFilterTiff* : Blockwise, GPU-parallelized multidimensional median filter
+        | *saveTiffStack* : Save a numpy array to a sequence of tiff stacks
+        | *groupedZProject* : Utilize grouped z-project to downsample data
+        | *viewImage* :  Visualize a numpy array [Z x Y x X] as a video
+        | *loadBinaryMeta* : Loads meta file for binary video
     """
 
     def __init__(self):

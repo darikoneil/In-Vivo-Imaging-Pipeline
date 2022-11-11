@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Backup of scratch/working colorizing code.">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Docstring">
       <change afterPath="$PROJECT_DIR$/DebugData/suite2p/plane0/Goob/binary2" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/para.yaml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pth/ModelForPytorch/E_10_Iter_3500.pth" afterDir="false" />
@@ -30,8 +30,10 @@
       <change afterPath="$PROJECT_DIR$/pth/ex/E_17_Iter_1008.pth" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pth/ex/E_18_Iter_1008.pth" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/pth/ex/E_19_Iter_1008.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ImagingAnalysis/a.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" afterDir="false" />
     </list>
@@ -284,14 +286,8 @@
       <workItem from="1667861502946" duration="26169000" />
       <workItem from="1667946234364" duration="6000" />
       <workItem from="1667948828470" duration="92000" />
-      <workItem from="1667950144175" duration="619000" />
-    </task>
-    <task id="LOCAL-00021" summary="Synchronized Imaging Frames/Bruker Data">
-      <created>1665425567036</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1665425567036</updated>
+      <workItem from="1667950144175" duration="643000" />
+      <workItem from="1668177219727" duration="755000" />
     </task>
     <task id="LOCAL-00022" summary="Synchronized Imaging Frames/Bruker Data">
       <created>1665426080147</created>
@@ -629,7 +625,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667938214293</updated>
     </task>
-    <option name="localTasksCounter" value="70" />
+    <task id="LOCAL-00070" summary="Docstring">
+      <created>1667950786010</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1667950786020</updated>
+    </task>
+    <option name="localTasksCounter" value="71" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -648,7 +651,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Some things changed while doing some log-reg analysis" />
     <MESSAGE value="Noted Single Frame De-Sync in Downsampled Pandas DataFrames" />
     <MESSAGE value="Updated Decoding, some sync adjustments" />
     <MESSAGE value="Added Videos -&gt; Binary File Function" />
@@ -673,7 +675,8 @@
     <MESSAGE value="Slight" />
     <MESSAGE value="IGNORE" />
     <MESSAGE value="Backup of scratch/working colorizing code." />
-    <option name="LAST_COMMIT_MESSAGE" value="Backup of scratch/working colorizing code." />
+    <MESSAGE value="Docstring" />
+    <option name="LAST_COMMIT_MESSAGE" value="Docstring" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -34,6 +34,7 @@
       <w>linewidth</w>
       <w>linewidths</w>
       <w>logscale</w>
+      <w>logstate</w>
       <w>memmap</w>
       <w>mfpo</w>
       <w>multioutput</w>

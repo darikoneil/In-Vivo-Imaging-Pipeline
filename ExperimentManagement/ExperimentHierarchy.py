@@ -13,6 +13,7 @@ from ExperimentManagement.BrukerMetaModule import BrukerMeta
 from MigrationTools.Converters import renamed_load
 import math
 
+
 # yo some dis ugly
 
 
@@ -21,14 +22,58 @@ class ExperimentData:
     Class for Organizing & Managing Experimental Data Across Sessions
 
     **Class Methods**
-        | **loadHierarchy** : Function that loads the entire experimental hierarchy
+        | *loadHierarchy* : Function that loads the entire experimental hierarchy
+        | *getDate*: Function returns date
+        | *getTime* : Function returns time
+        | *checkPath* : Checks Path
+        | *generateDirectoryHierarchy* : Generates the Directory Structure (The structured folders where data stored)
+        | *generateHistology* :  Generates Histology Folder
+        | *generateROIMatchingIndex* : Generate ROI Matching Folder
+        | *generateStage* : Generate Behavioral Stage Folder
+        | *generateBehavior* : Generate Behavioral Folder
+        | *generateImaging* : Generate Imaging Folder
+        | *generateSampFreq* : Generate Sample Frequency Folder Innards
+        | *generateComputation* : Generate Computation Folder
+        | *generateAnalysisTechnique* : Generate Analysis Technique
+
+    **Static Methods**
+        | *generateReadMe* : Generate a read me file
+
+    **Self Methods**
+        | *passMeta* : Passes directory/mouse id
+        | *recordMod* : Record modification of experiment
+        | *saveHierarchy* : Saves Hierarchy to pickle
+        | *createLogFile* : Creates log file
+        | *startLog* : Starts Log
+        | *checkLog* : Checks Log Status
+
+    **Properties**
+        | *mouse_id* : ID of Mouse
+        | *log_file* : Log File Path
+        | *experimental_condition* : Experiment condition of the mouse
+        | *instance_data* : Date when this experimental hierarchy was created
+
+    **Attributes**
+        | *directory* : Experimental Hierarchy Directory
+        | *study* : Study
+        | *study_mouse* : ID of mouse in study
+        | *modifications* : modifications made to this file
+
     """
 
     def __init__(self, **kwargs):
+        """
+        :keyword LogFile: Path to existing log file (str, default None)
+        :keyword Mouse: Mouse ID (str, default None)
+        :keyword Condition: Experimental Condition (str, default None)
+        :keyword Directory: Directory for hierarchy (str, default None)
+        :keyword Study: Study (str, default None)
+        :keyword StudyMouse: Study ID (str, default None)
+        """
         # Hidden
-        self._mouse_id_assigned = False # to make sure mouse id only set once
-        self._log_file_assigned = False # to make sure log file only set once
-        self._experimental_condition_assigned = False # to make set condition only once
+        self._mouse_id_assigned = False  # to make sure mouse id only set once
+        self._log_file_assigned = False  # to make sure log file only set once
+        self._experimental_condition_assigned = False  # to make set condition only once
         # Protected In Practice
         self._log_file = kwargs.get('LogFile', None)
         self._mouse_id = kwargs.get('Mouse', None)
@@ -72,6 +117,11 @@ class ExperimentData:
 
     @property
     def log_file(self) -> str:
+        """
+        Log File Path
+
+        :rtype: str
+        """
         return self._log_file
 
     @log_file.setter
@@ -84,6 +134,11 @@ class ExperimentData:
 
     @property
     def mouse_id(self) -> str:
+        """
+        ID of Mouse
+
+        :rtype: str
+        """
         return self._mouse_id
 
     @mouse_id.setter
@@ -96,6 +151,11 @@ class ExperimentData:
 
     @property
     def instance_date(self) -> str:
+        """
+        Date when this experimental hierarchy was created
+
+        :rtype: str
+        """
         return self._ExperimentData__instance_date
 
     @classmethod
@@ -136,6 +196,24 @@ class ExperimentData:
 
     @classmethod
     def generateDirectoryHierarchy(cls, MouseDirectory: str, **kwargs) -> None:
+        """
+        Generates the Directory Structure (The structured folders where data stored)
+
+         Keyword Arguments
+        -----------------
+        *Histology* : Generate histology Folder (bool, default True)
+        *ROIMatchingIndex* : Generate ROI Matching Folder (bool, default True)
+        *Stage* :Generate Behavioral Stage Folder(bool, default True)
+        *LabNotebook* : Generate Lab Notebook Folder (bool, default True)
+
+        :param MouseDirectory: Directory to generate folders in
+        :type MouseDirectory: str
+        :keyword Histology: Generate histology Folder
+        :keyword ROIMatchingIndex: Generate ROI Matching Folder
+        :keyword Stage: Generate Behavioral Stage Folder
+        :keyword: LabNotebook: Generate Lab Notebook Folder
+        :rtype: None
+        """
         _gen_histology = kwargs.get('Histology', True)
         _gen_roi_matching_index = kwargs.get('ROIMatchingIndex', True)
         _gen_stage = kwargs.get('Stage', True)
@@ -152,6 +230,19 @@ class ExperimentData:
 
     @classmethod
     def generateHistology(cls, MouseDirectory: str, **kwargs) -> None:
+        """
+        Generates Histology Folder
+
+        Keyword Arguments
+        -----------------
+        *Title* : Title of Histology Experiment (str, default None)
+
+        :param MouseDirectory: Directory to generate folders in
+        :type MouseDirectory: str
+        :keyword Title: Title of Histology Experiment
+        :rtype: None
+        """
+
         _visual_hist_title = kwargs.get('Title', None)
         _base_hist_dir = MouseDirectory + "\\Histology"
         if _visual_hist_title is not None:
@@ -168,6 +259,11 @@ class ExperimentData:
 
     @classmethod
     def generateROIMatchingIndex(cls, MouseDirectory: str) -> None:
+        """
+        Generate ROI Matching Folder
+
+        :rtype: None
+        """
         _roi_matching_index_dir = MouseDirectory + "\\ROIMatchingIndex"
         _roi_matching_index_read_me = _roi_matching_index_dir + "\\ReadMe.txt"
 
@@ -177,6 +273,17 @@ class ExperimentData:
 
     @classmethod
     def generateStage(cls, MouseDirectory: str, **kwargs) -> None:
+        """
+        Generate Behavioral Stage Folder
+
+        Keyword Arguments
+        -----------------
+        *Behavior* : Include Behavioral Folder (bool, default True)
+        *Imaging* : Include Imaging Folder (bool, default True)
+        *Computation* : Include Computation Folder (bool, default True)
+        *Title* : Title of Behavioral Stage (str, default Stage)
+        :rtype: None
+        """
         _include_behavior = kwargs.get('Behavior', True)
         _include_imaging = kwargs.get('Imaging', True)
         _include_computation = kwargs.get('Computation', True)
@@ -192,6 +299,14 @@ class ExperimentData:
 
     @classmethod
     def generateBehavior(cls, StageDirectory: str) -> None:
+        """
+        Generate Behavioral Folder
+
+        :param StageDirectory: Directory for folder creation
+        :type StageDirectory: str
+        :rtype: None
+        """
+
         _base_behav_dir = StageDirectory + "\\Behavior"
         _raw_behavioral_data = _base_behav_dir + "\\RawBehavioralData"
         _behavioral_exports = _base_behav_dir + "\\BehavioralExports"
@@ -207,6 +322,19 @@ class ExperimentData:
 
     @classmethod
     def generateImaging(cls, StageDirectory: str, **kwargs) -> None:
+        """
+        Generate Imaging Folder
+
+        Keyword Arguments
+        -----------------
+        *SampleFrequency* : Image frequency (int, default 30)
+
+        :param StageDirectory: Directory for folder creation
+        :type StageDirectory: str
+        :keyword SampleFrequency: Image frequency
+        :rtype: None
+        """
+
         _sample_frequency = kwargs.get('SampleFrequency', 30)
         _sample_frequency_string = str(_sample_frequency) + "Hz"
         _base_image_dir = StageDirectory + "\\Imaging"
@@ -220,6 +348,13 @@ class ExperimentData:
 
     @classmethod
     def generateSampFreq(cls, SampFreqDirectory: str) -> None:
+        """
+        Generate Sample Frequency Folder Innards
+
+        :param SampFreqDirectory: Directory for folder creation
+        :type SampFreqDirectory: str
+        :rtype: None
+        """
         _suite2p = SampFreqDirectory + "\\suite2p"
         _fissa = SampFreqDirectory + "\\fissa"
         _roi_sorting = SampFreqDirectory + "\\sorting"
@@ -230,10 +365,22 @@ class ExperimentData:
         os.makedirs(_denoised)
         os.makedirs(_roi_sorting)
         os.makedirs(_cascade)
-        cls.generateReadMe(_roi_sorting+"\\ReadMe.txt", "Read-Me for ROI Sorting")
+        cls.generateReadMe(_roi_sorting + "\\ReadMe.txt", "Read-Me for ROI Sorting")
 
     @classmethod
     def generateComputation(cls, StageDirectory: str, **kwargs) -> None:
+        """
+        Generate Computation Folder
+
+        Keyword Arguments
+        -----------------
+        *Title* : Computational Analysis Title (str, default AnalysisTechnique)
+
+        :param StageDirectory: Directory for folder creation
+        :type StageDirectory: str
+        :keyword Title: Computational Analysis Title
+        :rtype: None
+        """
         _analysis_title = kwargs.get('Title', 'AnalysisTechnique')
         _base_comp_dir = StageDirectory + "\\Computational"
         _neural_data_dir = _base_comp_dir + "\\NeuralData"
@@ -243,33 +390,63 @@ class ExperimentData:
 
     @classmethod
     def generateAnalysisTechnique(cls, BaseCompDirectory: str, AnalysisTitle: str) -> None:
-        _analysis_dir = BaseCompDirectory+"\\"+AnalysisTitle
+        """
+        Generate Analysis Technique
+
+        :param BaseCompDirectory: Base Directory for Computation
+        :type BaseCompDirectory: str
+        :param AnalysisTitle: Title for Analysis
+        :type AnalysisTitle: str
+        :rtype: None
+        """
+        _analysis_dir = BaseCompDirectory + "\\" + AnalysisTitle
         os.makedirs(_analysis_dir)
-        cls.generateReadMe(_analysis_dir+"\\ReadMe.txt", "Read-Me for Analysis Technique")
+        cls.generateReadMe(_analysis_dir + "\\ReadMe.txt", "Read-Me for Analysis Technique")
 
     @staticmethod
     def generateReadMe(AbsoluteFilePath: str, Text: str) -> None:
+        """
+        Generate a read me file
+
+        :param AbsoluteFilePath: File path
+        :type AbsoluteFilePath: str
+        :param Text: Text inside
+        :type Text: str
+        :rtype: None
+        """
         with open(AbsoluteFilePath, 'w') as _read_me:
             _read_me.write(Text)
             _read_me.close()
 
     def passMeta(self) -> Tuple[str, str]:
+        """
+        Passes directory/mouse id
+
+        :returns: directory/mouse id
+        :rtype: tuple[str, str]
+        """
+
         return self.directory, self.mouse_id
 
     def recordMod(self, *args: str) -> Self:
         """
         Record modification of experiment (Data, Time, *args)
 
-        **Modifies**
-            | self.modifications
 
         :param args: A string explaining the modification
-        :rtype: None
+        :type args: str
+        :rtype: Any
         """
         # noinspection PyTypeChecker
         self.modifications.append((self.getDate(), self.getTime(), *args))
 
     def saveHierarchy(self) -> Self:
+        """
+        Saves Hierarchy to pickle
+
+        :rtype: Any
+        """
+
         print("Saving Experimental Hierarchy...")
         if hasattr('self', '_IP'):
             # noinspection PyAttributeOutsideInit
@@ -298,10 +475,20 @@ class ExperimentData:
             self._IP = get_ipython()
 
     def createLogFile(self) -> Self:
+        """
+        Creates log file
+
+        :rtype: Any
+        """
         self.log_file = self.directory + "\\log_file.log"
 
     # noinspection All
     def startLog(self) -> Self:
+        """
+        Starts Log
+
+        :rtype: Any
+        """
         self._IP = get_ipython()
         _magic_arguments = '-o -r -t ' + self.log_file + ' append'
         self._IP.run_line_magic('logstart', _magic_arguments)
@@ -309,31 +496,54 @@ class ExperimentData:
 
     # noinspection All
     def endLog(self) -> Self:
+        """
+        Ends Logging
+
+        :rtype: Any
+        """
         self._IP.run_line_magic('logstop', '')
 
     # noinspection All
-    def checkLog(self) -> Self: # noinspection All
-        self._IP.run_line_magic('logstate', '')
+    def checkLog(self) -> Self:  # noinspection All
+        """
+        Checks log status
+
+        :rtype: Any
+        """
+
+    self._IP.run_line_magic('logstate', '')
 
 
 class BehavioralStage:
     """
+    Data Container for a generic stage or day of a behavioral task
+
     **Self Methods**
-        | **recordMod** : Records a modification made to the behavioral stage (Date & Time)
-        | **createFolderDictionary** : Creates a dictionary of locations for specific files
-        | **fillImagingDictionary** :  Generates folders and a dictionary of imaging files (Raw, Meta, Compiled)
-        | **addImageSamplingFolder** : Generates a folder for containing imaging data of a specific sampling rate
-        | **addImageProcessingFolder** : Generates a folder for containing processed imaging data
+        | *recordMod* : Records a modification made to the behavioral stage (Date & Time)
+        | *createFolderDictionary* : Creates a dictionary of locations for specific files
+        | *fillImagingDictionary* :  Generates folders and a dictionary of imaging files (Raw, Meta, Compiled)
+        | *addImageSamplingFolder* : Generates a folder for containing imaging data of a specific sampling rate
+        | *addImageProcessingFolder* : Generates a folder for containing processed imaging data
 
     **Properties**
-        | **mouse_id** : Identifies which mouse this data belongs to
-        | **instance_data** : Identifies when this behavioral stage was created
+        | *mouse_id* : Identifies which mouse this data belongs to
+        | *instance_data* : Identifies when this behavioral stage was created
 
     **Attributes**
-        | **modifications** : List of modifications made to this behavioral stage
-        | **folder_dictionary** : A dictionary of relevant folders for this behavioral stage
+        | *modifications* : List of modifications made to this behavioral stage
+        | *folder_dictionary* : A dictionary of relevant folders for this behavioral stage
+        | *data_frame* : Pandas dataframe of synced data
+        | *meta_data* : bruker metadata|
+        | *sync_key* : key indicator for syncing data
     """
-    def __init__(self, Meta, Stage):
+
+    def __init__(self, Meta: Tuple[str, str], Stage: str):
+        """
+        :param Meta: Passed Meta from experimental hierarchy
+        :type Meta: tuple[str, str]
+        :param Stage: Title of Stage
+        :type Stage: str
+        """
         # PROTECTED
         self.__mouse_id = Meta[1]
         self.__instance_date = ExperimentData.getDate()
@@ -351,30 +561,39 @@ class BehavioralStage:
 
     @property
     def mouse_id(self) -> str:
+        """
+        ID of mouse
+
+        :rtype: str
+        """
         return self._BehavioralStage__mouse_id
 
     @property
-    def instance_date(self):
+    def instance_date(self) -> str:
+        """
+        Date created
+
+        :rtype: str
+        """
         return self._BehavioralStage__instance_date
 
-    def recordMod(self):
+    def recordMod(self) -> Self:
         """
         Records a modification made to the behavioral stage (Date & Time)
+
+        :rtype: Any
         """
         self.modifications.append((ExperimentData.getDate(), ExperimentData.getTime()))
 
-    def createFolderDictionary(self, MouseDirectory, Stage):
+    def createFolderDictionary(self, MouseDirectory: str, Stage: str) -> Self:
         """
         Creates a dictionary of locations for specific files
-
-        **Modifies**
-            | self.folder_dictionary
 
         :param MouseDirectory: Directory containing mouse data (passed meta)
         :type MouseDirectory: str
         :param Stage: The Stage ID
         :type Stage: str
-
+        :rtype: Any
         """
         _stage_directory = MouseDirectory + "\\" + Stage
         self.folder_dictionary = {
@@ -385,15 +604,11 @@ class BehavioralStage:
             'behavior_folder': _stage_directory + "\\Behavior",
         }
 
-    def fillImagingFolderDictionary(self):
+    def fillImagingFolderDictionary(self) -> Self:
         """
         Generates folders and a dictionary of imaging files (Raw, Meta, Compiled)
 
-        **Requires**
-            | self.folder_dictionary
-
-        **Modifies**
-            | self.folder_dictionary
+        :rtype: Any
         """
         # RAW
         _raw_data_folder = self.folder_dictionary['imaging_folder'] + "\\RawImagingData"
@@ -418,14 +633,15 @@ class BehavioralStage:
 
         self.folder_dictionary['compiled_imaging_data_folder'] = CollectedDataFolder(_compiled_imaging_data_folder)
 
-    def addImageSamplingFolder(self, SamplingRate):
+    def addImageSamplingFolder(self, SamplingRate: int) -> Self:
         """
         Generates a folder for containing imaging data of a specific sampling rate
 
         :param SamplingRate: Sampling Rate of Dataset in Hz
         :type SamplingRate: int
+        :rtype: Any
         """
-        SamplingRate = str(SamplingRate) # Because we know I'll always forget and send an int anyway
+        SamplingRate = str(SamplingRate)  # Because we know I'll always forget and send an int anyway
         _folder_name = "".join([self.folder_dictionary['imaging_folder'], "\\", SamplingRate, "Hz"])
         _attr_name = "".join(["Imaging_", SamplingRate, "Hz"])
         try:
@@ -436,24 +652,52 @@ class BehavioralStage:
         ExperimentData.generateSampFreq(_folder_name)
         self.__dict__.get(_attr_name).reIndex()
 
-    def loadBrukerMetaData(self):
+    def loadBrukerMetaData(self) -> Self:
+        """
+        Loads Bruker Meta Data
+
+        :rtype: Any
+        """
         self.folder_dictionary["bruker_meta_data"].reIndex()
         _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("xml")
         self.meta_data = BrukerMeta(_files[0], _files[2], _files[1])
         self.meta_data.import_meta_data()
         self.meta_data.creation_date = ExperimentData.getDate()
 
-    def loadBrukerAnalogRecordings(self):
+    def loadBrukerAnalogRecordings(self) -> pd.DataFrame:
+        """
+        Loads Bruker Analog Recordings
+
+        :returns: Analog Recording
+        :rtype: pd.DataFrame
+        """
+
         self.folder_dictionary["bruker_meta_data"].reIndex()
         _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("csv")
         return self.load_bruker_analog_recordings(_files[-1])
 
-    def loadAdditionalBrukerAnalogRecordings(self, Tag):
+    def loadAdditionalBrukerAnalogRecordings(self, Tag: str) -> pd.DataFrame:
+        """
+        Loads Additional Bruker Analog Recordings
+
+        :param Tag: Tag for additional recordings
+        :type Tag: str
+        :returns: Analog Recording
+        :rtype: pd.DataFrame
+        """
         self.folder_dictionary["".join(["bruker_meta_data_", str(Tag)])].reIndex()
         _files = self.folder_dictionary["".join(["bruker_meta_data_", str(Tag)])].find_all_ext("csv")
         return self.load_bruker_analog_recordings(_files[-1])
 
-    def loadAdditionalBrukerMetaData(self, Tag):
+    def loadAdditionalBrukerMetaData(self, Tag: str) -> BrukerMeta:
+        """
+        Load additional bruker meta data
+
+        :param Tag: Tag for additional data
+        :type Tag: str
+        :return: Bruker meta data
+        :rtype : BrukerMeta
+        """
         self.folder_dictionary["".join(["bruker_meta_data_", str(Tag)])].reIndex()
         _files = self.folder_dictionary["".join(["bruker_meta_data_", str(Tag)])].find_all_ext("xml")
         _meta_data = BrukerMeta(_files[0], _files[2], _files[1])
@@ -462,17 +706,32 @@ class BehavioralStage:
         return _meta_data
 
     # noinspection PyMethodMayBeStatic
-    def mergeAdditionalBruker(self, AnalogRecordings):
+    def mergeAdditionalBruker(self, AnalogRecordings: pd.DataFrame) -> None:
+        """
+        Generic function to merge bruker, overwritten during inheritance
+        :param AnalogRecordings: Analog Recordings
+        :type AnalogRecordings: pd.DataFrame
+        :rtype: None
+        """
         print(" Was not overwritten")
         return
 
     @staticmethod
-    def load_bruker_analog_recordings(File):
+    def load_bruker_analog_recordings(File: str) -> pd.DataFrame:
+        """
+        Method to load bruker analog recordings
+
+        :param File: filepath
+        :type File: str
+        :return: analog recordings
+        :rtype: pd.DataFrame
+        """
         return pd.read_csv(File)
 
     @staticmethod
-    def sync_bruker_recordings(DataFrame: pd.DataFrame, AnalogRecordings: pd.DataFrame, MetaData,  StateCastedDict,
-                               SyncKey, **kwargs) -> pd.DataFrame:
+    def sync_bruker_recordings(DataFrame: pd.DataFrame, AnalogRecordings: pd.DataFrame, MetaData: BrukerMeta,
+                               StateCastedDict: dict,
+                               SyncKey: Optional[Tuple[str, str]], **kwargs) -> pd.DataFrame:
         """
 
         :param DataFrame:
@@ -485,7 +744,8 @@ class BehavioralStage:
         :type StateCastedDict: dict
         :param SyncKey:
         :type SyncKey: tuple or None
-        :return:
+        :return: Sync Data
+        :rtype: pd.DataFrame
         """
 
         _fill_method = kwargs.get("fill", "backward")
@@ -494,11 +754,10 @@ class BehavioralStage:
         # Sync by matching first peak of the sync_key columns
         _DF_signal = DataFrame[SyncKey[0]].values.copy()
         _AR_signal = AnalogRecordings[SyncKey[1]].values.copy()
-        _AR_first_peak = np.where(np.diff(_AR_signal) > 1.0)[0][0]+1
-        assert(_AR_signal[_AR_first_peak] >= 3.3)
+        _AR_first_peak = np.where(np.diff(_AR_signal) > 1.0)[0][0] + 1
+        assert (_AR_signal[_AR_first_peak] >= 3.3)
 
         _first_peak_diff = np.where(_DF_signal == StateCastedDict.get("Trial"))[0][0] - _AR_first_peak
-
 
         if _first_peak_diff > 0:
             print("NOT YET IMPLEMENTED")
@@ -555,7 +814,7 @@ class BehavioralStage:
         return DataFrame
 
     @staticmethod
-    def sync_downsampled_images(DataFrame, MetaData, **kwargs):
+    def sync_downsampled_images(DataFrame: pd.DataFrame, MetaData: BrukerMeta, **kwargs) -> Union[pd.DataFrame, None]:
         _downsample_size = kwargs.get("downsample_multiplier", 3)
         _fill_method = kwargs.get("fill", "backward")
         _two_files = kwargs.get("two_files", False)
@@ -570,7 +829,8 @@ class BehavioralStage:
             _downsample_frames_1 = np.arange(0, _total_frames_1, _downsample_size)
             _downsample_frames_idx_1 = np.where(np.in1d(_downsample_frames_1, DataFrame["Imaging Frame"].values))[0]
             _time_stamps_1 = DataFrame.index.values[np.where(np.in1d(DataFrame["Imaging Frame"].values,
-                                                                   _downsample_frames_1[_downsample_frames_idx_1]))[0]]
+                                                                     _downsample_frames_1[_downsample_frames_idx_1]))[
+                0]]
             _frames_1 = pd.Series(_downsample_frames_idx_1, index=_time_stamps_1)
             _frames_1.name = "Downsampled Frame"
             _frames_1 = _frames_1.reindex(DataFrame.index)
@@ -581,7 +841,8 @@ class BehavioralStage:
             _downsample_frames_2 += _total_frames_1
             _downsample_frames_idx_2 = np.where(np.in1d(_downsample_frames_2, DataFrame["Imaging Frame"].values))[0]
             _time_stamps_2 = DataFrame.index.values[np.where(np.in1d(DataFrame["Imaging Frame"].values,
-                                                                   _downsample_frames_2[_downsample_frames_idx_2]))[0]]
+                                                                     _downsample_frames_2[_downsample_frames_idx_2]))[
+                0]]
             _frames_2 = pd.Series(_downsample_frames_idx_2, index=_time_stamps_2)
             _frames_2.name = "Downsampled Frame"
             _frames_2.reindex(DataFrame.index)
@@ -600,10 +861,10 @@ class BehavioralStage:
             _imaging_frames = DataFrame["Imaging Frame"].values.copy()
 
             if _fill_method == "backward":
-                _downsample_frames = np.arange(_downsample_size-1, _total_frames, _downsample_size)
+                _downsample_frames = np.arange(_downsample_size - 1, _total_frames, _downsample_size)
                 _downsample_frames_idx = np.where(np.in1d(_downsample_frames, DataFrame["Imaging Frame"].values))[0]
                 _time_stamps = DataFrame.index.values[np.where(np.in1d(DataFrame["Imaging Frame"].values,
-                                                                   _downsample_frames[_downsample_frames_idx]))[0]]
+                                                                       _downsample_frames[_downsample_frames_idx]))[0]]
                 _frames = pd.Series(_downsample_frames_idx, index=_time_stamps)
                 _frames.name = "Downsampled Frame"
                 _frames = _frames.reindex(DataFrame.index)
@@ -620,16 +881,20 @@ class CollectedDataFolder:
     This is a class for managing a folder of unorganized data files
 
 **Self Methods**
-        | **searchInFolder** : Search THIS object for the *first* file which matches the description
-        | **reIndex** : Function that indexed the files within folder again
+        | *searchInFolder* : Search THIS object for the *first* file which matches the description
+        | *reIndex* : Function that indexed the files within folder again
 
 **Static Methods**
-        | **fileParts** : Function returns each identifier of a file and its extension
-        | **fileLocator** : Find the file which matches the description
+        | *fileParts* : Function returns each identifier of a file and its extension
+        | *fileLocator* : Find the file which matches the description
 
-
+**Properties**
+        | *instance_data* : Data created
+        | *path* : path to folder
+        | *files* : List of files in folder
     """
-    def __init__(self, Path):
+
+    def __init__(self, Path: str):
         # Protected In Practice
         self.__instance_date = ExperimentData.getDate()
         self._path = str()
@@ -641,15 +906,25 @@ class CollectedDataFolder:
         self.files = self.path
 
     @property
-    def instance_date(self):
+    def instance_date(self) -> str:
+        """
+        Date Created
+
+        :rtype: str
+        """
         return self._CollectedDataFolder__instance_date
 
     @property
-    def path(self):
+    def path(self) -> str:
+        """
+        Path to folder
+
+        :rtype: str
+        """
         return self._path
 
     @path.setter
-    def path(self, Path):
+    def path(self, Path: str) -> Self:
         if self._path_assigned is False:
             self._path = Path
             self._path_assigned = True
@@ -657,20 +932,20 @@ class CollectedDataFolder:
             print("Path can only be assigned ONCE.")
 
     @property
-    def files(self):
+    def files(self) -> List[str]:
         return self._files
 
     @files.setter
-    def files(self, Path):
+    def files(self, Path: str) -> Self:
         self._files = os.listdir(Path)
 
-    def reIndex(self):
+    def reIndex(self) -> Self:
         """
         Function that indexed the files within folder again
         """
         self.files = self.path
 
-    def searchInFolder(self, ID):
+    def searchInFolder(self, ID: str) -> Union[str, None]:
         """
         Search THIS object for the *first* file which matches the description
 
@@ -681,7 +956,16 @@ class CollectedDataFolder:
         """
         return self.path + "\\" + CollectedDataFolder.fileLocator(self.files, ID)
 
-    def find_all_ext(self, ext):
+    def find_all_ext(self, ext: str) -> Union[List[str], None]:
+        """
+        Finds all files with specific extension
+
+        :param ext: File extension
+        :type ext: str
+        :return: List of files
+        :rtype: List[str]
+        """
+
         _ext = "".join(["*.", ext])
         Files = list(pathlib.Path(self.path).glob(_ext))
         for i in range(Files.__len__()):
@@ -689,7 +973,7 @@ class CollectedDataFolder:
         return Files
 
     @staticmethod
-    def fileLocator(files, ID):
+    def fileLocator(files: str, ID: str) -> Union[str, None]:
         """
         Find the *first* file which matches the description
 
@@ -704,10 +988,9 @@ class CollectedDataFolder:
             for _id in CollectedDataFolder.fileParts(files[i]):
                 if ID == _id:
                     return files[i]
-        return "Nil"
 
     @staticmethod
-    def fileParts(file):
+    def fileParts(file: str) -> List[str]:
         """
         Function returns each identifier of a file and its extension
 
@@ -720,17 +1003,33 @@ class CollectedDataFolder:
 
 
 class CollectedImagingFolder(CollectedDataFolder):
-    """ this is a super class containing methods for"""
-    def __init__(self, Path):
+    """
+    Class specifically for imaging folder, inherits collected data folder
+
+    **Self Methods**
+        | *load_fissa_exports* :
+        | *load_cascade_exports* :
+        | *load_suite2p* :
+        | *import_proc_traces* :
+        | *import_proc_inferences* :
+
+    **Static Methods**
+        | *load_proc_inferences* :
+        | *load_proc_traces* :
+
+    """
+
+    def __init__(self, Path: str):
         super().__init__(Path)
         self.current_stage = "Instanced"
         self.Suite2PModule = None
 
-    def load_fissa_exports(self):
+    def load_fissa_exports(self) -> Tuple[np.ndarray, np.ndarray]:
         """
         This function loads the prepared and separated files exported from Fissa
 
         :return: Prepared, Separated
+        :rtype: tuple[Any, Any]
         """
 
         try:
@@ -747,11 +1046,12 @@ class CollectedImagingFolder(CollectedDataFolder):
 
         return Prepared, Separated
 
-    def load_cascade_exports(self):
+    def load_cascade_exports(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """
         This function loads the Spike Times, Spike Prob, and Discrete Approximation files exported from Cascade
 
         :return: SpikeTimes, SpikeProb, DiscreteApproximation
+        :rtype: tuple[Any, Any, Any]
         """
 
         try:
