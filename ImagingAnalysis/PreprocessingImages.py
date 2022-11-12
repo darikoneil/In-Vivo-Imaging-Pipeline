@@ -38,6 +38,7 @@ class PreProcessing:
         | *groupedZProject* : Utilize grouped z-project to downsample data
         | *viewImage* :  Visualize a numpy array [Z x Y x X] as a video
         | *loadBinaryMeta* : Loads meta file for binary video
+        | *loadMappedBinary*: Loads a raw binary file in the workspace without loading into memory
     """
 
     def __init__(self):
@@ -492,3 +493,33 @@ class PreProcessing:
         """
         _num_frames, _y_pixels, _x_pixels, _type = np.genfromtxt(File, delimiter=",", dtype="str")
         return tuple([int(_num_frames), int(_y_pixels), int(_x_pixels), str(_type)])
+
+    @staticmethod
+    def load_mapped_binary(fname: str, meta_file: str, *args: str, **kwargs: str) -> np.memmap:
+        """
+        Loads a raw binary file in the workspace without loading into memory
+
+        Enter the path to autofill (assumes fname & meta are Path + binary_video, video_meta.txt)
+
+        **Keyword Arguments**
+            | *mode* : pass mode to numpy.memmap (str, default = "r")
+        :param fname: filename for binary video
+        :type fname: str
+        :param meta_file: filename for meta file
+        :type meta_file: str
+        :param args: Path
+        :type args: str
+        :return: memmap(numpy) array [Z x Y x X]
+        :rtype: Any
+        """
+        if len(args) == 1:
+            fname = "".join([args[0], "\\binary_video"])
+            meta_file = "".join([args[0], "\\video_meta.txt"])
+
+        _mode = kwargs.get("mode", "r")
+
+        _num_frames, _y_pixels, _x_pixels, _type = np.genfromtxt(meta_file, delimiter=",", dtype="str")
+        _num_frames = int(_num_frames)
+        _x_pixels = int(_x_pixels)
+        _y_pixels = int(_y_pixels)
+        return np.memmap(fname, dtype=_type, shape=(_num_frames, _y_pixels, _x_pixels), mode=_mode)

@@ -345,6 +345,34 @@ class Suite2PModule:
                                              fs=self.ops['fs'])
         np.save("".join([self.ops.get("save_path"), "\\spks.npy"]), self.spks, allow_pickle=True)
 
+    def integrateMotionCorrectionDenoising(self) -> Self:
+        """
+        Computes reference and mean images, adds x & y ranges using denoised image
+        without motion correcting
+
+        :rtype: Any
+        """
+        _images = PreProcessing.loadRawBinary("", "", self.ops.get("data_path"))
+        # shape
+        _num_frames, self.ops["yrange"], self.ops["xrange"] = _images.shape
+        self.ops["yrange"] = [0, self.ops.get("yrange")]
+        self.ops["xrange"] = [0, self.ops.get("xrange")]
+        # references
+        _frames = _images[
+            np.linspace(0, _num_frames, 1 + np.minimum(self.ops['nimg_init'], _num_frames), dtype=int)[:-1]]
+        self.ops["refImgO"] = suite2p.registration.register.compute_reference(_frames, self.ops)
+        self.ops["refImg"], self.ops["rmin"], self.ops["rmax"] = \
+            suite2p.registration.register.normalize_reference_image(self.ops.get("refImgO"))
+        # mean
+        _mean_img = np.zeros((self.ops.get("yrange")[-1], self.ops.get("xrange")[-1]), dtype='float32')
+        _batch_size = self.ops.get("batch_size")
+        for k in np.arange(0, _num_frames, _batch_size):
+            frames = _images[k: min(k + _batch_size, _num_frames)].astype('float32')
+            _mean_img += frames.sum(axis=0) / _num_frames
+        self.ops["meanImg"] = _mean_img
+        # Enhanced Mean
+        self.ops = suite2p.registration.register.enhanced_mean_image(self.ops)
+
     @classmethod
     def exportCroppedCorrection(cls, ops: dict) -> sys.stdout:
         """

@@ -675,7 +675,7 @@ class BehavioralStage:
         # setattr(self, _attr_name, CollectedImagingFolder(_folder_name)) changing to be in folder dictionary
         self.folder_dictionary[_key_name] = CollectedImagingFolder(_folder_name)
         ExperimentData.generateSampFreq(_folder_name)
-        self.folder_dictionary.get(_attr_name).reIndex()
+        self.update_folder_dictionary()
 
     def loadBrukerMetaData(self) -> Self:
         """

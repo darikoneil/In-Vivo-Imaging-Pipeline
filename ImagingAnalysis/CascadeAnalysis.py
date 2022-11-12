@@ -1,4 +1,8 @@
 # cascade imports
+from __future__ import annotations
+
+import os
+from typing import Tuple, Listr, Union, Optional
 import matplotlib
 matplotlib.use('Qt5Agg')
 import pickle as pkl
@@ -16,44 +20,50 @@ checks.check_packages()
 
 class CascadeModule:
     """
-    Cascade Module
-    --------------
     A module for CASCADE spike inference
 
-    Self Methods
-    ------------
-    | **load_neurons_x_time** : Loads 2D array of neurons x frames into class
-    | **predictSpikeProb** : Predict spike probability
-    | **inferDiscreteSpikes** : Approximate Discrete Spike Events
-    | **saveSpikeProb** : Save self.spike_prob to a numpy file
-    | **saveSpikeInference** : Save self.spike_time_estimates & self.discrete_approximation
-    | **exportSpikeProb** : Export self.spike_prob to MATLab file
-    | **exportSpikeInference** : Export self.spike_time_estimates to MATLab file
-    | **loadSpikeProb** : Load Spike Probabilities into self.spike_prob
-    | **loadSpikeInference** : Load Spike Inferences into self.spike_time_estimates and self.discrete_approximation
-    | **saveProcessedInferences** : Save Processed Inferences to file
-    | **loadProcessedInferences**: Load Processed Inferences from file
-    Class Methods
-    -------------
-    | **pullModels** : Retrieve the latest online models & locally-available models for spike inference
-    | **downloadModel** : Downloads online model for local-availability
-    | **setVerboseGPU** : Set GPU to verbose mode
-    | **confirmGPU** : Confirm that tensorflow was built with CUDA, and that a GPU is available for use
-
-
+    **Self Methods**
+        | *load_neurons_x_time* : Loads 2D array of neurons x frames into class
+        | *predictSpikeProb* : Predict spike probability
+        | *inferDiscreteSpikes* : Approximate Discrete Spike Events
+        | *saveSpikeProb* : Save self.spike_prob to a numpy file
+        | *saveSpikeInference* : Save self.spike_time_estimates & self.discrete_approximation
+        | *exportSpikeProb* : Export self.spike_prob to MATLab file
+        | *exportSpikeInference* : Export self.spike_time_estimates to MATLab file
+        | *loadSpikeProb* : Load Spike Probabilities into self.spike_prob
+        | *loadSpikeInference* : Load Spike Inferences into self.spike_time_estimates and self.discrete_approximation
+        | *saveProcessedInferences* : Save Processed Inferences to file
+        | *loadProcessedInferences*: Load Processed Inferences from file
+    **Class Methods**
+        | *pullModels* : Retrieve the latest online models & locally-available models for spike inference
+        | *downloadModel* : Downloads online model for local-availability
+        | *setVerboseGPU* : Set GPU to verbose mode
+        | *confirmGPU* : Confirm that tensorflow was built with CUDA, and that a GPU is available for use
     """
 
-    def __init__(self, traces, im_freq, **kwargs):
+    def __init__(self, Traces: np.ndarray, FrameRate: float, SavePath: Optional[str], **kwargs):
         self.model_folder = kwargs.get('model_folder', "Pretrained_models")
-        self.traces = traces
-        self.frame_rate = im_freq
-        self.spike_prob = None
+        self.save_folder = kwargs.get('save_folder', None)
+
+        if self.save_folder is None and SavePath is None:
+            self.save_path = os.getcwd()
+        elif self.save_folder is None and SavePath is not None:
+            self.save_path = self.save_path
+        elif self.save_folder is not None and SavePath is None:
+            self.save_path = "".join([os.getcwd(), "\\", self.save_folder])
+        elif self.save_folder is not None and SavePath is not None:
+            self.save_path = "".join([SavePath, "\\", self.save_folder])
+
+        self.traces = Traces
+        self.frame_rate = FrameRate
         self.model_name = None
+        self.spike_prob = None
         self.discrete_approximation = None
         self.spike_time_estimates = None
         self.data_file = None
         self.numNeurons = None
         self.numFrames = None
+        # Definitely need to refactor below and maybe make num neurons, frames properties and protect model name
         self.ProcessedInferences = ProcessedInferences()
 
     def load_neurons_x_time(self, file_path, framerate):
@@ -409,4 +419,3 @@ class ProcessedInferences:
         self.high_activity_frames = None
         self.utilized_model_name = None
         self.spike_matrix = None
-
