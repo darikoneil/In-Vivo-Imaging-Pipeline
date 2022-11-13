@@ -527,7 +527,7 @@ class BehavioralStage:
     Data Class for a generic stage or day of a behavioral task
 
     **Required Inputs**
-        | *Meta* : Passed meta from experimental hierarchy
+        | *Meta* : Passed meta from experimental hierarchy (directory, mouse_id)
         | *Stage* : Title of Stage
 
     **Positional Arguments**
@@ -677,6 +677,20 @@ class BehavioralStage:
         ExperimentData.generateSampFreq(_folder_name)
         self.update_folder_dictionary()
 
+    def update_folder_dictionary(self) -> Self:
+        """
+        This function reindexes all folders in the folder dictionary
+
+        :rtype: Any
+        """
+
+        # noinspection PyTypeChecker
+        for _key in self.folder_dictionary.keys():
+            if isinstance(self.folder_dictionary.get(_key), CollectedDataFolder):
+                self.folder_dictionary.get(_key).reIndex()
+            elif isinstance(self.folder_dictionary.get(_key), CollectedImagingFolder):
+                self.folder_dictionary.get(_key).reIndex()
+
     def loadBrukerMetaData(self) -> Self:
         """
         Loads Bruker Meta Data
@@ -741,30 +755,17 @@ class BehavioralStage:
         print(" Was not overwritten")
         return
 
-    def update_folder_dictionary(self) -> Self:
-        """
-        This function reindexes all folders in the folder dictionary
-
-        :rtype: Any
-        """
-
-        # noinspection PyTypeChecker
-        for _key in self.folder_dictionary.keys():
-            if isinstance(self.folder_dictionary.get(_key), CollectedDataFolder):
-                self.folder_dictionary.get(_key).reIndex()
-            elif isinstance(self.folder_dictionary.get(_key), CollectedImagingFolder):
-                self.folder_dictionary.get(_key).reIndex()
-
     @staticmethod
     def load_bruker_analog_recordings(File: str) -> pd.DataFrame:
         """
-        Method to load bruker analog recordings
+        Method to load bruker analog recordings from .csv
 
         :param File: filepath
         :type File: str
         :return: analog recordings
         :rtype: pd.DataFrame
         """
+        assert(pathlib.Path(File).suffix == ".csv")
         return pd.read_csv(File)
 
     @staticmethod

@@ -9,11 +9,10 @@
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_Retrieval.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/ccc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowPreference.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/LickTraining.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/Locomotion.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Notebooks/Analysis-Encoding-Decoding.ipynb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScratchRas.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Notebooks/ImageFormatting_and_PreProcessing.ipynb" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,11 +89,11 @@
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\USNAP" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\Notebooks" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ImagingAnalysis" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DebugData\suite2p\plane0\Goob" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DebugData\suite2p\plane0" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DebugData\suite2p\plane0\reg_tif\Goob" />
-      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline" />
     </key>
   </component>
   <component name="RunManager" selected="Python.ScratchRas">
@@ -266,14 +265,7 @@
       <workItem from="1667948828470" duration="92000" />
       <workItem from="1667950144175" duration="643000" />
       <workItem from="1668177219727" duration="14944000" />
-      <workItem from="1668195481001" duration="32861000" />
-    </task>
-    <task id="LOCAL-00033" summary="Noted Single Frame De-Sync in Downsampled Pandas DataFrames">
-      <created>1666379379962</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1666379379962</updated>
+      <workItem from="1668195481001" duration="33787000" />
     </task>
     <task id="LOCAL-00034" summary="Noted Single Frame De-Sync in Downsampled Pandas DataFrames">
       <created>1666389640533</created>
@@ -611,7 +603,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668370829250</updated>
     </task>
-    <option name="localTasksCounter" value="82" />
+    <task id="LOCAL-00082" summary="misc">
+      <created>1668375851701</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1668375851701</updated>
+    </task>
+    <option name="localTasksCounter" value="83" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
