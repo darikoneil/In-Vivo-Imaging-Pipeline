@@ -12,6 +12,7 @@ matplotlib.use('Qt5Agg')
 from matplotlib import pyplot as plt
 
 # Some of this stuff needs some serious refactoring & cleaning out old code
+# Really all the behaviors do
 # To-Do refactor out the indexing that can be done by native functions
 # To-Do refactor out the old behavioral organization such that only the pandas remains for easier maintenance
 # Yo some dis ugly
@@ -80,7 +81,16 @@ class FearConditioning(BehavioralStage):
         return self._FearConditioning__num_stim
 
     @classmethod
-    def identifyTrialValence(cls, csIndexFile):
+    def identifyTrialValence(cls, csIndexFile: str) -> Tuple[int, int]:
+        """
+        Returns the index for CS+ and CS- trials from a .csv indicator file
+
+        :param csIndexFile: Path to cs Index File (.csv)
+        :type csIndexFile: str
+        :return: Tuple of CS+ and CS- trials
+        :rtype: tuple[int, int]
+        """
+        assert(pathlib.Path(csIndexFile).suffix == ".csv")
         _csIndex = np.genfromtxt(csIndexFile, int, delimiter=",")
         PlusTrials = np.where(_csIndex == 0)
         MinusTrials = np.where(_csIndex == 1)
@@ -177,12 +187,14 @@ class FearConditioning(BehavioralStage):
         return NeuralActivity_TrialOrg, FeatureIndex, FeatureData_TrialOrg
 
     @classmethod
-    def loadAnalogData(cls, Filename):
+    def loadAnalogData(cls, Filename: str) -> np.ndarray:
         """
         Loads Analog Data from a burrow behavioral session
+
         :param Filename: Numpy file containing analog data
         :type Filename: str
         :return: Analog Data
+        :rtype: Any
         """
         try:
             analogData = np.load(Filename)
@@ -192,12 +204,14 @@ class FearConditioning(BehavioralStage):
         return analogData
 
     @classmethod
-    def loadDigitalData(cls, Filename):
+    def loadDigitalData(cls, Filename: str) -> np.ndarray:
         """
         Loads Digital Data from a burrow behavioral session
+
         :param Filename: Numpy file containing digital data
         :type Filename: str
         :return: Digital Data
+        :rtype: Any
         """
         # Note that we flip the bit to convert the data such that 1 == gate triggered
         try:
@@ -211,12 +225,14 @@ class FearConditioning(BehavioralStage):
         return digitalData
 
     @classmethod
-    def loadStateData(cls, Filename):
+    def loadStateData(cls, Filename: str) -> np.ndarray:
         """
         Loads State Data from a burrow behavioral session
+
         :param Filename: Numpy file containing state data
         :type Filename: str
         :return: State Data
+        :rtype: Any
         """
         try:
             stateData = np.load(Filename)
@@ -227,9 +243,10 @@ class FearConditioning(BehavioralStage):
         return stateData
 
     @classmethod
-    def loadDictionaryData(cls, Filename):
+    def loadDictionaryData(cls, Filename: str) -> dict:
         """
         Loads Dictionary Data from a burrow behavioral session
+
         :param Filename: Numpy file containing dictionary data
         :type Filename: str
         :return: Dictionary Data
@@ -253,7 +270,7 @@ class FearConditioning(BehavioralStage):
 
         return dictionaryData
 
-    def loadBehavioralData(self, **kwargs):
+    def loadBehavioralData(self, **kwargs) -> Self:
         """
         Master function that loads the following data -> analog, digital, state, dictionary
 
@@ -340,7 +357,7 @@ class FearConditioning(BehavioralStage):
             except KeyError:
                 print("Only one of multiple bruker datasets loaded")
 
-    def generateFileID(self, SaveType):
+    def generateFileID(self, SaveType: str) -> Union[str, None]:
         """
         Generate a file ID for a particular sort of data
 
@@ -367,7 +384,7 @@ class FearConditioning(BehavioralStage):
 
         return filename
 
-    def fillFolderDictionary(self):
+    def fillFolderDictionary(self) -> Self:
         """
         Function to index subfolders containing behavioral data
 
@@ -393,9 +410,9 @@ class FearConditioning(BehavioralStage):
         self.folder_dictionary['analog_burrow_data'] = self.folder_dictionary.get('behavior_folder') + \
                                                        "\\AnalogBurrowData"
 
-    def mergeAdditionalBruker(self, AnalogRecordings):
+    def mergeAdditionalBruker(self, AnalogRecordings: pd.DataFrame) -> Self:
         """
-        In this function I add a second file to the dataset
+        Merge a second bruker dataset's analog recordings
 
         :rtype: None
         """
@@ -423,7 +440,16 @@ class FearConditioning(BehavioralStage):
         self.data = self.data.join(_data_frame_concat)
 
     @staticmethod
-    def validate_bruker_recordings_labels(AnalogRecordings, NumTrials):
+    def validate_bruker_recordings_labels(AnalogRecordings: pd.DataFrame, NumTrials: int) -> pd.DataFrame:
+        """
+        Validate correct labeling of indicator vector for syncing data
+
+        :param AnalogRecordings: Bruker analog dataset
+        :param NumTrials: number of trials
+        :return: AnalogRecordings properly labeled
+        :rtype: pd.Dataframe
+        """
+
         try:
             assert(np.where(np.diff(AnalogRecordings[" TrialIndicator"].values) > 1)[0].__len__() <= NumTrials)
             return AnalogRecordings
@@ -434,7 +460,18 @@ class FearConditioning(BehavioralStage):
             return AnalogRecordings
 
     @staticmethod
-    def validate_bruker_recordings_completion(AnalogRecordings, NumTrials):
+    def validate_bruker_recordings_completion(AnalogRecordings: pd.DataFrame, NumTrials: int) -> Tuple[bool, int]:
+        """
+        Determines whether bruker analog dataset contains all trials
+
+        :param AnalogRecordings: Bruker analog dataset
+        :type AnalogRecordings: pd.DataFrame
+        :param NumTrials: number of trials
+        :type NumTrials: int
+        :return: True if dataset completed and number of detected trials
+        :rtype: tuple[bool, int]
+        """
+
         detected_trials = np.where(np.diff(AnalogRecordings[" TrialIndicator"].values) > 1)[0].__len__()
         try:
             assert(detected_trials == NumTrials)
@@ -443,7 +480,18 @@ class FearConditioning(BehavioralStage):
             return False, detected_trials
 
     @staticmethod
-    def index_trial_subset_for_bruker_sync(DataFrame, Trial, NumTrials, Direction):
+    def index_trial_subset_for_bruker_sync(DataFrame: pd.DataFrame, Trial: int,
+                                           NumTrials: int, Direction: str) -> Union[pd.DataFrame, None]:
+        """
+        Subsets the trials to sync with bruker data
+
+        :param DataFrame: Data
+        :param Trial: specific trial
+        :param NumTrials: total trials
+        :param Direction: Whether indexing from start or end
+        :return: a subset of the dataframe
+        :rtype: pd.DataFrame
+        """
         if Direction == "Start":
             return np.where(DataFrame["Trial Set"].values <= Trial+1)[0]
         elif Direction == "End":
@@ -453,12 +501,14 @@ class FearConditioning(BehavioralStage):
             return
 
     @staticmethod
-    def convertFromPy27_Array(Array):
+    def convertFromPy27_Array(Array: np.ndarray) -> np.ndarray:
         """
         Convert a numpy array of strings in byte-form to numpy array of strings in string-form
 
         :param Array: An array of byte strings (e.g., b'Setup')
+        :type Array: Any
         :return: decoded_array
+        :rtype: Any
         """
         decoded_array = list()
         for i in range(Array.shape[0]):
@@ -467,7 +517,7 @@ class FearConditioning(BehavioralStage):
         return decoded_array
 
     @staticmethod
-    def convertFromPy27_Dict(Dict):
+    def convertFromPy27_Dict(Dict: dict) -> dict:
         """
         Convert a dictionary pickled in Python 2.7 to a Python 3 dictionary
 
@@ -485,7 +535,14 @@ class FearConditioning(BehavioralStage):
         return new_dict
 
     @staticmethod
-    def check_sync_plot(DataFrame):
+    def check_sync_plot(DataFrame: pd.DataFrame) -> None:
+        """
+        Visualized syncing of the data
+
+        :param DataFrame: The data
+        :return: Plots in matplotlib
+        :rtype: None
+        """
         fig1 = plt.figure(1)
 
         ax1 = fig1.add_subplot(311)

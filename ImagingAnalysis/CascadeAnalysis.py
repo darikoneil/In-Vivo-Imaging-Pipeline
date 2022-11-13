@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import os
-from typing import Tuple, Listr, Union, Optional
+from typing import Tuple, List, Union, Optional
 import matplotlib
 matplotlib.use('Qt5Agg')
 import pickle as pkl
@@ -14,6 +14,7 @@ from cascade2p import checks
 import ruamel.yaml as yaml
 import tensorflow as tf
 from tensorflow.python.client import device_lib
+
 
 checks.check_packages()
 
@@ -41,14 +42,14 @@ class CascadeModule:
         | *confirmGPU* : Confirm that tensorflow was built with CUDA, and that a GPU is available for use
     """
 
-    def __init__(self, Traces: np.ndarray, FrameRate: float, SavePath: Optional[str], **kwargs):
+    def __init__(self, Traces: np.ndarray, FrameRate: float, SavePath: Optional[str] = None, **kwargs):
         self.model_folder = kwargs.get('model_folder', "Pretrained_models")
         self.save_folder = kwargs.get('save_folder', None)
 
         if self.save_folder is None and SavePath is None:
             self.save_path = os.getcwd()
         elif self.save_folder is None and SavePath is not None:
-            self.save_path = self.save_path
+            self.save_path = SavePath
         elif self.save_folder is not None and SavePath is None:
             self.save_path = "".join([os.getcwd(), "\\", self.save_folder])
         elif self.save_folder is not None and SavePath is not None:

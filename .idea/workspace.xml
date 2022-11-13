@@ -4,14 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="namespace changes">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="misc">
+      <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_Retrieval.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/ccc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ImagingAnalysis/CascadeAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/CascadeAnalysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/CascadeAnalysis.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/Denoising.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/FissaAnalysis.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/PlottingFunctions.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/PreprocessingImages.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/StaticPlotting.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/StaticProcessing.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/Suite2PAnalysis.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/was.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/buildingblocks.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/data_process.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/model_3DUnet.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/network.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/smoothies.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/utils.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -265,14 +279,7 @@
       <workItem from="1667948828470" duration="92000" />
       <workItem from="1667950144175" duration="643000" />
       <workItem from="1668177219727" duration="14944000" />
-      <workItem from="1668195481001" duration="20289000" />
-    </task>
-    <task id="LOCAL-00031" summary="Some things changed while doing some log-reg analysis">
-      <created>1666361384988</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1666361384988</updated>
+      <workItem from="1668195481001" duration="30576000" />
     </task>
     <task id="LOCAL-00032" summary="Some things changed while doing some log-reg analysis">
       <created>1666374357906</created>
@@ -610,7 +617,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668208242295</updated>
     </task>
-    <option name="localTasksCounter" value="80" />
+    <task id="LOCAL-00080" summary="misc">
+      <created>1668297590112</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1668297590112</updated>
+    </task>
+    <option name="localTasksCounter" value="81" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -629,7 +643,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Added function fo removing shutter artifacts &amp; loading raw binary videos" />
     <MESSAGE value="Added function for motion correction for binary videos" />
     <MESSAGE value="Updated environment.yml" />
     <MESSAGE value="gitignore2" />
@@ -654,7 +667,8 @@
     <MESSAGE value="Colorizer" />
     <MESSAGE value="Colorizer Functions Added" />
     <MESSAGE value="namespace changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="namespace changes" />
+    <MESSAGE value="misc" />
+    <option name="LAST_COMMIT_MESSAGE" value="misc" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Calcium_Imaging_Analysis_Pipeline$a.coverage" NAME="a Coverage Results" MODIFIED="1664464028437" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AnalysisModules" />
