@@ -9,24 +9,11 @@
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_Retrieval.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/ccc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/CascadeAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/CascadeAnalysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/CascadeAnalysis.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/Denoising.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/FissaAnalysis.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/PlottingFunctions.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/PreprocessingImages.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/StaticPlotting.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/StaticProcessing.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/Suite2PAnalysis.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/was.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/buildingblocks.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/data_process.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/model_3DUnet.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/network.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/smoothies.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImagingAnalysis/utils.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowPreference.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/LickTraining.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/Locomotion.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ScratchRas.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -279,14 +266,7 @@
       <workItem from="1667948828470" duration="92000" />
       <workItem from="1667950144175" duration="643000" />
       <workItem from="1668177219727" duration="14944000" />
-      <workItem from="1668195481001" duration="30576000" />
-    </task>
-    <task id="LOCAL-00032" summary="Some things changed while doing some log-reg analysis">
-      <created>1666374357906</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1666374357906</updated>
+      <workItem from="1668195481001" duration="32861000" />
     </task>
     <task id="LOCAL-00033" summary="Noted Single Frame De-Sync in Downsampled Pandas DataFrames">
       <created>1666379379962</created>
@@ -624,7 +604,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668297590112</updated>
     </task>
-    <option name="localTasksCounter" value="81" />
+    <task id="LOCAL-00081" summary="misc">
+      <created>1668370829250</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1668370829250</updated>
+    </task>
+    <option name="localTasksCounter" value="82" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
