@@ -7,9 +7,13 @@
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="misc">
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_Retrieval.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/ccc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DarikDataScripts/was.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/was.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Denoising.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Denoising.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -262,14 +266,14 @@
       <workItem from="1667948828470" duration="92000" />
       <workItem from="1667950144175" duration="643000" />
       <workItem from="1668177219727" duration="14944000" />
-      <workItem from="1668195481001" duration="34077000" />
-    </task>
-    <task id="LOCAL-00035" summary="Updated Decoding, some sync adjustments">
-      <created>1666890517466</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1666890517466</updated>
+      <workItem from="1668195481001" duration="35344000" />
+      <workItem from="1668435326556" duration="5000" />
+      <workItem from="1668465297880" duration="41000" />
+      <workItem from="1668465753239" duration="2116000" />
+      <workItem from="1668469223014" duration="2855000" />
+      <workItem from="1668527685070" duration="4000" />
+      <workItem from="1668533261757" duration="382000" />
+      <workItem from="1668534124332" duration="9060000" />
     </task>
     <task id="LOCAL-00036" summary="Updated Decoding, some sync adjustments">
       <created>1666990229636</created>
@@ -607,7 +611,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668376928577</updated>
     </task>
-    <option name="localTasksCounter" value="84" />
+    <task id="LOCAL-00084" summary="misc">
+      <created>1668377075575</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1668377075575</updated>
+    </task>
+    <option name="localTasksCounter" value="85" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

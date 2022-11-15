@@ -420,4 +420,4 @@ class DenoisingModule:
                 f.writelines([str(Image.shape[0]), ",", str(Image.shape[1]), ",",
                               str(Image.shape[2]), ",", str(Image.dtype)])
 
-        return np.memmap("".join([Path, "\\binary_video"]), dtype=Image.dtype, mode="w+", shape=Image.shape)
+        return np.memmap("".join([Path, "\\binary_video"]), dtype="uint16", mode="w+", shape=Image.shape)

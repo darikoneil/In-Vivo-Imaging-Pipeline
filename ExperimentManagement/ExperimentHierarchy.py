@@ -94,10 +94,18 @@ class ExperimentData:
         self.modifications = [(self.getDate(), self.getTime())]
         self.stages = []
 
+        if self.directory is not None and self.mouse_id is not None:
+            if os.path.exists(self.directory):
+                print("Data organization directory located...")
+            else:
+                print("Directory not found, spawning empty directory for data organization")
+                os.makedirs(self.directory)
+
         # Create log file if one does not exist
-        if self._log_file_assigned is False and self.directory is not None:
-            self.log_file = self.directory + "\\log_file.log"
-            print("Logging file assigned as :" + self.log_file)
+        if self._log_file_assigned is False and self.mouse_id is not None:
+            self.createLogFile()
+
+
 
         # start logging if log file exists
         if self._log_file_assigned:
@@ -488,7 +496,32 @@ class ExperimentData:
 
         :rtype: Any
         """
-        self.log_file = self.directory + "\\log_file.log"
+        if self.directory is not None:
+            self.log_file = self.directory + "\\log_file.log"
+            if not os.path.exists(self.directory):
+                print("Could not locate directory, saving in base.")
+                self.log_file = "".join([os.getcwd(), "\\log_file.log"])
+        else:
+            print("Could not locate directory, saving in base.")
+            self.log_file = "".join([os.getcwd(), "\\log_file.log"])
+
+
+        with open(self.log_file, "w") as _log:
+            _log.write("")
+        _log.close()
+
+        print("Logging file assigned as :" + self.log_file)
+
+    def create(self) -> Self:
+        """
+        This function generates the directory hierarchy in one step
+
+        :rtype: Any
+        """
+        if self.directory is not None and self.checkPath(self.directory):
+            self.generateDirectoryHierarchy(self.directory)
+        else:
+            print("Unable to create organized directory in specified path.")
 
     # noinspection All
     def startLog(self) -> Self:
@@ -980,6 +1013,12 @@ This is a class for managing a folder of unorganized data files
 
     @files.setter
     def files(self, Path: str) -> Self:
+        """
+        refactoring needed
+
+        """
+
+
         self._files = os.listdir(Path)
 
     def reIndex(self) -> Self:
@@ -988,10 +1027,27 @@ This is a class for managing a folder of unorganized data files
         """
         self.files = self.path
 
+    def find_matching_files(self, Filename: str, Folder: Optional[str] = None) -> Union[Tuple[str], str, None]:
+        """
+        Finds all matching files
+
+        :param Filename: Filename or  ID to search for
+        :type Filename: str
+        :param Folder: Specify folder filename in
+        :type Folder: Any
+        :return: Matching file/s
+        :rtype: Any
+        """
+        # arg for specifying folder
+        if Folder is not None:
+            Filename = "".join([Folder, "\\", Filename])
+
+        return [str(_path) for _path in self.files if Filename in str(_path)]
+
     def searchInFolder(self, ID: str) -> Union[str, None]:
         """
         Search THIS object for the *first* file which matches the description
-
+         Phasing Out
         :param ID: The description
         :type ID: str
         :return: The absolute file path of the matching filename
@@ -1002,7 +1058,7 @@ This is a class for managing a folder of unorganized data files
     def find_all_ext(self, ext: str) -> Union[List[str], None]:
         """
         Finds all files with specific extension
-
+        Refactoring needed
         :param ext: File extension
         :type ext: str
         :return: List of files
@@ -1015,8 +1071,8 @@ This is a class for managing a folder of unorganized data files
             Files[i] = Files[i].__str__()
         return Files
 
-    @staticmethod
-    def fileLocator(files: str, ID: str) -> Union[str, None]:
+    @classmethod
+    def fileLocator(cls, files: str, ID: str) -> Union[str, None]:
         """
         Find the *first* file which matches the description
 
@@ -1028,21 +1084,33 @@ This is a class for managing a folder of unorganized data files
         :rtype: str
         """
         for i in range(len(files)):
-            for _id in CollectedDataFolder.fileParts(files[i]):
+            for _id in cls.parse_experiment_labeling(files[i]):
                 if ID == _id:
                     return files[i]
 
     @staticmethod
-    def fileParts(file: str) -> List[str]:
+    def parse_experiment_labeling(File: str) -> List[str]:
         """
         Function returns each identifier of a file and its extension
 
-        :param file: Filename to be parsed
-        :type file: str
+        :param File: Filename to be parsed
+        :type File: str
         :return: stage, animal, ...[unique file identifiers]..., extension
         :rtype: list
         """
-        return file.split("_")[0:-1] + file.split("_")[-1].split(".")
+        return File.split("_")[0:-1] + File.split("_")[-1].split(".")
+
+    @staticmethod
+    def parse_path_parts(Path: str) -> List[str]:
+        """
+        returns f
+
+        :param Path: file path
+        :type Path: str
+        :return: split by "\\"
+        :rtype: list[str]
+        """
+        return pathlib.Path(Path).parts
 
 
 class CollectedImagingFolder(CollectedDataFolder):
@@ -1064,7 +1132,6 @@ class CollectedImagingFolder(CollectedDataFolder):
 
     def __init__(self, Path: str):
         super().__init__(Path)
-        self.current_stage = "Instanced"
 
     def load_fissa_exports(self) -> Tuple[np.ndarray, np.ndarray]:
         """
@@ -1154,6 +1221,70 @@ class CollectedImagingFolder(CollectedDataFolder):
             except Exception:
                 print("Migration Unsuccessful")
                 return
+
+    def clean_up_motion_correction(self) -> Self:
+        """
+        This function removes the reg_tif folder and registered.bin generated during motion correction.
+         (You can avoid the creation of these in the first place by changing suite2p parameters)
+
+        :rtype: Any
+        """
+
+        if self.find_matching_files("reg_tif").__len__() != 0:
+            [pathlib.Path(_file).unlink() for _file in IM.find_matching_files("reg_tif")]
+        if self.find_matching_files("registered_data.bin").__len__() != 0 and self.find_matching_files(
+                "binary_video", "suite2p//plane0").__len__() != 0:
+            [pathlib.Path(_file).unlink() for _file in IM.find_matching_files("data.bin")]
+        if self.find_matching_files("data.bin").__len__() != 0 and self.find_matching_files(
+                "binary_video", "suite2p//plane0").__len__() != 0:
+            [pathlib.Path(_file).unlink() for _file in IM.find_matching_files("data.bin")]
+
+    @property
+    def current_stage(self) -> str:
+        """
+        Stage of Analysis
+
+        :rtype: str
+        """
+
+        if self.find_matching_files("cascade").__len__() >= 4:
+            return "Ready for Analysis"
+        elif 2 < self.find_matching_files("cascade").__len__() < 4:
+            return "Cascade: Discrete Inference"
+        elif self.find_matching_files("fissa").__len__() >= 3:
+            return "Cascade: Spike Probability"
+        elif 2 <= self.find_matching_files("fissa").__len__() < 3:
+            return "Fissa: Source-Separation"
+        elif self.find_matching_files("spks.npy", "suite2p\\plane0").__len__() >= 1:
+            return "Fissa: Trace Extraction"
+        elif self.find_matching_files("iscell.npy", "suite2p\\plane0").__len__() >= 1:
+            return "Suite2P: Spike Inference [Formality]"
+        elif self.find_matching_files("F.npy", "suite2p\\plane0").__len__() >= 1:
+            return "Suite2P: Classify ROIs"
+        elif self.find_matching_files("stat.npy", "suite2p\\plane0").__len__() >= 1:
+            return "Suite2P: Trace Extraction"
+        elif self.find_matching_files("denoised").__len__() >= 2:
+            return "Suite2P: ROI Detection"
+        elif self.find_matching_files("suite2p").__len__() >= 3:
+            return "DeepCAD: Denoising"
+        else:
+            return "Motion Correction"
+
+    @property
+    def files(self) -> List[str]:
+        return self._files
+
+    @files.setter
+    def files(self, Path: str) -> Self:
+        """
+        stupid function to quickly fill recursively, need to look up documentation
+
+        :param Path: Directory to check
+        :type Path: str
+        :return: Any
+        """
+
+        self._files = [_file for _file in pathlib.Path(Path).rglob("*") if _file.is_file()]
 
     @staticmethod
     def load_proc_inferences(**kwargs):
