@@ -4,16 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="misc">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="func to save space by deleting old videos that have been processed">
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_Retrieval.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/ccc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/was.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/was.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Denoising.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Denoising.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/FissaAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/FissaAnalysis.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -273,14 +272,7 @@
       <workItem from="1668469223014" duration="2855000" />
       <workItem from="1668527685070" duration="4000" />
       <workItem from="1668533261757" duration="382000" />
-      <workItem from="1668534124332" duration="9060000" />
-    </task>
-    <task id="LOCAL-00036" summary="Updated Decoding, some sync adjustments">
-      <created>1666990229636</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1666990229636</updated>
+      <workItem from="1668534124332" duration="10143000" />
     </task>
     <task id="LOCAL-00037" summary="Added Videos -&gt; Binary File Function">
       <created>1666993921233</created>
@@ -618,7 +610,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668377075575</updated>
     </task>
-    <option name="localTasksCounter" value="85" />
+    <task id="LOCAL-00085" summary="func to save space by deleting old videos that have been processed">
+      <created>1668549185956</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1668549185957</updated>
+    </task>
+    <option name="localTasksCounter" value="86" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -637,7 +636,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Added function for motion correction for binary videos" />
     <MESSAGE value="Updated environment.yml" />
     <MESSAGE value="gitignore2" />
     <MESSAGE value="Implemented Denoising" />
@@ -662,7 +660,8 @@
     <MESSAGE value="Colorizer Functions Added" />
     <MESSAGE value="namespace changes" />
     <MESSAGE value="misc" />
-    <option name="LAST_COMMIT_MESSAGE" value="misc" />
+    <MESSAGE value="func to save space by deleting old videos that have been processed" />
+    <option name="LAST_COMMIT_MESSAGE" value="func to save space by deleting old videos that have been processed" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Calcium_Imaging_Analysis_Pipeline$a.coverage" NAME="a Coverage Results" MODIFIED="1664464028437" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AnalysisModules" />

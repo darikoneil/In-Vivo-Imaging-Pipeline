@@ -1132,6 +1132,17 @@ class CollectedImagingFolder(CollectedDataFolder):
 
     def __init__(self, Path: str):
         super().__init__(Path)
+        self.folders = None
+        self.default_folders()
+
+    def default_folders(self):
+        self.folders = {
+            "denoised": "".join([self.path, "\\denoised"]),
+            "fissa": "".join([self.path, "\\fissa"]),
+            "suite2p": "".join([self.path, "\\suite2p"]),
+            "cascade": "".join([self.path, "\\cascade"]),
+            "sorting": "".join([self.path, "\\sorting"]),
+        }
 
     def load_fissa_exports(self) -> Tuple[np.ndarray, np.ndarray]:
         """

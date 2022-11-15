@@ -64,6 +64,7 @@ class FissaModule:
 
         # ///Parse Inputs///
         _data_folder = kwargs.get('data_folder', None)
+        _output_folder = kwargs.get("output_folder", None)
         _index_file = kwargs.get('index_file', None)
         _video_folder = kwargs.get('video_folder', None)
         self.neuronal_index = kwargs.get('neuronal_index', None)
@@ -77,7 +78,7 @@ class FissaModule:
         self.stat = None
         self.iscell = None
         self.s2p_rois = None
-        self.output_folder = None
+        self.output_folder = _output_folder
         self.sep_file = None
         self.prep_file = None
         self.index_path = None
@@ -195,7 +196,7 @@ class FissaModule:
             except RuntimeError or AttributeError:
                 print("Could not load FISSA prepared file")
         else:
-            self.prep_file = _data_folder + "\\prepared.npz"
+            self.prep_file = self.output_folder + "\\prepared.npz"
             # Location of Fissa Preparation File
 
         if self.sep_file is not None:
@@ -204,7 +205,7 @@ class FissaModule:
             except RuntimeError or AttributeError:
                 print("Could not load FISSA separation file")
         else:
-            self.sep_file = _data_folder + "\\separated.npz"
+            self.sep_file = self.output_folder + "\\separated.npz"
             # Location of Fissa Separation File
 
     def loadSuite2P_ROIs(self) -> Self:
