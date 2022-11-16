@@ -337,7 +337,7 @@ class ExperimentData:
         os.makedirs(_analog_burrow_data)
 
     @classmethod
-    def generateImaging(cls, StageDirectory: str, **kwargs) -> None:
+    def generateImaging(cls, StageDirectory: str) -> None:
         """
         Generate Imaging Folder
 
@@ -351,8 +351,6 @@ class ExperimentData:
         :rtype: None
         """
 
-        _sample_frequency = kwargs.get('SampleFrequency', 30)
-        _sample_frequency_string = str(_sample_frequency) + "Hz"
         _base_image_dir = StageDirectory + "\\Imaging"
         _sample_frequency_dir = _base_image_dir + "\\" + _sample_frequency_string
         _raw_imaging_data = _base_image_dir + "\\RawImagingData"
@@ -360,7 +358,6 @@ class ExperimentData:
         os.makedirs(_base_image_dir)
         os.makedirs(_raw_imaging_data)
         os.makedirs(_bruker_meta_data)
-        cls.generateSampFreq(_sample_frequency_dir)
 
     @classmethod
     def generateSampFreq(cls, SampFreqDirectory: str) -> None:
@@ -1142,6 +1139,7 @@ class CollectedImagingFolder(CollectedDataFolder):
             "suite2p": "".join([self.path, "\\suite2p"]),
             "cascade": "".join([self.path, "\\cascade"]),
             "sorting": "".join([self.path, "\\sorting"]),
+            "plane0": "".join([self.path, "\\suite2p\\plane0"])
         }
 
     def load_fissa_exports(self) -> Tuple[np.ndarray, np.ndarray]:
@@ -1195,11 +1193,18 @@ class CollectedImagingFolder(CollectedDataFolder):
         return SpikeTimes, SpikeProb, DiscreteApproximation
 
     def load_suite2p(self):
-        return
+        # Dynamic imports because \m/_(>.<)_\m/
+        print("Loading Suite2p...")
+        from ImagingAnalysis.Suite2PAnalysis import Suite2PModule
+        suite2p_module = Suite2PModule(self.folders.get("denoised"), self.path, file_type="binary")
+        suite2p_module.load_files() # load the files
+        suite2p_module.db = suite2p_module.ops # make sure db never overwrites ops
+        print("Finished.")
+        return suite2p_module
 
     def import_proc_traces(self):
         try:
-            return self.load_proc_traces(absolute_path=self.searchInFolder("ProcessedTraces"))
+            return self.load_proc_traces(absolute_path=self.find_matching_files("ProcessedTraces")[0])
         except ModuleNotFoundError:
             print("Detected Deprecated Save. Migrating...")
             with open(self.searchInFolder("ProcessedTraces"), "rb") as _file:
@@ -1210,7 +1215,7 @@ class CollectedImagingFolder(CollectedDataFolder):
             _file.close()
             # noinspection PyBroadException
             try:
-                return self.load_proc_traces(absolute_path=self.searchInFolder("ProcessedTraces"))
+                return self.load_proc_traces(absolute_path=self.find_matching_files("ProcessedTraces")[0])
             except Exception:
                 print("Migration Unsuccessful")
                 return
@@ -1258,25 +1263,25 @@ class CollectedImagingFolder(CollectedDataFolder):
         :rtype: str
         """
 
-        if self.find_matching_files("cascade").__len__() >= 4:
+        if self.find_matching_files("cascade").__len__() >= 3:
             return "Ready for Analysis"
-        elif 2 < self.find_matching_files("cascade").__len__() < 4:
+        elif 1 < self.find_matching_files("cascade").__len__() < 3:
             return "Cascade: Discrete Inference"
-        elif self.find_matching_files("fissa").__len__() >= 3:
+        elif self.find_matching_files("fissa").__len__() >= 2:
             return "Cascade: Spike Probability"
-        elif 2 <= self.find_matching_files("fissa").__len__() < 3:
+        elif 1 <= self.find_matching_files("fissa").__len__() < 2:
             return "Fissa: Source-Separation"
-        elif self.find_matching_files("spks.npy", "suite2p\\plane0").__len__() >= 1:
+        elif self.find_matching_files("spks.npy", "suite2p\\plane0").__len__() >= 0:
             return "Fissa: Trace Extraction"
-        elif self.find_matching_files("iscell.npy", "suite2p\\plane0").__len__() >= 1:
+        elif self.find_matching_files("iscell.npy", "suite2p\\plane0").__len__() >= 0:
             return "Suite2P: Spike Inference [Formality]"
-        elif self.find_matching_files("F.npy", "suite2p\\plane0").__len__() >= 1:
+        elif self.find_matching_files("F.npy", "suite2p\\plane0").__len__() >= 0:
             return "Suite2P: Classify ROIs"
-        elif self.find_matching_files("stat.npy", "suite2p\\plane0").__len__() >= 1:
+        elif self.find_matching_files("stat.npy", "suite2p\\plane0").__len__() >= 0:
             return "Suite2P: Trace Extraction"
-        elif self.find_matching_files("denoised").__len__() >= 2:
+        elif self.find_matching_files("denoised").__len__() >= 1:
             return "Suite2P: ROI Detection"
-        elif self.find_matching_files("suite2p").__len__() >= 3:
+        elif self.find_matching_files("suite2p").__len__() >= 2:
             return "DeepCAD: Denoising"
         else:
             return "Motion Correction"

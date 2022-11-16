@@ -8,11 +8,14 @@
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_Retrieval.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure2.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/ccc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/was.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/was.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/FissaAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/FissaAnalysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/StaticProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/StaticProcessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -272,14 +275,8 @@
       <workItem from="1668469223014" duration="2855000" />
       <workItem from="1668527685070" duration="4000" />
       <workItem from="1668533261757" duration="382000" />
-      <workItem from="1668534124332" duration="10143000" />
-    </task>
-    <task id="LOCAL-00037" summary="Added Videos -&gt; Binary File Function">
-      <created>1666993921233</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1666993921233</updated>
+      <workItem from="1668534124332" duration="17136000" />
+      <workItem from="1668619404187" duration="14567000" />
     </task>
     <task id="LOCAL-00038" summary="Added Videos -&gt; Binary File Function">
       <created>1666994192002</created>
@@ -617,7 +614,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668549185957</updated>
     </task>
-    <option name="localTasksCounter" value="86" />
+    <task id="LOCAL-00086" summary="func to save space by deleting old videos that have been processed">
+      <created>1668550222002</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1668550222002</updated>
+    </task>
+    <option name="localTasksCounter" value="87" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

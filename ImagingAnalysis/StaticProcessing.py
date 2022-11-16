@@ -446,3 +446,18 @@ class Processing:
                         NeuralDataTensorForm[_trial, _neuron,
                         int(_intervals.values[_interval].left):int(_intervals.values[_interval].right)])
         return BinnedData
+
+    @staticmethod
+    def calculate_standardized_noise(DFF: np.ndarray, FrameRate: float) -> Union[float, np.ndarray]:
+        """
+        Calculates standardized noise, see:
+        https://www.nature.com/articles/s41593-021-00895-5
+
+        :param DFF: Fluorescence over Baseline (DF/F)
+        :param FrameRate: Imaging framerate
+        :type DFF: Any
+        :type FrameRate: float
+        :return: standardized noise
+        :rtype: Any
+        """
+        return np.median(np.abs(np.diff(DFF)))/np.sqrt(FrameRate)

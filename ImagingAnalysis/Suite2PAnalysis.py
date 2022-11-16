@@ -59,7 +59,7 @@ class Suite2PModule:
         try:
             os.makedirs(self.db.get("save_path"))
         except FileExistsError:
-            print("Warning Folder Already Exists and Wil be Overwritten")
+            print("Warning Folder Already Exists and Will be Overwritten")
             pass
 
         self.iscell = None
