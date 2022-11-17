@@ -1024,7 +1024,7 @@ This is a class for managing a folder of unorganized data files
         """
         self.files = self.path
 
-    def find_matching_files(self, Filename: str, Folder: Optional[str] = None) -> Union[Tuple[str], str, None]:
+    def find_matching_files(self, Filename: str, Folder: Optional[str] = None) -> Union[Tuple[str], None]:
         """
         Finds all matching files
 
@@ -1271,13 +1271,13 @@ class CollectedImagingFolder(CollectedDataFolder):
             return "Cascade: Spike Probability"
         elif 1 <= self.find_matching_files("fissa").__len__() < 2:
             return "Fissa: Source-Separation"
-        elif self.find_matching_files("spks.npy", "suite2p\\plane0").__len__() >= 0:
+        elif self.find_matching_files("spks.npy", "suite2p\\plane0").__len__() > 0:
             return "Fissa: Trace Extraction"
-        elif self.find_matching_files("iscell.npy", "suite2p\\plane0").__len__() >= 0:
+        elif self.find_matching_files("iscell.npy", "suite2p\\plane0").__len__() > 0:
             return "Suite2P: Spike Inference [Formality]"
-        elif self.find_matching_files("F.npy", "suite2p\\plane0").__len__() >= 0:
+        elif self.find_matching_files("F.npy", "suite2p\\plane0").__len__() > 0:
             return "Suite2P: Classify ROIs"
-        elif self.find_matching_files("stat.npy", "suite2p\\plane0").__len__() >= 0:
+        elif self.find_matching_files("stat.npy", "suite2p\\plane0").__len__() > 0:
             return "Suite2P: Trace Extraction"
         elif self.find_matching_files("denoised").__len__() >= 1:
             return "Suite2P: ROI Detection"

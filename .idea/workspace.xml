@@ -4,18 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="func to save space by deleting old videos that have been processed">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="touch up communication between modules">
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_Retrieval.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure2.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_Retrieval2.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/ccc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/was.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/was.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/StaticProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/StaticProcessing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -276,14 +274,11 @@
       <workItem from="1668527685070" duration="4000" />
       <workItem from="1668533261757" duration="382000" />
       <workItem from="1668534124332" duration="17136000" />
-      <workItem from="1668619404187" duration="14567000" />
-    </task>
-    <task id="LOCAL-00038" summary="Added Videos -&gt; Binary File Function">
-      <created>1666994192002</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1666994192002</updated>
+      <workItem from="1668619404187" duration="14620000" />
+      <workItem from="1668639668345" duration="491000" />
+      <workItem from="1668699322255" duration="8000" />
+      <workItem from="1668716511919" duration="38000" />
+      <workItem from="1668716582731" duration="4829000" />
     </task>
     <task id="LOCAL-00039" summary="Added Videos -&gt; Binary File Function">
       <created>1667242824677</created>
@@ -621,7 +616,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668550222002</updated>
     </task>
-    <option name="localTasksCounter" value="87" />
+    <task id="LOCAL-00087" summary="touch up communication between modules">
+      <created>1668639645478</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1668639645478</updated>
+    </task>
+    <option name="localTasksCounter" value="88" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -640,7 +642,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Updated environment.yml" />
     <MESSAGE value="gitignore2" />
     <MESSAGE value="Implemented Denoising" />
     <MESSAGE value="gitignore" />
@@ -665,7 +666,8 @@
     <MESSAGE value="namespace changes" />
     <MESSAGE value="misc" />
     <MESSAGE value="func to save space by deleting old videos that have been processed" />
-    <option name="LAST_COMMIT_MESSAGE" value="func to save space by deleting old videos that have been processed" />
+    <MESSAGE value="touch up communication between modules" />
+    <option name="LAST_COMMIT_MESSAGE" value="touch up communication between modules" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Calcium_Imaging_Analysis_Pipeline$a.coverage" NAME="a Coverage Results" MODIFIED="1664464028437" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AnalysisModules" />
