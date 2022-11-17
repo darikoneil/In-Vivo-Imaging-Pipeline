@@ -327,14 +327,10 @@ class ExperimentData:
         _raw_behavioral_data = _base_behav_dir + "\\RawBehavioralData"
         _behavioral_exports = _base_behav_dir + "\\BehavioralExports"
         _deep_lab_cut_data = _base_behav_dir + "\\DeepLabCutData"
-        _processed_data = _base_behav_dir + "\\ProcessedData"
-        _analog_burrow_data = _base_behav_dir + "\\AnalogBurrowData"
         os.makedirs(_base_behav_dir)
         os.makedirs(_raw_behavioral_data)
         os.makedirs(_behavioral_exports)
         os.makedirs(_deep_lab_cut_data)
-        os.makedirs(_processed_data)
-        os.makedirs(_analog_burrow_data)
 
     @classmethod
     def generateImaging(cls, StageDirectory: str) -> None:
@@ -373,11 +369,13 @@ class ExperimentData:
         _roi_sorting = SampFreqDirectory + "\\sorting"
         _denoised = SampFreqDirectory + "\\denoised"
         _cascade = SampFreqDirectory + "\\cascade"
+        _compiled = SampFreqDirectory + "\\compiled"
         os.makedirs(_suite2p)
         os.makedirs(_fissa)
         os.makedirs(_denoised)
         os.makedirs(_roi_sorting)
         os.makedirs(_cascade)
+        os.makedirs(_compiled)
         cls.generateReadMe(_roi_sorting + "\\ReadMe.txt", "Read-Me for ROI Sorting")
 
     @classmethod
@@ -670,7 +668,7 @@ class BehavioralStage:
             os.makedirs(_raw_data_folder)
         except FileExistsError:
             print("Existing Raw Data Folder Detected")
-        self.folder_dictionary['raw_imaging_data'] = _raw_data_folder
+        self.folder_dictionary['raw_imaging_data'] = CollectedDataFolder(_raw_data_folder)
         # META
         _bruker_meta_folder = self.folder_dictionary['imaging_folder'] + "\\BrukerMetaData"
         try:
@@ -678,14 +676,6 @@ class BehavioralStage:
         except FileExistsError:
             print("Existing Bruker Meta Data Folder Detected")
         self.folder_dictionary['bruker_meta_data'] = CollectedDataFolder(_bruker_meta_folder)
-        # COMPILED
-        _compiled_imaging_data_folder = self.folder_dictionary['imaging_folder'] + "\\CompiledImagingData"
-        try:
-            os.makedirs(_compiled_imaging_data_folder)
-        except FileExistsError:
-            print("Existing Compiled Data Folder Detected")
-
-        self.folder_dictionary['compiled_imaging_data_folder'] = CollectedDataFolder(_compiled_imaging_data_folder)
 
     def addImageSamplingFolder(self, SamplingRate: int) -> Self:
         """
@@ -1129,6 +1119,7 @@ class CollectedImagingFolder(CollectedDataFolder):
 
     def __init__(self, Path: str):
         super().__init__(Path)
+        self.parameters = dict()
         self.folders = None
         self.default_folders()
 
@@ -1139,7 +1130,8 @@ class CollectedImagingFolder(CollectedDataFolder):
             "suite2p": "".join([self.path, "\\suite2p"]),
             "cascade": "".join([self.path, "\\cascade"]),
             "sorting": "".join([self.path, "\\sorting"]),
-            "plane0": "".join([self.path, "\\suite2p\\plane0"])
+            "plane0": "".join([self.path, "\\suite2p\\plane0"]),
+            "compiled": "".join([self.path, "\\compiled"])
         }
 
     def load_fissa_exports(self) -> Tuple[np.ndarray, np.ndarray]:
@@ -1247,13 +1239,27 @@ class CollectedImagingFolder(CollectedDataFolder):
         """
 
         if self.find_matching_files("reg_tif").__len__() != 0:
-            [pathlib.Path(_file).unlink() for _file in IM.find_matching_files("reg_tif")]
+            [pathlib.Path(_file).unlink() for _file in self.find_matching_files("reg_tif")]
         if self.find_matching_files("registered_data.bin").__len__() != 0 and self.find_matching_files(
                 "binary_video", "suite2p//plane0").__len__() != 0:
-            [pathlib.Path(_file).unlink() for _file in IM.find_matching_files("data.bin")]
+            [pathlib.Path(_file).unlink() for _file in self.find_matching_files("data.bin")]
         if self.find_matching_files("data.bin").__len__() != 0 and self.find_matching_files(
                 "binary_video", "suite2p//plane0").__len__() != 0:
-            [pathlib.Path(_file).unlink() for _file in IM.find_matching_files("data.bin")]
+            [pathlib.Path(_file).unlink() for _file in self.find_matching_files("data.bin")]
+
+    def clean_up_compilation(self) -> Self:
+        """
+        This function removes the compiled tif files generated inside CompiledImagingData
+        (You can avoid the creation of these in the first place by changing suite2p parameters)
+
+        :rtype: Any
+        """
+
+        if self.find_matching_files("compiledVideo", "compiled").__len__() != 0:
+            [pathlib.Path(_file).unlink() for _file in self.find_matching_files("compiledVideo", "compiled")]
+
+    def add_preproc_notes(self, keys, notes) -> Self:
+        self.parameters[("preprocessing", key)] = notes
 
     @property
     def current_stage(self) -> str:
