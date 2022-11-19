@@ -1,3 +1,5 @@
+from __future__ import annotations
+from typing import Union, Tuple, List, Optional
 import sys
 import numpy as np
 from tqdm.auto import tqdm
@@ -182,8 +184,10 @@ class Processing:
             disable=False,
         ):
             for _component in range(_components):
+                _calculated_kappa = _kappa * (np.max(np.concatenate(Traces[_neuron], axis=1)[_component, :]) -
+                                              np.min(np.concatenate(Traces[_neuron], axis=1)[_component, :]))
                 _smoothedTracesByComponent[_neuron, :, _component] = anisotropic_diffusion(
-                    np.concatenate(Traces[_neuron], axis=1)[_component, :], niter=_niter, kappa=_kappa,
+                    np.concatenate(Traces[_neuron], axis=1)[_component, :], niter=_niter, kappa=_calculated_kappa,
                     gamma=_gamma)
 
         for _neuron in tqdm(
