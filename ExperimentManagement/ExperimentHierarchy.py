@@ -14,9 +14,6 @@ from MigrationTools.Converters import renamed_load
 import math
 
 
-# yo some dis ugly
-
-
 class ExperimentData:
     """
     Class for Organizing & Managing Experimental Data Across Sessions
@@ -50,10 +47,12 @@ class ExperimentData:
     **Self Methods**
         | *passMeta* : Passes directory/mouse id
         | *recordMod* : Record modification of experiment
+        | *recordStageMod* : Record modification of experiment and behavioral stage
         | *saveHierarchy* : Saves Hierarchy to pickle
         | *createLogFile* : Creates log file
         | *startLog* : Starts Log
         | *checkLog* : Checks Log Status
+        | *create* : This function generates the directory hierarchy in one step
 
     **Properties**
         | *mouse_id* : ID of Mouse
@@ -451,6 +450,26 @@ class ExperimentData:
         # noinspection PyTypeChecker
         self.modifications.append((self.getDate(), self.getTime(), *args))
 
+    def recordStageMod(self, StageKey: str, *args) -> Self:
+        """
+        Record modification of experiment (Data, Time, *args)
+
+        :param StageKey: The key name for the stage
+        :type StageKey: str
+        :param args: A string explaining the modification
+        :type args: str
+        :rtype: Any
+        """
+        if args:
+            self.recordMod(args[0])
+        else:
+            self.recordMod()
+        try:
+            self.__dict__.get(StageKey).recordMod()
+        except KeyError:
+            print("Unable to identify stage from provided key")
+
+
     def saveHierarchy(self) -> Self:
         """
         Saves Hierarchy to pickle
@@ -735,6 +754,7 @@ class BehavioralStage:
         _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("csv")
         return self.load_bruker_analog_recordings(_files[-1])
 
+    # maybe we localize these
     def loadAdditionalBrukerAnalogRecordings(self, Tag: str) -> pd.DataFrame:
         """
         Loads Additional Bruker Analog Recordings
@@ -776,6 +796,162 @@ class BehavioralStage:
         return
 
     @staticmethod
+    def organize_base_data(Analog: np.ndarray, Digital: np.ndarray, State: np.ndarray,
+                           HardwareConfig: Optional[dict] = None) -> pd.DataFrame:
+        """
+        This function organizes analog, digital, and state data into a pandas dataframe
+
+        :param Analog: Analog Data
+        :type Analog: Any
+        :param Digital: Digital Data
+        :type Digital: Any
+        :param State: State Data
+        :type State: Any
+        :param HardwareConfig: Dictionary indicating configuration of hardware channels
+        :type HardwareConfig: dict
+        :return: Data organized into a pandas dataframe
+        :rtype: pd.DataFrame
+        """
+
+        # Parse Channel IDs
+        if HardwareConfig is None:
+            _analog_dictionary = {
+                "Imaging Sync": 0,
+                "Motor Position": 1,
+                "Force": 3,
+            }
+            _digital_dictionary = {
+                "Gate": 0
+            }
+        else:
+            print("Not yet implemented, reverting to defaults")
+            _analog_dictionary = {
+                "Imaging Sync": 0,
+                "Motor Position": 1,
+                "Force": 3,
+            }
+            _digital_dictionary = {
+                "Gate": 0
+            }
+
+        # Determine Sampling Rates
+        if HardwareConfig is None:
+            _data_sampling_rate = 1000
+            _state_sampling_rate = 10
+        else:
+            print("Not yet implemented, reverting to defaults")
+            _data_sampling_rate = 1000
+            _state_sampling_rate = 10
+
+        def nest_all_stages_under_trials(State_Data: np.ndarray, Index: np.ndarray, State_Casted_Dict: dict):
+            nested_trial_index = np.full(Index.__len__(), 69, dtype=np.float64)
+            _trial_idx = np.where(State_Data == State_Casted_Dict.get("Trial"))[0]
+            _deriv_idx = np.diff(_trial_idx)
+            _trailing_edge = _trial_idx[np.where(_deriv_idx > 1)[0]]
+            _trailing_edge = np.append(_trailing_edge, _trial_idx[-1])
+            _habituation_trailing_edge = np.where(State_Data == State_Casted_Dict.get("Habituation"))[0][-1]
+
+            nested_trial_index[_habituation_trailing_edge] = 0
+            nested_trial_index[-1] = _trailing_edge.__len__() + 1
+
+            for _edge in range(_trailing_edge.shape[0]):
+                nested_trial_index[_trailing_edge[_edge]] = _edge + 1
+
+            nested_trial_index = pd.Series(nested_trial_index, index=Index, dtype=np.float64)
+            nested_trial_index[nested_trial_index == 69] = np.nan
+            nested_trial_index.bfill(inplace=True)
+            nested_trial_index.name = "Trial Set"
+            return nested_trial_index
+
+        def construct_state_index_series(State_Data: np.ndarray, Time_Vector_Data: np.ndarray,
+                                         Time_Vector_State: np.ndarray) -> Tuple[dict, pd.Series]:
+            def cast_state_into_float64(State__Data: np.ndarray) -> Tuple[np.ndarray, dict]:
+                State__Casted__Dict = dict()
+                Integer_State_Index = np.full(State__Data.shape[0], 0, dtype=np.float64)
+                _unique_states = np.unique(State__Data)
+
+                for _unique_value in range(_unique_states.shape[0]):
+                    State__Casted__Dict[_unique_states[_unique_value]] = _unique_value
+                    Integer_State_Index[np.where(State__Data == _unique_states[_unique_value])[0]] = _unique_value
+
+                return Integer_State_Index, State__Casted__Dict
+
+            _integer_state_index, State_Casted_Dict = cast_state_into_float64(State_Data)
+            State_Index = pd.Series(_integer_state_index, index=Time_Vector_State)
+            State_Index.sort_index(inplace=True)
+            State_Index = State_Index.reindex(Time_Vector_Data)
+            State_Index.ffill(inplace=True)
+            State_Index.name = "State Integer"
+            return State_Casted_Dict, State_Index
+
+        # Create Time Vectors
+        _time_vector_data = np.around(np.arange(0, Analog.shape[1] * (1 / _data_sampling_rate), 1 / _data_sampling_rate,
+                                                dtype=np.float64),
+                                      decimals=3)
+        _time_vector_state = np.around(np.arange(0, State.__len__() * (1 / _state_sampling_rate), 1 /
+                                                 _state_sampling_rate, dtype=np.float64), decimals=3)
+
+        # Construct State Index
+        StateCastedDict, _state_index = construct_state_index_series(State, _time_vector_data, _time_vector_state)
+
+        # Construct Nested Trial Index
+        _trial_index = nest_all_stages_under_trials(_state_index.values, _time_vector_data, StateCastedDict)
+
+        # Create Multi-Index
+        MultiIndex = pd.MultiIndex.from_arrays([_state_index.values, _trial_index.values, _time_vector_data])
+        MultiIndex.names = ["State Integer", "Trial Set", "Time (s)"]
+
+        # Initialize Organized Data Frame
+        OrganizedData = pd.DataFrame(None, index=_time_vector_data, dtype=np.float64)
+        OrganizedData.index.name = "Time (s)"
+
+        # Type Check
+        try:
+            assert (_state_index.values.dtype == np.float64)
+            assert (_trial_index.values.dtype == np.float64)
+            assert (Analog.dtype == np.float64)
+            assert (Digital.dtype == np.float64)
+        except AssertionError:
+            print("Bug. Incorrect Type detected. Forcing conversion...")
+            try:
+                _state_index.values.astype(np.float64)
+                _trial_index.values.astype(np.float64)
+                Analog.astype(np.float64)
+                Digital.astype(np.float64)
+                print("Successfully converted erroneous data types")
+            except AttributeError:
+                print("Failed automatic conversion")
+                return OrganizedData
+
+        # Add According to Index, Start with State Integer
+        OrganizedData = OrganizedData.join(_state_index, on="Time (s)")
+        OrganizedData = OrganizedData.join(_trial_index, on="Time (s)")
+
+        # Add Analogs
+        if Analog.shape[0] < Analog.shape[1]:  # orientation check
+            Analog = Analog.T
+
+        for _key in _analog_dictionary:
+            _analog_series = pd.Series(Analog[:, _analog_dictionary.get(_key)], index=_time_vector_data,
+                                       dtype=np.float64)
+            _analog_series.name = _key
+            OrganizedData = OrganizedData.join(_analog_series, on="Time (s)")
+
+        # Add Digital
+        if _digital_dictionary.keys().__len__() > 1:
+            for _key in _digital_dictionary:
+                _digital_series = pd.Series(Digital[:, _digital_dictionary.get(_key)], index=_time_vector_data,
+                                            dtype=np.float64)
+                _digital_series.name = _digital_dictionary.get(_key)
+                OrganizedData = OrganizedData.join(_digital_series, on="Time (s)")
+        else:
+            _digital_series = pd.Series(Digital, index=_time_vector_data, dtype=np.float64)
+            _digital_series.name = list(_digital_dictionary.keys())[0]
+            OrganizedData = OrganizedData.join(_digital_series, on="Time (s)")
+
+        return OrganizedData, StateCastedDict, MultiIndex
+
+    @staticmethod
     def load_bruker_analog_recordings(File: str) -> pd.DataFrame:
         """
         Method to load bruker analog recordings from .csv
@@ -791,7 +967,7 @@ class BehavioralStage:
     @staticmethod
     def sync_bruker_recordings(DataFrame: pd.DataFrame, AnalogRecordings: pd.DataFrame, MetaData: BrukerMeta,
                                StateCastedDict: dict,
-                               SyncKey: Optional[Tuple[str, str]], **kwargs) -> pd.DataFrame:
+                               SyncKey: Optional[Tuple[str, str]], Parameters: dict, **kwargs) -> pd.DataFrame:
         """
 
         :param DataFrame:
@@ -804,11 +980,13 @@ class BehavioralStage:
         :type StateCastedDict: dict
         :param SyncKey:
         :type SyncKey: tuple or None
+        :param Parameters: dictionary containing preprocessing and other parameters
+        :type Parameters: dict
         :return: Sync Data
         :rtype: pd.DataFrame
         """
 
-        _fill_method = kwargs.get("fill", "backward")
+        _fill_method = kwargs.get("fill", "nearest")
         if SyncKey is None:
             SyncKey = ("State Integer", " TrialIndicator")
         # Sync by matching first peak of the sync_key columns
@@ -870,11 +1048,88 @@ class BehavioralStage:
         elif _fill_method == "nearest":
             _frames.interpolate(method="nearest", inplace=True)
         _frames = _frames.rename(columns={"Imaging Frame": "[FILLED] Imaging Frame"})
+
         DataFrame = DataFrame.join(_frames.copy(deep=True))
+
+        # adjust for preprocessing
+        # parse params
+        _bin_size = Parameters.get(("preprocessing", "grouped-z project bin size"), 3)
+        _artifact = Parameters.get(("preprocessing", "shuttle artifact length"), 1000)
+        _chunk_size = Parameters.get(("preprocessing", "chunk size"), 7000)
+
+        # parse meta
+        _num_frames = MetaData.imaging_metadata.get("relativeTimes").__len__()
+
+        # determine original frames
+        if _num_frames % _chunk_size >= _artifact:
+            _first_frame = _num_frames % _chunk_size
+        else:
+            _artifact_free_frames = _num_frames - _artifact
+            _additional_crop = _artifact_free_frames % _chunk_size
+            _first_frame = _additional_crop + _artifact
+
+            # DataFrame["Imaging Frame"] = DataFrame["Imaging Frame"].subtract(_first_frame)
+            # DataFrame["[FILLED] Imaging Frame"] = DataFrame["[FILLED] Imaging Frame"].substract(_first_frame)
         return DataFrame
 
     @staticmethod
-    def sync_downsampled_images(DataFrame: pd.DataFrame, MetaData: BrukerMeta, **kwargs) -> Union[pd.DataFrame, None]:
+    def sync_grouped_z_projected_images(DataFrame: pd.DataFrame, MetaData: BrukerMeta, Parameters: dict, **kwargs) -> \
+            pd.DataFrame:
+        _fill_method = kwargs.get("fill", "nearest")
+
+        # parse params
+        _bin_size = Parameters.get(("preprocessing", "grouped-z project bin size"), 3)
+        _artifact = Parameters.get(("preprocessing", "shuttle artifact length"), 1000)
+        _chunk_size = Parameters.get(("preprocessing", "chunk size"), 7000)
+
+        # parse meta
+        _num_frames = MetaData.imaging_metadata.get("relativeTimes").__len__()
+
+        # determine original frames
+        # if _num_frames % _chunk_size >= _artifact:
+        #    _first_frame = _num_frames % _chunk_size
+        # else:
+        #    _artifact_free_frames = _num_frames - _artifact
+        #    _additional_crop = _artifact_free_frames % _chunk_size
+        #    _first_frame = _additional_crop + _artifact
+
+        # determine frames kept for synchrony
+        # _kept_sync_frames = np.unique(DataFrame["Imaging Frame"].values)
+        # _kept_sync_frames = _kept_sync_frames[~np.isnan(_kept_sync_frames)]
+        # _kept_sync_frames.sort()
+        # _first_sync_frame, _last_sync_frame = _kept_sync_frames[0], _kept_sync_frames[-1]
+
+        # determine downsample frames
+        _original_downsample_frames = np.arange(0, _num_frames, 3).__len__()
+        if _original_downsample_frames % _chunk_size >= _artifact:
+            _first_downsample_frame = _original_downsample_frames % _chunk_size
+        else:
+            _artifact_free_downsample_frames = _original_downsample_frames - _artifact
+            _additional_crop_downsample = _artifact_free_downsample_frames % _chunk_size
+            _first_downsample_frame = _artifact_free_downsample_frames + _additional_crop_downsample
+        _projected_frames = np.arange(_first_downsample_frame, _original_downsample_frames, 3)
+        _projected_first_frame = _projected_frames[0]
+        _matching_frames = _projected_frames*_bin_size
+        _matching_frames += 1 # make the center frame the timestamp instead of the first frame
+        _time_stamps = np.full((_matching_frames.shape[0]), np.nan, dtype=np.float64)
+
+        _frames_idx = np.where(np.in1d(_matching_frames, DataFrame["Imaging Frame"].values))[0]
+        _time_stamps_1 = DataFrame.index.values[np.where(np.in1d(DataFrame["Imaging Frame"].values,
+                                                                 _matching_frames[_frames_idx]))[0]]
+        _downsampled_frames = pd.Series(np.arange(0, _projected_frames.__len__(), 1), index=_time_stamps_1)
+        _downsampled_frames.name = "Downsampled Imaging Frame"
+
+        DataFrame.join(_downsampled_frames.copy(deep=True), on="Time (s)")
+
+        _downsampled_frames.reindex(DataFrame.index)
+        _downsampled_frames = _downsampled_frames.name = "[FILLED] Downsampled Imaging Frame"
+        _downsampled_frames.interpolate(method="nearest", inplace=True)
+        DataFrame.join(_downsampled_frames, on="Time (s)")
+
+        return DataFrame
+
+    @staticmethod
+    def _sync_downsampled_images(DataFrame: pd.DataFrame, MetaData: BrukerMeta, **kwargs) -> Union[pd.DataFrame, None]:
         _downsample_size = kwargs.get("downsample_multiplier", 3)
         _fill_method = kwargs.get("fill", "backward")
         _two_files = kwargs.get("two_files", False)
@@ -1184,11 +1439,18 @@ class CollectedImagingFolder(CollectedDataFolder):
 
         return SpikeTimes, SpikeProb, DiscreteApproximation
 
-    def load_suite2p(self):
+    def load_suite2p(self, *args: str):
+
+        if args:
+            _folder = args[0]
+        else:
+            _folder = "denoised"
+
+
         # Dynamic imports because \m/_(>.<)_\m/
         print("Loading Suite2p...")
         from ImagingAnalysis.Suite2PAnalysis import Suite2PModule
-        suite2p_module = Suite2PModule(self.folders.get("denoised"), self.path, file_type="binary")
+        suite2p_module = Suite2PModule(self.folders.get(_folder), self.path, file_type="binary")
         suite2p_module.load_files() # load the files
         suite2p_module.db = suite2p_module.ops # make sure db never overwrites ops
         print("Finished.")
@@ -1258,8 +1520,26 @@ class CollectedImagingFolder(CollectedDataFolder):
         if self.find_matching_files("compiledVideo", "compiled").__len__() != 0:
             [pathlib.Path(_file).unlink() for _file in self.find_matching_files("compiledVideo", "compiled")]
 
-    def add_preproc_notes(self, keys, notes) -> Self:
-        self.parameters[("preprocessing", key)] = notes
+    def add_notes(self, Step: str, KeyOrDict: Union[str, dict], Notes: Optional[Any] = None) -> Self:
+        """
+        Function adds notes indicating steps
+
+        :param Step: Step of Analysis
+        :param Step: str
+        :param KeyOrDict: Either a Key or a dictionary containing multiple key-value (note) pairs
+        :type KeyOrDict: Union[str, dict]
+        :param Notes: If using key, then notes is the paired value
+        :type Notes: Optional[Any]
+        :rtype: Any
+        """
+        if isinstance(KeyOrDict, str) and Notes is not None:
+            self.parameters[(Step, KeyOrDict)] = Notes
+        elif isinstance(KeyOrDict, str) and Notes is None:
+            self.parameters[(Step, KeyOrDict)] = Notes
+            print("No value (note) provided to pair with key value. Added None")
+        elif isinstance(KeyOrDict, dict):
+            for _key in KeyOrDict:
+                self.parameters[(Step, _key)] = KeyOrDict.get(_key)
 
     @property
     def current_stage(self) -> str:

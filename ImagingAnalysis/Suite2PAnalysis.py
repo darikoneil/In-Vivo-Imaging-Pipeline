@@ -133,9 +133,10 @@ class Suite2PModule:
     def reg_binary_path(self) -> str:
         return self.ops.get("reg_file")
 
-    def run(self) -> Self:
+    def _run(self) -> Self:
         """
         Runs a Full Suite2P Analysis
+        Deprecated?
 
         :return: None
         :rtype: None
@@ -517,7 +518,7 @@ class Suite2PModule:
 
         if BinaryVideo.dtype.type == np.uint16:
             return (BinaryVideo // 2).astype(np.int16)
-        elif BinaryVideo.dtype.type == np.int16:
+        elif BinaryVideo.dtype.type == np.int16 or BinaryVideo.dtype.type == int16:
             print("No conversion was necessary!!!")
             return BinaryVideo
         else:

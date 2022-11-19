@@ -4,16 +4,42 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="fixed typo that messed up indicator of current analysis stage">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="fixed typo in clean-up imaging function">
+      <change afterPath="$PROJECT_DIR$/BehavioralAnalysis/Scratch2.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_Retrieval.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure2.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_Retrieval2.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/ccc.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Scratch.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dask-worker-space/global.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dask-worker-space/purge.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dask-worker-space/worker-0lr0y8jy.dirlock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dask-worker-space/worker-1hp51o5y.dirlock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dask-worker-space/worker-4ol33iu2.dirlock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dask-worker-space/worker-6chnlmnv.dirlock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dask-worker-space/worker-814ckr2_.dirlock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dask-worker-space/worker-9hue2359.dirlock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dask-worker-space/worker-_4czt1tt.dirlock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dask-worker-space/worker-_zktqfbn.dirlock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dask-worker-space/worker-bzm7j8pi.dirlock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dask-worker-space/worker-fol0pq_9.dirlock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dask-worker-space/worker-hb4wz_yc.dirlock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dask-worker-space/worker-kj3piwvk.dirlock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dask-worker-space/worker-tt5epxqb.dirlock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dask-worker-space/worker-vcvhjsa1.dirlock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dask-worker-space/worker-vn6e_fti.dirlock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dask-worker-space/worker-ysn2f3wb.dirlock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/was.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/was.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/StaticProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/DataProcessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MigrationTools/Converters.py" beforeDir="false" afterPath="$PROJECT_DIR$/MigrationTools/Converters.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -278,14 +304,9 @@
       <workItem from="1668639668345" duration="491000" />
       <workItem from="1668699322255" duration="8000" />
       <workItem from="1668716511919" duration="38000" />
-      <workItem from="1668716582731" duration="8298000" />
-    </task>
-    <task id="LOCAL-00040" summary="Added function fo removing shutter artifacts &amp; loading raw binary videos">
-      <created>1667247420716</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1667247420716</updated>
+      <workItem from="1668716582731" duration="25793000" />
+      <workItem from="1668870841324" duration="4691000" />
+      <workItem from="1668876839856" duration="17957000" />
     </task>
     <task id="LOCAL-00041" summary="Added function fo removing shutter artifacts &amp; loading raw binary videos">
       <created>1667247427217</created>
@@ -623,7 +644,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668722418548</updated>
     </task>
-    <option name="localTasksCounter" value="89" />
+    <task id="LOCAL-00089" summary="fixed typo in clean-up imaging function">
+      <created>1668729522655</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1668729522655</updated>
+    </task>
+    <option name="localTasksCounter" value="90" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -642,7 +670,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Implemented Denoising" />
     <MESSAGE value="gitignore" />
     <MESSAGE value="Denoising Implementation" />
     <MESSAGE value="git ignore update" />
@@ -667,7 +694,8 @@
     <MESSAGE value="func to save space by deleting old videos that have been processed" />
     <MESSAGE value="touch up communication between modules" />
     <MESSAGE value="fixed typo that messed up indicator of current analysis stage" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed typo that messed up indicator of current analysis stage" />
+    <MESSAGE value="fixed typo in clean-up imaging function" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed typo in clean-up imaging function" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Calcium_Imaging_Analysis_Pipeline$a.coverage" NAME="a Coverage Results" MODIFIED="1664464028437" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AnalysisModules" />
