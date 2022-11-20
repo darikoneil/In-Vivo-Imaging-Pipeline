@@ -1068,14 +1068,12 @@ class BehavioralStage:
             _additional_crop = _artifact_free_frames % _chunk_size
             _first_frame = _additional_crop + _artifact
 
-            # DataFrame["Imaging Frame"] = DataFrame["Imaging Frame"].subtract(_first_frame)
-            # DataFrame["[FILLED] Imaging Frame"] = DataFrame["[FILLED] Imaging Frame"].substract(_first_frame)
+
         return DataFrame
 
     @staticmethod
-    def sync_grouped_z_projected_images(DataFrame: pd.DataFrame, MetaData: BrukerMeta, Parameters: dict, **kwargs) -> \
+    def sync_grouped_z_projected_images(DataFrame: pd.DataFrame, MetaData: BrukerMeta, Parameters: dict) -> \
             pd.DataFrame:
-        _fill_method = kwargs.get("fill", "nearest")
 
         # parse params
         _bin_size = Parameters.get(("preprocessing", "grouped-z project bin size"), 3)
@@ -1085,20 +1083,6 @@ class BehavioralStage:
         # parse meta
         _num_frames = MetaData.imaging_metadata.get("relativeTimes").__len__()
 
-        # determine original frames
-        # if _num_frames % _chunk_size >= _artifact:
-        #    _first_frame = _num_frames % _chunk_size
-        # else:
-        #    _artifact_free_frames = _num_frames - _artifact
-        #    _additional_crop = _artifact_free_frames % _chunk_size
-        #    _first_frame = _additional_crop + _artifact
-
-        # determine frames kept for synchrony
-        # _kept_sync_frames = np.unique(DataFrame["Imaging Frame"].values)
-        # _kept_sync_frames = _kept_sync_frames[~np.isnan(_kept_sync_frames)]
-        # _kept_sync_frames.sort()
-        # _first_sync_frame, _last_sync_frame = _kept_sync_frames[0], _kept_sync_frames[-1]
-
         # determine downsample frames
         _original_downsample_frames = np.arange(0, _num_frames, 3).__len__()
         if _original_downsample_frames % _chunk_size >= _artifact:
@@ -1107,29 +1091,33 @@ class BehavioralStage:
             _artifact_free_downsample_frames = _original_downsample_frames - _artifact
             _additional_crop_downsample = _artifact_free_downsample_frames % _chunk_size
             _first_downsample_frame = _artifact_free_downsample_frames + _additional_crop_downsample
-        _projected_frames = np.arange(_first_downsample_frame, _original_downsample_frames, 3)
+        _projected_frames = np.arange(_first_downsample_frame, _num_frames, 3)
         _projected_first_frame = _projected_frames[0]
-        _matching_frames = _projected_frames*_bin_size
-        _matching_frames += 1 # make the center frame the timestamp instead of the first frame
-        _time_stamps = np.full((_matching_frames.shape[0]), np.nan, dtype=np.float64)
+        _matching_frames = np.arange(_projected_first_frame, _num_frames, 3) + 1
+        # make the center frame the timestamp instead of the first frame
+        _time_stamp = np.full(_matching_frames.shape, -1, dtype=np.float64)
+        for _frame in range(_matching_frames.__len__()):
+            try:
+                _time_stamp[_frame] = DataFrame.index.values[np.where(DataFrame["Imaging Frame"].values == _matching_frames[_frame])[0]]
+            except ValueError:
+                pass
+        _true_idx = np.where(_time_stamp != -1)[0]
+        _time_stamp = _time_stamp[np.where(_time_stamp != -1)[0]]
 
-        _frames_idx = np.where(np.in1d(_matching_frames, DataFrame["Imaging Frame"].values))[0]
-        _time_stamps_1 = DataFrame.index.values[np.where(np.in1d(DataFrame["Imaging Frame"].values,
-                                                                 _matching_frames[_frames_idx]))[0]]
-        _downsampled_frames = pd.Series(np.arange(0, _projected_frames.__len__(), 1), index=_time_stamps_1)
+        _downsampled_frames = pd.Series(np.arange(0, _time_stamp.__len__(), 1), index=_time_stamp)
         _downsampled_frames.name = "Downsampled Imaging Frame"
 
-        DataFrame.join(_downsampled_frames.copy(deep=True), on="Time (s)")
+        DataFrame = DataFrame.join(_downsampled_frames.copy(deep=True), on="Time (s)")
 
         _downsampled_frames.reindex(DataFrame.index)
-        _downsampled_frames = _downsampled_frames.name = "[FILLED] Downsampled Imaging Frame"
+        _downsampled_frames.name = "[FILLED] Downsampled Imaging Frame"
         _downsampled_frames.interpolate(method="nearest", inplace=True)
-        DataFrame.join(_downsampled_frames, on="Time (s)")
+        DataFrame = DataFrame.join(_downsampled_frames, on="Time (s)")
 
         return DataFrame
 
     @staticmethod
-    def _sync_downsampled_images(DataFrame: pd.DataFrame, MetaData: BrukerMeta, **kwargs) -> Union[pd.DataFrame, None]:
+    def sync_downsampled_images(DataFrame: pd.DataFrame, MetaData: BrukerMeta, **kwargs) -> Union[pd.DataFrame, None]:
         _downsample_size = kwargs.get("downsample_multiplier", 3)
         _fill_method = kwargs.get("fill", "backward")
         _two_files = kwargs.get("two_files", False)

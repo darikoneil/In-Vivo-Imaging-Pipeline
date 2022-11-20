@@ -4,14 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="fixed typo in clean-up imaging function">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Clean up some of the awful pandas code for syncing data. some edge cases still don't work, be alert">
       <change afterPath="$PROJECT_DIR$/BehavioralAnalysis/Scratch2.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_Retrieval.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure2.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_Retrieval2.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DarikDataScripts/ccc.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Scratch.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/dask-worker-space/global.lock" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/dask-worker-space/purge.lock" afterDir="false" />
@@ -32,14 +31,9 @@
       <change afterPath="$PROJECT_DIR$/dask-worker-space/worker-vn6e_fti.dirlock" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/dask-worker-space/worker-ysn2f3wb.dirlock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/was.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/was.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/StaticProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/DataProcessing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MigrationTools/Converters.py" beforeDir="false" afterPath="$PROJECT_DIR$/MigrationTools/Converters.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -306,21 +300,7 @@
       <workItem from="1668716511919" duration="38000" />
       <workItem from="1668716582731" duration="25793000" />
       <workItem from="1668870841324" duration="4691000" />
-      <workItem from="1668876839856" duration="17957000" />
-    </task>
-    <task id="LOCAL-00041" summary="Added function fo removing shutter artifacts &amp; loading raw binary videos">
-      <created>1667247427217</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1667247427217</updated>
-    </task>
-    <task id="LOCAL-00042" summary="Added function for motion correction for binary videos">
-      <created>1667319535734</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1667319535734</updated>
+      <workItem from="1668876839856" duration="23744000" />
     </task>
     <task id="LOCAL-00043" summary="Updated environment.yml">
       <created>1667399875736</created>
@@ -651,7 +631,21 @@
       <option name="project" value="LOCAL" />
       <updated>1668729522655</updated>
     </task>
-    <option name="localTasksCounter" value="90" />
+    <task id="LOCAL-00090" summary="Clean up some of the awful pandas code for syncing data. some edge cases still don't work, be alert">
+      <created>1668901083782</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1668901083782</updated>
+    </task>
+    <task id="LOCAL-00091" summary="Clean up some of the awful pandas code for syncing data. some edge cases still don't work, be alert">
+      <created>1668901101666</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1668901101666</updated>
+    </task>
+    <option name="localTasksCounter" value="92" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -670,7 +664,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="gitignore" />
     <MESSAGE value="Denoising Implementation" />
     <MESSAGE value="git ignore update" />
     <MESSAGE value="Keyword for denoising multiprocessor" />
@@ -695,7 +688,8 @@
     <MESSAGE value="touch up communication between modules" />
     <MESSAGE value="fixed typo that messed up indicator of current analysis stage" />
     <MESSAGE value="fixed typo in clean-up imaging function" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed typo in clean-up imaging function" />
+    <MESSAGE value="Clean up some of the awful pandas code for syncing data. some edge cases still don't work, be alert" />
+    <option name="LAST_COMMIT_MESSAGE" value="Clean up some of the awful pandas code for syncing data. some edge cases still don't work, be alert" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Calcium_Imaging_Analysis_Pipeline$a.coverage" NAME="a Coverage Results" MODIFIED="1664464028437" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AnalysisModules" />
