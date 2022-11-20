@@ -1464,18 +1464,18 @@ class CollectedImagingFolder(CollectedDataFolder):
 
     def import_proc_inferences(self):
         try:
-            return self.load_proc_inferences(absolute_path=self.searchInFolder("ProcessedInferences"))
+            return self.load_proc_inferences(absolute_path=self.find_matching_files("ProcessedInferences")[0])
         except ModuleNotFoundError:
             print("Detected Deprecated Save. Migrating...")
-            with open(self.searchInFolder("ProcessedInferences"), "rb") as _file:
+            with open(self.find_matching_files("ProcessedInferences")[0], "rb") as _file:
                 _ = renamed_load(_file)
             _file.close()
-            with open(self.searchInFolder("ProcessedInferences"), "wb") as _file:
+            with open(self.find_matching_files("ProcessedInferences")[0], "wb") as _file:
                 pkl.dump(_, _file)
             _file.close()
             # noinspection PyBroadException
             try:
-                return self.load_proc_inferences(absolute_path=self.searchInFolder("ProcessedInferences"))
+                return self.load_proc_inferences(absolute_path=self.find_matching_files("ProcessedInferences")[0])
             except Exception:
                 print("Migration Unsuccessful")
                 return

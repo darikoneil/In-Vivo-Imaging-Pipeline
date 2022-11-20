@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Clean up some of the awful pandas code for syncing data. some edge cases still don't work, be alert">
-      <change afterPath="$PROJECT_DIR$/BehavioralAnalysis/Scratch2.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_Retrieval.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure2.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_Retrieval2.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Scratch.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/dask-worker-space/global.lock" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/dask-worker-space/purge.lock" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/dask-worker-space/worker-0lr0y8jy.dirlock" afterDir="false" />
@@ -300,14 +298,8 @@
       <workItem from="1668716511919" duration="38000" />
       <workItem from="1668716582731" duration="25793000" />
       <workItem from="1668870841324" duration="4691000" />
-      <workItem from="1668876839856" duration="23744000" />
-    </task>
-    <task id="LOCAL-00043" summary="Updated environment.yml">
-      <created>1667399875736</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1667399875736</updated>
+      <workItem from="1668876839856" duration="24372000" />
+      <workItem from="1668909930175" duration="425000" />
     </task>
     <task id="LOCAL-00044" summary="gitignore2">
       <created>1667420008519</created>
@@ -645,7 +637,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668901101666</updated>
     </task>
-    <option name="localTasksCounter" value="92" />
+    <task id="LOCAL-00092" summary="Clean up some of the awful pandas code for syncing data. some edge cases still don't work, be alert">
+      <created>1668909023771</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1668909023771</updated>
+    </task>
+    <option name="localTasksCounter" value="93" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
