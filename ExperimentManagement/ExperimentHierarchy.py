@@ -469,7 +469,6 @@ class ExperimentData:
         except KeyError:
             print("Unable to identify stage from provided key")
 
-
     def saveHierarchy(self) -> Self:
         """
         Saves Hierarchy to pickle
@@ -1092,7 +1091,7 @@ class BehavioralStage:
             _additional_crop_downsample = _artifact_free_downsample_frames % _chunk_size
             _first_downsample_frame = _artifact_free_downsample_frames + _additional_crop_downsample
         _projected_frames = np.arange(_first_downsample_frame, _num_frames, 3)
-        _projected_first_frame = _projected_frames[0]
+        _projected_first_frame = _projected_frames[0]*3
         _matching_frames = np.arange(_projected_first_frame, _num_frames, 3) + 1
         # make the center frame the timestamp instead of the first frame
         _time_stamp = np.full(_matching_frames.shape, -1, dtype=np.float64)
@@ -1104,7 +1103,8 @@ class BehavioralStage:
         _true_idx = np.where(_time_stamp != -1)[0]
         _time_stamp = _time_stamp[np.where(_time_stamp != -1)[0]]
 
-        _downsampled_frames = pd.Series(np.arange(0, _time_stamp.__len__(), 1), index=_time_stamp)
+        _downsampled_frames = pd.Series(np.arange(0, _time_stamp.shape[0], 1),
+                                        index=_time_stamp)
         _downsampled_frames.name = "Downsampled Imaging Frame"
 
         DataFrame = DataFrame.join(_downsampled_frames.copy(deep=True), on="Time (s)")
@@ -1408,19 +1408,19 @@ class CollectedImagingFolder(CollectedDataFolder):
         """
 
         try:
-            SpikeTimes = np.load(self.searchInFolder("times"), allow_pickle=True)
+            SpikeTimes = np.load(self.find_matching_files("spike_times", "cascade")[0], allow_pickle=True)
         except FileNotFoundError:
             print("Could not locate Cascade spike times file.")
             SpikeTimes = None
 
         try:
-            SpikeProb = np.load(self.searchInFolder("prob"), allow_pickle=True)
+            SpikeProb = np.load(self.find_matching_files("spike_prob", "cascade")[0], allow_pickle=True)
         except FileNotFoundError:
             print("Could not locate Cascade spike prob file.")
             SpikeProb = None
 
         try:
-            DiscreteApproximation = np.load(self.searchInFolder("discrete"), allow_pickle=True)
+            DiscreteApproximation = np.load(self.find_matching_files("discrete_approximation", "cascade")[0], allow_pickle=True)
         except FileNotFoundError:
             print("Could not locate Cascade discrete approximation file.")
             DiscreteApproximation = None

@@ -65,6 +65,8 @@
       <w>vmax</w>
       <w>vmin</w>
       <w>vram</w>
+      <w>ytick</w>
+      <w>yticks</w>
       <w>zphysical</w>
     </words>
   </dictionary>

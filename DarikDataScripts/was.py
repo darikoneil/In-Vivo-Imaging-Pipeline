@@ -1,32 +1,36 @@
 
 from ExperimentManagement.ExperimentHierarchy import ExperimentData
 import numpy as np
-EH = ExperimentData.loadHierarchy("D:\\EM0122")
+EH = ExperimentData.loadHierarchy("D:\\EM0137")
 from BehavioralAnalysis.BurrowFearConditioning import FearConditioning
-EH.PreExposure = FearConditioning(EH.passMeta(), "PreExposure")
+EH.Retrieval = FearConditioning(EH.passMeta(), "Retrieval")
 from ImagingAnalysis.PreprocessingImages import PreProcessing
-RawVideoDirectory = EH.PreExposure.folder_dictionary.get("raw_imaging_data")
-OutputDirectory = EH.PreExposure.folder_dictionary.get("compiled_imaging_data_folder").path
-EH.PreExposure.loadBrukerMetaData()
+RawVideoDirectory = EH.Retrieval.folder_dictionary.get("raw_imaging_data")
+OutputDirectory = EH.Retrieval.folder_dictionary.get("compiled_imaging_data_folder").path
+EH.Retrieval.loadBrukerMetaData()
 PreProcessing.repackageBrukerTiffs(RawVideoDirectory, OutputDirectory)
-EH.PreExposure.update_folder_dictionary()
+EH.Retrieval.update_folder_dictionary()
 images = PreProcessing.loadAllTiffs(OutputDirectory)
 images = PreProcessing.blockwiseFastFilterTiff(images, Footprint=np.ones((7, 3, 3)))
 images = PreProcessing.removeShuttleArtifact(images, chunk_size=7000, artifact_length=1000)
 PreProcessing.saveRawBinary(images, OutputDirectory)
-EH.PreExposure.update_folder_dictionary()
+EH.Retrieval.update_folder_dictionary()
 EH.recordMod("Repackaged, filtered, and exported images as raw binary. Made video even length this time")
-EH.PreExposure.addImageSamplingFolder(30)
+EH.saveHierarchy()
+EH.Retrieval.addImageSamplingFolder(30)
 from ImagingAnalysis.Suite2PAnalysis import Suite2PModule
-MotionCorrection = Suite2PModule(EH.PreExposure.folder_dictionary.get("compiled_imaging_data_folder").path, EH.PreExposure.folder_dictionary.get("imaging_30Hz").path, file_type="binary")
+MotionCorrection = Suite2PModule(EH.Retrieval.folder_dictionary.get("compiled_imaging_data_folder").path, EH.Retrieval.folder_dictionary.get("imaging_30Hz").path, file_type="binary")
 MotionCorrection.motionCorrect()
 MotionCorrection.exportCroppedCorrection(MotionCorrection.ops)
 del MotionCorrection # Clean Up
+EH.Retrieval.recordMod()
+EH.recordMod("Motion Corrected Retrieval")
+EH.saveHierarchy()
 from ImagingAnalysis.Denoising import DenoisingModule
 Denoiser = DenoisingModule("ModelForPyTorch", "binary_video",
                     model_path="C:\\ProgramData\\Anaconda3\\envs\\Calcium-Imaging-Analysis-Pipeline\\pth",
-                    data_path="".join([EH.PreExposure.folder_dictionary.get("imaging_30Hz").path, "\\suite2p\\plane0"]),
-                    output_path="".join([EH.PreExposure.folder_dictionary.get("imaging_30Hz").path, "\\denoised"]),
+                    data_path="".join([EH.Retrieval.folder_dictionary.get("imaging_30Hz").path, "\\suite2p\\plane0"]),
+                    output_path="".join([EH.Retrieval.folder_dictionary.get("imaging_30Hz").path, "\\denoised"]),
                     image_type="binary",
                     length="14000",
                     workers=4,
@@ -34,8 +38,11 @@ Denoiser = DenoisingModule("ModelForPyTorch", "binary_video",
                     batch_size2=4)
 Denoiser.runDenoising()
 Denoiser = None
+EH.Retrieval.recordMod()
+EH.recordMod("Denoised")
+EH.saveHierarchy()
 from ImagingAnalysis.Suite2PAnalysis import Suite2PModule
-S2P = Suite2PModule("".join([EH.PreExposure.folder_dictionary.get("imaging_30Hz").path, "\\denoised"]), EH.PreExposure.folder_dictionary.get("imaging_30Hz").path, file_type="binary")
+S2P = Suite2PModule("".join([EH.Retrieval.folder_dictionary.get("imaging_30Hz").path, "\\denoised"]), EH.Retrieval.folder_dictionary.get("imaging_30Hz").path, file_type="binary")
 S2P.roiDetection()
 S2P.extractTraces()
 S2P.classifyROIs()
@@ -43,16 +50,17 @@ S2P.spikeExtraction() # Finalize (Required spks.npy to use GUI)
 S2P.integrateMotionCorrectionDenoising()
 S2P.iscell, S2P.stat = S2P.remove_small_neurons(S2P.iscell, S2P.stat)
 S2P.save_files()
-EH.PreExposure.recordMod()
-EH.recordMod("S2P PreExposure")
+EH.Retrieval.recordMod()
+EH.recordMod("S2P Retrieval")
 EH.saveHierarchy()
 del S2P
 from ImagingAnalysis.FissaAnalysis import FissaModule
-Fissa = FissaModule(data_folder=EH.PreExposure.folder_dictionary.get("imaging_30Hz").path, video_folder="".join([EH.PreExposure.folder_dictionary.get("imaging_30Hz").path, "\\denoised"]))
+Fissa = FissaModule(data_folder=EH.Retrieval.folder_dictionary.get("imaging_30Hz").path, output_folder=EH.Retrieval.folder_dictionary.get("imaging_30Hz").folders.get("fissa"),
+                    video_folder=EH.Retrieval.folder_dictionary.get("imaging_30Hz").folders.get("denoised"))
 Fissa.initializeFissa()
 Fissa.extractTraces() # simple, call to extract raw traces from videos
 Fissa.saveFissaPrep()
-from ImagingAnalysis.StaticProcessing import Processing
+from ImagingAnalysis.DataProcessing import Processing
 # let's smooth the data with edge-preserving to make it nicer
 Fissa.ProcessedTraces.smoothed_raw = Processing.smoothTraces_TiffOrg(Fissa.preparation.raw, niter=50, kappa=150, gamma=0.15)[0]
 Fissa.preparation.raw = Fissa.ProcessedTraces.smoothed_raw.copy()
@@ -71,13 +79,14 @@ Fissa.ProcessedTraces.detrended_merged_dFoF_result = Processing.detrendTraces(Fi
 
 # Save
 Fissa.saveProcessedTraces()
-EH.recordMod("PreExposure Source-Separation")
+EH.recordMod("Retrieval Source-Separation")
+EH.Retrieval.recordMod()
 EH.saveHierarchy()
 
 from ImagingAnalysis.CascadeAnalysis import CascadeModule
 
 Cascade = CascadeModule(Fissa.ProcessedTraces.detrended_merged_dFoF_result, Fissa.frame_rate,
-                        "".join([EH.PreExposure.folder_dictionary.get("imaging_30Hz").path, "\\cascade"]),
+                        EH.Retrieval.folder_dictionary.get("imaging_30Hz").folders.get("cascade"),
                         model_folder=
                         "C:\\ProgramData\\Anaconda3\\envs\\Calcium-Imaging-Analysis-Pipeline\\Pretrained_models")
 
@@ -91,17 +100,17 @@ Cascade.downloadModel(Cascade.model_name, "C:\\ProgramData\\Anaconda3\\envs\\Cal
 # Infer Spike Probability
 Cascade.predictSpikeProb() # Simple, call to infer spike probability for each frame
 # Calculate Firing Rates # Simple, firing rate = spike probability * imaging frequency
-from ImagingAnalysis.StaticProcessing import Processing
+from ImagingAnalysis.DataProcessing import Processing
 Cascade.ProcessedInferences.firing_rates = Processing.calculateFiringRate(Cascade.spike_prob, Cascade.frame_rate)
 Cascade.saveSpikeProb(Fissa.output_folder)
 Cascade.saveProcessedInferences(Fissa.output_folder)
 Cascade.inferDiscreteSpikes()
 Cascade.saveSpikeInference(Fissa.output_folder)
-EH.recordMod("PreExposure Cascade")
+EH.recordMod("Retrieval Cascade")
+EH.Retrieval.recordMod()
 EH.saveHierarchy()
-EH.PreExposure.recordMod()
-EH.PreExposure.update_folder_dictionary()
-EH.PreExposure.folder_dictionary.get("imaging_30Hz").current_stage = "Ready for Analysis"
+EH.Retrieval.recordMod()
+EH.Retrieval.update_folder_dictionary()
 EH.saveHierarchy()
 del Fissa
 del Cascade

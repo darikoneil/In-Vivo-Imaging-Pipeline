@@ -373,6 +373,7 @@ class Processing:
         smoothedFiringRates = scipy.ndimage.gaussian_filter1d(FiringRates, Sigma, axis=1)
         #normFiringRates = sklearn.preprocessing.minmax_scale(smoothedFiringRates, axis=1, copy=True)
         normFiringRates = smoothedFiringRates/np.max(smoothedFiringRates, axis=0)
+        normFiringRates[normFiringRates <= 0] = 0
         return normFiringRates
 
     @staticmethod
@@ -446,10 +447,26 @@ class Processing:
         for _neuron in range(_num_neurons):
             for _trial in range(_num_trials):
                 for _interval in range(len(_intervals)):
-                    BinnedData[_trial, _neuron, _interval] = np.sum(
+                    BinnedData[_trial, _neuron, _interval] = np.mean(
                         NeuralDataTensorForm[_trial, _neuron,
                         int(_intervals.values[_interval].left):int(_intervals.values[_interval].right)])
         return BinnedData
+
+    @staticmethod
+    def bind_data(NeuralData, BinSize):
+        _num_neurons, _num_frames = NeuralData.shape
+        _intervals = pd.interval_range(0, _num_frames, freq=BinSize)
+        BinnedData = np.full((_num_neurons, len(_intervals)), 0, dtype=np.float64)
+        for _neuron in range(_num_neurons):
+            for _interval in range(len(_intervals)):
+                BinnedData[_neuron, _interval] = \
+                np.sum(NeuralData[_neuron,
+                       int(_intervals.values[_interval].left):int(_intervals.values[_interval].right)])
+        return BinnedData
+
+    @staticmethod
+    def calculate_mean_firing_rate(NeuralData):
+        return np.nanmean(NeuralData, axis=1)
 
     @staticmethod
     def calculate_standardized_noise(DFF: np.ndarray, FrameRate: float) -> Union[float, np.ndarray]:

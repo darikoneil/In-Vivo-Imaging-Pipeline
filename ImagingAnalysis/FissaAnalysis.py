@@ -438,7 +438,7 @@ class FissaModule:
         :rtype: None
         """
         print("Loading Processed Traces...")
-        _input_file = self.output_folder + "ProcessedTraces"
+        _input_file = self.output_folder + "\\ProcessedTraces"
         _input = open(_input_file, 'rb')
         self.ProcessedTraces = pkl.load(_input)
         _input.close()
