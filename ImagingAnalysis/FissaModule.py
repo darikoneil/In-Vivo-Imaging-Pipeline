@@ -11,7 +11,7 @@ from ImagingAnalysis.PreprocessingImages import PreProcessing
 
 
 # /// /// Main Module /// ///
-class FissaModule:
+class FissaAnalysis:
     """
     Fissa Module
     ------------
@@ -99,9 +99,9 @@ class FissaModule:
             print("Initializing without data")
 
         # /// Pre-Allocation///
-        self.experiment = SeparationModule() # Store Fissa Separation Data
-        self.preparation = PreparationModule() # Store Fissa Preparation Data
-        self.ProcessedTraces = ProcessedTracesModule()
+        self.experiment = SeparationDictionary() # Store Fissa Separation Data
+        self.preparation = PreparationDictionary() # Store Fissa Preparation Data
+        self.ProcessedTraces = ProcessedTracesDictionary()
 
     def loadDataFolder(self, _data_folder: str, *args) -> Self:
         """
@@ -309,7 +309,7 @@ class FissaModule:
         # Load Existing Prep File
         print('Loading Fissa Preparation...')
         _prep = np.load(self.prep_file, allow_pickle=True)
-        self.preparation = PreparationModule(preparation=_prep)
+        self.preparation = PreparationDictionary(preparation=_prep)
         print('Finished Loading Fissa Prep')
 
     def loadFissaSep(self) -> Self:
@@ -328,7 +328,7 @@ class FissaModule:
         # Load Existing Sep File
         print('Loading Fissa Separation...')
         _sep = np.load(self.sep_file, allow_pickle=True)
-        self.experiment = SeparationModule(experiment=_sep)
+        self.experiment = SeparationDictionary(experiment=_sep)
         print('Finished Loading Fissa Sep')
 
     def initializeFissa(self) -> Self:
@@ -535,8 +535,8 @@ class FissaModule:
         return img_list
 
 
-# /// /// Container for Preparation Data /// ///
-class PreparationModule:
+# /// /// Dictionary with defaults for required keys /// ///
+class PreparationDictionary:
     """
     Preparation Module
     """
@@ -558,8 +558,8 @@ class PreparationModule:
             self.means = _preparation['means']
 
 
-# /// /// Container for Separation Data /// ///
-class SeparationModule:
+# /// /// Dictionary with defaults for required keys/// ///
+class SeparationDictionary:
     """
     Separation Module
     """
@@ -594,8 +594,8 @@ class SeparationModule:
             self.nRegions = _experiment['nRegions'] # Number of Sub-Masks
 
 
-# /// /// Container for Processed Traces /// ///
-class ProcessedTracesModule:
+# /// /// Dictionary with defaults for required keys /// ///
+class ProcessedTracesDictionary:
     def __init__(self):
         """
         Simply a container for Processed Traces

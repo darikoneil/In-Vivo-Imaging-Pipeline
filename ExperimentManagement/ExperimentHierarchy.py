@@ -1268,35 +1268,120 @@ class CollectedImagingFolder(CollectedDataFolder):
             "compiled": "".join([self.path, "\\compiled"])
         }
 
-    def load_fissa_exports(self) -> Tuple[np.ndarray, np.ndarray]:
+    def load_fissa_exports(self) -> Tuple[dict, dict, dict]:
         """
         This function loads the prepared and separated files exported from Fissa
 
-        :return: Prepared, Separated
-        :rtype: tuple[Any, Any]
+        :return: Prepared, Separated, ProcessedTraces
+        :rtype: tuple[dict, dict, dict]
         """
+
+        def load_processed_traces(Filename) -> dict:
+
+            def load_proc_traces(Filename_) -> dict:
+                """
+                Load Processed Traces from file
+
+                :keyword load_path: Path containing processed traces
+                :keyword absolute_path: Absolute filepath
+                :rtype: dict
+                """
+                try:
+                    print("Loading Processed Traces...")
+                    _input_pickle = open(Filename_, 'rb')
+                    ProcessedTraces_ = pkl.load(_input_pickle)
+                    _input_pickle.close()
+                    print("Finished Loading Processed Traces.")
+                except RuntimeError:
+                    print("Unable to load processed traces. Check supplied path.")
+                    return dict()
+
+                return ProcessedTraces_
+
+            try:
+                return load_proc_traces(Filename)
+            except ModuleNotFoundError:
+                print("Detected Deprecated Save. Migrating...")
+                with open(Filename, "rb") as _file:
+                    _ = renamed_load(_file)
+                _file.close()
+                with open(sFilename, "wb") as _file:
+                    pkl.dump(_, _file)
+                _file.close()
+                # noinspection PyBroadException
+                try:
+                    return load_proc_traces(Filename)
+                except Exception:
+                    print("Migration Unsuccessful")
+                    return dict()
 
         try:
             Prepared = np.load(self.find_matching_files("prepared")[0], allow_pickle=True)
         except FileNotFoundError:
             print("Could Not Locate Fissa Prepared File")
-            Prepared = None
+            Prepared = dict()
 
         try:
             Separated = np.load(self.find_matching_files("separated")[0], allow_pickle=True)
         except FileNotFoundError:
             print("Could Not Locate Fissa Separated File")
-            Separated = None
+            Separated = dict()
 
-        return Prepared, Separated
+        # noinspection PyBroadException
+        try:
+            ProcessedTraces = load_processed_traces(self.find_matching_files("ProcessedTraces")[0])
+        except Exception:
+            print("Could not locate processed traces file")
+            ProcessedTraces = dict()
 
-    def load_cascade_exports(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+        return {**Prepared}, {**Separated}, {**ProcessedTraces}
+
+    def load_cascade_exports(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray, dict]:
         """
-        This function loads the Spike Times, Spike Prob, and Discrete Approximation files exported from Cascade
+        This function loads the Spike Times, Spike Prob, Discrete Approximation and ProcessedInferences files exported from Cascade
 
-        :return: SpikeTimes, SpikeProb, DiscreteApproximation
-        :rtype: tuple[Any, Any, Any]
+        :return: SpikeTimes, SpikeProb, DiscreteApproximation, Processed Inferences
+        :rtype: tuple[Any, Any, Any, dict]
         """
+
+        def load_processed_inferences(Filename) -> dict:
+
+            def load_proc_inferences(Filename_) -> dict:
+                """
+                Load Processed Inferences from file
+
+                :keyword load_path: Path containing processed inferences
+                :keyword absolute_path: Absolute filepath
+                :rtype: dict
+                """
+                try:
+                    print("Loading Processed Inferences...")
+                    _input_pickle = open(Filename_, 'rb')
+                    ProcessedInferences_ = pkl.load(_input_pickle)
+                    _input_pickle.close()
+                    print("Finished Loading Processed Inferences.")
+                except RuntimeError:
+                    print("Unable to load processed inferences. Check supplied path.")
+                    return dict()
+
+                return ProcessedInferences_
+
+            try:
+                return load_proc_inferences(Filename)
+            except ModuleNotFoundError:
+                print("Detected Deprecated Save. Migrating...")
+                with open(Filename, "rb") as _file:
+                    _ = renamed_load(_file)
+                _file.close()
+                with open(Filename, "wb") as _file:
+                    pkl.dump(_, _file)
+                _file.close()
+                # noinspection PyBroadException
+                try:
+                    return load_proc_inferences(Filename)
+                except Exception:
+                    print("Migration Unsuccessful")
+                    return dict()
 
         try:
             SpikeTimes = np.load(self.find_matching_files("spike_times", "cascade")[0], allow_pickle=True)
@@ -1316,7 +1401,13 @@ class CollectedImagingFolder(CollectedDataFolder):
             print("Could not locate Cascade discrete approximation file.")
             DiscreteApproximation = None
 
-        return SpikeTimes, SpikeProb, DiscreteApproximation
+        # noinspection PyBroadException
+        try:
+            ProcessedInferences = load_processed_inferences(self.find_matching_files("ProcessedInferences")[0])
+        except Exception:
+            print("Unable to locate processed inferences file")
+            ProcessedInferences = dict()
+        return SpikeTimes, SpikeProb, DiscreteApproximation, {**ProcessedInferences}
 
     def load_suite2p(self, *args: str):
 
@@ -1334,42 +1425,6 @@ class CollectedImagingFolder(CollectedDataFolder):
         suite2p_module.db = suite2p_module.ops # make sure db never overwrites ops
         print("Finished.")
         return suite2p_module
-
-    def load_processed_traces(self):
-        try:
-            return self.load_proc_traces(absolute_path=self.find_matching_files("ProcessedTraces")[0])
-        except ModuleNotFoundError:
-            print("Detected Deprecated Save. Migrating...")
-            with open(self.find_matching_files("ProcessedTraces")[0], "rb") as _file:
-                _ = renamed_load(_file)
-            _file.close()
-            with open(self.find_matching_files("ProcessedTraces")[0], "wb") as _file:
-                pkl.dump(_, _file)
-            _file.close()
-            # noinspection PyBroadException
-            try:
-                return self.load_proc_traces(absolute_path=self.find_matching_files("ProcessedTraces")[0])
-            except Exception:
-                print("Migration Unsuccessful")
-                return
-
-    def load_processed_inferences(self):
-        try:
-            return self.load_proc_inferences(absolute_path=self.find_matching_files("ProcessedInferences")[0])
-        except ModuleNotFoundError:
-            print("Detected Deprecated Save. Migrating...")
-            with open(self.find_matching_files("ProcessedInferences")[0], "rb") as _file:
-                _ = renamed_load(_file)
-            _file.close()
-            with open(self.find_matching_files("ProcessedInferences")[0], "wb") as _file:
-                pkl.dump(_, _file)
-            _file.close()
-            # noinspection PyBroadException
-            try:
-                return self.load_proc_inferences(absolute_path=self.find_matching_files("ProcessedInferences")[0])
-            except Exception:
-                print("Migration Unsuccessful")
-                return
 
     def export_registration_to_denoised(self):
         """
@@ -1459,69 +1514,3 @@ class CollectedImagingFolder(CollectedDataFolder):
             return "DeepCAD: Denoising"
         else:
             return "Motion Correction"
-
-    @staticmethod
-    def load_proc_inferences(**kwargs):
-        """
-        Load Processed Inferences from file
-
-        :keyword load_path: Path containing processed inferences
-        :keyword absolute_path: Absolute filepath
-        :rtype: object
-        """
-
-        _load_path = kwargs.get('load_path')
-        _absolute_path = kwargs.get('absolute_path')
-        try:
-            if _load_path is not None:
-                _filename = _load_path + "ProcessedInferences"
-            elif _absolute_path is not None:
-                _filename = _absolute_path
-            else:
-                print("Location of Processed Inferences Not Adequate")
-                raise RuntimeError
-
-            print("Loading Processed Inferences...")
-            _input_pickle = open(_filename, 'rb')
-            ProcessedInferences = pkl.load(_input_pickle)
-            _input_pickle.close()
-            print("Finished Loading Processed Inferences.")
-
-        except RuntimeError:
-            print("Unable to load processed inferences. Check supplied path.")
-            return
-
-        return ProcessedInferences
-
-    @staticmethod
-    def load_proc_traces(**kwargs):
-        """
-        Load Processed Traces from file
-
-        :keyword load_path: Path containing processed traces
-        :keyword absolute_path: Absolute filepath
-        :rtype: object
-        """
-
-        _load_path = kwargs.get('load_path')
-        _absolute_path = kwargs.get('absolute_path')
-        try:
-            if _load_path is not None:
-                _filename = _load_path + "ProcessedTraces"
-            elif _absolute_path is not None:
-                _filename = _absolute_path
-            else:
-                print("Location of Processed Traces Not Adequate")
-                raise RuntimeError
-
-            print("Loading Processed Traces...")
-            _input_pickle = open(_filename, 'rb')
-            ProcessedTraces = pkl.load(_input_pickle)
-            _input_pickle.close()
-            print("Finished Loading Processed Traces.")
-
-        except RuntimeError:
-            print("Unable to load processed traces. Check supplied path.")
-            return
-
-        return ProcessedTraces
