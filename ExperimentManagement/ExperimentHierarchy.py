@@ -753,47 +753,6 @@ class BehavioralStage:
         _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("csv")
         return self.load_bruker_analog_recordings(_files[-1])
 
-    # maybe we localize these
-    def loadAdditionalBrukerAnalogRecordings(self, Tag: str) -> pd.DataFrame:
-        """
-        Loads Additional Bruker Analog Recordings
-
-        :param Tag: Tag for additional recordings
-        :type Tag: str
-        :returns: Analog Recording
-        :rtype: pd.DataFrame
-        """
-        self.folder_dictionary["".join(["bruker_meta_data_", str(Tag)])].reIndex()
-        _files = self.folder_dictionary["".join(["bruker_meta_data_", str(Tag)])].find_all_ext("csv")
-        return self.load_bruker_analog_recordings(_files[-1])
-
-    def loadAdditionalBrukerMetaData(self, Tag: str) -> BrukerMeta:
-        """
-        Load additional bruker meta data
-
-        :param Tag: Tag for additional data
-        :type Tag: str
-        :return: Bruker meta data
-        :rtype : BrukerMeta
-        """
-        self.folder_dictionary["".join(["bruker_meta_data_", str(Tag)])].reIndex()
-        _files = self.folder_dictionary["".join(["bruker_meta_data_", str(Tag)])].find_all_ext("xml")
-        _meta_data = BrukerMeta(_files[0], _files[2], _files[1])
-        _meta_data.import_meta_data()
-        _meta_data.creation_date = ExperimentData.getDate()
-        return _meta_data
-
-    # noinspection PyMethodMayBeStatic
-    def mergeAdditionalBruker(self, AnalogRecordings: pd.DataFrame) -> None:
-        """
-        Generic function to merge bruker, overwritten during inheritance
-        :param AnalogRecordings: Analog Recordings
-        :type AnalogRecordings: pd.DataFrame
-        :rtype: None
-        """
-        print(" Was not overwritten")
-        return
-
     @staticmethod
     def organize_base_data(Analog: np.ndarray, Digital: np.ndarray, State: np.ndarray,
                            HardwareConfig: Optional[dict] = None) -> pd.DataFrame:
@@ -1075,9 +1034,9 @@ class BehavioralStage:
             pd.DataFrame:
 
         # parse params
-        _bin_size = Parameters.get(("preprocessing", "grouped-z project bin size"), 3)
-        _artifact = Parameters.get(("preprocessing", "shuttle artifact length"), 1000)
-        _chunk_size = Parameters.get(("preprocessing", "chunk size"), 7000)
+        _bin_size = Parameters.get(("preprocessing", "grouped-z project bin size"))
+        _artifact = Parameters.get(("preprocessing", "shuttle artifact length"))
+        _chunk_size = Parameters.get(("preprocessing", "chunk size"))
 
         # parse meta
         _num_frames = MetaData.imaging_metadata.get("relativeTimes").__len__()
@@ -1114,68 +1073,6 @@ class BehavioralStage:
         _downsampled_frames.interpolate(method="nearest", inplace=True)
         DataFrame = DataFrame.join(_downsampled_frames, on="Time (s)")
 
-        return DataFrame
-
-    @staticmethod
-    def sync_downsampled_images(DataFrame: pd.DataFrame, MetaData: BrukerMeta, **kwargs) -> Union[pd.DataFrame, None]:
-        _downsample_size = kwargs.get("downsample_multiplier", 3)
-        _fill_method = kwargs.get("fill", "backward")
-        _two_files = kwargs.get("two_files", False)
-        _meta_data_2 = kwargs.get("second_meta", ExperimentManagement.BrukerMetaModule.BrukerMeta)
-
-        if _fill_method != "backward":
-            print("Not Yet Implemented")
-            return
-
-        if _two_files:
-            _total_frames_1 = MetaData.imaging_metadata.get("relativeTimes").__len__()
-            _downsample_frames_1 = np.arange(0, _total_frames_1, _downsample_size)
-            _downsample_frames_idx_1 = np.where(np.in1d(_downsample_frames_1, DataFrame["Imaging Frame"].to_numpy()))[0]
-            _time_stamps_1 = DataFrame.index.to_numpy()[np.where(np.in1d(DataFrame["Imaging Frame"].to_numpy(),
-                                                                     _downsample_frames_1[_downsample_frames_idx_1]))[
-                0]]
-            _frames_1 = pd.Series(_downsample_frames_idx_1, index=_time_stamps_1)
-            _frames_1.name = "Downsampled Frame"
-            _frames_1 = _frames_1.reindex(DataFrame.index)
-            _frames_1 = _frames_1[~_frames_1.isnull()]
-
-            _total_frames_2 = _meta_data_2.imaging_metadata.get("relativeTimes").__len__()
-            _downsample_frames_2 = np.arange(0, _total_frames_2, _downsample_size)
-            _downsample_frames_2 += _total_frames_1
-            _downsample_frames_idx_2 = np.where(np.in1d(_downsample_frames_2, DataFrame["Imaging Frame"].to_numpy()))[0]
-            _time_stamps_2 = DataFrame.index.to_numpy()[np.where(np.in1d(DataFrame["Imaging Frame"].to_numpy(),
-                                                                     _downsample_frames_2[_downsample_frames_idx_2]))[
-                0]]
-            _frames_2 = pd.Series(_downsample_frames_idx_2, index=_time_stamps_2)
-            _frames_2.name = "Downsampled Frame"
-            _frames_2.reindex(DataFrame.index)
-            _frames_2 = _frames_2[~_frames_2.isnull()]
-
-            _frames_merged = pd.concat([_frames_1, _frames_2])
-            _frames_merged.name = "Downsampled Frame"
-            DataFrame = DataFrame.join(_frames_merged.copy(deep=True))
-            _frames = pd.DataFrame(_frames_merged)
-            _frames.bfill(inplace=True)
-            _frames = _frames_merged.name = "[FILLED] Downsampled Frame"
-            DataFrame = DataFrame.join(_frames_merged.copy(deep=True))
-
-        else:
-            _total_frames = MetaData.imaging_metadata.get("relativeTimes").__len__()
-            _imaging_frames = DataFrame["Imaging Frame"].to_numpy().copy()
-
-            if _fill_method == "backward":
-                _downsample_frames = np.arange(_downsample_size - 1, _total_frames, _downsample_size)
-                _downsample_frames_idx = np.where(np.in1d(_downsample_frames, DataFrame["Imaging Frame"].to_numpy()))[0]
-                _time_stamps = DataFrame.index.to_numpy()[np.where(np.in1d(DataFrame["Imaging Frame"].to_numpy(),
-                                                                       _downsample_frames[_downsample_frames_idx]))[0]]
-                _frames = pd.Series(_downsample_frames_idx, index=_time_stamps)
-                _frames.name = "Downsampled Frame"
-                _frames = _frames.reindex(DataFrame.index)
-                DataFrame = DataFrame.join(_frames.copy(deep=True))
-                _frames = pd.DataFrame(_frames)
-                _frames.bfill(inplace=True)
-                _frames = _frames.rename(columns={"Downsampled Frame": "[FILLED] Downsampled Frame"})
-                DataFrame = DataFrame.join(_frames.copy(deep=True))
         return DataFrame
 
 
