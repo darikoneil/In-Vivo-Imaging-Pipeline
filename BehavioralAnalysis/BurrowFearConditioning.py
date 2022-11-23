@@ -543,36 +543,32 @@ class DeepLabModule:
                 :returns: pre_trial_data, trial_data
                 :rtype: tuple[pd.DataFrame, pd.DataFrame]
                 """
-        # extract paths
-        PathDLC = DataFolderDLC.path
-        PathBE = DataFolderBehavioralExports.path
-        # Find dlc .csv's
-        _dlc_csv_files = []
-        for i in DataFolderDLC.files:
-            if pathlib.Path("".join([PathDLC, "\\", i])).suffix == ".csv":
-                _dlc_csv_files.append(i)
-        # Locate Pre Trial csv
-        _pre_trial_csv = DataFolderDLC.fileLocator(_dlc_csv_files, "PRETRIALSDLC")
-        # Locate Trial csv
-        _trial_csv = DataFolderDLC.fileLocator(_dlc_csv_files, "TRIALSDLC")
-
-        # Find behavioral exports .csv's
-        _be_csv_files = []
-        for i in DataFolderBehavioralExports.files:
-            if pathlib.Path("".join([PathBE, "\\", i])).suffix == ".csv":
-                _be_csv_files.append(i)
-        # Pre Trial Frame IDs
-        _pre_trial_frame_ids_csv = DataFolderBehavioralExports.fileLocator(_be_csv_files, "preTrial")
-        # Trial Frame IDs
-        _trial_frame_ids_csv = DataFolderBehavioralExports.fileLocator(_be_csv_files, "frameIDs")
+        # Use -1 idx because newer file always would have larger tag on dlc file
+        # DLC
+        try:
+            _pre_trial_csv = [file for file in DataFolderDLC.find_all_ext("csv") if "PRETRIAL" in file][-1]
+            _trial_csv = [file for file in DataFolderDLC.find_all_ext("csv") if ("PRETRIAL" not in file and "TRIAL" in file)][-1]
+        except IndexError:
+            print("could not find csv data")
+            return tuple(None)
+        # BehavioralExports
+        try:
+            _pre_trial_frame_ids_csv = \
+                [file for file in DataFolderBehavioralExports.find_all_ext("csv") if "preTrial" in file][-1]
+            _trial_frame_ids_csv = \
+                [file for file in DataFolderBehavioralExports.find_all_ext("csv") if
+                 ("preTrial" not in file and "frameIDs" in file)][-1]
+        except IndexError:
+            print("could not find csv data")
+            return tuple(None)
 
         # load data
-        pre_trial = pd.read_csv("".join([PathDLC, "\\", _pre_trial_csv]), header=2)
-        trial = pd.read_csv("".join([PathDLC, "\\", _trial_csv]), header=2)
+        pre_trial = pd.read_csv(_pre_trial_csv, header=2)
+        trial = pd.read_csv(_trial_csv, header=2)
 
         # load ids
-        _pre_trial_frame_ids = np.genfromtxt("".join([PathBE, "\\", _pre_trial_frame_ids_csv]), delimiter=",").astype(int)
-        _trial_frame_ids = np.genfromtxt("".join([PathBE, "\\", _trial_frame_ids_csv]), delimiter=",").astype(int)
+        _pre_trial_frame_ids = np.genfromtxt(_pre_trial_frame_ids_csv, delimiter=",").astype(int)
+        _trial_frame_ids = np.genfromtxt(_trial_frame_ids_csv, delimiter=",").astype(int)
 
         # attach ids
         pre_trial.index = _pre_trial_frame_ids

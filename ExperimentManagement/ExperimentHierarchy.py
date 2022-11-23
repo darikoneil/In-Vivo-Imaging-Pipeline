@@ -618,6 +618,7 @@ class BehavioralStage:
         self.data = None
         self.meta = None
         self.state_index = None
+        self.trial_parameters = None
 
         if len(args) >= 1:
             self.sync_id = args[0]
@@ -725,9 +726,9 @@ class BehavioralStage:
         # noinspection PyTypeChecker
         for _key in self.folder_dictionary.keys():
             if isinstance(self.folder_dictionary.get(_key), CollectedDataFolder):
-                self.folder_dictionary.get(_key).reIndex()
+                self.folder_dictionary.get(_key).reindex()
             elif isinstance(self.folder_dictionary.get(_key), CollectedImagingFolder):
-                self.folder_dictionary.get(_key).reIndex()
+                self.folder_dictionary.get(_key).reindex()
 
     def loadBrukerMetaData(self) -> Self:
         """
@@ -735,7 +736,7 @@ class BehavioralStage:
 
         :rtype: Any
         """
-        self.folder_dictionary["bruker_meta_data"].reIndex()
+        self.folder_dictionary["bruker_meta_data"].reindex()
         _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("xml")
         self.meta = BrukerMeta(_files[0], _files[2], _files[1])
         self.meta.import_meta_data()
@@ -749,9 +750,52 @@ class BehavioralStage:
         :rtype: pd.DataFrame
         """
 
-        self.folder_dictionary["bruker_meta_data"].reIndex()
+        self.folder_dictionary["bruker_meta_data"].reindex()
         _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("csv")
         return self.load_bruker_analog_recordings(_files[-1])
+
+    def loadBaseBehavior(self) -> Self:
+        """
+        Loads the basic behavioral data: analog, dictionary, digital, state, and CS identities
+
+        :rtype: Any
+        """
+
+        print("Loading Base Data...")
+        # Analog
+        _analog_file = self.generateFileID('Analog')
+        _analog_data = FearConditioning.loadAnalogData(_analog_file)
+        if type(_analog_data) == str and _analog_data == "ERROR":
+            return print("Could not find analog data!")
+
+        # Digital
+        _digital_file = self.generateFileID('Digital')
+        _digital_data = FearConditioning.loadDigitalData(_digital_file)
+        if type(_digital_data) == str and _digital_data == "ERROR":
+            return print("Could not find digital data!")
+
+        # State
+        _state_file = self.generateFileID('State')
+        _state_data = FearConditioning.loadStateData(_state_file)
+        if _state_data[0] == "ERROR": # 0 because it's an array of strings so ambiguous str comparison
+            return print("Could not find state data!")
+
+        # Dictionary
+        _dictionary_file = self.generateFileID('Dictionary')
+        _dictionary_data = FearConditioning.loadDictionaryData(_dictionary_file)
+        try:
+            self.trial_parameters = _dictionary_data.copy() # For Safety
+        except AttributeError:
+            print(_dictionary_data)
+
+        if _dictionary_data == "ERROR_FIND":
+            return print("Could not find dictionary data!")
+        elif _dictionary_data == "ERROR_READ":
+            return print("Could not read dictionary data!")
+
+        # Form Pandas DataFrame
+        self.data, self.state_index, self.multi_index = self.organize_base_data(_analog_data, _digital_data,
+                                                                                _state_data)
 
     @staticmethod
     def organize_base_data(Analog: np.ndarray, Digital: np.ndarray, State: np.ndarray,
@@ -1084,13 +1128,9 @@ This is a class for managing a folder of unorganized data files
     | *Path* : path to folder
 
 **Self Methods**
-        | *searchInFolder* : Search THIS object for the *first* file which matches the description
-        | *reIndex* : Function that indexed the files within folder again
-
-**Static Methods**
-        | *fileParts* : Function returns each identifier of a file and its extension
-        | *fileLocator* : Find the file which matches the description
-
+        | *find_matching_files* : Finds all matching files
+        | *reindex* : Function that indexed the files within folder again
+        | *find_all_ext* :  Finds all files with specific extension
 **Properties**
         | *instance_data* : Data created
         | *path* : path to folder
@@ -1141,17 +1181,20 @@ This is a class for managing a folder of unorganized data files
     @files.setter
     def files(self, Path: str) -> Self:
         """
-        refactoring needed
+       function to quickly fill recursively
 
+        :param Path: Directory to check
+        :type Path: str
+        :return: Any
         """
 
+        self._files = [_file for _file in pathlib.Path(Path).rglob("*") if _file.is_file()]
 
-        self._files = os.listdir(Path)
-
-    def reIndex(self) -> Self:
+    def reindex(self) -> Self:
         """
-        Function that indexed the files within folder again
+        Function that indexes the files within folder again
         """
+        
         self.files = self.path
 
     def find_matching_files(self, Filename: str, Folder: Optional[str] = None) -> Union[Tuple[str], None]:
@@ -1171,73 +1214,24 @@ This is a class for managing a folder of unorganized data files
 
         return [str(_path) for _path in self.files if Filename in str(_path)]
 
-    def searchInFolder(self, ID: str) -> Union[str, None]:
-        """
-        Search THIS object for the *first* file which matches the description
-         Phasing Out
-        :param ID: The description
-        :type ID: str
-        :return: The absolute file path of the matching filename
-        :rtype: str
-        """
-        return self.path + "\\" + CollectedDataFolder.fileLocator(self.files, ID)
-
     def find_all_ext(self, ext: str) -> Union[List[str], None]:
         """
         Finds all files with specific extension
-        Refactoring needed
+
         :param ext: File extension
         :type ext: str
         :return: List of files
         :rtype: List[str]
         """
+        # make sure appropriately formatted
 
-        _ext = "".join(["*.", ext])
-        Files = list(pathlib.Path(self.path).glob(_ext))
-        for i in range(Files.__len__()):
-            Files[i] = Files[i].__str__()
-        return Files
+        if "." not in ext:
+            ext = "".join([".", ext])
 
-    @classmethod
-    def fileLocator(cls, files: str, ID: str) -> Union[str, None]:
-        """
-        Find the *first* file which matches the description
+        if "*" in ext:
+            ext.replace("*", "")
 
-        :param files: A list of files
-        :type files: list
-        :param ID: The description
-        :type ID: str
-        :return: The matching filename
-        :rtype: str
-        """
-        for i in range(len(files)):
-            for _id in cls.parse_experiment_labeling(files[i]):
-                if ID == _id:
-                    return files[i]
-
-    @staticmethod
-    def parse_experiment_labeling(File: str) -> List[str]:
-        """
-        Function returns each identifier of a file and its extension
-
-        :param File: Filename to be parsed
-        :type File: str
-        :return: stage, animal, ...[unique file identifiers]..., extension
-        :rtype: list
-        """
-        return File.split("_")[0:-1] + File.split("_")[-1].split(".")
-
-    @staticmethod
-    def parse_path_parts(Path: str) -> List[str]:
-        """
-        returns f
-
-        :param Path: file path
-        :type Path: str
-        :return: split by "\\"
-        :rtype: list[str]
-        """
-        return pathlib.Path(Path).parts
+        return [str(file) for file in self.Files if file.suffix == ext]
 
 
 class CollectedImagingFolder(CollectedDataFolder):
@@ -1283,13 +1277,13 @@ class CollectedImagingFolder(CollectedDataFolder):
         """
 
         try:
-            Prepared = np.load(self.searchInFolder("prepared"), allow_pickle=True)
+            Prepared = np.load(self.find_matching_files("prepared")[0], allow_pickle=True)
         except FileNotFoundError:
             print("Could Not Locate Fissa Prepared File")
             Prepared = None
 
         try:
-            Separated = np.load(self.searchInFolder("separated"), allow_pickle=True)
+            Separated = np.load(self.find_matching_files("separated")[0], allow_pickle=True)
         except FileNotFoundError:
             print("Could Not Locate Fissa Separated File")
             Separated = None
@@ -1341,15 +1335,15 @@ class CollectedImagingFolder(CollectedDataFolder):
         print("Finished.")
         return suite2p_module
 
-    def import_proc_traces(self):
+    def load_processed_traces(self):
         try:
             return self.load_proc_traces(absolute_path=self.find_matching_files("ProcessedTraces")[0])
         except ModuleNotFoundError:
             print("Detected Deprecated Save. Migrating...")
-            with open(self.searchInFolder("ProcessedTraces"), "rb") as _file:
+            with open(self.find_matching_files("ProcessedTraces")[0], "rb") as _file:
                 _ = renamed_load(_file)
             _file.close()
-            with open(self.searchInFolder("ProcessedTraces"), "wb") as _file:
+            with open(self.find_matching_files("ProcessedTraces")[0], "wb") as _file:
                 pkl.dump(_, _file)
             _file.close()
             # noinspection PyBroadException
@@ -1359,7 +1353,7 @@ class CollectedImagingFolder(CollectedDataFolder):
                 print("Migration Unsuccessful")
                 return
 
-    def import_proc_inferences(self):
+    def load_processed_inferences(self):
         try:
             return self.load_proc_inferences(absolute_path=self.find_matching_files("ProcessedInferences")[0])
         except ModuleNotFoundError:
@@ -1379,8 +1373,8 @@ class CollectedImagingFolder(CollectedDataFolder):
 
     def export_registration_to_denoised(self):
         """
-        Temporary for ease, moves registration to new folder for namespace
-        compatibility
+        moves registration to new folder for namespace compatibility
+
         :return:
         """
         _images = np.reshape(np.fromfile(self.find_matching_files("registered_data.bin", "plane0")[0], dtype=np.int16), (-1, 512, 512))
@@ -1465,22 +1459,6 @@ class CollectedImagingFolder(CollectedDataFolder):
             return "DeepCAD: Denoising"
         else:
             return "Motion Correction"
-
-    @property
-    def files(self) -> List[str]:
-        return self._files
-
-    @files.setter
-    def files(self, Path: str) -> Self:
-        """
-        stupid function to quickly fill recursively, need to look up documentation
-
-        :param Path: Directory to check
-        :type Path: str
-        :return: Any
-        """
-
-        self._files = [_file for _file in pathlib.Path(Path).rglob("*") if _file.is_file()]
 
     @staticmethod
     def load_proc_inferences(**kwargs):
