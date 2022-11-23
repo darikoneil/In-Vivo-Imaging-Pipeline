@@ -141,21 +141,24 @@ class CascadeModule:
 
         self.discrete_approximation, self.spike_time_estimates = infer_discrete_spikes(self.spike_prob, self.model_name, model_folder=self.model_folder)
 
-    def saveSpikeProb(self, save_path):
+    def saveSpikeProb(self, *args):
         """
         Save self.spike_prob to a numpy file
 
         **Requires**
             | self.spike_prob
 
-        :param save_path: Path to save file
-        :type save_path: str
         :rtype: None
         """
-        _filename = save_path + "spike_prob.npy"
+        if args:
+            save_path = args[0]
+        else:
+            save_path = self.save_path
+
+        _filename = save_path + "\\spike_prob.npy"
         np.save(_filename, self.spike_prob, allow_pickle=True)
 
-    def saveSpikeInference(self, save_path):
+    def saveSpikeInference(self, *args):
         """
         Save self.spike_time_estimates & self.discrete_approximation
 
@@ -163,13 +166,16 @@ class CascadeModule:
             | self.spike_time_estimates
             | self.discrete_approximation
 
-        :param save_path: Path to save files
-        :type save_path: str
         :rtype: None
         """
-        _filename = save_path + "spike_times.npy"
+        if args:
+            save_path = args[0]
+        else:
+            save_path = self.save_path
+
+        _filename = save_path + "\\spike_times.npy"
         np.save(_filename, self.spike_time_estimates, allow_pickle=True)
-        _filename = save_path + "discrete_approximation.npy"
+        _filename = save_path + "\\discrete_approximation.npy"
         np.save(_filename, self.discrete_approximation, allow_pickle=True)
 
     def exportSpikeProb(self, save_path):
@@ -293,18 +299,20 @@ class CascadeModule:
         except RuntimeError:
             print("Unable to load Discrete Approximations. Check supplied path.")
 
-    def saveProcessedInferences(self, save_path):
+    def saveProcessedInferences(self, *args: save_path):
         """
         Save Processed Inferences to file
 
         **Requires**
             | self.ProcessedInferences
-        :param save_path: Path to saved file
-        :type save_path: str
         :rtype: None
         """
+        if args:
+            save_path = args[0]
+        else:
+            save_path = self.save_path
         print("Saving Processed Inferences...")
-        _output_file = save_path + "ProcessedInferences"
+        _output_file = save_path + "\\ProcessedInferences"
         _output_pickle = open(_output_file, 'wb')
         pkl.dump(self.ProcessedInferences, _output_pickle)
         _output_pickle.close()

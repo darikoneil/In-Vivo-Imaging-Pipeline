@@ -431,7 +431,7 @@ class PreProcessing:
         """
         print("Downsampling data...")
         downsampled_image = skimage.measure.block_reduce(TiffStack, block_size=BinSize,
-                                                         func=DownsampleFunction)
+                                                            func=DownsampleFunction)
         print("Finished.")
         return downsampled_image
 

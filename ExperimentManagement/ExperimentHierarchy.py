@@ -894,10 +894,10 @@ class BehavioralStage:
         StateCastedDict, _state_index = construct_state_index_series(State, _time_vector_data, _time_vector_state)
 
         # Construct Nested Trial Index
-        _trial_index = nest_all_stages_under_trials(_state_index.values, _time_vector_data, StateCastedDict)
+        _trial_index = nest_all_stages_under_trials(_state_index.to_numpy(), _time_vector_data, StateCastedDict)
 
         # Create Multi-Index
-        MultiIndex = pd.MultiIndex.from_arrays([_state_index.values, _trial_index.values, _time_vector_data])
+        MultiIndex = pd.MultiIndex.from_arrays([_state_index.to_numpy(), _trial_index.to_numpy(), _time_vector_data])
         MultiIndex.names = ["State Integer", "Trial Set", "Time (s)"]
 
         # Initialize Organized Data Frame
@@ -906,15 +906,15 @@ class BehavioralStage:
 
         # Type Check
         try:
-            assert (_state_index.values.dtype == np.float64)
-            assert (_trial_index.values.dtype == np.float64)
+            assert (_state_index.to_numpy().dtype == np.float64)
+            assert (_trial_index.to_numpy().dtype == np.float64)
             assert (Analog.dtype == np.float64)
             assert (Digital.dtype == np.float64)
         except AssertionError:
             print("Bug. Incorrect Type detected. Forcing conversion...")
             try:
-                _state_index.values.astype(np.float64)
-                _trial_index.values.astype(np.float64)
+                _state_index.to_numpy().astype(np.float64)
+                _trial_index.to_numpy().astype(np.float64)
                 Analog.astype(np.float64)
                 Digital.astype(np.float64)
                 print("Successfully converted erroneous data types")
@@ -989,8 +989,8 @@ class BehavioralStage:
         if SyncKey is None:
             SyncKey = ("State Integer", " TrialIndicator")
         # Sync by matching first peak of the sync_key columns
-        _DF_signal = DataFrame[SyncKey[0]].values.copy()
-        _AR_signal = AnalogRecordings[SyncKey[1]].values.copy()
+        _DF_signal = DataFrame[SyncKey[0]].to_numpy().copy()
+        _AR_signal = AnalogRecordings[SyncKey[1]].to_numpy().copy()
         _AR_first_peak = np.where(np.diff(_AR_signal) > 1.0)[0][0] + 1
         assert (_AR_signal[_AR_first_peak] >= 3.3)
 
@@ -1004,17 +1004,17 @@ class BehavioralStage:
             _AR_signal = np.pad(_AR_signal, (_first_peak_diff, 0), constant_values=0)
         elif _first_peak_diff < 0:
             _first_peak_diff *= -1
-            _AR_signal = pd.DataFrame(AnalogRecordings.iloc[_first_peak_diff:, 1:].values,
+            _AR_signal = pd.DataFrame(AnalogRecordings.iloc[_first_peak_diff:, 1:].to_numpy(),
                                       index=np.around(
-                                          (AnalogRecordings.index.values[_first_peak_diff:] - _first_peak_diff) /
-                                          int(MetaData.acquisition_rate), decimals=3) + DataFrame.index.values[0])
+                                          (AnalogRecordings.index.to_numpy()[_first_peak_diff:] - _first_peak_diff) /
+                                          int(MetaData.acquisition_rate), decimals=3) + DataFrame.index.to_numpy()[0])
             _AR_signal.columns = AnalogRecordings.columns[1:]
 
             _frames = pd.Series(np.arange(0, MetaData.imaging_metadata.get("relativeTimes").__len__(), 1),
                                 index=np.around(MetaData.imaging_metadata.get("relativeTimes") -
-                                                AnalogRecordings["Time(ms)"].values[_first_peak_diff] / int(
-                                    MetaData.acquisition_rate), decimals=3) + DataFrame.index.values[0])
-            _frames = _frames[_frames.index >= 0 + DataFrame.index.values[0]].copy(deep=True)
+                                                AnalogRecordings["Time(ms)"].to_numpy()[_first_peak_diff] / int(
+                                    MetaData.acquisition_rate), decimals=3) + DataFrame.index.to_numpy()[0])
+            _frames = _frames[_frames.index >= 0 + DataFrame.index.to_numpy()[0]].copy(deep=True)
             _frames.name = "Imaging Frame"
         else:
             print("Already Synced")
@@ -1022,10 +1022,10 @@ class BehavioralStage:
         # Here I just make sure shape-match
         if _DF_signal.shape[0] < _AR_signal.shape[0]:
             _AR_signal = _AR_signal.iloc[0:_DF_signal.shape[0], :]
-            _frames = _frames[_frames.index <= DataFrame.index.values[-1]].copy(deep=True)
+            _frames = _frames[_frames.index <= DataFrame.index.to_numpy()[-1]].copy(deep=True)
             print("Cropped Bruker Signals")
         elif _DF_signal.shape[0] > _AR_signal.shape[0]:
-            # _AR_signal.values = np.pad(_AR_signal.values, pad_width=((0, _DF_signal.shape[0] - _AR_signal.shape[0]), (0, 0)),
+            # _AR_signal.to_numpy() = np.pad(_AR_signal.to_numpy(), pad_width=((0, _DF_signal.shape[0] - _AR_signal.shape[0]), (0, 0)),
             # mode="constant", constant_values=0)
 
             _AR_signal = _AR_signal.reindex(DataFrame.index)
@@ -1097,7 +1097,7 @@ class BehavioralStage:
         _time_stamp = np.full(_matching_frames.shape, -1, dtype=np.float64)
         for _frame in range(_matching_frames.__len__()):
             try:
-                _time_stamp[_frame] = DataFrame.index.values[np.where(DataFrame["Imaging Frame"].values == _matching_frames[_frame])[0]]
+                _time_stamp[_frame] = DataFrame.index.to_numpy()[np.where(DataFrame["Imaging Frame"].to_numpy() == _matching_frames[_frame])[0]]
             except ValueError:
                 pass
         _true_idx = np.where(_time_stamp != -1)[0]
@@ -1130,8 +1130,8 @@ class BehavioralStage:
         if _two_files:
             _total_frames_1 = MetaData.imaging_metadata.get("relativeTimes").__len__()
             _downsample_frames_1 = np.arange(0, _total_frames_1, _downsample_size)
-            _downsample_frames_idx_1 = np.where(np.in1d(_downsample_frames_1, DataFrame["Imaging Frame"].values))[0]
-            _time_stamps_1 = DataFrame.index.values[np.where(np.in1d(DataFrame["Imaging Frame"].values,
+            _downsample_frames_idx_1 = np.where(np.in1d(_downsample_frames_1, DataFrame["Imaging Frame"].to_numpy()))[0]
+            _time_stamps_1 = DataFrame.index.to_numpy()[np.where(np.in1d(DataFrame["Imaging Frame"].to_numpy(),
                                                                      _downsample_frames_1[_downsample_frames_idx_1]))[
                 0]]
             _frames_1 = pd.Series(_downsample_frames_idx_1, index=_time_stamps_1)
@@ -1142,8 +1142,8 @@ class BehavioralStage:
             _total_frames_2 = _meta_data_2.imaging_metadata.get("relativeTimes").__len__()
             _downsample_frames_2 = np.arange(0, _total_frames_2, _downsample_size)
             _downsample_frames_2 += _total_frames_1
-            _downsample_frames_idx_2 = np.where(np.in1d(_downsample_frames_2, DataFrame["Imaging Frame"].values))[0]
-            _time_stamps_2 = DataFrame.index.values[np.where(np.in1d(DataFrame["Imaging Frame"].values,
+            _downsample_frames_idx_2 = np.where(np.in1d(_downsample_frames_2, DataFrame["Imaging Frame"].to_numpy()))[0]
+            _time_stamps_2 = DataFrame.index.to_numpy()[np.where(np.in1d(DataFrame["Imaging Frame"].to_numpy(),
                                                                      _downsample_frames_2[_downsample_frames_idx_2]))[
                 0]]
             _frames_2 = pd.Series(_downsample_frames_idx_2, index=_time_stamps_2)
@@ -1161,12 +1161,12 @@ class BehavioralStage:
 
         else:
             _total_frames = MetaData.imaging_metadata.get("relativeTimes").__len__()
-            _imaging_frames = DataFrame["Imaging Frame"].values.copy()
+            _imaging_frames = DataFrame["Imaging Frame"].to_numpy().copy()
 
             if _fill_method == "backward":
                 _downsample_frames = np.arange(_downsample_size - 1, _total_frames, _downsample_size)
-                _downsample_frames_idx = np.where(np.in1d(_downsample_frames, DataFrame["Imaging Frame"].values))[0]
-                _time_stamps = DataFrame.index.values[np.where(np.in1d(DataFrame["Imaging Frame"].values,
+                _downsample_frames_idx = np.where(np.in1d(_downsample_frames, DataFrame["Imaging Frame"].to_numpy()))[0]
+                _time_stamps = DataFrame.index.to_numpy()[np.where(np.in1d(DataFrame["Imaging Frame"].to_numpy(),
                                                                        _downsample_frames[_downsample_frames_idx]))[0]]
                 _frames = pd.Series(_downsample_frames_idx, index=_time_stamps)
                 _frames.name = "Downsampled Frame"
@@ -1479,6 +1479,15 @@ class CollectedImagingFolder(CollectedDataFolder):
             except Exception:
                 print("Migration Unsuccessful")
                 return
+
+    def export_registration_to_denoised(self):
+        """
+        Temporary for ease, moves registration to new folder for namespace
+        compatibility
+        :return:
+        """
+        _images = np.reshape(np.fromfile(self.find_matching_files("registered_data.bin", "plane0")[0], dtype=np.int16), (-1, 512, 512))
+        PreProcessing.saveRawBinary(_images, self.folders.get("denoised"))
 
     def clean_up_motion_correction(self) -> Self:
         """

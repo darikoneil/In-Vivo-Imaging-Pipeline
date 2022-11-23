@@ -377,7 +377,7 @@ class FissaModule:
 
         :rtype: None
         """
-        self.experiment.save_prep(destination=self.output_folder+"prepared.npz")
+        self.experiment.save_prep(destination=self.output_folder+"\\prepared.npz")
         print("Finished Saving Prep")
 
     def saveFissaSep(self) -> Self:
@@ -391,7 +391,7 @@ class FissaModule:
 
         :rtype: None
         """
-        self.experiment.save_separated(destination=self.output_folder+"separated.npz")
+        self.experiment.save_separated(destination=self.output_folder+"\\separated.npz")
 
     def saveFissaAll(self) -> Self:
         """
@@ -418,7 +418,7 @@ class FissaModule:
         :rtype:
         """
         print("Saving Processed Traces...")
-        _output_file = self.output_folder + "ProcessedTraces"
+        _output_file = self.output_folder + "\\ProcessedTraces"
         _output_pickle = open(_output_file, 'wb')
         pkl.dump(self.ProcessedTraces, _output_pickle)
         _output_pickle.close()

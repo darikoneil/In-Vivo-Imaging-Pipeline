@@ -6,20 +6,21 @@
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Clean up some of the awful pandas code for syncing data. some edge cases still don't work, be alert">
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_PreExposure.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_Retrieval.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_Encoding2.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure2.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_Retrieval2.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DarikDataScripts/YYY.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ImagingAnalysis/tt.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DarikDataScripts/was.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/was.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DarikDataScripts/s.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DarikDataScripts/was.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/DataProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/DataProcessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/CascadeAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/CascadeAnalysis.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ImagingAnalysis/FissaAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/FissaAnalysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Visualization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,11 +97,11 @@
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\USNAP" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ScratchPad" />
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\Notebooks" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ImagingAnalysis" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DebugData\suite2p\plane0\Goob" />
-      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DebugData\suite2p\plane0" />
-      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DebugData\suite2p\plane0\reg_tif\Goob" />
     </key>
   </component>
   <component name="RunManager" selected="Python.ScratchRas">
@@ -289,14 +290,7 @@
       <workItem from="1668876839856" duration="24372000" />
       <workItem from="1668909930175" duration="570000" />
       <workItem from="1668954971483" duration="28362000" />
-      <workItem from="1669050152619" duration="863000" />
-    </task>
-    <task id="LOCAL-00045" summary="Implemented Denoising">
-      <created>1667420044896</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1667420044896</updated>
+      <workItem from="1669050152619" duration="18928000" />
     </task>
     <task id="LOCAL-00046" summary="gitignore">
       <created>1667420065456</created>
@@ -634,7 +628,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668910370439</updated>
     </task>
-    <option name="localTasksCounter" value="94" />
+    <task id="LOCAL-00094" summary="Clean up some of the awful pandas code for syncing data. some edge cases still don't work, be alert">
+      <created>1669064092369</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1669064092369</updated>
+    </task>
+    <option name="localTasksCounter" value="95" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
