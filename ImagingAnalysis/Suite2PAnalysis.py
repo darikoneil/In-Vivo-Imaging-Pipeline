@@ -69,7 +69,7 @@ class Suite2PModule:
         self.spks = None
 
         # Protected
-        self.__instance_date = ExperimentData.getDate()
+        self.__instance_date = ExperimentData.get_date()
 
         # Check File Types, only support binary of tiff
         if self.file_type == "tiff" or self.file_type == "tif" or self.file_type == ".tiff" or self.file_type == ".tif":

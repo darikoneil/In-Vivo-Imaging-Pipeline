@@ -17,7 +17,7 @@ class BrukerMeta:
             if args.__len__() > 1:
                 self.voltage_output_meta_filepath = args[1]
 
-        # self.instance_date = ExperimentData.getDate()
+        # self.instance_date = ExperimentData.get_date()
 
         self.imaging_metadata = dict()
         self.frame_metadata = dict()

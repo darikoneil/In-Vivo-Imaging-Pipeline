@@ -162,7 +162,7 @@ class FearConditioning(BehavioralStage):
 
         :rtype: Any
         """
-        _analog_recordings = self.loadBrukerAnalogRecordings()
+        _analog_recordings = self.load_bruker_analog_recordings()
         if self.validate_bruker_recordings_completion(_analog_recordings, self.num_trials)[0]:
             self.data = self.sync_bruker_recordings(self.data.copy(deep=True),
                                                           _analog_recordings, self.meta, self.state_index,

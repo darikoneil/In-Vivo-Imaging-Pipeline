@@ -4,20 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="namespace">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="PEP8">
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_Encoding2.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure2.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_Retrieval2.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ImagingAnalysis/tt.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/s.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/was.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExperimentManagement/BrukerMetaModule.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/BrukerMetaModule.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/USNAP/DariksSecretFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/USNAP/DariksSecretFunctions.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -288,14 +291,7 @@
       <workItem from="1668909930175" duration="570000" />
       <workItem from="1668954971483" duration="28362000" />
       <workItem from="1669050152619" duration="23739000" />
-      <workItem from="1669313985926" duration="1527000" />
-    </task>
-    <task id="LOCAL-00051" summary="Keyword for denoising multiprocessor">
-      <created>1667427140565</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1667427140565</updated>
+      <workItem from="1669313985926" duration="2622000" />
     </task>
     <task id="LOCAL-00052" summary="Keyword for denoising batchsize &amp; memmory mapped images">
       <created>1667491094532</created>
@@ -633,7 +629,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669314371933</updated>
     </task>
-    <option name="localTasksCounter" value="100" />
+    <task id="LOCAL-00100" summary="PEP8">
+      <created>1669315535586</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1669315535586</updated>
+    </task>
+    <option name="localTasksCounter" value="101" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -652,7 +655,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Keyword for denoising batchsize &amp; memmory mapped images" />
     <MESSAGE value="S2P analysis" />
     <MESSAGE value="docstrings" />
     <MESSAGE value="changed denoising to uint16" />
@@ -677,7 +679,8 @@
     <MESSAGE value="Conv values -&gt; to_numpy()" />
     <MESSAGE value="Removed unused, broken functions in behavioral stage" />
     <MESSAGE value="namespace" />
-    <option name="LAST_COMMIT_MESSAGE" value="namespace" />
+    <MESSAGE value="PEP8" />
+    <option name="LAST_COMMIT_MESSAGE" value="PEP8" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

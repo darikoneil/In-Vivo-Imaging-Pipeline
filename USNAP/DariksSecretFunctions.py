@@ -7,7 +7,7 @@ from ImagingAnalysis.Suite2PAnalysis import Suite2PModule
 def processSampling(EH, Stage, SamplingRate):
     print("STARTING PROCESSING")
     EH.__dict__[Stage].addImageProcessingFolder("filtered_imaging_data")
-    EH.__dict__[Stage].addImageSamplingFolder(SamplingRate)
+    EH.__dict__[Stage].add_image_sampling_folder(SamplingRate)
     _TiffStack = PreProcessing.loadAllTiffs(EH.__dict__[Stage].folder_dictionary['compiled_imaging_data'].path)
     _TiffStack = PreProcessing.blockwiseFastFilterTiff(_TiffStack, Footprint=np.ones((7, 3, 3)))
     PreProcessing.saveTiffStack(_TiffStack, EH.__dict__[Stage].folder_dictionary['filtered_imaging_data'].path)
