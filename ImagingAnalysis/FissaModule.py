@@ -137,7 +137,7 @@ class FissaAnalysis:
             # Images stored here
         else:
             print("\nLoading and Splitting Images\n")
-            self.images = self.split_binary_images(PreProcessing.loadRawBinary("", "", _video_folder))
+            self.images = self.split_binary_images(PreProcessing.load_raw_binary("", "", _video_folder))
 
         try:
             self.ops = np.load((_data_folder + '\\suite2p\\plane0\\ops.npy'),

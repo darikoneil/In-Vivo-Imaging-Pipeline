@@ -1432,7 +1432,7 @@ class CollectedImagingFolder(CollectedDataFolder):
         :return:
         """
         _images = np.reshape(np.fromfile(self.find_matching_files("registered_data.bin", "plane0")[0], dtype=np.int16), (-1, 512, 512))
-        PreProcessing.saveRawBinary(_images, self.folders.get("denoised"))
+        PreProcessing.save_raw_binary(_images, self.folders.get("denoised"))
 
     def clean_up_motion_correction(self) -> Self:
         """

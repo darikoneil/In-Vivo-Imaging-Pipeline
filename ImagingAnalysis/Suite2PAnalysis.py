@@ -269,7 +269,7 @@ class Suite2PModule:
         try:
             _video_meta = self.load_binary_meta("".join([self.ops.get("data_path"), "\\video_meta.txt"]))
             if _video_meta[-1] != "int16":
-                _binary_video = PreProcessing.loadRawBinary("", "", self.ops.get("data_path"))
+                _binary_video = PreProcessing.load_raw_binary("", "", self.ops.get("data_path"))
                 _binary_video = self.convert_binary(_binary_video)
                 _new_data_path = "".join([self.ops.get("data_path"), "\\converted"])
                 self.ops["data_path"] = _new_data_path
@@ -277,7 +277,7 @@ class Suite2PModule:
                 self.ops["reg_file"] = "".join([self.ops.get("data_path"), "\\binary_video"])
                 # Db overwrites, this to prevent using converted some places and not others
                 os.makedirs(_new_data_path, exist_ok=True)
-                PreProcessing.saveRawBinary(_binary_video, _new_data_path)
+                PreProcessing.save_raw_binary(_binary_video, _new_data_path)
                 del _binary_video
                 del _video_meta
                 # collect garbage
@@ -353,7 +353,7 @@ class Suite2PModule:
 
         :rtype: Any
         """
-        _images = PreProcessing.loadRawBinary("", "", self.ops.get("data_path"))
+        _images = PreProcessing.load_raw_binary("", "", self.ops.get("data_path"))
         # shape
         _num_frames, self.ops["yrange"], self.ops["xrange"] = _images.shape
         self.ops["yrange"] = [0, self.ops.get("yrange")]
@@ -388,7 +388,7 @@ class Suite2PModule:
         _images = cls.load_suite2p_binary(ops.get("reg_file"))
         _images = np.reshape(_images, (-1, ops.get("Ly"), ops.get("Lx")))
         _images = _images[:, _yrange[0]:_yrange[-1], _xrange[0]:_xrange[-1]]
-        PreProcessing.saveRawBinary(_images, ops.get("save_path"))
+        PreProcessing.save_raw_binary(_images, ops.get("save_path"))
         return print("Exported Cropped Motion-Corrected Video")
 
     # noinspection PyMethodMayBeStatic,PyUnusedLocal

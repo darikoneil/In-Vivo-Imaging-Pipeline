@@ -24,20 +24,20 @@ class PreProcessing:
     Class containing a variety of static methods for preprocessing images
 
     **Static Methods**
-        | *loadBrukerTiffs* : Load a sequence of tiff files from a directory.
-        | *repackageBrukerTiffs* :  Repackages a sequence of tiff files within a directory to a smaller sequence of tiff stacks.
-        | *filterTiff* : Denoise a tiff stack using a multidimensional median filter
-        | *fastFilterTiff* : GPU-parallelized multidimensional median filter
-        | *saveTiff* : Save a numpy array to a single tiff file
-        | *loadTiff* : Load a single tiff file
-        | *loadAllTiffs* : Load a sequence of tiff stacks
-        | *loadRawBinary* : Loads a raw binary file
-        | *saveRawBinary* : This function saves a tiff stack as a binary file
+        | *load_bruker_tiffs* : Load a sequence of tiff files from a directory.
+        | *repackage_bruker_tiffs* :  Repackages a sequence of tiff files within a directory to a smaller sequence of tiff stacks.
+        | *filter_tiff* : Denoise a tiff stack using a multidimensional median filter
+        | *fast_filter_tiff* : GPU-parallelized multidimensional median filter
+        | *save_tiff* : Save a numpy array to a single tiff file
+        | *load_tiff* : Load a single tiff file
+        | *load_all_tiffs* : Load a sequence of tiff stacks
+        | *load_raw_binary* : Loads a raw binary file
+        | *save_raw_binary* : This function saves a tiff stack as a binary file
         | *removeShutterArtifact* : Function to remove the shuttle artifacts present at the initial imaging frames
-        | *blockwiseFastFilterTiff* : Blockwise, GPU-parallelized multidimensional median filter
-        | *saveTiffStack* : Save a numpy array to a sequence of tiff stacks
-        | *groupedZProject* : Utilize grouped z-project to downsample data
-        | *viewImage* :  Visualize a numpy array [Z x Y x X] as a video
+        | *blockwise_fast_filter_tiff* : Blockwise, GPU-parallelized multidimensional median filter
+        | *save_tiff_stack* : Save a numpy array to a sequence of tiff stacks
+        | *grouped_z_project* : Utilize grouped z-project to downsample data
+        | *view_image* :  Visualize a numpy array [Z x Y x X] as a video
         | *loadBinaryMeta* : Loads meta file for binary video
         | *loadMappedBinary*: Loads a raw binary file in the workspace without loading into memory
     """
@@ -46,9 +46,9 @@ class PreProcessing:
         return
 
     @staticmethod
-    def loadBrukerTiffs(VideoDirectory: str) -> np.ndarray:
+    def load_bruker_tiffs(VideoDirectory: str) -> np.ndarray:
         """
-        loadBrukerTiffs
+        load_bruker_tiffs
         ---------------
         Load a sequence of tiff files from a directory.
 
@@ -74,7 +74,7 @@ class PreProcessing:
         return complete_image
 
     @staticmethod
-    def repackageBrukerTiffs(VideoDirectory: str, OutputDirectory: str) -> None:
+    def repackage_bruker_tiffs(VideoDirectory: str, OutputDirectory: str) -> None:
         """
 
         Repackages a sequence of tiff files within a directory to a smaller sequence
@@ -117,14 +117,14 @@ class PreProcessing:
             ):
                 image_chunk[_fname, :, :] = np.asarray(Image.open(VideoDirectory + "\\" + _fnames[_fname+_offset]))
             if c_idx < 10:
-                PreProcessing.saveTiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_0" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
+                PreProcessing.save_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_0" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
             else:
-                PreProcessing.saveTiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
+                PreProcessing.save_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
             c_idx += 1
         return print("Finished Repackaging Bruker Tiffs")
 
     @staticmethod
-    def filterTiff(Tiff: np.ndarray, **kwargs) -> np.ndarray:
+    def filter_tiff(Tiff: np.ndarray, **kwargs) -> np.ndarray:
         """
         Denoise a tiff stack using a multidimensional median filter
 
@@ -151,7 +151,7 @@ class PreProcessing:
         return filtered_tiff
 
     @staticmethod
-    def fastFilterTiff(Tiff: np.ndarray, **kwargs) -> np.ndarray:
+    def fast_filter_tiff(Tiff: np.ndarray, **kwargs) -> np.ndarray:
         """
         GPU-parallelized multidimensional median filter
 
@@ -174,7 +174,7 @@ class PreProcessing:
         return filtered_tiff
 
     @staticmethod
-    def saveTiff(Tiff: np.ndarray, fname: str) -> None:
+    def save_tiff(Tiff: np.ndarray, fname: str) -> None:
         """
         Save a numpy array to a single tiff file
 
@@ -189,7 +189,7 @@ class PreProcessing:
                 tif.save(frame)
 
     @staticmethod
-    def loadTiff(fname: str, num_frames: int) -> np.ndarray:
+    def load_tiff(fname: str, num_frames: int) -> np.ndarray:
         """
         Load a single tiff file
 
@@ -203,7 +203,7 @@ class PreProcessing:
         return tifffile.imread(fname, key=range(0, num_frames, 1))
 
     @staticmethod
-    def loadAllTiffs(VideoDirectory: str) -> np.ndarray:
+    def load_all_tiffs(VideoDirectory: str) -> np.ndarray:
         """
         Load a sequence of tiff stacks
 
@@ -227,13 +227,13 @@ class PreProcessing:
                 disable=False,
         ):
             complete_image[_last_frame:_last_frame+_num_frames[_fname], :, :] = \
-                PreProcessing.loadTiff(VideoDirectory + "\\" + _fnames[_fname], _num_frames[_fname])
+                PreProcessing.load_tiff(VideoDirectory + "\\" + _fnames[_fname], _num_frames[_fname])
             _last_frame += _num_frames[_fname]
 
         return complete_image
 
     @staticmethod
-    def loadRawBinary(fname: str, meta_file: str, *args) -> np.ndarray:
+    def load_raw_binary(fname: str, meta_file: str, *args) -> np.ndarray:
         """
         Loads a raw binary file
 
@@ -259,7 +259,7 @@ class PreProcessing:
         return np.reshape(np.fromfile(fname, dtype=_type), (_num_frames, _y_pixels, _x_pixels))
 
     @staticmethod
-    def saveRawBinary(Video: np.ndarray, VideoDirectory: str) -> None:
+    def save_raw_binary(Video: np.ndarray, VideoDirectory: str) -> None:
         """
         This function saves a tiff stack as a binary file
 
@@ -288,7 +288,7 @@ class PreProcessing:
         print("Finished saving video as a binary.")
 
     @staticmethod
-    def removeShuttleArtifact(Video: np.ndarray, **kwargs) -> np.ndarray:
+    def remove_shuttle_artifact(Video: np.ndarray, **kwargs) -> np.ndarray:
         """
         Function to remove the shuttle artifacts present at the initial imaging frames
 
@@ -315,7 +315,7 @@ class PreProcessing:
             return Video[_shuttle_artifact_length+_crop_idx:, :, :]
 
     @staticmethod
-    def blockwiseFastFilterTiff(TiffStack: np.ndarray, **kwargs) -> np.ndarray:
+    def blockwise_fast_filter_tiff(TiffStack: np.ndarray, **kwargs) -> np.ndarray:
         """
         GPU-parallelized multidimensional median filter performed in overlapping blocks.
 
@@ -358,21 +358,21 @@ class PreProcessing:
         ):
             if _block == 0:
                 _remainder = TiffStack[_blocks[_block + 1] - 500:_blocks[_block + 1], :, :].copy()
-                TiffStack[0:_blocks[_block + 1], :, :] = cupy.asnumpy(PreProcessing.fastFilterTiff(cupy.asarray(
+                TiffStack[0:_blocks[_block + 1], :, :] = cupy.asnumpy(PreProcessing.fast_filter_tiff(cupy.asarray(
                     TiffStack[0:_blocks[_block + 1], :, :]), Footprint=_footprint))
             elif _block == _num_blocks - 1:
 
                 TiffStack[_blocks[_block]:_total_frames, :, :] = \
-                    cupy.asnumpy(PreProcessing.fastFilterTiff(
+                    cupy.asnumpy(PreProcessing.fast_filter_tiff(
                         cupy.asarray(np.append(_remainder, TiffStack[_blocks[_block]:_total_frames, :, :],
                                                axis=0)), Footprint=_footprint))[_block_buffer_region:, :, :]
 
-                # TiffStack[_blocks[_block]:_total_frames, :, :] = PreProcessing.fastFilterTiff(np.append(_remainder, TiffStack[_blocks[_block]:_total_frames, :, :],
+                # TiffStack[_blocks[_block]:_total_frames, :, :] = PreProcessing.fast_filter_tiff(np.append(_remainder, TiffStack[_blocks[_block]:_total_frames, :, :],
                 # axis=0))[_block_buffer_region:, :, :])
             else:
                 _remainder_new = TiffStack[_blocks[_block + 1] - 500:_blocks[_block + 1], :, :].copy()
                 TiffStack[_blocks[_block]:_blocks[_block + 1], :, :] = \
-                    cupy.asnumpy(PreProcessing.fastFilterTiff(
+                    cupy.asnumpy(PreProcessing.fast_filter_tiff(
                         cupy.asarray(np.append(_remainder, TiffStack[_blocks[_block]:_blocks[_block + 1], :, :],
                                                axis=0)), Footprint=_footprint))[_block_buffer_region:_block_size+_block_buffer_region, :, :]
                 _remainder = _remainder_new.copy()
@@ -380,7 +380,7 @@ class PreProcessing:
         return TiffStack
 
     @staticmethod
-    def saveTiffStack(TiffStack: str, OutputDirectory: str) -> None:
+    def save_tiff_stack(TiffStack: str, OutputDirectory: str) -> None:
         """
         Save a numpy array to a sequence of tiff stacks
 
@@ -403,19 +403,19 @@ class PreProcessing:
                 _end_idx = _num_frames + 1
 
             if c_idx < 10:
-                PreProcessing.saveTiff(TiffStack[_start_idx:_end_idx, :, :],
-                                       OutputDirectory + "\\" + "Video_0" + str(c_idx) + "_of_" + str(
+                PreProcessing.save_tiff(TiffStack[_start_idx:_end_idx, :, :],
+                                        OutputDirectory + "\\" + "Video_0" + str(c_idx) + "_of_" + str(
                                            _chunks) + ".tif")
             else:
-                PreProcessing.saveTiff(TiffStack[_start_idx:_end_idx, :, :],
-                                       OutputDirectory + "\\" + "Video_" + str(c_idx) + "_of_" + str(
+                PreProcessing.save_tiff(TiffStack[_start_idx:_end_idx, :, :],
+                                        OutputDirectory + "\\" + "Video_" + str(c_idx) + "_of_" + str(
                                            _chunks) + ".tif")
             c_idx += 1
 
         return print("Finished Saving Tiffs")
 
     @staticmethod
-    def groupedZProject(TiffStack: np.ndarray, BinSize: int, DownsampleFunction: Callable[[np.ndarray], np.ndarray]) \
+    def grouped_z_project(TiffStack: np.ndarray, BinSize: int, DownsampleFunction: Callable[[np.ndarray], np.ndarray]) \
             -> np.ndarray:
         """
         Utilize grouped z-project to downsample data
@@ -436,7 +436,7 @@ class PreProcessing:
         return downsampled_image
 
     @staticmethod
-    def viewImage(Video: np.ndarray, fps: float, **kwargs) -> \
+    def view_image(Video: np.ndarray, fps: float, **kwargs) -> \
             List[object]:
         """
         Visualize a numpy array [Z x Y x X] as a video

@@ -180,7 +180,7 @@ class DenoisingModule:
 
                     if len(_model_list) > 1:
                         _result_name = "".join([self.opt.output_path, "\\", _model_name.replace(".pth", ""), str(_image)])
-                        PreProcessing.saveRawBinary(_output_img, _result_name)
+                        PreProcessing.save_raw_binary(_output_img, _result_name)
                     else:
                         _mapped_output[_image*_output_img.shape[0]:_image*_output_img.shape[0]+_output_img.shape[0],
                             :, :] = _output_img

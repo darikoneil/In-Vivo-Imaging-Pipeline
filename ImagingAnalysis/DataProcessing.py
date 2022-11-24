@@ -97,13 +97,13 @@ class Processing:
             if _merge_after:
                 _numNeurons = dFoF.shape[0]
                 _numTiffs = dFoF.shape[1]
-                _firstTiffSize = dFoF[0,0].shape[1]
+                _firstTiffSize = dFoF[0, 0].shape[1]
                 _lastTiffSize = dFoF[0, _numTiffs-1].shape[1]
                 _totalFrames = _firstTiffSize*(_numTiffs-1)+_lastTiffSize
                 _unmerged_dFoF = dFoF.copy()
                 dFoF = np.full((_numNeurons, _totalFrames), 0, dtype=np.float64)
 
-                #Merge Here
+                # Merge Here
                 for _neuron in tqdm(
                     range(_numNeurons),
                     total=_numNeurons,
@@ -171,7 +171,7 @@ class Processing:
         [_neurons, _tiffs] = Traces.shape
         _components = Traces[0, 0].shape[0]
         _smoothedTracesByComponent = np.full((_neurons, _frames, _components), 0, dtype=np.float64)
-        #smoothedTraces = Traces.copy()
+        # smoothedTraces = Traces.copy()
 
         smoothedTraces = np.empty((_neurons, _tiffs), dtype=object)
         for _neuron, _tiff in itertools.product(range(_neurons), range(_tiffs)):
@@ -276,12 +276,12 @@ class Processing:
         neighbors = kwargs.get('neighbors', 1) # number of neighboring points to consider
 
         # Define Diffusion Function Such To Avoid Circular Import
-        def diffusionFunction(s, neighbors):
+        def diffusionFunction(s_, neighbors_):
             # Perona-Malik 2
             # exp( - (s/K)^2 )
             # s is the gradient of the image
             # K is a diffusivity conductance that controls the diffusion process
-            return np.exp(-(s / K) ** 2) / neighbors
+            return np.exp(-(s_ / K) ** 2) / neighbors_
 
         # Pre-Allocate & Format
         _smoothTrace = Trace.copy()
@@ -371,7 +371,7 @@ class Processing:
     @staticmethod
     def normalizeSmoothFiringRates(FiringRates, Sigma):
         smoothedFiringRates = scipy.ndimage.gaussian_filter1d(FiringRates, Sigma, axis=1)
-        #normFiringRates = sklearn.preprocessing.minmax_scale(smoothedFiringRates, axis=1, copy=True)
+        # normFiringRates = sklearn.preprocessing.minmax_scale(smoothedFiringRates, axis=1, copy=True)
         normFiringRates = smoothedFiringRates/np.max(smoothedFiringRates, axis=0)
         normFiringRates[normFiringRates <= 0] = 0
         return normFiringRates
