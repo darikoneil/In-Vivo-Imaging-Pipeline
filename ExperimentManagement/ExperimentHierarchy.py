@@ -183,7 +183,7 @@ class ExperimentData:
         :return: ExperimentData
         :rtype: ExperimentManagement.ExperimentHierarchy.ExperimentData
         """
-        print("Loading Experimental Hierarchy...")
+        print("Loading Experiments...")
         _input_file = ExperimentDirectory + "\\ExperimentalHierarchy"
         _input_pickle = open(_input_file, 'rb')
         _pickles = pkl.load(_input_pickle)
@@ -476,7 +476,7 @@ class ExperimentData:
         :rtype: Any
         """
 
-        print("Saving Experimental Hierarchy...")
+        print("Saving Experiments...")
         if hasattr('self', '_IP'):
             # noinspection PyAttributeOutsideInit
             self._IP = True

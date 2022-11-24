@@ -67,13 +67,13 @@ class FearConditioning(BehavioralStage):
 
     @property
     def num_stim(self) -> int:
-        return self.unique_stimuli.__len__()
+        return self.unique_stim.__len__()
 
     @property
     def trials_per_stim(self) -> int:
         try:
             _trials_per_stim = [stimulus for stimulus in self.trial_parameters.get("stimulusTypes")
-                                if stimulus == self.unique_stimuli[0]].__len__()
+                                if stimulus == self.unique_stim[0]].__len__()
             if self.num_stim > 1:
                 for _unique in self.unique_stim:
                     # make sure same number of all stimuli
@@ -84,11 +84,11 @@ class FearConditioning(BehavioralStage):
             return 0
 
     @property
-    def trial_groups(self) -> Union[Tuple[Tuple[Any]], None]:
+    def trial_groups(self) -> Union[Tuple[Tuple], None]:
         try:
             _trial_sets = []
             for _unique in self.unique_stim:
-                _trial_sets.append(tuple([_trial for _trial in self.trial_parameters.get("stimulusTypes") if _trial == _unique]))
+                _trial_sets.append(tuple(np.where(np.array(self.trial_parameters.get("stimulusTypes")) == _unique)[0]))
             _trial_sets = tuple(_trial_sets)
             return _trial_sets
         except KeyError:
