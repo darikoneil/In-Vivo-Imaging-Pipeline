@@ -755,7 +755,7 @@ class BehavioralStage:
         _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("csv")
         return self.load_bruker_analog_recordings(_files[-1])
 
-    def loadBaseBehavior(self) -> Self:
+    def load_base_behavior(self) -> Self:
         """
         Loads the basic behavioral data: analog, dictionary, digital, state, and CS identities
 
@@ -765,25 +765,25 @@ class BehavioralStage:
         print("Loading Base Data...")
         # Analog
         _analog_file = self.generateFileID('Analog')
-        _analog_data = FearConditioning.loadAnalogData(_analog_file)
+        _analog_data = FearConditioning.load_analog_data(_analog_file)
         if type(_analog_data) == str and _analog_data == "ERROR":
             return print("Could not find analog data!")
 
         # Digital
         _digital_file = self.generateFileID('Digital')
-        _digital_data = FearConditioning.loadDigitalData(_digital_file)
+        _digital_data = FearConditioning.load_digital_data(_digital_file)
         if type(_digital_data) == str and _digital_data == "ERROR":
             return print("Could not find digital data!")
 
         # State
         _state_file = self.generateFileID('State')
-        _state_data = FearConditioning.loadStateData(_state_file)
+        _state_data = FearConditioning.load_state_data(_state_file)
         if _state_data[0] == "ERROR": # 0 because it's an array of strings so ambiguous str comparison
             return print("Could not find state data!")
 
         # Dictionary
         _dictionary_file = self.generateFileID('Dictionary')
-        _dictionary_data = FearConditioning.loadDictionaryData(_dictionary_file)
+        _dictionary_data = FearConditioning.load_dictionary_data(_dictionary_file)
         try:
             self.trial_parameters = _dictionary_data.copy() # For Safety
         except AttributeError:
@@ -1232,7 +1232,7 @@ This is a class for managing a folder of unorganized data files
         if "*" in ext:
             ext.replace("*", "")
 
-        return [str(file) for file in self.Files if file.suffix == ext]
+        return [str(file) for file in self.files if file.suffix == ext]
 
 
 class CollectedImagingFolder(CollectedDataFolder):

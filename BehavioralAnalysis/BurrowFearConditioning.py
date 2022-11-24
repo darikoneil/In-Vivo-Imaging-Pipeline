@@ -2,7 +2,6 @@ from __future__ import annotations
 import numpy as np
 import pickle as pkl
 import pathlib
-# import pandas as pd
 import pandas as pd
 from tqdm.auto import tqdm
 from typing import Tuple, List, Optional, Union
@@ -25,14 +24,14 @@ class FearConditioning(BehavioralStage):
         | *NumStim* : Number of stimuli (int, default 2)
 
     **Self Methods**
-        | *self.generateFileID* : Generate a file ID for a particular sort of data
-        | *self.fillFolderDictionary* : Function to index subfolders containing behavioral data
+        | *self.generate_file_id* : Generate a file ID for a particular sort of data
+        | *self.fill_folder_dictionary* : Function to index subfolders containing behavioral data
 
     **Class Methods**
-        | *cls.loadAnalogData* : Loads Analog Data from a burrow behavioral session
-        | *cls.loadDigitalData* : Loads Digital Data from a burrow behavioral session
-        | *cls.loadStateData* : Loads State Data from a burrow behavioral session
-        | *cls.loadDictionaryData* : Loads Dictionary Data from a burrow behavioral session
+        | *cls.load_analog_data* : Loads Analog Data from a burrow behavioral session
+        | *cls.load_digital_data* : Loads Digital Data from a burrow behavioral session
+        | *cls.load_state_data* : Loads State Data from a burrow behavioral session
+        | *cls.load_dictionary_data* : Loads Dictionary Data from a burrow behavioral session
         | *cls.loadBehavioralData* : Loads Behavioral Data from a burrow behavioral session
 
     """
@@ -40,7 +39,7 @@ class FearConditioning(BehavioralStage):
 
 
         super().__init__(Meta, Stage)
-        self.fillFolderDictionary()
+        self.fill_folder_dictionary()
 
         # PROTECT ME
         _trials_per_stim = kwargs.get('TrialsPerStim', 5)
@@ -73,7 +72,7 @@ class FearConditioning(BehavioralStage):
     def num_stim(self) -> int:
         return self._FearConditioning__num_stim
 
-    def loadBaseBehavior(self) -> Self:
+    def load_base_behavior(self) -> Self:
         """
         Loads the basic behavioral data: analog, dictionary, digital, state, and CS identities
 
@@ -82,26 +81,26 @@ class FearConditioning(BehavioralStage):
 
         print("Loading Base Data...")
         # Analog
-        _analog_file = self.generateFileID('Analog')
-        _analog_data = FearConditioning.loadAnalogData(_analog_file)
+        _analog_file = self.generate_file_id('Analog')
+        _analog_data = FearConditioning.load_analog_data(_analog_file)
         if type(_analog_data) == str and _analog_data == "ERROR":
             return print("Could not find analog data!")
 
         # Digital
-        _digital_file = self.generateFileID('Digital')
-        _digital_data = FearConditioning.loadDigitalData(_digital_file)
+        _digital_file = self.generate_file_id('Digital')
+        _digital_data = FearConditioning.load_digital_data(_digital_file)
         if type(_digital_data) == str and _digital_data == "ERROR":
             return print("Could not find digital data!")
 
         # State
-        _state_file = self.generateFileID('State')
-        _state_data = FearConditioning.loadStateData(_state_file)
+        _state_file = self.generate_file_id('State')
+        _state_data = FearConditioning.load_state_data(_state_file)
         if _state_data[0] == "ERROR": # 0 because it's an array of strings so ambiguous str comparison
             return print("Could not find state data!")
 
         # Dictionary
-        _dictionary_file = self.generateFileID('Dictionary')
-        _dictionary_data = FearConditioning.loadDictionaryData(_dictionary_file)
+        _dictionary_file = self.generate_file_id('Dictionary')
+        _dictionary_data = FearConditioning.load_dictionary_data(_dictionary_file)
         try:
             self.trial_parameters = _dictionary_data.copy() # For Safety
         except AttributeError:
@@ -137,12 +136,12 @@ class FearConditioning(BehavioralStage):
             _old_max = 800
 
         _dlc = DeepLabModule(self.folder_dictionary['deep_lab_cut_data'], self.folder_dictionary['behavioral_exports'])
-        _dlc.trial_data = DeepLabModule.ConvertFullDataFrameToPhysicalUnits(_dlc.trial_data, _old_min, _old_max,
-                                                                            ("X1", "X2"))
-        _dlc.pre_trial_data = DeepLabModule.ConvertFullDataFrameToPhysicalUnits(_dlc.pre_trial_data, _old_min, _old_max,
-                                                                                ("X1", "X2"))
-        _dlc.trial_data = DeepLabModule.ConvertToMeanZero(_dlc.trial_data, ("Y1", "Y2"))
-        _dlc.pre_trial_data = DeepLabModule.ConvertToMeanZero(_dlc.pre_trial_data, ("Y1", "Y2"))
+        _dlc.trial_data = DeepLabModule.convert_full_dataframe_to_physical_units(_dlc.trial_data, _old_min, _old_max,
+                                                                                 ("X1", "X2"))
+        _dlc.pre_trial_data = DeepLabModule.convert_full_dataframe_to_physical_units(_dlc.pre_trial_data, _old_min, _old_max,
+                                                                                     ("X1", "X2"))
+        _dlc.trial_data = DeepLabModule.convert_to_mean_zero(_dlc.trial_data, ("Y1", "Y2"))
+        _dlc.pre_trial_data = DeepLabModule.convert_to_mean_zero(_dlc.pre_trial_data, ("Y1", "Y2"))
 
         # Check Efficacy
         try:
@@ -171,7 +170,7 @@ class FearConditioning(BehavioralStage):
         else:
             print('Not Yet Implemented')
 
-    def generateFileID(self, SaveType: str) -> Union[str, None]:
+    def generate_file_id(self, SaveType: str) -> Union[str, None]:
         """
         Generate a file ID for a particular sort of data
 
@@ -198,7 +197,7 @@ class FearConditioning(BehavioralStage):
 
         return filename
 
-    def fillFolderDictionary(self) -> Self:
+    def fill_folder_dictionary(self) -> Self:
         """
         Function to index subfolders containing behavioral data
 
@@ -225,7 +224,7 @@ class FearConditioning(BehavioralStage):
                                                        "\\AnalogBurrowData"
 
     @classmethod
-    def loadAnalogData(cls, Filename: str) -> np.ndarray:
+    def load_analog_data(cls, Filename: str) -> np.ndarray:
         """
         Loads Analog Data from a burrow behavioral session
 
@@ -242,7 +241,7 @@ class FearConditioning(BehavioralStage):
         return analogData
 
     @classmethod
-    def loadDigitalData(cls, Filename: str) -> np.ndarray:
+    def load_digital_data(cls, Filename: str) -> np.ndarray:
         """
         Loads Digital Data from a burrow behavioral session
 
@@ -263,7 +262,7 @@ class FearConditioning(BehavioralStage):
         return digitalData
 
     @classmethod
-    def loadStateData(cls, Filename: str) -> np.ndarray:
+    def load_state_data(cls, Filename: str) -> np.ndarray:
         """
         Loads State Data from a burrow behavioral session
 
@@ -281,7 +280,7 @@ class FearConditioning(BehavioralStage):
         return stateData
 
     @classmethod
-    def loadDictionaryData(cls, Filename: str) -> dict:
+    def load_dictionary_data(cls, Filename: str) -> dict:
         """
         Loads Dictionary Data from a burrow behavioral session
 
@@ -433,7 +432,7 @@ class FearConditioning(BehavioralStage):
         fig1.tight_layout()
 
     @staticmethod
-    def identifyTrialValence(csIndexFile: str) -> Tuple[int, int]:
+    def identify_trial_valence(csIndexFile: str) -> Tuple[int, int]:
         """
         Returns the index for CS+ and CS- trials from a .csv indicator file
 
@@ -460,6 +459,7 @@ class MethodsForPandasOrganization:
     def safe_extract(OldFrame, Commands, *args, **kwargs):
         """
         Function for safe extraction
+        DAO 11/24/2022 what am I?
 
         :param OldFrame: Original DataFrame
         :type OldFrame: pd.DataFrame
@@ -518,20 +518,15 @@ class MethodsForPandasOrganization:
 
 class DeepLabModule:
     """
-    Module for deep lab cut data in the form of a pandas dataframe
-
-    **Class Methods**
-        |
-        | **cls.loadData** : Function loads the deep lab cut data
-        |
+    Module for importing deeplabcut data
     """
     def __init__(self, DataFolderDLC: CollectedDataFolder, DataFolderBehavioralExports: CollectedDataFolder):
         self.pre_trial_data, self.trial_data = \
-            self.loadData(DataFolderDLC, DataFolderBehavioralExports)
+            self.load_data(DataFolderDLC, DataFolderBehavioralExports)
         return
 
     @classmethod
-    def loadData(cls, DataFolderDLC: CollectedDataFolder, DataFolderBehavioralExports: CollectedDataFolder) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    def load_data(cls, DataFolderDLC: CollectedDataFolder, DataFolderBehavioralExports: CollectedDataFolder) -> Tuple[pd.DataFrame, pd.DataFrame]:
         # noinspection GrazieInspection
         """
                 Load DeepLabCut Data
@@ -583,19 +578,19 @@ class DeepLabModule:
         return pre_trial, trial
 
     @classmethod
-    def ConductPostProcessing(cls, RawData, **kwargs):
+    def conduct_post_processing(cls, RawData, **kwargs):
         _old_min = kwargs.get("old min", 0)
         _old_max = kwargs.get("old max", 800)
         _markers_idx = kwargs.get("marker_index", tuple([1, 2, 4, 5]))
         dlc_physical = RawData.copy()
 
         for _marker in _markers_idx:
-            dlc_physical[dlc_physical.columns[_marker]] = cls.ConvertToPhysicalUnits(dlc_physical[dlc_physical.columns[_marker]].to_numpy(),
-                                                                                     _old_min, _old_max)
+            dlc_physical[dlc_physical.columns[_marker]] = cls.convert_to_physical_units(dlc_physical[dlc_physical.columns[_marker]].to_numpy(),
+                                                                                        _old_min, _old_max)
         return dlc_physical
 
     @classmethod
-    def SegregateTrials(cls, Data, TrialNumber):
+    def segregate_trials(cls, Data, TrialNumber):
         """
         Returns the data for that particular trial
 
@@ -606,7 +601,7 @@ class DeepLabModule:
         return Data.copy(deep=True).loc[TrialNumber]
 
     @classmethod
-    def ConvertToPhysicalUnits(cls, fPositions, oldMin, oldMax, **kwargs):
+    def convert_to_physical_units(cls, fPositions, oldMin, oldMax, **kwargs):
         """
         Converts the burrow positions to physical units (mm)
 
@@ -624,17 +619,17 @@ class DeepLabModule:
         return (((fPositions-oldMin)*_new_range)/_old_range)+_new_min
 
     @classmethod
-    def ConvertFullDataFrameToPhysicalUnits(cls, DataFrame, oldMin, oldMax, idx, **kwargs):
+    def convert_full_dataframe_to_physical_units(cls, DataFrame, oldMin, oldMax, idx, **kwargs):
         _new_max = kwargs.get("new_max", 140)
         _new_min = kwargs.get("new_min", 0)
 
         DataFrame = DataFrame.copy(deep=True)
         for i in idx:
-            DataFrame[i] = DeepLabModule.ConvertToPhysicalUnits(DataFrame[i].to_numpy(), oldMin, oldMax)
+            DataFrame[i] = DeepLabModule.convert_to_physical_units(DataFrame[i].to_numpy(), oldMin, oldMax)
         return DataFrame
 
     @classmethod
-    def ConvertToMeanZero(cls, DataFrame, idx):
+    def convert_to_mean_zero(cls, DataFrame, idx):
         DataFrame = DataFrame.copy(deep=True)
         for i in idx:
             DataFrame[i] = DataFrame[i].to_numpy() - np.mean(DataFrame[i].to_numpy())
@@ -643,7 +638,7 @@ class DeepLabModule:
     @classmethod
     def match_data_to_new_index(cls, OriginalVector, OriginalIndex, NewIndex, **kwargs):
         """
-        Function to match data to a new index
+        Function to match data to a new index. can be done better, written when learning pandas
 
         :param OriginalVector:
         :param OriginalIndex:
@@ -707,12 +702,12 @@ class DeepLabModule:
                 # Do this to skip the "Habituation" Index
                 continue
             # Trials
-            _trial = self.safe_extract(DataFrame, None, (StateCastDict.get("Trial"), i),
+            _trial = MethodsForPandasOrganization.safe_extract(DataFrame, None, (StateCastDict.get("Trial"), i),
                                                                (0, 1), False, multi_index=MultiIndex,
                                                                reset=True, export_time=True)
             if _trial.index.name != "Time (s)":
                 raise KeyError("The exported index must be time!")
-            _dlc = DLC.SegregateTrials(DLC.trial_data, i)
+            _dlc = DLC.segregate_trials(DLC.trial_data, i)
             _num_frames = _dlc['X1'].__len__()
             _old_dlc_index = np.around(
                 np.linspace(_trial.index.to_numpy()[0], _trial.index.to_numpy()[-1], _num_frames), decimals=3)
@@ -722,7 +717,7 @@ class DeepLabModule:
             _trial_data = pd.DataFrame(None, index=_new_dlc_index, dtype=np.float64)
             _trial_data.index.name = "Time (s)"
             for _column in _dlc.columns.to_numpy():
-                _trial_data[_column] = self.match_data_to_new_index(_dlc[_column].to_numpy(),
+                _trial_data[_column] = cls.match_data_to_new_index(_dlc[_column].to_numpy(),
                                                                                             _old_dlc_index,
                                                                                             _new_dlc_index,
                                                                                             feedback=False)
@@ -738,12 +733,12 @@ class DeepLabModule:
                 # Do this to skip the "Habituation" Index
                 continue
             # Trials
-            _pre_trial = self.safe_extract(DataFrame, None, (StateCastDict.get("PreTrial"), i),
+            _pre_trial = MethodsForPandasOrganization.safe_extract(DataFrame, None, (StateCastDict.get("PreTrial"), i),
                                                                    (0, 1), False, multi_index=MultiIndex,
                                                                     reset=True, export_time=True)
             if _pre_trial.index.name != "Time (s)":
                 raise KeyError("The exported index must be time!")
-            _dlc = DLC.SegregateTrials(DLC.pre_trial_data, i)
+            _dlc = DLC.segregate_trials(DLC.pre_trial_data, i)
             _num_frames = _dlc['X1'].__len__()
             _old_dlc_index = np.floor(np.linspace(0, _pre_trial.index.to_numpy().__len__()-1, _num_frames))
             if _old_dlc_index.__len__() != np.unique(_old_dlc_index).__len__():
@@ -754,7 +749,7 @@ class DeepLabModule:
             _pre_trial_data = pd.DataFrame(None, index=_new_dlc_index, dtype=np.float64)
             # _pre_trial_data.index.name = "Time (s)"
             for _column in _dlc.columns.to_numpy():
-                _pre_trial_data[_column] = self.match_data_to_new_index(_dlc[_column].to_numpy(),
+                _pre_trial_data[_column] = cls.match_data_to_new_index(_dlc[_column].to_numpy(),
                                                                                                 _old_dlc_index,
                                                                                                 _new_dlc_index,
                                                                                                 feedback=False)
