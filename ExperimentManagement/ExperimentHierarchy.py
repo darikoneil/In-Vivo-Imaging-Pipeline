@@ -618,8 +618,8 @@ class BehavioralStage:
         self.data = None
         self.meta = None
         self.multi_index = None
-        self.state_index = None
-        self.trial_parameters = None
+        self.state_index = dict()
+        self.trial_parameters = dict()
 
         if len(args) >= 1:
             self.sync_id = args[0]

@@ -35,26 +35,17 @@ class FearConditioning(BehavioralStage):
         | *cls.loadBehavioralData* : Loads Behavioral Data from a burrow behavioral session
 
     """
-    def __init__(self, Meta: Tuple[str, str], Stage: str, **kwargs):
+    def __init__(self, Meta: Tuple[str, str], Stage: str):
 
 
         super().__init__(Meta, Stage)
         self.fill_folder_dictionary()
 
         # PROTECT ME
-        _trials_per_stim = kwargs.get('TrialsPerStim', 5)
-        _num_stim = kwargs.get('NumStim', 2)
-        _num_trials = _trials_per_stim * _num_stim
         _stage = Stage
 
-        # PROTECTED
-        self.__trials_per_stim = _trials_per_stim
-        self.__num_stim = _num_stim
-        self.__num_trials = _num_trials
+        # Super Protected
         self.__stage_id = _stage
-
-        self.multi_index = None
-        self.trial_parameters = None
 
     @property
     def stage_id(self) -> str:
@@ -62,15 +53,47 @@ class FearConditioning(BehavioralStage):
 
     @property
     def num_trials(self) -> int:
-        return self._FearConditioning__num_trials
+        try:
+            return self.trial_parameters.get("stimulusTypes").__len__()
+        except KeyError:
+            return 0
 
     @property
-    def trials_per_stim(self) -> int:
-        return self._FearConditioning__trials_per_stim
+    def unique_stim(self) -> List[Any]:
+        try:
+            return list(np.unique(np.array(self.trial_parameters.get("stimulusTypes"))))
+        except KeyError:
+            return list(None)
 
     @property
     def num_stim(self) -> int:
-        return self._FearConditioning__num_stim
+        return self.unique_stimuli.__len__()
+
+    @property
+    def trials_per_stim(self) -> int:
+        try:
+            _trials_per_stim = [stimulus for stimulus in self.trial_parameters.get("stimulusTypes")
+                                if stimulus == self.unique_stimuli[0]].__len__()
+            if self.num_stim > 1:
+                for _unique in self.unique_stim:
+                    # make sure same number of all stimuli
+                    assert(_trials_per_stim == [stimulus for stimulus in self.trial_parameters.get("stimulusTypes")
+                                        if stimulus == _unique].__len__())
+            return _trials_per_stim
+        except KeyError:
+            return 0
+
+    @property
+    def trial_groups(self) -> Union[Tuple[Tuple[Any]], None]:
+        try:
+            _trial_sets = []
+            for _unique in self.unique_stim:
+                _trial_sets.append(tuple([_trial for _trial in self.trial_parameters.get("stimulusTypes") if _trial == _unique]))
+            _trial_sets = tuple(_trial_sets)
+            return _trial_sets
+        except KeyError:
+            _ = [0]
+            return None
 
     def load_base_behavior(self) -> Self:
         """
@@ -110,6 +133,8 @@ class FearConditioning(BehavioralStage):
             return print("Could not find dictionary data!")
         elif _dictionary_data == "ERROR_READ":
             return print("Could not read dictionary data!")
+
+        # ingest trial dictionary
 
         # Form Pandas DataFrame
         self.data, self.state_index, self.multi_index = self.organize_base_data(_analog_data, _digital_data,

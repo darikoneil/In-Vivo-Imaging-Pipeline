@@ -6,21 +6,17 @@
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="PEP8">
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_PreExposure.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_Encoding2.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure2.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_Retrieval2.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ImagingAnalysis/tt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/s.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/was.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ExperimentManagement/BrukerMetaModule.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/BrukerMetaModule.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/USNAP/DariksSecretFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/USNAP/DariksSecretFunctions.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -291,21 +287,7 @@
       <workItem from="1668909930175" duration="570000" />
       <workItem from="1668954971483" duration="28362000" />
       <workItem from="1669050152619" duration="23739000" />
-      <workItem from="1669313985926" duration="2622000" />
-    </task>
-    <task id="LOCAL-00052" summary="Keyword for denoising batchsize &amp; memmory mapped images">
-      <created>1667491094532</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1667491094533</updated>
-    </task>
-    <task id="LOCAL-00053" summary="S2P analysis">
-      <created>1667582497644</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1667582497644</updated>
+      <workItem from="1669313985926" duration="5890000" />
     </task>
     <task id="LOCAL-00054" summary="docstrings">
       <created>1667584726000</created>
@@ -636,7 +618,21 @@
       <option name="project" value="LOCAL" />
       <updated>1669315535586</updated>
     </task>
-    <option name="localTasksCounter" value="101" />
+    <task id="LOCAL-00101" summary="PEP8">
+      <created>1669316648841</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1669316648841</updated>
+    </task>
+    <task id="LOCAL-00102" summary="PEP8">
+      <created>1669316663559</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1669316663559</updated>
+    </task>
+    <option name="localTasksCounter" value="103" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
