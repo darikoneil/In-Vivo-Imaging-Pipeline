@@ -17,8 +17,6 @@
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/s.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/was.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/FissaAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/FissaModule.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -288,14 +286,8 @@
       <workItem from="1668876839856" duration="24372000" />
       <workItem from="1668909930175" duration="570000" />
       <workItem from="1668954971483" duration="28362000" />
-      <workItem from="1669050152619" duration="23628000" />
-    </task>
-    <task id="LOCAL-00049" summary="git ignore update">
-      <created>1667424869310</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1667424869310</updated>
+      <workItem from="1669050152619" duration="23739000" />
+      <workItem from="1669313985926" duration="374000" />
     </task>
     <task id="LOCAL-00050" summary="Keyword for denoising multiprocessor">
       <created>1667425423878</created>
@@ -633,7 +625,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669227887756</updated>
     </task>
-    <option name="localTasksCounter" value="98" />
+    <task id="LOCAL-00098" summary="namespace">
+      <created>1669229633264</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1669229633264</updated>
+    </task>
+    <option name="localTasksCounter" value="99" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -691,6 +690,10 @@
           <url>file://$PROJECT_DIR$/ComputationalAnalysis/DecodingAnalysis.py</url>
           <line>233</line>
           <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py</url>
+          <option name="timeStamp" value="39" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

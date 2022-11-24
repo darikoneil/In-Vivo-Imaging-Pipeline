@@ -617,6 +617,7 @@ class BehavioralStage:
         # self.data = pd.DataFrame
         self.data = None
         self.meta = None
+        self.multi_index = None
         self.state_index = None
         self.trial_parameters = None
 
@@ -1239,15 +1240,13 @@ class CollectedImagingFolder(CollectedDataFolder):
     Class specifically for imaging folder, inherits collected data folder
 
     **Self Methods**
-        | *load_fissa_exports* :
-        | *load_cascade_exports* :
-        | *load_suite2p* :
-        | *import_proc_traces* :
-        | *import_proc_inferences* :
-
-    **Static Methods**
-        | *load_proc_inferences* :
-        | *load_proc_traces* :
+        | *load_fissa_exports* : loads fissa exported files
+        | *load_cascade_exports* : loads cascade exported files
+        | *load_suite2p* : loads suite2p exported files
+        | *export_registration_to_denoised* : moves registration to new folder for namespace compatibility when skipping denoising step
+        | *clean_up_motion_correction* : This function removes the reg_tif folder and registered.bin generated during motion correction.
+        | *clean_up_compilation* : This function removes the compiled tif files
+        | *add_notes* : Function adds notes
 
     """
 
