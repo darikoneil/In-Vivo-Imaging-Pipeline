@@ -248,8 +248,8 @@ class FearConditioning(BehavioralStage):
         self.folder_dictionary['analog_burrow_data'] = self.folder_dictionary.get('behavior_folder') + \
                                                        "\\AnalogBurrowData"
 
-    @classmethod
-    def load_analog_data(cls, Filename: str) -> np.ndarray:
+    @staticmethod
+    def load_analog_data(Filename: str) -> np.ndarray:
         """
         Loads Analog Data from a burrow behavioral session
 
@@ -265,8 +265,8 @@ class FearConditioning(BehavioralStage):
 
         return analogData
 
-    @classmethod
-    def load_digital_data(cls, Filename: str) -> np.ndarray:
+    @staticmethod
+    def load_digital_data(Filename: str) -> np.ndarray:
         """
         Loads Digital Data from a burrow behavioral session
 
@@ -286,8 +286,8 @@ class FearConditioning(BehavioralStage):
         digitalData[np.where(digitalData == 255)] = 1
         return digitalData
 
-    @classmethod
-    def load_state_data(cls, Filename: str) -> np.ndarray:
+    @staticmethod
+    def load_state_data(Filename: str) -> np.ndarray:
         """
         Loads State Data from a burrow behavioral session
 
@@ -304,8 +304,8 @@ class FearConditioning(BehavioralStage):
         stateData = convertFromPy27_Array(stateData)
         return stateData
 
-    @classmethod
-    def load_dictionary_data(cls, Filename: str) -> dict:
+    @staticmethod
+    def load_dictionary_data(Filename: str) -> dict:
         """
         Loads Dictionary Data from a burrow behavioral session
 
@@ -455,22 +455,6 @@ class FearConditioning(BehavioralStage):
         ax3.set_ylabel("Trial Flag")
 
         fig1.tight_layout()
-
-    @staticmethod
-    def identify_trial_valence(csIndexFile: str) -> Tuple[int, int]:
-        """
-        Returns the index for CS+ and CS- trials from a .csv indicator file
-
-        :param csIndexFile: Path to cs Index File (.csv)
-        :type csIndexFile: str
-        :return: Tuple of CS+ and CS- trials
-        :rtype: tuple[int, int]
-        """
-        assert(pathlib.Path(csIndexFile).suffix == ".csv")
-        _csIndex = np.genfromtxt(csIndexFile, int, delimiter=",")
-        PlusTrials = np.where(_csIndex == 0)
-        MinusTrials = np.where(_csIndex == 1)
-        return PlusTrials[0], MinusTrials[0]
 
 
 class MethodsForPandasOrganization:
