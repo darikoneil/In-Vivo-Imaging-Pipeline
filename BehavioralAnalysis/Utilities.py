@@ -69,7 +69,3 @@ def extract_specific_data(DataFrame: pd.DataFrame,
         set_original_index()
 
     return _dataframe
-
-
-
-

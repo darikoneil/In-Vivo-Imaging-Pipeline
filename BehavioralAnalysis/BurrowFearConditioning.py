@@ -657,7 +657,7 @@ class DeepLabModule:
         :return: NewVector
         """
         _is_string = kwargs.get("is_string", False)
-        _forward_fill = kwargs.get("forward_fill", "nearest")
+        _fill = kwargs.get("forward_fill", "nearest")
         _feedback = kwargs.get("feedback", True)
 
         if _is_string:

@@ -4,18 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="beg py test">
-      <change afterPath="$PROJECT_DIR$/BehavioralAnalysis/Utilities.py" afterDir="false" />
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="dlc stuff">
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure2.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_Retrieval2.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/Utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/Utilities.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Visualization.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -322,14 +320,7 @@
       <workItem from="1668909930175" duration="570000" />
       <workItem from="1668954971483" duration="28362000" />
       <workItem from="1669050152619" duration="23739000" />
-      <workItem from="1669313985926" duration="35371000" />
-    </task>
-    <task id="LOCAL-00066" summary="IGNORE">
-      <created>1667859116076</created>
-      <option name="number" value="00066" />
-      <option name="presentableId" value="LOCAL-00066" />
-      <option name="project" value="LOCAL" />
-      <updated>1667859116076</updated>
+      <workItem from="1669313985926" duration="37300000" />
     </task>
     <task id="LOCAL-00067" summary="IGNORE">
       <created>1667859186795</created>
@@ -667,7 +658,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669406583123</updated>
     </task>
-    <option name="localTasksCounter" value="115" />
+    <task id="LOCAL-00115" summary="dlc stuff">
+      <created>1669416999233</created>
+      <option name="number" value="00115" />
+      <option name="presentableId" value="LOCAL-00115" />
+      <option name="project" value="LOCAL" />
+      <updated>1669416999233</updated>
+    </task>
+    <option name="localTasksCounter" value="116" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -686,7 +684,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Updated Docstrings for Suite2P, Temp scratch work for colorizer" />
     <MESSAGE value="Updated Docstrings for Image PreProcessing" />
     <MESSAGE value="Updated Docstrings for Suite2P" />
     <MESSAGE value="Updated Docstrings" />
@@ -711,7 +708,8 @@
     <MESSAGE value="Updated Migration Tools" />
     <MESSAGE value="Fixed Typo in ImageProcessingModule" />
     <MESSAGE value="beg py test" />
-    <option name="LAST_COMMIT_MESSAGE" value="beg py test" />
+    <MESSAGE value="dlc stuff" />
+    <option name="LAST_COMMIT_MESSAGE" value="dlc stuff" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
