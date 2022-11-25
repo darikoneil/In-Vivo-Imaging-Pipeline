@@ -15,7 +15,6 @@ from ImagingAnalysis.IO import save_raw_binary
 from MigrationTools.Converters import renamed_load
 
 
-
 class ExperimentData:
     """
     Class for Organizing & Managing Experimental Data Across Sessions
@@ -1212,29 +1211,34 @@ This is a class for managing a folder of unorganized data files
         :rtype: Any
         """
         # arg for specifying folder
+
+        self.reindex() # reindex to be sure not missing anything
+
         if Folder is not None:
             Filename = "".join([Folder, "\\", Filename])
 
         return [str(_path) for _path in self.files if Filename in str(_path)]
 
-    def find_all_ext(self, ext: str) -> Union[List[str], None]:
+    def find_all_ext(self, Ext: str) -> Union[List[str], None]:
         """
         Finds all files with specific extension
 
-        :param ext: Filename extension
-        :type ext: str
+        :param Ext: Filename extension
+        :type Ext: str
         :return: List of files
         :rtype: List[str]
         """
         # make sure appropriately formatted
 
-        if "." not in ext:
-            ext = "".join([".", ext])
+        if "." not in Ext:
+            Ext = "".join([".", Ext])
 
-        if "*" in ext:
+        if "*" in Ext:
             ext.replace("*", "")
 
-        return [str(file) for file in self.files if file.suffix == ext]
+        self.reindex() # reindex to be sure not missing anything
+
+        return [str(file) for file in self.files if file.suffix == Ext]
 
 
 class CollectedImagingFolder(CollectedDataFolder):
