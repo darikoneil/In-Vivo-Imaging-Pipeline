@@ -9,27 +9,29 @@
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure2.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_Retrieval2.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/IO.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/ImageProcessing.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/SignalProcessing.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/Utilities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ComputationalAnalysis/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0137_Encoding2.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_Encoding2.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DarikDataScripts/s.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DarikDataScripts/was.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ExperimentManagement/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/A.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/DataProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/DataProcessing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Denoising.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Denoising.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/CascadeAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/CascadeModule.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Colorizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Colorizer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/DataProcessing.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Denoising.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/DenoisingModule.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ImagingAnalysis/FissaModule.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/FissaModule.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/PlottingFunctions.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/PreprocessingImages.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/StaticPlotting.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Visualization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/smoothies.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MigrationTools/Converters.py" beforeDir="false" afterPath="$PROJECT_DIR$/MigrationTools/Converters.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Notebooks/Analysis_of_Imaging_Data.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/USNAP/DariksSecretFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/USNAP/DariksSecretFunctions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/USNAP/__init__.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -300,28 +302,7 @@
       <workItem from="1668909930175" duration="570000" />
       <workItem from="1668954971483" duration="28362000" />
       <workItem from="1669050152619" duration="23739000" />
-      <workItem from="1669313985926" duration="9625000" />
-    </task>
-    <task id="LOCAL-00057" summary="changed denoising to uint16">
-      <created>1667586114658</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1667586114658</updated>
-    </task>
-    <task id="LOCAL-00058" summary="Updated Docstrings for Suite2P, Temp scratch work for colorizer">
-      <created>1667769115081</created>
-      <option name="number" value="00058" />
-      <option name="presentableId" value="LOCAL-00058" />
-      <option name="project" value="LOCAL" />
-      <updated>1667769115081</updated>
-    </task>
-    <task id="LOCAL-00059" summary="Updated Docstrings for Image PreProcessing">
-      <created>1667769655585</created>
-      <option name="number" value="00059" />
-      <option name="presentableId" value="LOCAL-00059" />
-      <option name="project" value="LOCAL" />
-      <updated>1667769655585</updated>
+      <workItem from="1669313985926" duration="19202000" />
     </task>
     <task id="LOCAL-00060" summary="Updated Docstrings for Suite2P">
       <created>1667769716161</created>
@@ -645,7 +626,28 @@
       <option name="project" value="LOCAL" />
       <updated>1669331021331</updated>
     </task>
-    <option name="localTasksCounter" value="106" />
+    <task id="LOCAL-00106" summary="PEP8">
+      <created>1669332556052</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1669332556052</updated>
+    </task>
+    <task id="LOCAL-00107" summary="PEP8">
+      <created>1669332577375</created>
+      <option name="number" value="00107" />
+      <option name="presentableId" value="LOCAL-00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1669332577375</updated>
+    </task>
+    <task id="LOCAL-00108" summary="PEP8">
+      <created>1669332604138</created>
+      <option name="number" value="00108" />
+      <option name="presentableId" value="LOCAL-00108" />
+      <option name="project" value="LOCAL" />
+      <updated>1669332604138</updated>
+    </task>
+    <option name="localTasksCounter" value="109" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -698,10 +700,6 @@
           <url>file://$PROJECT_DIR$/ComputationalAnalysis/DecodingAnalysis.py</url>
           <line>233</line>
           <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py</url>
-          <option name="timeStamp" value="39" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

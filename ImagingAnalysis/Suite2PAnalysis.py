@@ -8,7 +8,7 @@ from natsort import natsorted
 import os
 import glob
 from ExperimentManagement.ExperimentHierarchy import ExperimentData
-from ImagingAnalysis.PreprocessingImages import PreProcessing
+from ImagingAnalysis.IO import load_raw_binary, save_raw_binary
 from typing import Tuple, List, Union, Optional
 
 
@@ -17,8 +17,8 @@ class Suite2PModule:
     Helper Module for Suite2P Analysis
 
     **Required Inputs**
-        | *File_Directory* : Images Directory
-        | *Output_Directory* : Directory to save in
+        | *ImageDirectory* : Images ImageDirectory
+        | *OutputDirectory* : ImageDirectory to save in
 
     **Keyword Arguments**
         | *meta_file* : file containing binary metadata (str, default None)
@@ -29,14 +29,14 @@ class Suite2PModule:
 
 
     """
-    def __init__(self, File_Directory: str, Output_Directory: str, **kwargs):
+    def __init__(self, ImageDirectory: str, OutputDirectory: str, **kwargs: Union[dict, str, Tuple[int]]):
         """
         Instances A Suite2P Analysis
 
-        :param File_Directory: directory containing binary metadata
-        :type File_Directory: str
-        :param Output_Directory: directory to save in
-        :type Output_Directory: str
+        :param ImageDirectory: directory containing binary metadata
+        :type ImageDirectory: str
+        :param OutputDirectory: directory to save in
+        :type OutputDirectory: str
         :keyword meta_file: file containing binary metadata (str, default None)
         :keyword meta: binary metadata (tuple[int, int, int,str], default None)
         :keyword video: images (np.ndarray, default None)
@@ -52,9 +52,9 @@ class Suite2PModule:
 
         # Initialized
         self.db = {
-            'data_path': File_Directory,
-            'save_path0': Output_Directory,
-            "save_path": "".join([Output_Directory, "\\suite2p\\plane0"])
+            'data_path': ImageDirectory,
+            'save_path0': OutputDirectory,
+            "save_path": "".join([OutputDirectory, "\\suite2p\\plane0"])
         }
         try:
             os.makedirs(self.db.get("save_path"))
@@ -71,13 +71,13 @@ class Suite2PModule:
         # Protected
         self.__instance_date = ExperimentData.get_date()
 
-        # Check File Types, only support binary of tiff
+        # Check Filename Types, only support binary of tiff
         if self.file_type == "tiff" or self.file_type == "tif" or self.file_type == ".tiff" or self.file_type == ".tif":
-            self.db = {**self.db, **{"tiff_list": Suite2PModule.make_list_tiffs(File_Directory)[0]}}
+            self.db = {**self.db, **{"tiff_list": Suite2PModule.make_list_tiffs(ImageDirectory)[0]}}
         elif self.file_type == "binary":
             if _meta is None and _meta_file is None:
                 try: # Try to infer the file location
-                    _meta = self.load_binary_meta("".join([File_Directory, "\\video_meta.txt"]))
+                    _meta = self.load_binary_meta("".join([ImageDirectory, "\\video_meta.txt"]))
                 except FileNotFoundError:
                     AssertionError("Using binary is impossible with shape and endianness")
             elif _meta is None and _meta_file is not None:
@@ -85,8 +85,8 @@ class Suite2PModule:
 
             if _video_file is None:
                 try: # Try to infer the file location
-                    os.path.isfile("".join([File_Directory, "\\binary_video"]))
-                    _video_file = "".join([File_Directory, "\\binary_video"])
+                    os.path.isfile("".join([ImageDirectory, "\\binary_video"]))
+                    _video_file = "".join([ImageDirectory, "\\binary_video"])
                 except FileNotFoundError:
                     AssertionError("Unable to locate a valid binary file")
 
@@ -269,7 +269,7 @@ class Suite2PModule:
         try:
             _video_meta = self.load_binary_meta("".join([self.ops.get("data_path"), "\\video_meta.txt"]))
             if _video_meta[-1] != "int16":
-                _binary_video = PreProcessing.load_raw_binary("", "", self.ops.get("data_path"))
+                _binary_video = load_raw_binary("", "", self.ops.get("data_path"))
                 _binary_video = self.convert_binary(_binary_video)
                 _new_data_path = "".join([self.ops.get("data_path"), "\\converted"])
                 self.ops["data_path"] = _new_data_path
@@ -277,7 +277,7 @@ class Suite2PModule:
                 self.ops["reg_file"] = "".join([self.ops.get("data_path"), "\\binary_video"])
                 # Db overwrites, this to prevent using converted some places and not others
                 os.makedirs(_new_data_path, exist_ok=True)
-                PreProcessing.save_raw_binary(_binary_video, _new_data_path)
+                save_raw_binary(_binary_video, _new_data_path)
                 del _binary_video
                 del _video_meta
                 # collect garbage
@@ -292,7 +292,7 @@ class Suite2PModule:
         self.ops, self.stat = suite2p.detection_wrapper(f_reg=f_reg, ops=self.ops,
                                                         classfile=suite2p.classification.builtin_classfile)
 
-    def extractTraces(self, *args) -> Self:
+    def extractTraces(self, *args: Optional[Union[np.ndarray, str]]) -> Self:
         """
         Extracts Traces
 
@@ -353,7 +353,7 @@ class Suite2PModule:
 
         :rtype: Any
         """
-        _images = PreProcessing.load_raw_binary("", "", self.ops.get("data_path"))
+        _images = load_raw_binary("", "", self.ops.get("data_path"))
         # shape
         _num_frames, self.ops["yrange"], self.ops["xrange"] = _images.shape
         self.ops["yrange"] = [0, self.ops.get("yrange")]
@@ -375,59 +375,59 @@ class Suite2PModule:
         self.ops = suite2p.registration.register.enhanced_mean_image(self.ops)
 
     @classmethod
-    def exportCroppedCorrection(cls, ops: dict) -> sys.stdout:
+    def exportCroppedCorrection(cls, Ops: dict) -> sys.stdout:
         """
-        Export Binary File Cropped According to Motion Correction
+        Export Binary Filename Cropped According to Motion Correction
 
-        :param ops: Suite2P "ops"
-        :type ops: dict
+        :param Ops: Suite2P "ops"
+        :type Ops: dict
         :return: None
         """
-        _xrange = ops.get("xrange")
-        _yrange = ops.get("yrange")
-        _images = cls.load_suite2p_binary(ops.get("reg_file"))
-        _images = np.reshape(_images, (-1, ops.get("Ly"), ops.get("Lx")))
+        _xrange = Ops.get("xrange")
+        _yrange = Ops.get("yrange")
+        _images = cls.load_suite2p_binary(Ops.get("reg_file"))
+        _images = np.reshape(_images, (-1, Ops.get("Ly"), Ops.get("Lx")))
         _images = _images[:, _yrange[0]:_yrange[-1], _xrange[0]:_xrange[-1]]
-        PreProcessing.save_raw_binary(_images, ops.get("save_path"))
-        return print("Exported Cropped Motion-Corrected Video")
+        save_raw_binary(_images, Ops.get("save_path"))
+        return print("Exported Cropped Motion-Corrected Images")
 
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
     def replaceTraces(self, NewTraces: Any) -> sys.stdout:
         return print("Not Yet Implemented")
 
     @staticmethod
-    def remove_small_neurons(cells: np.ndarray, stats: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    def remove_small_neurons(Cells: np.ndarray, Stats: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         """
         Remove small diameter neurons
 
-        :param cells: Suite2P "iscell"
-        :type cells: Any
-        :param stats: Suite2P "stat"
-        :type stats: Any
+        :param Cells: Suite2P "iscell"
+        :type Cells: Any
+        :param Stats: Suite2P "stat"
+        :type Stats: Any
         :return: modified cells, stats
         :rtype: Any
         """
-        _num_rois = stats.shape[0]
-        diameters = Suite2PModule.find_diameters(stats)
+        _num_rois = Stats.shape[0]
+        diameters = Suite2PModule.find_diameters(Stats)
 
         _rem_idx = np.where(diameters < 10)[0]
-        cells[_rem_idx, 0] = 0
+        Cells[_rem_idx, 0] = 0
         for _roi in range(_num_rois):
-            stats[_roi]['diameter'] = diameters[_roi]
-        return cells, stats
+            Stats[_roi]['diameter'] = diameters[_roi]
+        return Cells, Stats
 
     @staticmethod
-    def make_list_tiffs(Directory: str) -> Tuple[List[str], np.ndarray]:
+    def make_list_tiffs(ImageDirectory: str) -> Tuple[List[str], np.ndarray]:
         """
         Returns a list of tiffs in directory
 
-        :param Directory: Directory Path
-        :type Directory: str
+        :param ImageDirectory: Directory Path
+        :type ImageDirectory: str
         :return: files, first_tiffs
         :rtype: Any
         """
 
-        _pathPlusExt = os.path.join(Directory, "*.tif")
+        _pathPlusExt = os.path.join(ImageDirectory, "*.tif")
         files = []
         files.extend(glob.glob(_pathPlusExt))
         files = natsorted(set(files))
@@ -440,34 +440,34 @@ class Suite2PModule:
         return files, first_tiffs
 
     @staticmethod
-    def find_diameters(stats: np.ndarray[np.ndarray]) -> np.ndarray:
+    def find_diameters(Stats: np.ndarray[np.ndarray]) -> np.ndarray:
         """
         Return roi diameters
 
-        :param stats: Suite2P "stats"
-        :type stats: Any
+        :param Stats: Suite2P "stats"
+        :type Stats: Any
         :return: roi diameters
         :rtype: Any
         """
-        _num_rois = stats.shape[0]
+        _num_rois = Stats.shape[0]
         diameters = np.zeros(_num_rois)
         for _roi in range(_num_rois):
-            diameters[_roi] = stats[_roi].get('radius') * 2
+            diameters[_roi] = Stats[_roi].get('radius') * 2
         return diameters
 
-    # noinspection PyTypeChecker
+
     @staticmethod
-    def load_binary_meta(File: str) -> Tuple[int, int, int, str]:
+    def load_binary_meta(Filename: str) -> Tuple[int, int, int, str]:
         """
         Loads meta file for binary video
 
-        :param File: The meta file (.txt ext)
-        :type File: str
+        :param Filename: The meta file (.txt ext)
+        :type Filename: str
         :return: A tuple containing the number of frames, y pixels, and x pixels
         :rtype: tuple[int, int, int, str]
         """
-        _num_frames, _y_pixels, _x_pixels, _type = np.genfromtxt(File, delimiter=",", dtype="str")
-        return tuple([int(_num_frames), int(_y_pixels), int(_x_pixels), _type])
+        _num_frames, _y_pixels, _x_pixels, _type = np.genfromtxt(Filename, delimiter=",", dtype="str")
+        return int(_num_frames), int(_y_pixels), int(_x_pixels), _type
 
     @staticmethod
     def my_default_ops() -> dict:
@@ -495,31 +495,31 @@ class Suite2PModule:
         return ops
 
     @staticmethod
-    def load_suite2p_binary(File: str) -> np.ndarray:
+    def load_suite2p_binary(Filename: str) -> np.ndarray:
         """
         Loads suite2p binary file
 
-        :param File: File path
-        :type File: str
+        :param Filename: Filename path
+        :type Filename: str
         :return: np.ndarray containing images data [Z x Y x X] [int16]
         """
-        return np.fromfile(File, dtype=np.int16)
+        return np.fromfile(Filename, dtype=np.int16)
 
     @staticmethod
-    def convert_binary(BinaryVideo: np.ndarray) -> np.ndarray:
+    def convert_binary(Images: np.ndarray) -> np.ndarray:
         """
         Converts binary to match the form of suite2p binaries
 
-        :param BinaryVideo: Numpy array containing binary video [Z x Y x X]
-        :type BinaryVideo: Any
-        :return: Binary Video Numpy Array [Int 16]
+        :param Images: Numpy array containing binary video [Z x Y x X]
+        :type Images: Any
+        :return: Binary Images Numpy Array [Int 16]
         :rtype: Any
         """
 
-        if BinaryVideo.dtype.type == np.uint16:
-            return (BinaryVideo // 2).astype(np.int16)
-        elif BinaryVideo.dtype.type == np.int16 or BinaryVideo.dtype.type == int16:
+        if Images.dtype.type == np.uint16:
+            return (Images // 2).astype(np.int16)
+        elif Images.dtype.type == np.int16 or Images.dtype.type == int16:
             print("No conversion was necessary!!!")
-            return BinaryVideo
+            return Images
         else:
-            return BinaryVideo.astype(np.int16)
+            return Images.astype(np.int16)

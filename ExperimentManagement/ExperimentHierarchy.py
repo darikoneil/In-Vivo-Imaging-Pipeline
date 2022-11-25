@@ -7,11 +7,13 @@ import numpy as np
 import pandas as pd
 from IPython import get_ipython
 import pathlib
+import math
 
 import ExperimentManagement.BrukerMetaModule
 from ExperimentManagement.BrukerMetaModule import BrukerMeta
+from ImagingAnalysis.IO import save_raw_binary
 from MigrationTools.Converters import renamed_load
-import math
+
 
 
 class ExperimentData:
@@ -56,7 +58,7 @@ class ExperimentData:
 
     **Properties**
         | *mouse_id* : ID of Mouse
-        | *log_file* : Log File Path
+        | *log_file* : Log Filename Path
         | *experimental_condition* : Experiment condition of the mouse
         | *instance_data* : Date when this experimental hierarchy was created
 
@@ -133,7 +135,7 @@ class ExperimentData:
     @property
     def log_file(self) -> str:
         """
-        Log File Path
+        Log Filename Path
 
         :rtype: str
         """
@@ -418,7 +420,7 @@ class ExperimentData:
         """
         Generate a read me file
 
-        :param AbsoluteFilePath: File path
+        :param AbsoluteFilePath: Filename path
         :type AbsoluteFilePath: str
         :param Text: Text inside
         :type Text: str
@@ -1219,7 +1221,7 @@ This is a class for managing a folder of unorganized data files
         """
         Finds all files with specific extension
 
-        :param ext: File extension
+        :param ext: Filename extension
         :type ext: str
         :return: List of files
         :rtype: List[str]
@@ -1317,13 +1319,13 @@ class CollectedImagingFolder(CollectedDataFolder):
         try:
             Prepared = np.load(self.find_matching_files("prepared")[0], allow_pickle=True)
         except FileNotFoundError:
-            print("Could Not Locate Fissa Prepared File")
+            print("Could Not Locate Fissa Prepared Filename")
             Prepared = dict()
 
         try:
             Separated = np.load(self.find_matching_files("separated")[0], allow_pickle=True)
         except FileNotFoundError:
-            print("Could Not Locate Fissa Separated File")
+            print("Could Not Locate Fissa Separated Filename")
             Separated = dict()
 
         # noinspection PyBroadException
@@ -1432,7 +1434,7 @@ class CollectedImagingFolder(CollectedDataFolder):
         :return:
         """
         _images = np.reshape(np.fromfile(self.find_matching_files("registered_data.bin", "plane0")[0], dtype=np.int16), (-1, 512, 512))
-        PreProcessing.save_raw_binary(_images, self.folders.get("denoised"))
+        save_raw_binary(_images, self.folders.get("denoised"))
 
     def clean_up_motion_correction(self) -> Self:
         """

@@ -49,7 +49,7 @@ def colorize_video(Images: np.ndarray, Stats: np.ndarray, ROIs: Optional[List[in
     requires background = False)
     :keyword write: boolean indicating whether to write video to file (default False)
     :keyword filename: str file path for saving video(default None, which saves to current directory)
-    :return: Colorized Video
+    :return: Colorized Images
     :rtype: Any
     """
 
@@ -110,13 +110,13 @@ def overlay_colorized_rois(Background: np.ndarray, ColorizedVideo: np.ndarray, *
     """
    This function overlays colorized videos onto background video
 
-    :param Background: Background Video in Grayscale
+    :param Background: Background Images in Grayscale
     :type Background: Any
     :param ColorizedVideo: Colorized Overlays In Colormap Space + Alpha Channel
     :type ColorizedVideo: Any
     :param args: Alpha for Background
     :type args: float
-    :return: Merged Video
+    :return: Merged Images
     :rtype: Any
     """
 
@@ -237,7 +237,7 @@ def merge_background(Background: np.ndarray, NewVideo: np.ndarray, PixelPairs: T
 
     :param Background: Background video
     :type Background: Any
-    :param NewVideo: Video to merge with
+    :param NewVideo: Images to merge with
     :type NewVideo: Any
     :param PixelPairs: Pairs of pixels at which merging will occur
     :type PixelPairs: tuple[tuple[int,int]]
@@ -342,9 +342,9 @@ def write_video(Video: np.ndarray, Filename: str) -> None:
     """
     Function writes video to .mp4
 
-    :param Video: Video to be written
+    :param Video: Images to be written
     :type Video: Any
-    :param Filename: Filename  (Or Complete File Path)
+    :param Filename: Filename  (Or Complete Filename Path)
     :type Filename: str
     :rtype: None
     """
@@ -355,6 +355,6 @@ def write_video(Video: np.ndarray, Filename: str) -> None:
     if Video.dtype.type != np.uint8:
         Video = Video.astype(np.uint8)
 
-    print("\nWriting Video...\n")
+    print("\nWriting Images...\n")
     iio.mimwrite(Filename, Video, fps=30, quality=10, macro_block_size=4)
     print("Finished.")

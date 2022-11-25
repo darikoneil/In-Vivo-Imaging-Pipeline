@@ -12,13 +12,13 @@ from ImagingAnalysis.utils import save_yaml, read_yaml
 from ImagingAnalysis.data_process import test_preprocess_lessMemoryNoTail_feedImage, \
     testset, multibatch_test_save, singlebatch_test_save
 from skimage import io
-from ImagingAnalysis.PreprocessingImages import PreProcessing
+from ImagingAnalysis.IO import save_raw_binary
 import pprint
 
 # Make sure to  edit the forking pickler to use protocol 4 in multiprocessing library
 
 
-class DenoisingModule:
+class DenoisingAnalysis:
     """
     Class for Denoising Calcium Imaging Data
     """
@@ -180,7 +180,7 @@ class DenoisingModule:
 
                     if len(_model_list) > 1:
                         _result_name = "".join([self.opt.output_path, "\\", _model_name.replace(".pth", ""), str(_image)])
-                        PreProcessing.save_raw_binary(_output_img, _result_name)
+                        save_raw_binary(_output_img, _result_name)
                     else:
                         _mapped_output[_image*_output_img.shape[0]:_image*_output_img.shape[0]+_output_img.shape[0],
                             :, :] = _output_img

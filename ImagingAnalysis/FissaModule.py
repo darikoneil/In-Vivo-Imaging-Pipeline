@@ -7,7 +7,7 @@ import pickle as pkl
 import fissa
 import pathlib
 from typing import Tuple, List
-from ImagingAnalysis.PreprocessingImages import PreProcessing
+from ImagingAnalysis.IO import load_raw_binary
 
 
 # /// /// Main Module /// ///
@@ -137,7 +137,7 @@ class FissaAnalysis:
             # Images stored here
         else:
             print("\nLoading and Splitting Images\n")
-            self.images = self.split_binary_images(PreProcessing.load_raw_binary("", "", _video_folder))
+            self.images = self.split_binary_images(load_raw_binary("", "", _video_folder))
 
         try:
             self.ops = np.load((_data_folder + '\\suite2p\\plane0\\ops.npy'),
@@ -197,7 +197,7 @@ class FissaAnalysis:
                 print("Could not load FISSA prepared file")
         else:
             self.prep_file = self.output_folder + "\\prepared.npz"
-            # Location of Fissa Preparation File
+            # Location of Fissa Preparation Filename
 
         if self.sep_file is not None:
             try:
@@ -206,7 +206,7 @@ class FissaAnalysis:
                 print("Could not load FISSA separation file")
         else:
             self.sep_file = self.output_folder + "\\separated.npz"
-            # Location of Fissa Separation File
+            # Location of Fissa Separation Filename
 
     def loadSuite2P_ROIs(self) -> Self:
         """
@@ -254,7 +254,7 @@ class FissaAnalysis:
 
         :rtype: None
         """
-        # Load File
+        # Load Filename
         file_ext = pathlib.Path(self.index_path).suffix
         if file_ext == ".npy" or file_ext == ".npz":
             self.neuronal_index = np.load(self.index_path, allow_pickle=True)
@@ -306,7 +306,7 @@ class FissaAnalysis:
 
         :rtype: None
         """
-        # Load Existing Prep File
+        # Load Existing Prep Filename
         print('Loading Fissa Preparation...')
         _prep = np.load(self.prep_file, allow_pickle=True)
         self.preparation = PreparationDictionary(preparation=_prep)
@@ -325,7 +325,7 @@ class FissaAnalysis:
         :rtype: None
         """
 
-        # Load Existing Sep File
+        # Load Existing Sep Filename
         print('Loading Fissa Separation...')
         _sep = np.load(self.sep_file, allow_pickle=True)
         self.experiment = SeparationDictionary(experiment=_sep)
@@ -497,12 +497,12 @@ class FissaAnalysis:
         self.iscell = self.iscell[self.neuronal_index, :]
 
     @staticmethod
-    def split_binary_images(BinaryVideo: np.ndarray) -> List[np.ndarray]:
+    def split_binary_images(Images: np.ndarray) -> List[np.ndarray]:
         """
         This Function splits binary image into stacks for multiprocessing
 
-        :param BinaryVideo: Binary Video in numpy array [Z x Y x X]
-        :type BinaryVideo: Any
+        :param Images: Binary Images in numpy array [Z x Y x X]
+        :type Images: Any
         :return: List of Binary Videos
         :rtype: list
         """
@@ -526,12 +526,12 @@ class FissaAnalysis:
                     return chunk_size
                 chunk_size += 1
 
-        _num_frames = BinaryVideo.shape[0]
+        _num_frames = Images.shape[0]
         _chunk_size = determine_split_size(_num_frames, 8000)
         _idx = np.arange(0, _num_frames+1, _num_frames/_chunk_size)
         img_list = []
         for i in range(_idx.shape[0] - 1):
-            img_list.append(BinaryVideo[_idx[i].astype(int):_idx[i + 1].astype(int), :, :])
+            img_list.append(Images[_idx[i].astype(int):_idx[i + 1].astype(int), :, :])
         return img_list
 
 

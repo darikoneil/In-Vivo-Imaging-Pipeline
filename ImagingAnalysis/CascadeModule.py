@@ -1,6 +1,4 @@
-# cascade imports
 from __future__ import annotations
-
 import os
 from typing import Tuple, List, Union, Optional
 import matplotlib
@@ -19,7 +17,7 @@ from tensorflow.python.client import device_lib
 checks.check_packages()
 
 
-class CascadeModule:
+class CascadeAnalysis:
     """
     A module for CASCADE spike inference
 
@@ -222,10 +220,10 @@ class CascadeModule:
                 print("Loading Spike Probabilities from Load Path...")
                 _filename = _load_path + "spike_prob.npy"
             elif _absolute_path is not None:
-                print("Loading Spike Probabilities from Provided File...")
+                print("Loading Spike Probabilities from Provided Filename...")
                 _filename = _absolute_path
             else:
-                print("Location of Spike Probabilities File Not Adequate")
+                print("Location of Spike Probabilities Filename Not Adequate")
                 raise RuntimeError
 
             self.spike_prob = np.load(_filename, allow_pickle=True)

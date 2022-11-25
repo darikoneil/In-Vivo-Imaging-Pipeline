@@ -145,7 +145,7 @@ class FearConditioning(BehavioralStage):
 
         print("Finished.")
 
-    def load_dlc_data(self, *args: Tuple[int, int]) -> Self:
+    def load_dlc_data(self, *args: Optional[Tuple[int, int]]) -> Self:
         """
         This function loads deep lab cut data
 
@@ -697,7 +697,7 @@ class DeepLabModule:
     def merge_dlc_data(cls, DataFrame, DLC, MultiIndex, StateCastDict, **kwargs):
         _individual_series = []
         _num_trials = kwargs.get("num_trials", np.max(DLC.trial_data.index))
-        _fps = kwargs.get("fps", 30)
+        _fps = kwargs.get("FPS", 30)
 
         # Assert MultiIndex & Columns Contain Time
 
