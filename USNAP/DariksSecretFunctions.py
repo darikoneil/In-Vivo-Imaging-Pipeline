@@ -1,7 +1,7 @@
 
 import numpy as np
 from ImagingAnalysis.PreprocessingImages import PreProcessing
-from ImagingAnalysis.Suite2PAnalysis import Suite2PModule
+from ImagingAnalysis.Suite2PModule import Suite2PModule
 
 
 def processSampling(EH, Stage, SamplingRate):

@@ -12,7 +12,7 @@ from ImagingAnalysis.IO import load_raw_binary, save_raw_binary
 from typing import Tuple, List, Union, Optional
 
 
-class Suite2PModule:
+class Suite2PAnalysis:
     """
     Helper Module for Suite2P Analysis
 
@@ -73,7 +73,7 @@ class Suite2PModule:
 
         # Check Filename Types, only support binary of tiff
         if self.file_type == "tiff" or self.file_type == "tif" or self.file_type == ".tiff" or self.file_type == ".tif":
-            self.db = {**self.db, **{"tiff_list": Suite2PModule.make_list_tiffs(ImageDirectory)[0]}}
+            self.db = {**self.db, **{"tiff_list": Suite2PAnalysis.make_list_tiffs(ImageDirectory)[0]}}
         elif self.file_type == "binary":
             if _meta is None and _meta_file is None:
                 try: # Try to infer the file location
@@ -408,7 +408,7 @@ class Suite2PModule:
         :rtype: Any
         """
         _num_rois = Stats.shape[0]
-        diameters = Suite2PModule.find_diameters(Stats)
+        diameters = Suite2PAnalysis.find_diameters(Stats)
 
         _rem_idx = np.where(diameters < 10)[0]
         Cells[_rem_idx, 0] = 0

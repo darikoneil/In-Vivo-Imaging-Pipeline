@@ -5,6 +5,7 @@ from PIL import Image
 from tqdm.auto import tqdm
 import tifffile
 from typing import Callable, List, Tuple, Sequence, Optional, Union
+import math
 
 
 def load_bruker_tiffs(ImageDirectory: str) -> np.ndarray:
