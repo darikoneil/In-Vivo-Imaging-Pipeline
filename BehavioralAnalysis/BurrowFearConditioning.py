@@ -363,6 +363,8 @@ class FearConditioning(BehavioralStage):
 
         DataFrame = DataFrame.join(_cs_series, on="Time (s)")
 
+        DataFrame = DataFrame.reindex(columns=sorted(DataFrame.columns))
+
         return DataFrame
 
     @staticmethod
@@ -655,13 +657,13 @@ class DeepLabModule:
         :return: NewVector
         """
         _is_string = kwargs.get("is_string", False)
-        _forward_fill = kwargs.get("forward_fill", True)
+        _forward_fill = kwargs.get("forward_fill", "nearest")
         _feedback = kwargs.get("feedback", True)
 
         if _is_string:
             new_vector = np.full(NewIndex.__len__(), '', dtype="<U21")
         else:
-            new_vector = np.full(NewIndex.__len__(), 69, dtype=OriginalVector.dtype)
+            new_vector = np.full(NewIndex.__len__(), 6969, dtype=OriginalVector.dtype)
 
         if _feedback:
             for _sample in tqdm(
@@ -684,13 +686,14 @@ class DeepLabModule:
             new_vector[new_vector == ''] = np.nan
         else:
             new_vector = pd.Series(new_vector, index=NewIndex, dtype=new_vector.dtype)
-            new_vector[new_vector == 69] = np.nan
+            new_vector[new_vector == 6969] = np.nan
 
-        if _forward_fill:
+        if _fill == "forward":
             new_vector.ffill(inplace=True)
-        else:
+        elif _fill == "backward":
             new_vector.bfill(inplace=True)
-
+        elif _fill == "nearest":
+            new_vector.interpolate("nearest", inplace=True)
         return new_vector
 
     @classmethod
@@ -698,6 +701,7 @@ class DeepLabModule:
         _individual_series = []
         _num_trials = kwargs.get("num_trials", np.max(DLC.trial_data.index))
         _fps = kwargs.get("FPS", 30)
+        _fill = kwargs.get("fill", "nearest")
 
         # Assert MultiIndex & Columns Contain Time
 
@@ -770,12 +774,15 @@ class DeepLabModule:
         _concat_dataframe.reindex(index=DataFrame.index)
 
         DataFrame = DataFrame.join(_concat_dataframe)
+
         DataFrame["X1"].fillna(value=np.nanmax(DataFrame["X1"].to_numpy()), inplace=True)
         DataFrame["X2"].fillna(value=np.nanmax(DataFrame["X2"].to_numpy()), inplace=True)
         DataFrame["Y1"].fillna(0, inplace=True)
         DataFrame["Y2"].fillna(0, inplace=True)
         DataFrame["likelihood1"].fillna(1, inplace=True)
         DataFrame["likelihood2"].fillna(1, inplace=True)
+
+        DataFrame = DataFrame.reindex(columns=sorted(DataFrame.columns))
         return DataFrame
 
 

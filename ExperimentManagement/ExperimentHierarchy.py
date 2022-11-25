@@ -953,6 +953,9 @@ class BehavioralStage:
             _digital_series.name = list(_digital_dictionary.keys())[0]
             OrganizedData = OrganizedData.join(_digital_series, on="Time (s)")
 
+        # sort alphabetically for ease of viewing/debugging
+        OrganizedData = OrganizedData.reindex(columns=sorted(OrganizedData.columns))
+
         return OrganizedData, StateCastedDict, MultiIndex
 
     @staticmethod
@@ -1072,6 +1075,8 @@ class BehavioralStage:
             _additional_crop = _artifact_free_frames % _chunk_size
             _first_frame = _additional_crop + _artifact
 
+        # sort alphabetically for ease of viewing/debugging
+        DataFrame = DataFrame.reindex(columns=sorted(DataFrame.columns))
 
         return DataFrame
 
@@ -1118,6 +1123,8 @@ class BehavioralStage:
         _downsampled_frames.name = "[FILLED] Downsampled Imaging Frame"
         _downsampled_frames.interpolate(method="nearest", inplace=True)
         DataFrame = DataFrame.join(_downsampled_frames, on="Time (s)")
+
+        DataFrame = DataFrame.reindex(columns=sorted(DataFrame.columns))
 
         return DataFrame
 

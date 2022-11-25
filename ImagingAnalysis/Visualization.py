@@ -9,7 +9,6 @@ import numpy as np
 import sys
 import animatplot as amp
 import scipy.ndimage
-from cascade2p.utils import plot_dFF_traces, plot_noise_level_distribution
 
 
 def compareTraces(RawTraces: np.ndarray, SmoothTraces: np.ndarray, FrameRate: float, Frames: int) -> None:
@@ -450,16 +449,19 @@ def plotROC(TPR, FPR, **kwargs):
 
 def plotNoise(Traces, FrameRate):
     # plt.figure(1)
+    from cascade2p.utils import plot_noise_level_distribution
     _noise_levels = plot_noise_level_distribution(Traces, FrameRate)
 
 
 def plotTraces(self, **kwargs):
+    from cascade2p.utils import plot_dFF_traces
     NeuronalSubset = kwargs.get('NeuronalSubset', np.random.randint(self.traces.shape[0], size=10))
     TemporalSubset = kwargs.get('TemporalSubset', [0, self.frame_rate * 30])
     plot_dFF_traces(self.traces[:, TemporalSubset[0]:TemporalSubset[1]], NeuronalSubset, self.frame_rate)
 
 
 def plotTraceComparisons(self, **kwargs):
+    from cascade2p.utils import plot_dFF_traces
     NeuronalSubset = kwargs.get('NeuronalSubset', np.random.randint(self.traces.shape[0], size=10))
     TemporalSubset = kwargs.get('TemporalSubset', [0, self.frame_rate * 30])
     plot_dFF_traces(self.traces[:, TemporalSubset[0]:TemporalSubset[1]], NeuronalSubset, self.frame_rate,
@@ -467,6 +469,7 @@ def plotTraceComparisons(self, **kwargs):
 
 
 def plotSpikeInference(SpikeProb, SpikeTimes, Traces, FrameRate, **kwargs):
+    from cascade2p.utils import plot_dFF_traces
     NeuronalSubset = kwargs.get('NeuronalSubset', np.random.randint(Traces.shape[0], size=10))
     TemporalSubset = kwargs.get('TemporalSubset', [0, FrameRate * 30])
     plot_dFF_traces(Traces[:, int(TemporalSubset[0]):int(TemporalSubset[1])], NeuronalSubset, FrameRate,

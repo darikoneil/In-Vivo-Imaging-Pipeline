@@ -4,19 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Fixed Typo in ImageProcessingModule">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="beg py test">
+      <change afterPath="$PROJECT_DIR$/BehavioralAnalysis/Utilities.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure2.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_Retrieval2.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Testing/InstallationTests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImageProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/ImageProcessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Visualization.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -323,14 +322,7 @@
       <workItem from="1668909930175" duration="570000" />
       <workItem from="1668954971483" duration="28362000" />
       <workItem from="1669050152619" duration="23739000" />
-      <workItem from="1669313985926" duration="26750000" />
-    </task>
-    <task id="LOCAL-00065" summary="IGNORE">
-      <created>1667859031952</created>
-      <option name="number" value="00065" />
-      <option name="presentableId" value="LOCAL-00065" />
-      <option name="project" value="LOCAL" />
-      <updated>1667859031952</updated>
+      <workItem from="1669313985926" duration="35371000" />
     </task>
     <task id="LOCAL-00066" summary="IGNORE">
       <created>1667859116076</created>
@@ -668,7 +660,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669403633789</updated>
     </task>
-    <option name="localTasksCounter" value="114" />
+    <task id="LOCAL-00114" summary="beg py test">
+      <created>1669406583123</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1669406583123</updated>
+    </task>
+    <option name="localTasksCounter" value="115" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -687,7 +686,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="changed denoising to uint16" />
     <MESSAGE value="Updated Docstrings for Suite2P, Temp scratch work for colorizer" />
     <MESSAGE value="Updated Docstrings for Image PreProcessing" />
     <MESSAGE value="Updated Docstrings for Suite2P" />
@@ -712,7 +710,8 @@
     <MESSAGE value="PEP8" />
     <MESSAGE value="Updated Migration Tools" />
     <MESSAGE value="Fixed Typo in ImageProcessingModule" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed Typo in ImageProcessingModule" />
+    <MESSAGE value="beg py test" />
+    <option name="LAST_COMMIT_MESSAGE" value="beg py test" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -721,6 +720,11 @@
           <url>file://$PROJECT_DIR$/ComputationalAnalysis/DecodingAnalysis.py</url>
           <line>233</line>
           <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py</url>
+          <line>763</line>
+          <option name="timeStamp" value="61" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
