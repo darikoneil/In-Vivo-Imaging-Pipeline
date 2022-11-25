@@ -12,10 +12,8 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ImagingAnalysis/IO.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/IO.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Suite2PAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Suite2PModule.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/USNAP/DariksSecretFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/USNAP/DariksSecretFunctions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImageProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/ImageProcessing.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -286,14 +284,7 @@
       <workItem from="1668909930175" duration="570000" />
       <workItem from="1668954971483" duration="28362000" />
       <workItem from="1669050152619" duration="23739000" />
-      <workItem from="1669313985926" duration="21170000" />
-    </task>
-    <task id="LOCAL-00063" summary="Type Conversion for Suite2P">
-      <created>1667833611813</created>
-      <option name="number" value="00063" />
-      <option name="presentableId" value="LOCAL-00063" />
-      <option name="project" value="LOCAL" />
-      <updated>1667833611813</updated>
+      <workItem from="1669313985926" duration="24104000" />
     </task>
     <task id="LOCAL-00064" summary="Slight">
       <created>1667854008427</created>
@@ -631,7 +622,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669396630945</updated>
     </task>
-    <option name="localTasksCounter" value="112" />
+    <task id="LOCAL-00112" summary="Updated Migration Tools">
+      <created>1669397560690</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1669397560690</updated>
+    </task>
+    <option name="localTasksCounter" value="113" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -77,9 +77,9 @@ def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str) -> None:
         ):
             image_chunk[_fname, :, :] = np.asarray(Image.open(ImageDirectory + "\\" + _fnames[_fname + _offset]))
         if c_idx < 10:
-            save_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_0" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
+            save_single_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_0" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
         else:
-            save_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
+            save_single_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
         c_idx += 1
     return print("Finished Repackaging Bruker Tiffs")
 
@@ -234,11 +234,11 @@ def save_tiff_stack(Images: str, OutputDirectory: str) -> None:
             _end_idx = _num_frames + 1
 
         if c_idx < 10:
-            save_tiff(Images[_start_idx:_end_idx, :, :],
+            save_single_tiff(Images[_start_idx:_end_idx, :, :],
                                     OutputDirectory + "\\" + "Video_0" + str(c_idx) + "_of_" + str(
                                        _chunks) + ".tif")
         else:
-            save_tiff(Images[_start_idx:_end_idx, :, :],
+            save_single_tiff(Images[_start_idx:_end_idx, :, :],
                                     OutputDirectory + "\\" + "Video_" + str(c_idx) + "_of_" + str(
                                        _chunks) + ".tif")
         c_idx += 1

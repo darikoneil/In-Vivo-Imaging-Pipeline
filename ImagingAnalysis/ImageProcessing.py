@@ -141,22 +141,19 @@ def blockwise_fast_filter_tiff(Images: np.ndarray, Footprint: Optional[str] = No
         if _block == 0:
             _remainder = Images[_blocks[_block + 1] - 500:_blocks[_block + 1], :, :].copy()
             Images[0:_blocks[_block + 1], :, :] = cupy.asnumpy(fast_filter_images(cupy.asarray(
-                Images[0:_blocks[_block + 1], :, :]), Footprint=Footprint))
+                Images[0:_blocks[_block + 1], :, :]), Footprint))
         elif _block == _num_blocks - 1:
 
             Images[_blocks[_block]:_total_frames, :, :] = \
                 cupy.asnumpy(fast_filter_images(
                     cupy.asarray(np.append(_remainder, Images[_blocks[_block]:_total_frames, :, :],
-                                           axis=0)), Footprint=Footprint))[_block_buffer_region:, :, :]
-
-            # Images[_blocks[_block]:_total_frames, :, :] = fast_filter_images(np.append(_remainder, Images[_blocks[_block]:_total_frames, :, :],
-            # axis=0))[_block_buffer_region:, :, :])
+                                           axis=0)), Footprint))[_block_buffer_region:, :, :]
         else:
             _remainder_new = Images[_blocks[_block + 1] - 500:_blocks[_block + 1], :, :].copy()
             Images[_blocks[_block]:_blocks[_block + 1], :, :] = \
                 cupy.asnumpy(fast_filter_images(
                     cupy.asarray(np.append(_remainder, Images[_blocks[_block]:_blocks[_block + 1], :, :],
-                                           axis=0)), Footprint=Footprint))[_block_buffer_region:_block_size+_block_buffer_region, :, :]
+                                           axis=0)), Footprint))[_block_buffer_region:_block_size+_block_buffer_region, :, :]
             _remainder = _remainder_new.copy()
 
     return Images
@@ -179,6 +176,6 @@ def grouped_z_project(Images: np.ndarray, BinSize: Union[Tuple[int, int, int], i
     :rtype: Any
     """
     return skimage.measure.block_reduce(Images, block_size=BinSize,
-                                                     func=DownsampleFunction).astype(Images)
+                                                     func=DownsampleFunction).astype(Images.dtype)
     # cast back down from float64
 
