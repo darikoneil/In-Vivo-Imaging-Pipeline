@@ -4,15 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Updated Migration Tools">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Fixed Typo in ImageProcessingModule">
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_PreExposure2.ipynb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_Retrieval2.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Testing/InstallationTests.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/IO.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/IO.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImageProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/ImageProcessing.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -97,7 +100,7 @@
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DebugData\suite2p\plane0\Goob" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.ScratchRas">
+  <component name="RunManager" selected="Python tests.pytest for InstallationTests.test_gpu_packages">
     <configuration name="BrukerMetaModule" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Calcium-Imaging-Analysis-Pipeline" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -164,8 +167,44 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for InstallationTests.test_external_neuro_packages" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="Calcium-Imaging-Analysis-Pipeline" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Testing" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;InstallationTests.test_external_neuro_packages&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for InstallationTests.test_gpu_packages" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="Calcium-Imaging-Analysis-Pipeline" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Testing" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;InstallationTests.test_gpu_packages&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for InstallationTests.test_gpu_packages" />
+        <item itemvalue="Python tests.pytest for InstallationTests.test_external_neuro_packages" />
         <item itemvalue="Python.ScratchRas" />
         <item itemvalue="Python.BrukerMetaModule" />
         <item itemvalue="Python.a" />
@@ -284,14 +323,7 @@
       <workItem from="1668909930175" duration="570000" />
       <workItem from="1668954971483" duration="28362000" />
       <workItem from="1669050152619" duration="23739000" />
-      <workItem from="1669313985926" duration="24104000" />
-    </task>
-    <task id="LOCAL-00064" summary="Slight">
-      <created>1667854008427</created>
-      <option name="number" value="00064" />
-      <option name="presentableId" value="LOCAL-00064" />
-      <option name="project" value="LOCAL" />
-      <updated>1667854008427</updated>
+      <workItem from="1669313985926" duration="26750000" />
     </task>
     <task id="LOCAL-00065" summary="IGNORE">
       <created>1667859031952</created>
@@ -629,7 +661,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669397560690</updated>
     </task>
-    <option name="localTasksCounter" value="113" />
+    <task id="LOCAL-00113" summary="Fixed Typo in ImageProcessingModule">
+      <created>1669403633789</created>
+      <option name="number" value="00113" />
+      <option name="presentableId" value="LOCAL-00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1669403633789</updated>
+    </task>
+    <option name="localTasksCounter" value="114" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -648,7 +687,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="docstrings" />
     <MESSAGE value="changed denoising to uint16" />
     <MESSAGE value="Updated Docstrings for Suite2P, Temp scratch work for colorizer" />
     <MESSAGE value="Updated Docstrings for Image PreProcessing" />
@@ -673,7 +711,8 @@
     <MESSAGE value="namespace" />
     <MESSAGE value="PEP8" />
     <MESSAGE value="Updated Migration Tools" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated Migration Tools" />
+    <MESSAGE value="Fixed Typo in ImageProcessingModule" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed Typo in ImageProcessingModule" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -688,7 +727,9 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Calcium_Imaging_Analysis_Pipeline$a.coverage" NAME="a Coverage Results" MODIFIED="1664464028437" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AnalysisModules" />
+    <SUITE FILE_PATH="coverage/Calcium_Imaging_Analysis_Pipeline$pytest_for_InstallationTests_test_external_neuro_packages.coverage" NAME="pytest for InstallationTests.test_external_neuro_packages Coverage Results" MODIFIED="1669406362660" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Testing" />
     <SUITE FILE_PATH="coverage/Calcium_Imaging_Analysis_Pipeline$BrukerMetaModule.coverage" NAME="BrukerMetaModule Coverage Results" MODIFIED="1664482415984" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ExperimentManagement" />
     <SUITE FILE_PATH="coverage/Calcium_Imaging_Analysis_Pipeline$ScratchRas.coverage" NAME="ScratchRas Coverage Results" MODIFIED="1665416969873" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Calcium_Imaging_Analysis_Pipeline$pytest_for_InstallationTests_test_gpu_packages.coverage" NAME="pytest for InstallationTests.test_gpu_packages Coverage Results" MODIFIED="1669406434872" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Testing" />
   </component>
 </project>

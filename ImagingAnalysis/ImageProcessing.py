@@ -9,9 +9,8 @@ import math
 try:
     import cupy
     import cupyx.scipy.ndimage
-except ModuleNotFoundError:
-    print("CuPy required for fast implementation of multidimensional filters.")
-
+except ModuleNotFoundError or ImportError:
+    pass
 
 
 def filter_images(Images: np.ndarray, Footprint: Optional[np.ndarray] = None) -> np.ndarray:
@@ -95,7 +94,7 @@ def remove_shuttle_artifact(Images: np.ndarray, **kwargs: int) -> np.ndarray:
         return Images[_shuttle_artifact_length + _crop_idx:, :, :]
 
 
-def blockwise_fast_filter_tiff(Images: np.ndarray, Footprint: Optional[str] = None, **kwargs: int) -> np.ndarray:
+def blockwise_fast_filter_tiff(Images: np.ndarray, Footprint: Optional[np.ndarray] = None, **kwargs: int) -> np.ndarray:
     """
     GPU-parallelized multidimensional median filter performed in overlapping blocks.
 
@@ -178,4 +177,3 @@ def grouped_z_project(Images: np.ndarray, BinSize: Union[Tuple[int, int, int], i
     return skimage.measure.block_reduce(Images, block_size=BinSize,
                                                      func=DownsampleFunction).astype(Images.dtype)
     # cast back down from float64
-
