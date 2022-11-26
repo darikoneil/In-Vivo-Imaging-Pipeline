@@ -459,74 +459,6 @@ class FearConditioning(BehavioralStage):
         fig1.tight_layout()
 
 
-class MethodsForPandasOrganization:
-    """
-    Simply a container for methods related to organization of behavioral data through a pandas dataframe
-    """
-    def __init__(self):
-        return
-
-    @staticmethod
-    def safe_extract(OldFrame, Commands, *args, **kwargs):
-        """
-        Function for safe extraction
-        DAO 11/24/2022 what am I?
-
-        :param OldFrame: Original DataFrame
-        :type OldFrame: pd.DataFrame
-        :param Commands: Tuple where Tuple[0] is index name & Tuple[1] is subset name
-        :type Commands: tuple or None
-        :param args: index_tuple, levels_scalar_or_tuple, drop_level in that order
-        :param kwargs:
-        :return:
-        """
-        _export_time_as_index = kwargs.get("export_time", False)
-        _drop_index = kwargs.get("drop_index", False)
-        _reset_index = kwargs.get("reset", False)
-        _multi_index = kwargs.get("multi_index", None)
-
-        NewFrame = OldFrame.copy(deep=True) # Initialize with deep copy for safety
-
-        # Check
-        if _export_time_as_index and NewFrame.index.name != "Time (s)" and "Time (s)" not in NewFrame.columns.to_numpy():
-            raise KeyError("To export time as an index we need to start with a time index or time column")
-
-        if _reset_index and _drop_index and NewFrame.index.name not in NewFrame.columns.to_numpy():
-            raise AssertionError("Warning: index is not duplicated in a column and would be forever lost!")
-
-        # Reset Index & Determine Whether Dropping Time
-        if _reset_index:
-            NewFrame.reset_index(drop=_drop_index, inplace=True)
-
-        if _multi_index is not None:
-            NewFrame.set_index(_multi_index, drop=False, inplace=True)
-
-        if args:
-            if 1 < args.__len__() < 3:
-                _index_tuple = args[0]
-                _levels_scalar_or_tuple = args[1]
-
-                NewFrame = NewFrame.xs(args[0], args[1], drop_level=False)
-            elif args.__len__() == 3:
-                _index_tuple = args[0]
-                _levels_scalar_or_tuple = args[1]
-                _drop_level = args[2]
-                NewFrame = NewFrame.xs(_index_tuple, level=_levels_scalar_or_tuple, drop_level=_drop_level)
-        else:
-            _index_name = Commands[0]
-            _subset_name = Commands[1]
-            NewFrame.set_index(_index_name, drop=False, inplace=True)
-            NewFrame.sort_index(inplace=True)
-            NewFrame = NewFrame.loc[_subset_name].copy(deep=True)
-
-        if _export_time_as_index:
-            NewFrame.reset_index(drop=True, inplace=True)
-            NewFrame.set_index("Time (s)", drop=True, inplace=True)
-            NewFrame.sort_index(inplace=True)
-
-        return NewFrame.copy(deep=True) # Return a deep copy for safety
-
-
 class DeepLabModule:
     """
     Module for importing deeplabcut data
@@ -715,7 +647,7 @@ class DeepLabModule:
                 # Do this to skip the "Habituation" Index
                 continue
             # Trials
-            _trial = MethodsForPandasOrganization.safe_extract(DataFrame, None, (StateCastDict.get("Trial"), i),
+            _trial = self.safe_extract(DataFrame, None, (StateCastDict.get("Trial"), i),
                                                                (0, 1), False, multi_index=MultiIndex,
                                                                reset=True, export_time=True)
             if _trial.index.name != "Time (s)":
@@ -746,7 +678,7 @@ class DeepLabModule:
                 # Do this to skip the "Habituation" Index
                 continue
             # Trials
-            _pre_trial = MethodsForPandasOrganization.safe_extract(DataFrame, None, (StateCastDict.get("PreTrial"), i),
+            _pre_trial = self.safe_extract(DataFrame, None, (StateCastDict.get("PreTrial"), i),
                                                                    (0, 1), False, multi_index=MultiIndex,
                                                                     reset=True, export_time=True)
             if _pre_trial.index.name != "Time (s)":
@@ -784,6 +716,66 @@ class DeepLabModule:
 
         DataFrame = DataFrame.reindex(columns=sorted(DataFrame.columns))
         return DataFrame
+
+    @staticmethod
+    def safe_extract(OldFrame, Commands, *args, **kwargs):
+        """
+        Function for safe extraction
+        DAO 11/24/2022 what am I?
+
+        :param OldFrame: Original DataFrame
+        :type OldFrame: pd.DataFrame
+        :param Commands: Tuple where Tuple[0] is index name & Tuple[1] is subset name
+        :type Commands: tuple or None
+        :param args: index_tuple, levels_scalar_or_tuple, drop_level in that order
+        :param kwargs:
+        :return:
+        """
+        _export_time_as_index = kwargs.get("export_time", False)
+        _drop_index = kwargs.get("drop_index", False)
+        _reset_index = kwargs.get("reset", False)
+        _multi_index = kwargs.get("multi_index", None)
+
+        NewFrame = OldFrame.copy(deep=True) # Initialize with deep copy for safety
+
+        # Check
+        if _export_time_as_index and NewFrame.index.name != "Time (s)" and "Time (s)" not in NewFrame.columns.to_numpy():
+            raise KeyError("To export time as an index we need to start with a time index or time column")
+
+        if _reset_index and _drop_index and NewFrame.index.name not in NewFrame.columns.to_numpy():
+            raise AssertionError("Warning: index is not duplicated in a column and would be forever lost!")
+
+        # Reset Index & Determine Whether Dropping Time
+        if _reset_index:
+            NewFrame.reset_index(drop=_drop_index, inplace=True)
+
+        if _multi_index is not None:
+            NewFrame.set_index(_multi_index, drop=False, inplace=True)
+
+        if args:
+            if 1 < args.__len__() < 3:
+                _index_tuple = args[0]
+                _levels_scalar_or_tuple = args[1]
+
+                NewFrame = NewFrame.xs(args[0], args[1], drop_level=False)
+            elif args.__len__() == 3:
+                _index_tuple = args[0]
+                _levels_scalar_or_tuple = args[1]
+                _drop_level = args[2]
+                NewFrame = NewFrame.xs(_index_tuple, level=_levels_scalar_or_tuple, drop_level=_drop_level)
+        else:
+            _index_name = Commands[0]
+            _subset_name = Commands[1]
+            NewFrame.set_index(_index_name, drop=False, inplace=True)
+            NewFrame.sort_index(inplace=True)
+            NewFrame = NewFrame.loc[_subset_name].copy(deep=True)
+
+        if _export_time_as_index:
+            NewFrame.reset_index(drop=True, inplace=True)
+            NewFrame.set_index("Time (s)", drop=True, inplace=True)
+            NewFrame.sort_index(inplace=True)
+
+        return NewFrame.copy(deep=True) # Return a deep copy for safety
 
 
 def plot_burrow_coordinates(Coordinates):

@@ -68,4 +68,6 @@ def extract_specific_data(DataFrame: pd.DataFrame,
     if _use_original_index:
         set_original_index()
 
+    _dataframe = _dataframe.reindex(columns=sorted(_dataframe.columns))
+
     return _dataframe
