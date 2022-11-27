@@ -33,6 +33,7 @@
       <w>helmchen</w>
       <w>histplot</w>
       <w>icefire</w>
+      <w>krogh</w>
       <w>lbfgs</w>
       <w>libnames</w>
       <w>linewidth</w>
@@ -58,6 +59,7 @@
       <w>scatterplot</w>
       <w>shuf</w>
       <w>sinc</w>
+      <w>slinear</w>
       <w>spks</w>
       <w>subfile</w>
       <w>subfolders</w>

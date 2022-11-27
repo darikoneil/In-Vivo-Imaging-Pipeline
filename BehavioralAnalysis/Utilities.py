@@ -7,8 +7,8 @@ import pandas as pd
 
 
 def extract_specific_data(DataFrame: pd.DataFrame,
-                          KeyValuePairs: Union[Tuple[Tuple[str, Union[str, int, float]]],
-                                               Tuple[str, Union[str, int, float]]],
+                          KeyValuePairs: Union[Tuple[Tuple[str, Union[str, int, float, list]]],
+                                               Tuple[str, Union[str, int, float, list]]],
                           **kwargs: bool) -> pd.DataFrame:
     """
     This Function extracts some specific portion of the behavior
@@ -37,6 +37,8 @@ def extract_specific_data(DataFrame: pd.DataFrame,
         if isinstance(_expression, str):
             _eval_string = "".join(["_dataframe.index.to_numpy()", _expression])
             _dataframe = _dataframe.loc[eval(_eval_string)].copy(deep=True)
+        elif isinstance(_expression, list):
+            _dataframe = _dataframe.loc[_dataframe.index.isin(_expression)]
         else:
             _dataframe = _dataframe.loc[_expression].copy(deep=True)
 

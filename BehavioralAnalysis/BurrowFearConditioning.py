@@ -145,12 +145,13 @@ class FearConditioning(BehavioralStage):
 
         print("Finished.")
 
-    def load_dlc_data(self, *args: Optional[Tuple[int, int]]) -> Self:
+    def load_dlc_data(self, *args: Optional[Tuple[int, int]], **kwargs: str) -> Self:
         """
         This function loads deep lab cut data
 
         :param args: Optional input indicating min/max of video actuator range
         :type args: Tuple[int, int]
+        :keyword fill: type of interpolation or filling for nan values (str, default "nearest")
         :rtype: Any
         """
         if args:
@@ -178,8 +179,9 @@ class FearConditioning(BehavioralStage):
             print("Deep Lab Cut model label insufficient. Re-train")
             return
 
+        # noinspection PyArgumentList
         self.data = DeepLabModule.merge_dlc_data(self.data, _dlc, self.multi_index,
-                                                                self.state_index)
+                                                                self.state_index, **kwargs)
 
     def load_bruker_data(self, Parameters) -> Self:
         """
@@ -626,6 +628,10 @@ class DeepLabModule:
             new_vector.bfill(inplace=True)
         elif _fill == "nearest":
             new_vector.interpolate("nearest", inplace=True)
+        elif _fill in ["slinear", "quadratic", "cubic", "barycentric", "krogh", "pchip",
+                       "from_derivatives", "akima"]:
+            new_vector.interpolate(_fill, inplace=True)
+
         return new_vector
 
     @classmethod
@@ -647,7 +653,7 @@ class DeepLabModule:
                 # Do this to skip the "Habituation" Index
                 continue
             # Trials
-            _trial = self.safe_extract(DataFrame, None, (StateCastDict.get("Trial"), i),
+            _trial = cls.safe_extract(DataFrame, None, (StateCastDict.get("Trial"), i),
                                                                (0, 1), False, multi_index=MultiIndex,
                                                                reset=True, export_time=True)
             if _trial.index.name != "Time (s)":
@@ -678,7 +684,7 @@ class DeepLabModule:
                 # Do this to skip the "Habituation" Index
                 continue
             # Trials
-            _pre_trial = self.safe_extract(DataFrame, None, (StateCastDict.get("PreTrial"), i),
+            _pre_trial = cls.safe_extract(DataFrame, None, (StateCastDict.get("PreTrial"), i),
                                                                    (0, 1), False, multi_index=MultiIndex,
                                                                     reset=True, export_time=True)
             if _pre_trial.index.name != "Time (s)":
@@ -776,6 +782,20 @@ class DeepLabModule:
             NewFrame.sort_index(inplace=True)
 
         return NewFrame.copy(deep=True) # Return a deep copy for safety
+
+    @staticmethod
+    def calculate_distance(X: np.ndarray, Y: np.ndarray) -> np.ndarray:
+        """
+        Function calculates the euclidean distance for each pair of points in (X, Y)
+        :param X: A numpy array of X positions
+        :param Y: A numpy array of Y positions
+        :return: A numpy array containing the distance between each sequential pair of points
+        """
+        _coordinates = tuple([tuple([_x, _y]) for _x, _y in zip(X, Y)])
+        EucDist = [scipy.spatial.distance.euclidean(_coordinates[_coord+1], _coordinates[_coord])
+                   for _coord in range(_coordinates.__len__()-1)]
+        EucDist.insert(0, 0.0)
+        return np.array(EucDist)
 
 
 def plot_burrow_coordinates(Coordinates):
