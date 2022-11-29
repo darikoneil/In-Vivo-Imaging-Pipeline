@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="dlc stuff">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="plotting">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
@@ -320,14 +319,7 @@
       <workItem from="1669659197576" duration="646000" />
       <workItem from="1669661862861" duration="3968000" />
       <workItem from="1669676523890" duration="130000" />
-      <workItem from="1669676923029" duration="4995000" />
-    </task>
-    <task id="LOCAL-00070" summary="Docstring">
-      <created>1667950786010</created>
-      <option name="number" value="00070" />
-      <option name="presentableId" value="LOCAL-00070" />
-      <option name="project" value="LOCAL" />
-      <updated>1667950786020</updated>
+      <workItem from="1669676923029" duration="11331000" />
     </task>
     <task id="LOCAL-00071" summary="Docstring">
       <created>1668178050197</created>
@@ -665,7 +657,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669586125287</updated>
     </task>
-    <option name="localTasksCounter" value="119" />
+    <task id="LOCAL-00119" summary="plotting">
+      <created>1669737791774</created>
+      <option name="number" value="00119" />
+      <option name="presentableId" value="LOCAL-00119" />
+      <option name="project" value="LOCAL" />
+      <updated>1669737791774</updated>
+    </task>
+    <option name="localTasksCounter" value="120" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -684,7 +683,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Updated Docstrings for Image PreProcessing" />
     <MESSAGE value="Updated Docstrings for Suite2P" />
     <MESSAGE value="Updated Docstrings" />
     <MESSAGE value="Type Conversion for Suite2P" />
@@ -709,7 +707,8 @@
     <MESSAGE value="Fixed Typo in ImageProcessingModule" />
     <MESSAGE value="beg py test" />
     <MESSAGE value="dlc stuff" />
-    <option name="LAST_COMMIT_MESSAGE" value="dlc stuff" />
+    <MESSAGE value="plotting" />
+    <option name="LAST_COMMIT_MESSAGE" value="plotting" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

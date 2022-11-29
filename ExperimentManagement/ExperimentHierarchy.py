@@ -856,22 +856,23 @@ class BehavioralStage:
             _data_sampling_rate = 1000
             _state_sampling_rate = 10
 
-        def nest_all_stages_under_trials(State_Data: np.ndarray, Index: np.ndarray, State_Casted_Dict: dict):
-            nested_trial_index = np.full(Index.__len__(), 69, dtype=np.float64)
+        def nest_all_stages_under_trials(State_Data: np.ndarray, Index: np.ndarray, State_Casted_Dict: dict) \
+                -> pd.Series:
+            nested_trial_index = np.full(Index.__len__(), 6969, dtype=np.float64)
             _trial_idx = np.where(State_Data == State_Casted_Dict.get("Trial"))[0]
             _deriv_idx = np.diff(_trial_idx)
             _trailing_edge = _trial_idx[np.where(_deriv_idx > 1)[0]]
             _trailing_edge = np.append(_trailing_edge, _trial_idx[-1])
             _habituation_trailing_edge = np.where(State_Data == State_Casted_Dict.get("Habituation"))[0][-1]
 
-            nested_trial_index[_habituation_trailing_edge] = 0
-            nested_trial_index[-1] = _trailing_edge.__len__() + 1
+            nested_trial_index[_habituation_trailing_edge] = -1
+            nested_trial_index[-1] = _trailing_edge.__len__()
 
             for _edge in range(_trailing_edge.shape[0]):
-                nested_trial_index[_trailing_edge[_edge]] = _edge + 1
+                nested_trial_index[_trailing_edge[_edge]] = _edge
 
             nested_trial_index = pd.Series(nested_trial_index, index=Index, dtype=np.float64)
-            nested_trial_index[nested_trial_index == 69] = np.nan
+            nested_trial_index[nested_trial_index == 6969] = np.nan
             nested_trial_index.bfill(inplace=True)
             nested_trial_index.name = "Trial Set"
             return nested_trial_index
