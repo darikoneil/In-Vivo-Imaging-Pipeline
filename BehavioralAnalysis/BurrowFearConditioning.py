@@ -5,12 +5,15 @@ import pathlib
 import pandas as pd
 from tqdm.auto import tqdm
 from typing import Tuple, List, Optional, Union
-import ExperimentManagement.ExperimentHierarchy
-from ExperimentManagement.ExperimentHierarchy import BehavioralStage, CollectedDataFolder
+from itertools import product
 import matplotlib
 matplotlib.use('Qt5Agg')
 from matplotlib import pyplot as plt
+
+import ExperimentManagement.ExperimentHierarchy
+from ExperimentManagement.ExperimentHierarchy import BehavioralStage, CollectedDataFolder
 from MigrationTools.Converters import convertFromPy27_Array, convertFromPy27_Dict
+from BehavioralAnalysis.Utilities import extract_specific_data
 
 
 class FearConditioning(BehavioralStage):
@@ -805,3 +808,57 @@ def plot_burrow_coordinates(Coordinates):
         _subplots_number += 1
         _ax = _fig.add_subplot(_subplots_number)
         _ax.plot(Coordinates[_coord])
+
+
+def plot_column_by_trial_type(BehavioralObject: FearConditioning, ColumnName: str,
+                              *args: Tuple[str, Union[str, int, float, list]], **kwargs: str) -> plt.Figure:
+    """
+    This function plots some column organized by trial type
+
+    :param BehavioralObject: The FearConditioning object
+    :type BehavioralObject: Any
+    :param ColumnName: Name of the column to be plotted
+    :type ColumnName: str
+    :argument args: Second tuple for data extraction
+    :keyword cmap: string identifying desired colormap
+    :return: figure
+    :rtype: Any
+    """
+
+    _cmap_str = kwargs.get("cmap", "icefire")
+    _colors = plt.cm.get_cmap(_cmap_str)
+    # Hacky code incoming ->
+    # noinspection PyProtectedMember
+    _colors = _colors._resample(BehavioralObject.num_stim).colors
+
+    fig = plt.figure()
+    _cols = BehavioralObject.num_stim
+    _rows = BehavioralObject.trials_per_stim
+    _grid = matplotlib.gridspec.GridSpec(ncols=_cols, nrows=_rows, figure=fig)
+
+    if args:
+        _additional_key = args[0]
+    else:
+        _additional_key = None
+
+    for _stim, _trial in product(range(BehavioralObject.num_stim),
+                             range(BehavioralObject.trials_per_stim)):
+
+        _keys = ("Trial Set", BehavioralObject.trial_groups[_stim][_trial])
+
+        if _additional_key is not None:
+            _keys = (
+                _keys,
+                _additional_key
+            )
+
+        _data = extract_specific_data(BehavioralObject.data, _keys)
+        _ax = fig.add_subplot(_grid[_trial, _stim])
+        _ax.plot(_data.index.to_numpy(), _data[ColumnName].to_numpy(), color=_colors[_stim])
+        _ax.set_xlabel("Time (s)")
+        _ax.set_ylabel(ColumnName)
+        _ax.set_title("".join(["Stimulus ", str(BehavioralObject.unique_stim[_stim]), ", Trial ",
+                               str(BehavioralObject.trial_groups[_stim][_trial])]))
+
+    plt.tight_layout()
+    return fig

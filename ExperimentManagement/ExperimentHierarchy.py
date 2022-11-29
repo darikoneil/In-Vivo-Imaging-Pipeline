@@ -9,7 +9,6 @@ from IPython import get_ipython
 import pathlib
 import math
 
-import ExperimentManagement.BrukerMetaModule
 from ExperimentManagement.BrukerMetaModule import BrukerMeta
 from ImagingAnalysis.IO import save_raw_binary
 from MigrationTools.Converters import renamed_load
@@ -536,6 +535,16 @@ class ExperimentData:
             self.generate_directory_structure(self.directory)
         else:
             print("Unable to create organized directory in specified path.")
+
+    def update_all_folder_dictionaries(self) -> Self:
+        """
+        This function iterates through all behavioral stages to update their folder dictionaries
+
+        :rtype: Any
+        """
+        for _key in dir(self):
+            if isinstance(self.__getattribute__(_key), BehavioralStage):
+                self.__dict__.get(_key).update_folder_dictionary()
 
     # noinspection All
     def start_log(self) -> Self:
