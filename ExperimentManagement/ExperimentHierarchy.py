@@ -609,14 +609,12 @@ class BehavioralStage:
         | *sync_id* : key indicator for syncing data
     """
 
-    def __init__(self, Meta: Tuple[str, str], Stage: str, *args: Tuple[str, str]):
+    def __init__(self, Meta: Tuple[str, str], Stage: str):
         """
         :param Meta: Passed Meta from experimental hierarchy
         :type Meta: tuple[str, str]
         :param Stage: Title of Stage
         :type Stage: str
-        :param args: Sync ID (ID of columns used for syncing data)
-        :type args: Tuple[str, str]
         """
         # PROTECTED
         self.__mouse_id = Meta[1]
@@ -630,12 +628,6 @@ class BehavioralStage:
         self.multi_index = None
         self.state_index = dict()
         self.trial_parameters = dict()
-
-        if len(args) >= 1:
-            self.sync_id = args[0]
-            assert(isinstance(self.sync_id, tuple))
-        else:
-            self.sync_id = None
 
         _mouse_directory = Meta[0]
         self.create_folder_dictionary(_mouse_directory, Stage)
