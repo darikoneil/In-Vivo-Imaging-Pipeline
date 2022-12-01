@@ -1092,7 +1092,7 @@ class BehavioralStage:
     @staticmethod
     def sync_grouped_z_projected_images(DataFrame: pd.DataFrame, MetaData: BrukerMeta, Parameters: dict) -> \
             pd.DataFrame:
-
+        print("\nSyncing Images...")
         # parse params
         _bin_size = Parameters.get(("preprocessing", "grouped-z project bin size"))
         _artifact = Parameters.get(("preprocessing", "shuttle artifact length"))
@@ -1135,6 +1135,7 @@ class BehavioralStage:
 
         DataFrame = DataFrame.reindex(columns=sorted(DataFrame.columns))
 
+        print("\nFinished.")
         return DataFrame
 
 

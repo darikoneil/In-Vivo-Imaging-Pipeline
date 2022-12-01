@@ -163,8 +163,12 @@ class FearConditioning(BehavioralStage):
         print("\nLoading and Merging Deep Lab Cut Data...")
 
         if args:
-            _old_min = args[0]
-            _old_max = args[1]
+            try:
+                _old_min = args[0]
+                _old_max = args[1]
+            except IndexError:
+                _old_min = args[0][0]
+                _old_max = args[0][1]
         else:
             _old_min = 0
             _old_max = 800
