@@ -1070,7 +1070,6 @@ class BehavioralStage:
 
         # adjust for preprocessing
         # parse params
-        _bin_size = Parameters.get(("preprocessing", "grouped-z project bin size"), 3)
         _artifact = Parameters.get(("preprocessing", "shuttle artifact length"), 1000)
         _chunk_size = Parameters.get(("preprocessing", "chunk size"), 7000)
 

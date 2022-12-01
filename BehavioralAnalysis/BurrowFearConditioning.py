@@ -9,11 +9,12 @@ from itertools import product
 import matplotlib
 matplotlib.use('Qt5Agg')
 from matplotlib import pyplot as plt
+import seaborn as sns
 
 import ExperimentManagement.ExperimentHierarchy
 from ExperimentManagement.ExperimentHierarchy import BehavioralStage, CollectedDataFolder
 from MigrationTools.Converters import convertFromPy27_Array, convertFromPy27_Dict
-from BehavioralAnalysis.Utilities import extract_specific_data
+from BehavioralAnalysis.Utilities import extract_specific_data, lowpass_filter
 
 
 class FearConditioning(BehavioralStage):
@@ -146,17 +147,21 @@ class FearConditioning(BehavioralStage):
         # Add CS information
         self.data = self.merge_cs_index_into_dataframe(self.data, np.array(self.trial_parameters.get("stimulusTypes")))
 
+        # Post-Processing
+        self.data["Force"] = lowpass_filter(self.data["Force"].to_numpy(), 1000, 100)
+
         print("Finished.")
 
-    def load_dlc_data(self, *args: Optional[Tuple[int, int]], **kwargs: str) -> Self:
+    def load_dlc_data(self, *args: Optional[Tuple[int, int]]) -> Self:
         """
         This function loads deep lab cut data
 
         :param args: Optional input indicating min/max of video actuator range
         :type args: Tuple[int, int]
-        :keyword fill: type of interpolation or filling for nan values (str, default "nearest")
         :rtype: Any
         """
+        print("\nLoading and Merging Deep Lab Cut Data...")
+
         if args:
             _old_min = args[0]
             _old_max = args[1]
@@ -165,9 +170,9 @@ class FearConditioning(BehavioralStage):
             _old_max = 800
 
         _dlc = DeepLabModule(self.folder_dictionary['deep_lab_cut_data'], self.folder_dictionary['behavioral_exports'])
-        _dlc.trial_data = DeepLabModule.convert_full_dataframe_to_physical_units(_dlc.trial_data, _old_min, _old_max,
+        _dlc.trial_data = DeepLabModule.convert_dataframe_to_physical_units(_dlc.trial_data, _old_min, _old_max,
                                                                                  ("X1", "X2"))
-        _dlc.pre_trial_data = DeepLabModule.convert_full_dataframe_to_physical_units(_dlc.pre_trial_data, _old_min, _old_max,
+        _dlc.pre_trial_data = DeepLabModule.convert_dataframe_to_physical_units(_dlc.pre_trial_data, _old_min, _old_max,
                                                                                      ("X1", "X2"))
         _dlc.trial_data = DeepLabModule.convert_to_mean_zero(_dlc.trial_data, ("Y1", "Y2"))
         _dlc.pre_trial_data = DeepLabModule.convert_to_mean_zero(_dlc.pre_trial_data, ("Y1", "Y2"))
@@ -183,8 +188,9 @@ class FearConditioning(BehavioralStage):
             return
 
         # noinspection PyArgumentList
-        self.data = DeepLabModule.merge_dlc_data(self.data, _dlc, self.multi_index,
-                                                                self.state_index, **kwargs)
+        self.data = DeepLabModule.merge_dlc_data(self.data, _dlc, self.state_index)
+
+        print("\nFinished.")
 
     def load_bruker_data(self, Parameters) -> Self:
         """
@@ -192,6 +198,7 @@ class FearConditioning(BehavioralStage):
 
         :rtype: Any
         """
+        print("\nLoading Bruker Data...")
         _analog_recordings = self.load_bruker_analog_recordings()
         if self.validate_bruker_recordings_completion(_analog_recordings, self.num_trials)[0]:
             self.data = self.sync_bruker_recordings(self.data.copy(deep=True),
@@ -199,6 +206,7 @@ class FearConditioning(BehavioralStage):
                                                           ("State Integer", " TrialIndicator"), Parameters)
         else:
             print('Not Yet Implemented')
+        print("\nFinished.")
 
     def generate_file_id(self, SaveType: str) -> Union[str, None]:
         """
@@ -349,6 +357,10 @@ class FearConditioning(BehavioralStage):
         :return: DataFrame with CS identities
         :rtype: pd.DataFrame
         """
+
+        if isinstance(CSIndex, list):
+            CSIndex = np.array(CSIndex)
+
         # 0  = CS+, 1 = CS-, ..., Unique CS + 1 = Nil
         _nil_id = np.unique(CSIndex).__len__()  # Equivalent to the number cs id + 1 when considering zero-indexing
         _nan_id = _nil_id + 1
@@ -356,8 +368,10 @@ class FearConditioning(BehavioralStage):
         _cs_column = np.full(_trial_set.__len__(), _nan_id, dtype=np.float64)
 
         for _cs in range(np.unique(CSIndex).__len__()):
-            _cs_column[np.searchsorted(_trial_set, np.where(CSIndex == _cs)[0] + 1)] = _cs
+            _cs_column[np.searchsorted(_trial_set, np.where(CSIndex == _cs)[0])] = _cs
             # + 1 -> Adjust because trial set is not zero indexed
+            # Remove + 1 on 11/30/2022 given moving towards zero index with hab as -1
+
         # Enter Nil Start, Maintain NaNs for forward fill
         _cs_column[0] = _nil_id
 
@@ -411,27 +425,6 @@ class FearConditioning(BehavioralStage):
             return True, detected_trials
         except AssertionError:
             return False, detected_trials
-
-    @staticmethod
-    def index_trial_subset_for_bruker_sync(DataFrame: pd.DataFrame, Trial: int,
-                                           NumTrials: int, Direction: str) -> Union[pd.DataFrame, None]:
-        """
-        Subsets the trials to sync with bruker data
-
-        :param DataFrame: Data
-        :param Trial: specific trial
-        :param NumTrials: total trials
-        :param Direction: Whether indexing from start or end
-        :return: a subset of the dataframe
-        :rtype: pd.DataFrame
-        """
-        if Direction == "Start":
-            return np.where(DataFrame["Trial Set"].to_numpy() <= Trial+1)[0]
-        elif Direction == "End":
-            return np.where(DataFrame["Trial Set"].to_numpy() >= NumTrials - Trial + 1)[0]
-        else:
-            print("Please specify the direction as Start or End")
-            return
 
     @staticmethod
     def check_sync_plot(DataFrame: pd.DataFrame) -> None:
@@ -513,6 +506,13 @@ class DeepLabModule:
         _pre_trial_frame_ids = np.genfromtxt(_pre_trial_frame_ids_csv, delimiter=",").astype(int)
         _trial_frame_ids = np.genfromtxt(_trial_frame_ids_csv, delimiter=",").astype(int)
 
+        # make sure it's zero-indexed
+        if np.min(_pre_trial_frame_ids) == 1:
+            _pre_trial_frame_ids -= 1
+
+        if np.min(_trial_frame_ids) == 1:
+            _trial_frame_ids -= 1
+
         # attach ids
         pre_trial.index = _pre_trial_frame_ids
         pre_trial.index.name = "Trial"
@@ -526,196 +526,123 @@ class DeepLabModule:
         return pre_trial, trial
 
     @classmethod
-    def conduct_post_processing(cls, RawData, **kwargs):
-        _old_min = kwargs.get("old min", 0)
-        _old_max = kwargs.get("old max", 800)
-        _markers_idx = kwargs.get("marker_index", tuple([1, 2, 4, 5]))
-        dlc_physical = RawData.copy()
-
-        for _marker in _markers_idx:
-            dlc_physical[dlc_physical.columns[_marker]] = cls.convert_to_physical_units(dlc_physical[dlc_physical.columns[_marker]].to_numpy(),
-                                                                                        _old_min, _old_max)
-        return dlc_physical
-
-    @classmethod
-    def segregate_trials(cls, Data, TrialNumber):
+    def convert_dataframe_to_physical_units(cls, DataFrame: pd.DataFrame, oldMin: int, oldMax: int, idx: Union[str, Tuple[str]], **kwargs: int) -> pd.DataFrame:
         """
-        Returns the data for that particular trial
+        Converts data range to physical range
 
-        :param Data: Pandas Dataframe where the index is the trial number
-        :param TrialNumber: the desired trial number
-        :return: Pandas dataframe containing only that trial
+        :param DataFrame: dlc data
+        :type DataFrame: pd.DataFrame
+        :param oldMin: value representing left-side
+        :type oldMin: int
+        :param oldMax: value representing right-side
+        :type oldMax: int
+        :param idx: Which columns to rescale
+        :param idx: Union[str, Tuple[str]]
+        :keyword new_min: value representing new left-side (int, default 0)
+        :keyword new_max: value representing new right-side (int, default 140)
+        :return: DataFrame with rescaled data
+        :rtype: pd.DataFrame
         """
-        return Data.copy(deep=True).loc[TrialNumber]
 
-    @classmethod
-    def convert_to_physical_units(cls, fPositions, oldMin, oldMax, **kwargs):
-        """
-        Converts the burrow positions to physical units (mm)
-
-        :param fPositions:
-        :param oldMin:
-        :param oldMax:
-        :return:
-        """
         _new_max = kwargs.get("new_max", 140)
         _new_min = kwargs.get("new_min", 0)
 
-        _old_range = oldMax-oldMin
+        _old_range = oldMax - oldMin
         _new_range = _new_max - _new_min
 
-        return (((fPositions-oldMin)*_new_range)/_old_range)+_new_min
+        def convert_to_physical_units(fPositions):
+            """
+            Converts the burrow positions to physical units (mm)
 
-    @classmethod
-    def convert_full_dataframe_to_physical_units(cls, DataFrame, oldMin, oldMax, idx, **kwargs):
-        _new_max = kwargs.get("new_max", 140)
-        _new_min = kwargs.get("new_min", 0)
+            :param fPositions:
+            :return:
+            """
+            nonlocal _new_min
+            nonlocal oldMin
+            nonlocal _new_range
+            nonlocal _old_range
 
-        DataFrame = DataFrame.copy(deep=True)
+            return (((fPositions - oldMin) * _new_range) / _old_range) + _new_min
+
         for i in idx:
-            DataFrame[i] = DeepLabModule.convert_to_physical_units(DataFrame[i].to_numpy(), oldMin, oldMax)
+            DataFrame[i] = convert_to_physical_units(DataFrame[i].to_numpy())
+
         return DataFrame
 
     @classmethod
-    def convert_to_mean_zero(cls, DataFrame, idx):
+    def convert_to_mean_zero(cls, DataFrame: pd.DataFrame, idx: Union[str, Tuple[str]]) -> pd.DataFrame:
+        """
+        Converts data range to mean zero
+
+        :param DataFrame: dlc data
+        :type DataFrame: pd.DataFrame
+        :param idx: Which columns to rescale
+        :param idx: Union[str, Tuple[str]]
+        :return: DataFrame with rescaled data
+        :rtype: pd.DataFrame
+        """
+
         DataFrame = DataFrame.copy(deep=True)
         for i in idx:
             DataFrame[i] = DataFrame[i].to_numpy() - np.mean(DataFrame[i].to_numpy())
         return DataFrame
 
     @classmethod
-    def match_data_to_new_index(cls, OriginalVector, OriginalIndex, NewIndex, **kwargs):
+    def merge_dlc_data(cls, DataFrame: pd.DataFrame, DLC: DeepLabModule, StateCastDict: dict) -> pd.DataFrame:
         """
-        Function to match data to a new index. can be done better, written when learning pandas
+        Function to merge DLC data with some DataFrame
 
-        :param OriginalVector:
-        :param OriginalIndex:
-        :param NewIndex:
-        :return: NewVector
+        :param DataFrame: Data to merge with
+        :type DataFrame: pd.DataFrame
+        :param DLC: Data to merge
+        :type DLC: DeepLabModule
+        :param StateCastDict: dictionary relating the state integers with pre-trial and trial states
+        :type StateCastDict: dict
+        :return: the DataFrame with DLC data merged and time-matched
+        :rtype: pd.DataFrame
         """
-        _is_string = kwargs.get("is_string", False)
-        _fill = kwargs.get("forward_fill", "nearest")
-        _feedback = kwargs.get("feedback", True)
 
-        if _is_string:
-            new_vector = np.full(NewIndex.__len__(), '', dtype="<U21")
-        else:
-            new_vector = np.full(NewIndex.__len__(), 6969, dtype=OriginalVector.dtype)
+        # We need to make sure the index is time
+        assert(DataFrame.index.name == "Time (s)")
+        _num_trials = np.unique(DLC.trial_data.index).__len__()
 
-        if _feedback:
-            for _sample in tqdm(
-                    range(OriginalIndex.__len__()),
-                    total=OriginalIndex.__len__(),
-                    desc="Generating New Index",
-                    disable=False
-            ):
-                _timestamp = OriginalIndex[_sample]
-                idx = np.where(NewIndex == _timestamp)[0][0]
-                new_vector[idx] = OriginalVector[_sample]
-        else:
-            for _sample in range(OriginalIndex.__len__()):
-                _timestamp = OriginalIndex[_sample]
-                idx = np.where(NewIndex == _timestamp)[0][0]
-                new_vector[idx] = OriginalVector[_sample]
+        def matcher(Stage: str, TrialNumber: int) -> pd.DataFrame:
+            nonlocal DataFrame
+            nonlocal DLC
+            nonlocal StateCastDict
+            nonlocal _num_trials
 
-        if _is_string:
-            new_vector = pd.Series(new_vector, index=NewIndex, dtype="string")
-            new_vector[new_vector == ''] = np.nan
-        else:
-            new_vector = pd.Series(new_vector, index=NewIndex, dtype=new_vector.dtype)
-            new_vector[new_vector == 6969] = np.nan
+            # get new index
+            _new_index = extract_specific_data(DataFrame,
+                                               (("State Integer", StateCastDict.get(Stage)),
+                                                ("Trial Set", TrialNumber))).index
 
-        if _fill == "forward":
-            new_vector.ffill(inplace=True)
-        elif _fill == "backward":
-            new_vector.bfill(inplace=True)
-        elif _fill == "nearest":
-            new_vector.interpolate("nearest", inplace=True)
-        elif _fill in ["slinear", "quadratic", "cubic", "barycentric", "krogh", "pchip",
-                       "from_derivatives", "akima"]:
-            new_vector.interpolate(_fill, inplace=True)
+            # get old index & data
+            if Stage == "Trial":
+                _dlc_data = DLC.trial_data.copy(deep=True).loc[TrialNumber]
+            else:
+                _dlc_data = DLC.pre_trial_data.copy(deep=True).loc[TrialNumber]
 
-        return new_vector
+            _num_frames = _dlc_data["X1"].__len__()
+            _old_dlc_index = pd.Series(np.around(np.linspace(
+                _new_index.to_numpy()[0], _new_index.to_numpy()[-1], _num_frames).astype(np.float64), decimals=3))
+            _old_dlc_index.name = "Time (s)"
 
-    @classmethod
-    def merge_dlc_data(cls, DataFrame, DLC, MultiIndex, StateCastDict, **kwargs):
-        _individual_series = []
-        _num_trials = kwargs.get("num_trials", np.max(DLC.trial_data.index))
-        _fps = kwargs.get("FPS", 30)
-        _fill = kwargs.get("fill", "nearest")
+            # use new index
+            _dlc_data.reset_index(drop=True, inplace=True)
+            _dlc_data.set_index(_old_dlc_index, inplace=True)
+            _dlc_data = _dlc_data.reindex(_new_index)
+            _dlc_data.interpolate("nearest", inplace=True)
+            return _dlc_data
 
-        # Assert MultiIndex & Columns Contain Time
+        # Match them, collect, concat, then join
+        _matched_dlc_data = [matcher("Trial", _trial) for _trial in range(_num_trials)]
+        _matched_dlc_data.extend([matcher("PreTrial", _trial) for _trial in range(_num_trials)])
+        _matched_dlc_data = pd.concat(_matched_dlc_data)
+        _matched_dlc_data.reindex(index=DataFrame.index)
+        DataFrame = DataFrame.join(_matched_dlc_data)
 
-        for i in tqdm(
-                range(_num_trials),
-                total=_num_trials,
-                desc="Merging DLC Data... Trials...",
-                disable=False,
-                ):
-            if i == 0:
-                # Do this to skip the "Habituation" Index
-                continue
-            # Trials
-            _trial = cls.safe_extract(DataFrame, None, (StateCastDict.get("Trial"), i),
-                                                               (0, 1), False, multi_index=MultiIndex,
-                                                               reset=True, export_time=True)
-            if _trial.index.name != "Time (s)":
-                raise KeyError("The exported index must be time!")
-            _dlc = DLC.segregate_trials(DLC.trial_data, i)
-            _num_frames = _dlc['X1'].__len__()
-            _old_dlc_index = np.around(
-                np.linspace(_trial.index.to_numpy()[0], _trial.index.to_numpy()[-1], _num_frames), decimals=3)
-            _new_dlc_index = np.around(_trial.index.to_numpy(), decimals=3)
-
-            # for each column add to new index
-            _trial_data = pd.DataFrame(None, index=_new_dlc_index, dtype=np.float64)
-            _trial_data.index.name = "Time (s)"
-            for _column in _dlc.columns.to_numpy():
-                _trial_data[_column] = cls.match_data_to_new_index(_dlc[_column].to_numpy(),
-                                                                                            _old_dlc_index,
-                                                                                            _new_dlc_index,
-                                                                                            feedback=False)
-            _individual_series.append(_trial_data)
-
-        for i in tqdm(
-                range(_num_trials),
-                total=_num_trials,
-                desc="Merging DLC Data... Pre-Trials...",
-                disable=False,
-                ):
-            if i == 0:
-                # Do this to skip the "Habituation" Index
-                continue
-            # Trials
-            _pre_trial = cls.safe_extract(DataFrame, None, (StateCastDict.get("PreTrial"), i),
-                                                                   (0, 1), False, multi_index=MultiIndex,
-                                                                    reset=True, export_time=True)
-            if _pre_trial.index.name != "Time (s)":
-                raise KeyError("The exported index must be time!")
-            _dlc = DLC.segregate_trials(DLC.pre_trial_data, i)
-            _num_frames = _dlc['X1'].__len__()
-            _old_dlc_index = np.floor(np.linspace(0, _pre_trial.index.to_numpy().__len__()-1, _num_frames))
-            if _old_dlc_index.__len__() != np.unique(_old_dlc_index).__len__():
-                raise AssertionError("You should probably fix this code now...")
-            _new_dlc_index = np.arange(0, _pre_trial.index.to_numpy().__len__(), 1)
-
-            # for each column add to new index
-            _pre_trial_data = pd.DataFrame(None, index=_new_dlc_index, dtype=np.float64)
-            # _pre_trial_data.index.name = "Time (s)"
-            for _column in _dlc.columns.to_numpy():
-                _pre_trial_data[_column] = cls.match_data_to_new_index(_dlc[_column].to_numpy(),
-                                                                                                _old_dlc_index,
-                                                                                                _new_dlc_index,
-                                                                                                feedback=False)
-            _pre_trial_data.set_index(_pre_trial.index, drop=True, inplace=True)
-            _individual_series.append(_pre_trial_data)
-
-
-        _concat_dataframe = pd.concat(_individual_series)
-        _concat_dataframe.reindex(index=DataFrame.index)
-
-        DataFrame = DataFrame.join(_concat_dataframe)
-
+        # nan fill
         DataFrame["X1"].fillna(value=np.nanmax(DataFrame["X1"].to_numpy()), inplace=True)
         DataFrame["X2"].fillna(value=np.nanmax(DataFrame["X2"].to_numpy()), inplace=True)
         DataFrame["Y1"].fillna(0, inplace=True)
@@ -723,68 +650,10 @@ class DeepLabModule:
         DataFrame["likelihood1"].fillna(1, inplace=True)
         DataFrame["likelihood2"].fillna(1, inplace=True)
 
+        # sort for ease of use
         DataFrame = DataFrame.reindex(columns=sorted(DataFrame.columns))
+
         return DataFrame
-
-    @staticmethod
-    def safe_extract(OldFrame, Commands, *args, **kwargs):
-        """
-        Function for safe extraction
-        DAO 11/24/2022 what am I?
-
-        :param OldFrame: Original DataFrame
-        :type OldFrame: pd.DataFrame
-        :param Commands: Tuple where Tuple[0] is index name & Tuple[1] is subset name
-        :type Commands: tuple or None
-        :param args: index_tuple, levels_scalar_or_tuple, drop_level in that order
-        :param kwargs:
-        :return:
-        """
-        _export_time_as_index = kwargs.get("export_time", False)
-        _drop_index = kwargs.get("drop_index", False)
-        _reset_index = kwargs.get("reset", False)
-        _multi_index = kwargs.get("multi_index", None)
-
-        NewFrame = OldFrame.copy(deep=True) # Initialize with deep copy for safety
-
-        # Check
-        if _export_time_as_index and NewFrame.index.name != "Time (s)" and "Time (s)" not in NewFrame.columns.to_numpy():
-            raise KeyError("To export time as an index we need to start with a time index or time column")
-
-        if _reset_index and _drop_index and NewFrame.index.name not in NewFrame.columns.to_numpy():
-            raise AssertionError("Warning: index is not duplicated in a column and would be forever lost!")
-
-        # Reset Index & Determine Whether Dropping Time
-        if _reset_index:
-            NewFrame.reset_index(drop=_drop_index, inplace=True)
-
-        if _multi_index is not None:
-            NewFrame.set_index(_multi_index, drop=False, inplace=True)
-
-        if args:
-            if 1 < args.__len__() < 3:
-                _index_tuple = args[0]
-                _levels_scalar_or_tuple = args[1]
-
-                NewFrame = NewFrame.xs(args[0], args[1], drop_level=False)
-            elif args.__len__() == 3:
-                _index_tuple = args[0]
-                _levels_scalar_or_tuple = args[1]
-                _drop_level = args[2]
-                NewFrame = NewFrame.xs(_index_tuple, level=_levels_scalar_or_tuple, drop_level=_drop_level)
-        else:
-            _index_name = Commands[0]
-            _subset_name = Commands[1]
-            NewFrame.set_index(_index_name, drop=False, inplace=True)
-            NewFrame.sort_index(inplace=True)
-            NewFrame = NewFrame.loc[_subset_name].copy(deep=True)
-
-        if _export_time_as_index:
-            NewFrame.reset_index(drop=True, inplace=True)
-            NewFrame.set_index("Time (s)", drop=True, inplace=True)
-            NewFrame.sort_index(inplace=True)
-
-        return NewFrame.copy(deep=True) # Return a deep copy for safety
 
     @staticmethod
     def calculate_distance(X: np.ndarray, Y: np.ndarray) -> np.ndarray:
@@ -793,6 +662,7 @@ class DeepLabModule:
         :param X: A numpy array of X positions
         :param Y: A numpy array of Y positions
         :return: A numpy array containing the distance between each sequential pair of points
+        :rtype: Any
         """
         _coordinates = tuple([tuple([_x, _y]) for _x, _y in zip(X, Y)])
         EucDist = [scipy.spatial.distance.euclidean(_coordinates[_coord+1], _coordinates[_coord])
@@ -859,6 +729,31 @@ def plot_column_by_trial_type(BehavioralObject: FearConditioning, ColumnName: st
         _ax.set_ylabel(ColumnName)
         _ax.set_title("".join(["Stimulus ", str(BehavioralObject.unique_stim[_stim]), ", Trial ",
                                str(BehavioralObject.trial_groups[_stim][_trial])]))
+
+    plt.tight_layout()
+    return fig
+
+
+def plot_trial(BehavioralObject: FearConditioning, ColumnNames: list[str],
+               Trials: list[int], **kwargs: str) -> plt.Figure:
+
+    _cmap_str = kwargs.get("cmap", "icefire")
+    _colors = plt.cm.get_cmap(_cmap_str)
+    # Hacky code incoming ->
+    # noinspection PyProtectedMember
+    _colors = _colors._resample(ColumnNames.__len__()*Trials.__len__()).colors
+
+    fig = plt.figure()
+    _subplot_id = int("".join([str(Trials.__len__()), str(1), str(0)]))
+    for _trial in range(Trials.__len__()):
+        _subplot_id += 1
+        _ax = fig.add_subplot(_subplot_id)
+        _data = extract_specific_data(BehavioralObject.data, (("State Integer", BehavioralObject.state_index.get("Trial")), ("Trial Set", Trials[_trial])))
+        for _column in range(ColumnNames.__len__()):
+            _ax.plot(_data.index.to_numpy()-_data.index.to_numpy()[0], _data[ColumnNames[_column]].to_numpy(),
+                     color=_colors[_column+_trial], lw=3)
+            _ax.set_xlabel("Time (s)")
+            _ax.set_title("".join(["Trial: ", str(Trials[_trial])]))
 
     plt.tight_layout()
     return fig

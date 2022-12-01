@@ -3,6 +3,7 @@ import numpy as np
 from tqdm.auto import tqdm
 from typing import Tuple, List, Optional, Union
 import pandas as pd
+import scipy.signal as signal
 
 
 
@@ -73,3 +74,26 @@ def extract_specific_data(DataFrame: pd.DataFrame,
     _dataframe = _dataframe.reindex(columns=sorted(_dataframe.columns))
 
     return _dataframe
+
+
+def lowpass_filter(Data: np.ndarray, SamplingFrequency: float,
+                   Cutoff: float, Order: Optional[int] = None) -> np.ndarray:
+    """
+    Low pass filter (butter)
+
+    :param Data: Data to be filtered
+    :type Data: Any
+    :param SamplingFrequency: Sampling frequency of data
+    :type SamplingFrequency: float
+    :param Cutoff: Cutoff Frequency for filter
+    :type Cutoff: float
+    :param Order: Optional Order of Filter
+    :type Order: Optional[int]
+    :return: Filtered Data
+    :rtype: Any
+    """
+
+    if Order is None:
+        Order = 2
+
+    return signal.filtfilt(*signal.butter(Order, Cutoff/(0.5*SamplingFrequency)), Data)
