@@ -741,6 +741,26 @@ class BehavioralStage:
             elif isinstance(self.folder_dictionary.get(_key), CollectedImagingFolder):
                 self.folder_dictionary.get(_key).reindex()
 
+    def load_data(self, ImagingParameters: Optional[dict] = None, *args: Optional[Tuple[str, str]], **kwargs) -> Self:
+        """
+         Loads all data (Convenience Function)
+
+        :param ImagingParameters: Parameters for some imaging dataset
+        :type ImagingParameters: Optional[dict]
+        :param args: Optionally pass Sync Key to synchronize bruker recordings
+        :type args: Tuple[str, str]
+        :param kwargs: passed to internal functions taking kwargs
+        :rtype: Any
+        """
+
+        self.load_base_behavior()
+        self.load_bruker_meta_data()
+        if args and ImagingParameters is not None:
+            self.data = self.sync_bruker_recordings(self.data, self.load_bruker_analog_recordings(), self.meta,
+                                                    self.state_index, *args, ImagingParameters)
+            if ImagingParameters.get(("preprocessing", "grouped-z project bin size")):
+                self.data = self.sync_grouped_z_projected_images(self.data, self.meta, ImagingParameters)
+
     def load_bruker_meta_data(self) -> Self:
         """
         Loads Bruker Meta Data
@@ -984,7 +1004,7 @@ class BehavioralStage:
     @staticmethod
     def sync_bruker_recordings(DataFrame: pd.DataFrame, AnalogRecordings: pd.DataFrame, MetaData: BrukerMeta,
                                StateCastedDict: dict,
-                               SyncKey: Optional[Tuple[str, str]], Parameters: dict, **kwargs) -> pd.DataFrame:
+                               SyncKey: Tuple[str, str], Parameters: dict, **kwargs) -> pd.DataFrame:
         """
 
         :param DataFrame:
@@ -1004,8 +1024,6 @@ class BehavioralStage:
         """
 
         _fill_method = kwargs.get("fill", "nearest")
-        if SyncKey is None:
-            SyncKey = ("State Integer", " TrialIndicator")
         # Sync by matching first peak of the sync_key columns
         _DF_signal = DataFrame[SyncKey[0]].to_numpy().copy()
         _AR_signal = AnalogRecordings[SyncKey[1]].to_numpy().copy()

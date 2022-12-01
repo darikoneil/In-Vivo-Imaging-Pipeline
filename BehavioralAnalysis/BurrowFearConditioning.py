@@ -99,6 +99,36 @@ class FearConditioning(BehavioralStage):
             _ = [0]
             return None
 
+    def load_data(self, ImagingParameters: Optional[dict] = None, *args: Optional[Tuple[int, int]], **kwargs) -> Self:
+        """
+        Loads all data (Convenience Function)
+
+        :param ImagingParameters: Parameters for some imaging dataset
+        :param args: Optional input indicating min/max of video actuator range
+        :type args: Tuple[int, int]
+        :param kwargs: passed to internal functions taking kwargs
+        :rtype: Any
+        """
+
+        print("\nLoading all data...")
+
+        self.load_base_behavior()
+
+        if args:
+            # noinspection PyArgumentList
+            self.load_dlc_data(*args, **kwargs)
+        else:
+            # noinspection PyArgumentList
+            self.load_dlc_data(**kwargs)
+
+        if ImagingParameters is not None:
+            self.load_bruker_data(ImagingParameters)
+
+        if ImagingParameters.get(("preprocessing", "grouped-z project bin size")):
+            self.data = self.sync_grouped_z_projected_images(self.data, self.meta, ImagingParameters)
+
+        print("\nFinished loading all data.")
+
     def load_base_behavior(self) -> Self:
         """
         Loads the basic behavioral data: analog, dictionary, digital, state, and CS identities
@@ -765,5 +795,3 @@ def plot_trial(BehavioralObject: FearConditioning, ColumnNames: list[str],
 
     plt.tight_layout()
     return fig
-
-def plot_gate_and_positions
