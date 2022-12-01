@@ -152,7 +152,7 @@ class FearConditioning(BehavioralStage):
 
         print("Finished.")
 
-    def load_dlc_data(self, *args: Optional[Tuple[int, int]]) -> Self:
+    def load_dlc_data(self, *args: Optional[Tuple[int, int]], **kwargs: bool) -> Self:
         """
         This function loads deep lab cut data
 
@@ -174,12 +174,16 @@ class FearConditioning(BehavioralStage):
             _old_max = 800
 
         _dlc = DeepLabModule(self.folder_dictionary['deep_lab_cut_data'], self.folder_dictionary['behavioral_exports'])
-        _dlc.trial_data = DeepLabModule.convert_dataframe_to_physical_units(_dlc.trial_data, _old_min, _old_max,
+
+        _convert = kwargs.get("convert", True)
+
+        if _convert:
+            _dlc.trial_data = DeepLabModule.convert_dataframe_to_physical_units(_dlc.trial_data, _old_min, _old_max,
                                                                                  ("X1", "X2"))
-        _dlc.pre_trial_data = DeepLabModule.convert_dataframe_to_physical_units(_dlc.pre_trial_data, _old_min, _old_max,
+            _dlc.pre_trial_data = DeepLabModule.convert_dataframe_to_physical_units(_dlc.pre_trial_data, _old_min, _old_max,
                                                                                      ("X1", "X2"))
-        _dlc.trial_data = DeepLabModule.convert_to_mean_zero(_dlc.trial_data, ("Y1", "Y2"))
-        _dlc.pre_trial_data = DeepLabModule.convert_to_mean_zero(_dlc.pre_trial_data, ("Y1", "Y2"))
+            _dlc.trial_data = DeepLabModule.convert_to_mean_zero(_dlc.trial_data, ("Y1", "Y2"))
+            _dlc.pre_trial_data = DeepLabModule.convert_to_mean_zero(_dlc.pre_trial_data, ("Y1", "Y2"))
 
         # Check Efficacy
         try:
@@ -761,3 +765,5 @@ def plot_trial(BehavioralObject: FearConditioning, ColumnNames: list[str],
 
     plt.tight_layout()
     return fig
+
+def plot_gate_and_positions
