@@ -629,8 +629,8 @@ class BehavioralStage:
         self.trial_parameters = dict()
         # Create, Fill, and Index Relevant Folders
         _mouse_directory = Meta[0]
-        self.__create_folder_dictionary(_mouse_directory, Stage)
-        self.__fill_imaging_folder_dictionary()
+        self._create_folder_dictionary(_mouse_directory, Stage)
+        self._fill_imaging_folder_dictionary()
         # noinspection PyBroadException
         try:
             self.load_data()
@@ -698,20 +698,20 @@ class BehavioralStage:
             else:
                 return
 
-        self.__load_base_behavior()
+        self._load_base_behavior()
         if ImagingParameters is not None:
-            self.__load_bruker_meta_data()
+            self._load_bruker_meta_data()
         if args and ImagingParameters is not None:
             if isinstance(ImagingParameters, dict):
-                self.data = self.__sync_bruker_recordings(self.data, self.__load_bruker_analog_recordings(), self.meta,
-                                                        self.state_index, *args, ImagingParameters)
+                self.data = self._sync_bruker_recordings(self.data, self._load_bruker_analog_recordings(), self.meta,
+                                                         self.state_index, *args, ImagingParameters)
                 if ImagingParameters.get(("preprocessing", "grouped-z project bin size")):
-                    self.data = self.__sync_grouped_z_projected_images(self.data, self.meta, ImagingParameters)
+                    self.data = self._sync_grouped_z_projected_images(self.data, self.meta, ImagingParameters)
             elif isinstance(ImagingParameters, list) and isinstance(ImagingParameters[-1], dict):
-                self.data = self.__sync_bruker_recordings(self.data, self.__load_bruker_analog_recordings(), self.meta,
-                                                        self.state_index, *args, ImagingParameters[0])
+                self.data = self._sync_bruker_recordings(self.data, self._load_bruker_analog_recordings(), self.meta,
+                                                         self.state_index, *args, ImagingParameters[0])
                 for _sampling in range(1, ImagingParameters.__len__(), 1):
-                    self.data = self.__sync_grouped_z_projected_images(
+                    self.data = self._sync_grouped_z_projected_images(
                         self.data, self.meta, ImagingParameters[_sampling],
                         "".join(["Downsampled Imaging Frame Set ", str(_sampling)]))
 
@@ -737,7 +737,7 @@ class BehavioralStage:
             elif isinstance(self.folder_dictionary.get(_key), CollectedImagingAnalysisFolder):
                 self.folder_dictionary.get(_key).reindex()
 
-    def __create_folder_dictionary(self, MouseDirectory: str, Stage: str) -> Self:
+    def _create_folder_dictionary(self, MouseDirectory: str, Stage: str) -> Self:
         """
         Creates a dictionary of locations for specific files
 
@@ -756,7 +756,7 @@ class BehavioralStage:
             'behavior_folder': _stage_directory + "\\Behavior",
         }
 
-    def __fill_imaging_folder_dictionary(self) -> Self:
+    def _fill_imaging_folder_dictionary(self) -> Self:
         """
         Generates folders and a dictionary of imaging files (Raw, Meta, Compiled)
 
@@ -777,7 +777,7 @@ class BehavioralStage:
             print("Existing Bruker Meta Data Folder Detected")
         self.folder_dictionary['bruker_meta_data'] = CollectedDataFolder(_bruker_meta_folder)
 
-    def __load_base_behavior(self) -> Self:
+    def _load_base_behavior(self) -> Self:
         """
         Loads the basic behavioral data: analog, dictionary, digital, state, and CS identities
 
@@ -808,10 +808,10 @@ class BehavioralStage:
             print(_dictionary_data)
 
         # Form Pandas DataFrame
-        self.data, self.state_index, self.multi_index = self.__organize_base_data(_analog_data, _digital_data,
-                                                                                  _state_data)
+        self.data, self.state_index, self.multi_index = self._organize_base_data(_analog_data, _digital_data,
+                                                                                 _state_data)
 
-    def __load_bruker_analog_recordings(self) -> pd.DataFrame:
+    def _load_bruker_analog_recordings(self) -> pd.DataFrame:
         """
         Loads Bruker Analog Recordings
 
@@ -821,9 +821,9 @@ class BehavioralStage:
 
         self.folder_dictionary["bruker_meta_data"].reindex()
         _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("csv")
-        return self.__load_bruker_analog_file(_files[-1])
+        return self._load_bruker_analog_file(_files[-1])
 
-    def __load_bruker_meta_data(self) -> Self:
+    def _load_bruker_meta_data(self) -> Self:
         """
         Loads Bruker Meta Data
 
@@ -833,10 +833,10 @@ class BehavioralStage:
         _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("xml")
         _files = [_files[0], _files[2], _files[1]]
         # Rearrange as Imaging, Voltage Recording, Voltage Output
-        self.meta = self.__load_bruker_meta_file(_files)
+        self.meta = self._load_bruker_meta_file(_files)
 
     @staticmethod
-    def __load_bruker_analog_file(File: str) -> pd.DataFrame:
+    def _load_bruker_analog_file(File: str) -> pd.DataFrame:
         """
         Method to load bruker analog recordings from .csv
 
@@ -849,7 +849,7 @@ class BehavioralStage:
         return pd.read_csv(File)
 
     @staticmethod
-    def __load_bruker_meta_file(File: Union[str, list[str]]) -> BrukerMeta:
+    def _load_bruker_meta_file(File: Union[str, list[str]]) -> BrukerMeta:
         """
         Loads bruker meta file using a class wrapping sam's code
 
@@ -870,8 +870,8 @@ class BehavioralStage:
         return meta
 
     @staticmethod
-    def __organize_base_data(Analog: np.ndarray, Digital: np.ndarray, State: np.ndarray,
-                             HardwareConfig: Optional[dict] = None) -> pd.DataFrame:
+    def _organize_base_data(Analog: np.ndarray, Digital: np.ndarray, State: np.ndarray,
+                            HardwareConfig: Optional[dict] = None) -> pd.DataFrame:
         """
         This function organizes analog, digital, and state data into a pandas dataframe
 
@@ -1030,9 +1030,9 @@ class BehavioralStage:
         return OrganizedData, StateCastedDict, MultiIndex
 
     @staticmethod
-    def __sync_bruker_recordings(DataFrame: pd.DataFrame, AnalogRecordings: pd.DataFrame, MetaData: BrukerMeta,
-                                 StateCastedDict: dict,
-                                 SyncKey: Tuple[str, str], Parameters: dict, **kwargs) -> pd.DataFrame:
+    def _sync_bruker_recordings(DataFrame: pd.DataFrame, AnalogRecordings: pd.DataFrame, MetaData: BrukerMeta,
+                                StateCastedDict: dict,
+                                SyncKey: Tuple[str, str], Parameters: dict, **kwargs) -> pd.DataFrame:
         """
 
         :param DataFrame:
@@ -1136,7 +1136,7 @@ class BehavioralStage:
         return DataFrame
 
     @staticmethod
-    def __sync_grouped_z_projected_images(DataFrame: pd.DataFrame, MetaData: BrukerMeta, Parameters: dict, *args: str) -> \
+    def _sync_grouped_z_projected_images(DataFrame: pd.DataFrame, MetaData: BrukerMeta, Parameters: dict, *args: str) -> \
             pd.DataFrame:
         print("\nSyncing Images...")
 
@@ -1220,6 +1220,22 @@ This is a class for managing a folder of unorganized data files
         self.files = self.path
 
     @property
+    def files(self) -> List[str]:
+        return self._files
+
+    @files.setter
+    def files(self, Path: str) -> Self:
+        """
+       function to quickly fill recursively
+
+        :param Path: Directory to check
+        :type Path: str
+        :return: Any
+        """
+
+        self._files = [_file for _file in pathlib.Path(Path).rglob("*") if _file.is_file()]
+
+    @property
     def instance_date(self) -> str:
         """
         Date Created
@@ -1245,49 +1261,6 @@ This is a class for managing a folder of unorganized data files
         else:
             print("Path can only be assigned ONCE.")
 
-    @property
-    def files(self) -> List[str]:
-        return self._files
-
-    @files.setter
-    def files(self, Path: str) -> Self:
-        """
-       function to quickly fill recursively
-
-        :param Path: Directory to check
-        :type Path: str
-        :return: Any
-        """
-
-        self._files = [_file for _file in pathlib.Path(Path).rglob("*") if _file.is_file()]
-
-    def reindex(self) -> Self:
-        """
-        Function that indexes the files within folder again
-        """
-        
-        self.files = self.path
-
-    def find_matching_files(self, Filename: str, Folder: Optional[str] = None) -> Union[Tuple[str], None]:
-        """
-        Finds all matching files
-
-        :param Filename: Filename or  ID to search for
-        :type Filename: str
-        :param Folder: Specify folder filename in
-        :type Folder: Any
-        :return: Matching file/s
-        :rtype: Any
-        """
-        # arg for specifying folder
-
-        self.reindex() # reindex to be sure not missing anything
-
-        if Folder is not None:
-            Filename = "".join([Folder, "\\", Filename])
-
-        return [str(_path) for _path in self.files if Filename in str(_path)]
-
     def find_all_ext(self, Ext: str) -> Union[List[str], None]:
         """
         Finds all files with specific extension
@@ -1309,6 +1282,33 @@ This is a class for managing a folder of unorganized data files
 
         return [str(file) for file in self.files if file.suffix == Ext]
 
+    def find_matching_files(self, Filename: str, Folder: Optional[str] = None) -> Union[Tuple[str], None]:
+        """
+        Finds all matching files
+
+        :param Filename: Filename or  ID to search for
+        :type Filename: str
+        :param Folder: Specify folder filename in
+        :type Folder: Any
+        :return: Matching file/s
+        :rtype: Any
+        """
+        # arg for specifying folder
+
+        self.reindex() # reindex to be sure not missing anything
+
+        if Folder is not None:
+            Filename = "".join([Folder, "\\", Filename])
+
+        return [str(_path) for _path in self.files if Filename in str(_path)]
+
+    def reindex(self) -> Self:
+        """
+        Function that indexes the files within folder again
+        """
+
+        self.files = self.path
+
 
 class CollectedImagingFolder(CollectedDataFolder):
     """
@@ -1325,14 +1325,14 @@ class CollectedImagingFolder(CollectedDataFolder):
         return np.unique(_exts)[_counts == max(_counts)]
 
     @property
-    def meta_files(self):
-        _exts = [file.suffix() for file in self.files]
-        return _exts[_exts != self.file_format].__len__()
-
-    @property
     def imaging_files(self):
         _exts = [file.suffix() for file in self.files]
         return _exts[_exts == self.file_format].__len__()
+
+    @property
+    def meta_files(self):
+        _exts = [file.suffix() for file in self.files]
+        return _exts[_exts != self.file_format].__len__()
 
 
 class CollectedImagingAnalysisFolder(CollectedDataFolder):
