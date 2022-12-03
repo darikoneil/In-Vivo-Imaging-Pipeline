@@ -112,7 +112,7 @@ class FearConditioning(BehavioralStage):
         if ImagingParameters is not None:
             self._load_bruker_meta_data()
 
-        if args and ImagingParameters is not None:
+        if ImagingParameters is not None:
             if isinstance(ImagingParameters, dict):
                 self.data = self._sync_bruker_recordings(self.data, self._load_bruker_analog_recordings(), self.meta,
                                                          self.state_index, ("State Integer", " TrialIndicator"), ImagingParameters)
