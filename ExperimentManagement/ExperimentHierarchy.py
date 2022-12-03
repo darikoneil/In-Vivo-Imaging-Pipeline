@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import sys
 from typing import Union, Tuple, List, Optional
 import os
 from datetime import date, datetime
@@ -586,27 +588,24 @@ class BehavioralStage:
         | *Meta* : Passed meta from experimental hierarchy (directory, mouse_id)
         | *Stage* : Title of Stage
 
-    **Positional Arguments**
-        | *SyncID* : Sync ID (ID of columns used for syncing data)
-
-    **Self Methods**
-        | *record_mod* : Records a modification made to the behavioral stage (Date & Time)
-        | *create_folder_dictionary* : Creates a dictionary of locations for specific files
-        | *fillImagingDictionary* :  Generates folders and a dictionary of imaging files (Raw, Meta, Compiled)
-        | *add_image_sampling_folder* : Generates a folder for containing imaging data of a specific sampling rate
-        | *addImageProcessingFolder* : Generates a folder for containing processed imaging data
-
     **Properties**
         | *mouse_id* : Identifies which mouse this data belongs to
         | *instance_data* : Identifies when this behavioral stage was created
 
     **Attributes**
-        | *modifications* : List of modifications made to this behavioral stage
-        | *folder_dictionary* : A dictionary of relevant folders for this behavioral stage
         | *data* : Pandas dataframe of synced data
+        | *folder_dictionary* : A dictionary of relevant folders for this behavioral stage
+        | *modifications* : List of modifications made to this behavioral stage
         | *meta* : bruker metadata
-        | *state_index* : index of states
-        | *sync_id* : key indicator for syncing data
+        | *multi_index*: Pandas multi-index of behavioral components
+        | *state_index* : look-up table / index relating states to integers
+        | *trial_parameters* : behavioral parameters
+
+    **Methods**
+        | *add_image_sampling_folder* : Generates a folder for containing imaging data of a specific sampling rate
+        | *load_data* : Loads all data
+        | *record_mod* :  Records a modification made to the behavioral stage (Date & Time)
+        | *update_folder_dictionary* : This function reindexes all folders in the folder dictionary
     """
 
     def __init__(self, Meta: Tuple[str, str], Stage: str):
@@ -619,28 +618,23 @@ class BehavioralStage:
         # PROTECTED
         self.__mouse_id = Meta[1]
         self.__instance_date = ExperimentData.get_date()
-        #
-        self.modifications = [(ExperimentData.get_date(), ExperimentData.get_time())]
-        self.folder_dictionary = dict()
-        # self.data = pd.DataFrame
+        # PUBLIC
         self.data = None
+        self.folder_dictionary = dict()
         self.meta = None
+        self.modifications = [(ExperimentData.get_date(), ExperimentData.get_time())]
         self.multi_index = None
         self.state_index = dict()
         self.trial_parameters = dict()
-
+        # Create, Fill, and Index Relevant Folders
         _mouse_directory = Meta[0]
-        self.create_folder_dictionary(_mouse_directory, Stage)
-        self.fill_imaging_folder_dictionary()
-
-    @property
-    def mouse_id(self) -> str:
-        """
-        ID of mouse
-
-        :rtype: str
-        """
-        return self._BehavioralStage__mouse_id
+        self.__create_folder_dictionary(_mouse_directory, Stage)
+        self.__fill_imaging_folder_dictionary()
+        # noinspection PyBroadException
+        try:
+            self.load_data()
+        except Exception:
+            print(sys.exc_info())
 
     @property
     def instance_date(self) -> str:
@@ -651,6 +645,70 @@ class BehavioralStage:
         """
         return self._BehavioralStage__instance_date
 
+    @property
+    def mouse_id(self) -> str:
+        """
+        ID of mouse
+
+        :rtype: str
+        """
+        return self._BehavioralStage__mouse_id
+
+    def add_image_sampling_folder(self, SamplingRate: int) -> Self:
+        """
+        Generates a folder for containing imaging data of a specific sampling rate
+
+        :param SamplingRate: Sampling Rate of Dataset in Hz
+        :type SamplingRate: int
+        :rtype: Any
+        """
+        SamplingRate = str(SamplingRate)  # Because we know I'll always forget and send an int anyway
+        _folder_name = "".join([self.folder_dictionary['imaging_folder'], "\\", SamplingRate, "Hz"])
+        _key_name = "".join(["imaging_", SamplingRate, "Hz"])
+        try:
+            os.makedirs(_folder_name)
+        except FileExistsError:
+            print("The sampling folder already exists. Adding to folder dictionary")
+        # setattr(self, _attr_name, CollectedImagingAnalysisFolder(_folder_name)) changing to be in folder dictionary
+        self.folder_dictionary[_key_name] = CollectedImagingAnalysisFolder(_folder_name)
+        ExperimentData.generate_imaging_sampling_rate_subdirectory(_folder_name)
+        self.update_folder_dictionary()
+
+    def load_data(self, ImagingParameters: Optional[Union[dict, list[dict]]] = None, *args: Optional[Tuple[str, str]], **kwargs) -> Self:
+        """
+         Loads all data
+
+        :param ImagingParameters: Parameters for some imaging dataset or list of datasets (e.g., for two different sampling rates)
+        :type ImagingParameters: Optional[dict]
+        :param args: Optionally pass Sync Key to synchronize bruker recordings
+        :type args: Tuple[str, str]
+        :param kwargs: passed to internal functions taking kwargs
+        :rtype: Any
+        """
+
+        if self.data is not None:
+            input("\nDetected there is currently data loaded!\n Would you like to Overwrite?(Y/N)\n")
+            if input == "Y" or input == "Yes" or input == "Ye" or input == "es":
+                pass
+            else:
+                return
+
+        self.__load_base_behavior()
+        self.__load_bruker_meta_data()
+        if args and ImagingParameters is not None:
+            if isinstance(ImagingParameters, dict):
+                self.data = self.__sync_bruker_recordings(self.data, self.__load_bruker_analog_recordings(), self.meta,
+                                                        self.state_index, *args, ImagingParameters)
+                if ImagingParameters.get(("preprocessing", "grouped-z project bin size")):
+                    self.data = self.__sync_grouped_z_projected_images(self.data, self.meta, ImagingParameters)
+            elif isinstance(ImagingParameters, list) and isinstance(ImagingParameters[-1], dict):
+                self.data = self.__sync_bruker_recordings(self.data, self.__load_bruker_analog_recordings(), self.meta,
+                                                        self.state_index, *args, ImagingParameters[0])
+                for _sampling in range(1, ImagingParameters.__len__(), 1):
+                    self.data = self.__sync_grouped_z_projected_images(
+                        self.data, self.meta, ImagingParameters[_sampling],
+                        "".join(["Downsampled Imaging Frame Set ", str(_sampling)]))
+
     def record_mod(self) -> Self:
         """
         Records a modification made to the behavioral stage (Date & Time)
@@ -659,7 +717,21 @@ class BehavioralStage:
         """
         self.modifications.append((ExperimentData.get_date(), ExperimentData.get_time()))
 
-    def create_folder_dictionary(self, MouseDirectory: str, Stage: str) -> Self:
+    def update_folder_dictionary(self) -> Self:
+        """
+        This function reindexes all folders in the folder dictionary
+
+        :rtype: Any
+        """
+
+        # noinspection PyTypeChecker
+        for _key in self.folder_dictionary.keys():
+            if isinstance(self.folder_dictionary.get(_key), CollectedDataFolder):
+                self.folder_dictionary.get(_key).reindex()
+            elif isinstance(self.folder_dictionary.get(_key), CollectedImagingAnalysisFolder):
+                self.folder_dictionary.get(_key).reindex()
+
+    def __create_folder_dictionary(self, MouseDirectory: str, Stage: str) -> Self:
         """
         Creates a dictionary of locations for specific files
 
@@ -678,7 +750,7 @@ class BehavioralStage:
             'behavior_folder': _stage_directory + "\\Behavior",
         }
 
-    def fill_imaging_folder_dictionary(self) -> Self:
+    def __fill_imaging_folder_dictionary(self) -> Self:
         """
         Generates folders and a dictionary of imaging files (Raw, Meta, Compiled)
 
@@ -690,7 +762,7 @@ class BehavioralStage:
             os.makedirs(_raw_data_folder)
         except FileExistsError:
             print("Existing Raw Data Folder Detected")
-        self.folder_dictionary['raw_imaging_data'] = CollectedDataFolder(_raw_data_folder)
+        self.folder_dictionary['raw_imaging_data'] = CollectedImagingFolder(_raw_data_folder)
         # META
         _bruker_meta_folder = self.folder_dictionary['imaging_folder'] + "\\BrukerMetaData"
         try:
@@ -699,73 +771,41 @@ class BehavioralStage:
             print("Existing Bruker Meta Data Folder Detected")
         self.folder_dictionary['bruker_meta_data'] = CollectedDataFolder(_bruker_meta_folder)
 
-    def add_image_sampling_folder(self, SamplingRate: int) -> Self:
+    def __load_base_behavior(self) -> Self:
         """
-        Generates a folder for containing imaging data of a specific sampling rate
+        Loads the basic behavioral data: analog, dictionary, digital, state, and CS identities
 
-        :param SamplingRate: Sampling Rate of Dataset in Hz
-        :type SamplingRate: int
         :rtype: Any
         """
-        SamplingRate = str(SamplingRate)  # Because we know I'll always forget and send an int anyway
-        _folder_name = "".join([self.folder_dictionary['imaging_folder'], "\\", SamplingRate, "Hz"])
-        _key_name = "".join(["imaging_", SamplingRate, "Hz"])
+
+        print("Loading Base Data...")
+        # Analog
+        _analog_file = "".join([self.folder_dictionary.get("behavior_folder"), "\\analog.npy"])
+        _analog_data = np.load(_analog_file, allow_pickle=True)
+
+        # Digital
+        _digital_file = "".join([self.folder_dictionary.get("behavior_folder"), "\\digital.npy"])
+        _digital_data = np.load(_digital_file, allow_pickle=True)
+
+        # State
+        _state_file = "".join([self.folder_dictionary.get("behavior_folder"), "\\state_data.npy"])
+        _state_data = np.load(_state_file, allow_pickle=True
+                              )
+        # Dictionary
+        _dictionary_file = "".join([self.folder_dictionary.get("behavior_folder"), "\\config.npy"])
+        with open(_dictionary_file, "rb") as f:
+            _dictionary_data = pkl.load(f)
+
         try:
-            os.makedirs(_folder_name)
-        except FileExistsError:
-            print("The sampling folder already exists. Adding to folder dictionary")
-        # setattr(self, _attr_name, CollectedImagingFolder(_folder_name)) changing to be in folder dictionary
-        self.folder_dictionary[_key_name] = CollectedImagingFolder(_folder_name)
-        ExperimentData.generate_imaging_sampling_rate_subdirectory(_folder_name)
-        self.update_folder_dictionary()
+            self.trial_parameters = _dictionary_data.copy()  # For Safety
+        except AttributeError:
+            print(_dictionary_data)
 
-    def update_folder_dictionary(self) -> Self:
-        """
-        This function reindexes all folders in the folder dictionary
+        # Form Pandas DataFrame
+        self.data, self.state_index, self.multi_index = self.__organize_base_data(_analog_data, _digital_data,
+                                                                                  _state_data)
 
-        :rtype: Any
-        """
-
-        # noinspection PyTypeChecker
-        for _key in self.folder_dictionary.keys():
-            if isinstance(self.folder_dictionary.get(_key), CollectedDataFolder):
-                self.folder_dictionary.get(_key).reindex()
-            elif isinstance(self.folder_dictionary.get(_key), CollectedImagingFolder):
-                self.folder_dictionary.get(_key).reindex()
-
-    def load_data(self, ImagingParameters: Optional[dict] = None, *args: Optional[Tuple[str, str]], **kwargs) -> Self:
-        """
-         Loads all data (Convenience Function)
-
-        :param ImagingParameters: Parameters for some imaging dataset
-        :type ImagingParameters: Optional[dict]
-        :param args: Optionally pass Sync Key to synchronize bruker recordings
-        :type args: Tuple[str, str]
-        :param kwargs: passed to internal functions taking kwargs
-        :rtype: Any
-        """
-
-        self.load_base_behavior()
-        self.load_bruker_meta_data()
-        if args and ImagingParameters is not None:
-            self.data = self.sync_bruker_recordings(self.data, self.load_bruker_analog_recordings(), self.meta,
-                                                    self.state_index, *args, ImagingParameters)
-            if ImagingParameters.get(("preprocessing", "grouped-z project bin size")):
-                self.data = self.sync_grouped_z_projected_images(self.data, self.meta, ImagingParameters)
-
-    def load_bruker_meta_data(self) -> Self:
-        """
-        Loads Bruker Meta Data
-
-        :rtype: Any
-        """
-        self.folder_dictionary["bruker_meta_data"].reindex()
-        _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("xml")
-        self.meta = BrukerMeta(_files[0], _files[2], _files[1])
-        self.meta.import_meta_data()
-        self.meta.creation_date = ExperimentData.get_date()
-
-    def load_bruker_analog_recordings(self) -> pd.DataFrame:
+    def __load_bruker_analog_recordings(self) -> pd.DataFrame:
         """
         Loads Bruker Analog Recordings
 
@@ -775,54 +815,57 @@ class BehavioralStage:
 
         self.folder_dictionary["bruker_meta_data"].reindex()
         _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("csv")
-        return self.load_bruker_analog_file(_files[-1])
+        return self.__load_bruker_analog_file(_files[-1])
 
-    def load_base_behavior(self) -> Self:
+    def __load_bruker_meta_data(self) -> Self:
         """
-        Loads the basic behavioral data: analog, dictionary, digital, state, and CS identities
+        Loads Bruker Meta Data
 
         :rtype: Any
         """
-
-        print("Loading Base Data...")
-        # Analog
-        _analog_file = self.generateFileID('Analog')
-        _analog_data = FearConditioning.load_analog_data(_analog_file)
-        if type(_analog_data) == str and _analog_data == "ERROR":
-            return print("Could not find analog data!")
-
-        # Digital
-        _digital_file = self.generateFileID('Digital')
-        _digital_data = FearConditioning.load_digital_data(_digital_file)
-        if type(_digital_data) == str and _digital_data == "ERROR":
-            return print("Could not find digital data!")
-
-        # State
-        _state_file = self.generateFileID('State')
-        _state_data = FearConditioning.load_state_data(_state_file)
-        if _state_data[0] == "ERROR": # 0 because it's an array of strings so ambiguous str comparison
-            return print("Could not find state data!")
-
-        # Dictionary
-        _dictionary_file = self.generateFileID('Dictionary')
-        _dictionary_data = FearConditioning.load_dictionary_data(_dictionary_file)
-        try:
-            self.trial_parameters = _dictionary_data.copy() # For Safety
-        except AttributeError:
-            print(_dictionary_data)
-
-        if _dictionary_data == "ERROR_FIND":
-            return print("Could not find dictionary data!")
-        elif _dictionary_data == "ERROR_READ":
-            return print("Could not read dictionary data!")
-
-        # Form Pandas DataFrame
-        self.data, self.state_index, self.multi_index = self.organize_base_data(_analog_data, _digital_data,
-                                                                                _state_data)
+        self.folder_dictionary["bruker_meta_data"].reindex()
+        _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("xml")
+        _files = [_files[0], _files[2], _files[1]]
+        # Rearrange as Imaging, Voltage Recording, Voltage Output
+        self.meta = self.__load_bruker_meta_file(_files)
 
     @staticmethod
-    def organize_base_data(Analog: np.ndarray, Digital: np.ndarray, State: np.ndarray,
-                           HardwareConfig: Optional[dict] = None) -> pd.DataFrame:
+    def __load_bruker_analog_file(File: str) -> pd.DataFrame:
+        """
+        Method to load bruker analog recordings from .csv
+
+        :param File: filepath
+        :type File: str
+        :return: analog recordings
+        :rtype: pd.DataFrame
+        """
+        assert(pathlib.Path(File).suffix == ".csv")
+        return pd.read_csv(File)
+
+    @staticmethod
+    def __load_bruker_meta_file(File: Union[str, list[str]]) -> BrukerMeta:
+        """
+        Loads bruker meta file using a class wrapping sam's code
+
+        :param File: Filename of a single or list of bruker meta files
+        :type File: Union[str, list[str]]
+        :return: the metadata
+        :rtype: BrukerMeta
+        """
+        if isinstance(File, list):
+            meta = BrukerMeta(*File)
+        else:
+            meta = BrukerMeta(File)
+
+        meta.import_meta_data()
+
+        meta.creation_date = ExperimentData.get_date()
+
+        return meta
+
+    @staticmethod
+    def __organize_base_data(Analog: np.ndarray, Digital: np.ndarray, State: np.ndarray,
+                             HardwareConfig: Optional[dict] = None) -> pd.DataFrame:
         """
         This function organizes analog, digital, and state data into a pandas dataframe
 
@@ -981,22 +1024,9 @@ class BehavioralStage:
         return OrganizedData, StateCastedDict, MultiIndex
 
     @staticmethod
-    def load_bruker_analog_file(File: str) -> pd.DataFrame:
-        """
-        Method to load bruker analog recordings from .csv
-
-        :param File: filepath
-        :type File: str
-        :return: analog recordings
-        :rtype: pd.DataFrame
-        """
-        assert(pathlib.Path(File).suffix == ".csv")
-        return pd.read_csv(File)
-
-    @staticmethod
-    def sync_bruker_recordings(DataFrame: pd.DataFrame, AnalogRecordings: pd.DataFrame, MetaData: BrukerMeta,
-                               StateCastedDict: dict,
-                               SyncKey: Tuple[str, str], Parameters: dict, **kwargs) -> pd.DataFrame:
+    def __sync_bruker_recordings(DataFrame: pd.DataFrame, AnalogRecordings: pd.DataFrame, MetaData: BrukerMeta,
+                                 StateCastedDict: dict,
+                                 SyncKey: Tuple[str, str], Parameters: dict, **kwargs) -> pd.DataFrame:
         """
 
         :param DataFrame:
@@ -1100,9 +1130,15 @@ class BehavioralStage:
         return DataFrame
 
     @staticmethod
-    def sync_grouped_z_projected_images(DataFrame: pd.DataFrame, MetaData: BrukerMeta, Parameters: dict) -> \
+    def __sync_grouped_z_projected_images(DataFrame: pd.DataFrame, MetaData: BrukerMeta, Parameters: dict, *args: str) -> \
             pd.DataFrame:
         print("\nSyncing Images...")
+
+        if args:
+            _name = args[0]
+        else:
+            _name = "Downsampled Imaging Frame"
+
         # parse params
         _bin_size = Parameters.get(("preprocessing", "grouped-z project bin size"))
         _artifact = Parameters.get(("preprocessing", "shuttle artifact length"))
@@ -1134,12 +1170,12 @@ class BehavioralStage:
 
         _downsampled_frames = pd.Series(np.arange(0, _time_stamp.shape[0], 1),
                                         index=_time_stamp)
-        _downsampled_frames.name = "Downsampled Imaging Frame"
+        _downsampled_frames.name = _name
 
         DataFrame = DataFrame.join(_downsampled_frames.copy(deep=True), on="Time (s)")
 
         _downsampled_frames.reindex(DataFrame.index)
-        _downsampled_frames.name = "[FILLED] Downsampled Imaging Frame"
+        _downsampled_frames.name = "".join(["[FILLED] ", _name])
         _downsampled_frames.interpolate(method="nearest", inplace=True)
         DataFrame = DataFrame.join(_downsampled_frames, on="Time (s)")
 
@@ -1270,7 +1306,32 @@ This is a class for managing a folder of unorganized data files
 
 class CollectedImagingFolder(CollectedDataFolder):
     """
-    Class specifically for imaging folder, inherits collected data folder
+    Class specifically for folders containing raw images, inherits collected data folder
+    """
+
+    def __init__(self, Path: str):
+        super().__init__(Path)
+
+    @property
+    def file_format(self):
+        _exts = [file.suffix() for file in self.files]
+        _counts = [_exts.count(ext) for ext in np.unique(_exts)]
+        return np.unique(_exts)[_counts == max(_counts)]
+
+    @property
+    def meta_files(self):
+        _exts = [file.suffix() for file in self.files]
+        return _exts[_exts != self.file_format].__len__()
+
+    @property
+    def imaging_files(self):
+        _exts = [file.suffix() for file in self.files]
+        return _exts[_exts == self.file_format].__len__()
+
+
+class CollectedImagingAnalysisFolder(CollectedDataFolder):
+    """
+    Class specifically for imaging analysis folders, inherits collected data folder
 
     **Self Methods**
         | *load_fissa_exports* : loads fissa exported files
@@ -1289,6 +1350,86 @@ class CollectedImagingFolder(CollectedDataFolder):
         self.folders = None
         self.default_folders()
 
+    @property
+    def current_stage(self) -> str:
+        """
+        Stage of Analysis
+
+        :rtype: str
+        """
+
+        if self.find_matching_files("cascade").__len__() >= 3:
+            return "Ready for Analysis"
+        elif 1 < self.find_matching_files("cascade").__len__() < 3:
+            return "Cascade: Discrete Inference"
+        elif self.find_matching_files("fissa").__len__() >= 2:
+            return "Cascade: Spike Probability"
+        elif 1 <= self.find_matching_files("fissa").__len__() < 2:
+            return "Fissa: Source-Separation"
+        elif self.find_matching_files("spks.npy", "suite2p\\plane0").__len__() > 0:
+            return "Fissa: Trace Extraction"
+        elif self.find_matching_files("iscell.npy", "suite2p\\plane0").__len__() > 0:
+            return "Suite2P: Spike Inference [Formality]"
+        elif self.find_matching_files("F.npy", "suite2p\\plane0").__len__() > 0:
+            return "Suite2P: Classify ROIs"
+        elif self.find_matching_files("stat.npy", "suite2p\\plane0").__len__() > 0:
+            return "Suite2P: Trace Extraction"
+        elif self.find_matching_files("denoised").__len__() >= 1:
+            return "Suite2P: ROI Detection"
+        elif self.find_matching_files("suite2p").__len__() >= 2:
+            return "DeepCAD: Denoising"
+        else:
+            return "Motion Correction"
+
+    def add_notes(self, Step: str, KeyOrDict: Union[str, dict], Notes: Optional[Any] = None) -> Self:
+        """
+        Function adds notes indicating steps
+
+        :param Step: Step of Analysis
+        :param Step: str
+        :param KeyOrDict: Either a Key or a dictionary containing multiple key-value (note) pairs
+        :type KeyOrDict: Union[str, dict]
+        :param Notes: If using key, then notes is the paired value
+        :type Notes: Optional[Any]
+        :rtype: Any
+        """
+        if isinstance(KeyOrDict, str) and Notes is not None:
+            self.parameters[(Step, KeyOrDict)] = Notes
+        elif isinstance(KeyOrDict, str) and Notes is None:
+            self.parameters[(Step, KeyOrDict)] = Notes
+            print("No value (note) provided to pair with key value. Added None")
+        elif isinstance(KeyOrDict, dict):
+            for _key in KeyOrDict:
+                self.parameters[(Step, _key)] = KeyOrDict.get(_key)
+
+    def clean_up_motion_correction(self) -> Self:
+        """
+        This function removes the reg_tif folder and registered.bin generated during motion correction.
+         (You can avoid the creation of these in the first place by changing suite2p parameters)
+
+        :rtype: Any
+        """
+
+        if self.find_matching_files("reg_tif").__len__() != 0:
+            [pathlib.Path(_file).unlink() for _file in self.find_matching_files("reg_tif")]
+        if self.find_matching_files("registered_data.bin").__len__() != 0 and self.find_matching_files(
+                "binary_video", "suite2p//plane0").__len__() != 0:
+            [pathlib.Path(_file).unlink() for _file in self.find_matching_files("data.bin")]
+        if self.find_matching_files("data.bin").__len__() != 0 and self.find_matching_files(
+                "binary_video", "suite2p//plane0").__len__() != 0:
+            [pathlib.Path(_file).unlink() for _file in self.find_matching_files("data.bin")]
+
+    def clean_up_compilation(self) -> Self:
+        """
+        This function removes the compiled tif files generated inside CompiledImagingData
+        (You can avoid the creation of these in the first place by changing suite2p parameters)
+
+        :rtype: Any
+        """
+
+        if self.find_matching_files("compiledVideo", "compiled").__len__() != 0:
+            [pathlib.Path(_file).unlink() for _file in self.find_matching_files("compiledVideo", "compiled")]
+
     def default_folders(self):
         self.folders = {
             "denoised": "".join([self.path, "\\denoised"]),
@@ -1299,6 +1440,15 @@ class CollectedImagingFolder(CollectedDataFolder):
             "plane0": "".join([self.path, "\\suite2p\\plane0"]),
             "compiled": "".join([self.path, "\\compiled"])
         }
+
+    def export_registration_to_denoised(self):
+        """
+        moves registration to new folder for namespace compatibility
+
+        :return:
+        """
+        _images = np.reshape(np.fromfile(self.find_matching_files("registered_data.bin", "plane0")[0], dtype=np.int16), (-1, 512, 512))
+        save_raw_binary(_images, self.folders.get("denoised"))
 
     def load_fissa_exports(self) -> Tuple[dict, dict, dict]:
         """
@@ -1457,92 +1607,3 @@ class CollectedImagingFolder(CollectedDataFolder):
         suite2p_module.db = suite2p_module.ops # make sure db never overwrites ops
         print("Finished.")
         return suite2p_module
-
-    def export_registration_to_denoised(self):
-        """
-        moves registration to new folder for namespace compatibility
-
-        :return:
-        """
-        _images = np.reshape(np.fromfile(self.find_matching_files("registered_data.bin", "plane0")[0], dtype=np.int16), (-1, 512, 512))
-        save_raw_binary(_images, self.folders.get("denoised"))
-
-    def clean_up_motion_correction(self) -> Self:
-        """
-        This function removes the reg_tif folder and registered.bin generated during motion correction.
-         (You can avoid the creation of these in the first place by changing suite2p parameters)
-
-        :rtype: Any
-        """
-
-        if self.find_matching_files("reg_tif").__len__() != 0:
-            [pathlib.Path(_file).unlink() for _file in self.find_matching_files("reg_tif")]
-        if self.find_matching_files("registered_data.bin").__len__() != 0 and self.find_matching_files(
-                "binary_video", "suite2p//plane0").__len__() != 0:
-            [pathlib.Path(_file).unlink() for _file in self.find_matching_files("data.bin")]
-        if self.find_matching_files("data.bin").__len__() != 0 and self.find_matching_files(
-                "binary_video", "suite2p//plane0").__len__() != 0:
-            [pathlib.Path(_file).unlink() for _file in self.find_matching_files("data.bin")]
-
-    def clean_up_compilation(self) -> Self:
-        """
-        This function removes the compiled tif files generated inside CompiledImagingData
-        (You can avoid the creation of these in the first place by changing suite2p parameters)
-
-        :rtype: Any
-        """
-
-        if self.find_matching_files("compiledVideo", "compiled").__len__() != 0:
-            [pathlib.Path(_file).unlink() for _file in self.find_matching_files("compiledVideo", "compiled")]
-
-    def add_notes(self, Step: str, KeyOrDict: Union[str, dict], Notes: Optional[Any] = None) -> Self:
-        """
-        Function adds notes indicating steps
-
-        :param Step: Step of Analysis
-        :param Step: str
-        :param KeyOrDict: Either a Key or a dictionary containing multiple key-value (note) pairs
-        :type KeyOrDict: Union[str, dict]
-        :param Notes: If using key, then notes is the paired value
-        :type Notes: Optional[Any]
-        :rtype: Any
-        """
-        if isinstance(KeyOrDict, str) and Notes is not None:
-            self.parameters[(Step, KeyOrDict)] = Notes
-        elif isinstance(KeyOrDict, str) and Notes is None:
-            self.parameters[(Step, KeyOrDict)] = Notes
-            print("No value (note) provided to pair with key value. Added None")
-        elif isinstance(KeyOrDict, dict):
-            for _key in KeyOrDict:
-                self.parameters[(Step, _key)] = KeyOrDict.get(_key)
-
-    @property
-    def current_stage(self) -> str:
-        """
-        Stage of Analysis
-
-        :rtype: str
-        """
-
-        if self.find_matching_files("cascade").__len__() >= 3:
-            return "Ready for Analysis"
-        elif 1 < self.find_matching_files("cascade").__len__() < 3:
-            return "Cascade: Discrete Inference"
-        elif self.find_matching_files("fissa").__len__() >= 2:
-            return "Cascade: Spike Probability"
-        elif 1 <= self.find_matching_files("fissa").__len__() < 2:
-            return "Fissa: Source-Separation"
-        elif self.find_matching_files("spks.npy", "suite2p\\plane0").__len__() > 0:
-            return "Fissa: Trace Extraction"
-        elif self.find_matching_files("iscell.npy", "suite2p\\plane0").__len__() > 0:
-            return "Suite2P: Spike Inference [Formality]"
-        elif self.find_matching_files("F.npy", "suite2p\\plane0").__len__() > 0:
-            return "Suite2P: Classify ROIs"
-        elif self.find_matching_files("stat.npy", "suite2p\\plane0").__len__() > 0:
-            return "Suite2P: Trace Extraction"
-        elif self.find_matching_files("denoised").__len__() >= 1:
-            return "Suite2P: ROI Detection"
-        elif self.find_matching_files("suite2p").__len__() >= 2:
-            return "DeepCAD: Denoising"
-        else:
-            return "Motion Correction"

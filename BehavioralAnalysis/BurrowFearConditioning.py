@@ -41,9 +41,27 @@ class FearConditioning(BehavioralStage):
     """
     def __init__(self, Meta: Tuple[str, str], Stage: str):
 
-
         super().__init__(Meta, Stage)
-        self.fill_folder_dictionary()
+
+        def fill_folder_dictionary() -> Self:
+            """
+            Constructs folder data folder structures
+
+            :rtype: Any
+            """
+            nonlocal self
+
+            self.folder_dictionary['behavioral_exports'] = CollectedDataFolder(
+                self.folder_dictionary.get('behavior_folder') +
+                "\\BehavioralExports")
+            self.folder_dictionary['deep_lab_cut_data'] = CollectedDataFolder(
+                self.folder_dictionary.get('behavior_folder') +
+                "\\DeepLabCutData")
+            self.folder_dictionary['raw_behavioral_data'] = CollectedDataFolder(
+                self.folder_dictionary.get('behavior_folder') +
+                "\\RawBehavioralData")
+
+        fill_folder_dictionary()
 
         # PROTECT ME
         _stage = Stage
@@ -112,7 +130,7 @@ class FearConditioning(BehavioralStage):
 
         print("\nLoading all data...")
 
-        self.load_base_behavior()
+        self.__load_base_behavior()
 
         if args:
             # noinspection PyArgumentList
@@ -125,11 +143,11 @@ class FearConditioning(BehavioralStage):
             self.load_bruker_data(ImagingParameters)
 
         if ImagingParameters.get(("preprocessing", "grouped-z project bin size")):
-            self.data = self.sync_grouped_z_projected_images(self.data, self.meta, ImagingParameters)
+            self.data = self.__sync_grouped_z_projected_images(self.data, self.meta, ImagingParameters)
 
         print("\nFinished loading all data.")
 
-    def load_base_behavior(self) -> Self:
+    def __load_base_behavior(self) -> Self:
         """
         Loads the basic behavioral data: analog, dictionary, digital, state, and CS identities
 
@@ -171,8 +189,8 @@ class FearConditioning(BehavioralStage):
         # ingest trial dictionary
 
         # Form Pandas DataFrame
-        self.data, self.state_index, self.multi_index = self.organize_base_data(_analog_data, _digital_data,
-                                                                                _state_data)
+        self.data, self.state_index, self.multi_index = self.__organize_base_data(_analog_data, _digital_data,
+                                                                                  _state_data)
 
         # Add CS information
         self.data = self.merge_cs_index_into_dataframe(self.data, np.array(self.trial_parameters.get("stimulusTypes")))
@@ -237,11 +255,11 @@ class FearConditioning(BehavioralStage):
         :rtype: Any
         """
         print("\nLoading Bruker Data...")
-        _analog_recordings = self.load_bruker_analog_recordings()
+        _analog_recordings = self.__load_bruker_analog_recordings()
         if self.validate_bruker_recordings_completion(_analog_recordings, self.num_trials)[0]:
-            self.data = self.sync_bruker_recordings(self.data.copy(deep=True),
-                                                          _analog_recordings, self.meta, self.state_index,
-                                                          ("State Integer", " TrialIndicator"), Parameters)
+            self.data = self.__sync_bruker_recordings(self.data.copy(deep=True),
+                                                      _analog_recordings, self.meta, self.state_index,
+                                                      ("State Integer", " TrialIndicator"), Parameters)
         else:
             print('Not Yet Implemented')
         print("\nFinished.")
@@ -272,32 +290,6 @@ class FearConditioning(BehavioralStage):
                    str(self.num_trials) + "_" + _save_type
 
         return filename
-
-    def fill_folder_dictionary(self) -> Self:
-        """
-        Function to index subfolders containing behavioral data
-
-        **Requires**
-            | self.folder_dictionary['behavior_folder']
-
-        **Constructs**
-            | self.folder_dictionary['behavioral_exports']
-            | self.folder_dictionary['deep_lab_cut_data']
-            | self.folder_dictionary['raw_behavioral_data']
-            | self.folder_dictionary['processed_data']
-            | self.folder_dictionary['analog_burrow_data']
-
-        """
-        self.folder_dictionary['behavioral_exports'] = CollectedDataFolder(self.folder_dictionary.get('behavior_folder') +
-                                                                           "\\BehavioralExports")
-        self.folder_dictionary['deep_lab_cut_data'] = CollectedDataFolder(self.folder_dictionary.get('behavior_folder') +
-                                                                          "\\DeepLabCutData")
-        self.folder_dictionary['raw_behavioral_data'] = CollectedDataFolder(self.folder_dictionary.get('behavior_folder') +
-                                                                            "\\RawBehavioralData")
-        self.folder_dictionary['processed_data'] = self.folder_dictionary.get('behavior_folder') + \
-                                                   "\\ProcessedData"
-        self.folder_dictionary['analog_burrow_data'] = self.folder_dictionary.get('behavior_folder') + \
-                                                       "\\AnalogBurrowData"
 
     @staticmethod
     def load_analog_data(Filename: str) -> np.ndarray:
