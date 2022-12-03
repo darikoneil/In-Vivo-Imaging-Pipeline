@@ -318,14 +318,7 @@
       <workItem from="1669676523890" duration="130000" />
       <workItem from="1669676923029" duration="11348000" />
       <workItem from="1669833637361" duration="27850000" />
-      <workItem from="1670086696995" duration="8785000" />
-    </task>
-    <task id="LOCAL-00083" summary="misc">
-      <created>1668376928576</created>
-      <option name="number" value="00083" />
-      <option name="presentableId" value="LOCAL-00083" />
-      <option name="project" value="LOCAL" />
-      <updated>1668376928577</updated>
+      <workItem from="1670086696995" duration="10047000" />
     </task>
     <task id="LOCAL-00084" summary="misc">
       <created>1668377075575</created>
@@ -663,7 +656,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670106014814</updated>
     </task>
-    <option name="localTasksCounter" value="132" />
+    <task id="LOCAL-00132" summary="Abstracted out some methods because I was getting annoyed by single-use function clutter in namespace">
+      <created>1670107078311</created>
+      <option name="number" value="00132" />
+      <option name="presentableId" value="LOCAL-00132" />
+      <option name="project" value="LOCAL" />
+      <updated>1670107078311</updated>
+    </task>
+    <option name="localTasksCounter" value="133" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

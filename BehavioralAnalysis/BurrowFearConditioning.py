@@ -92,13 +92,10 @@ class FearConditioning(BehavioralStage):
         """
 
         if self.data is not None:
-            input("\nDetected there is currently data loaded!\n Would you like to Overwrite?(Y/N)\n")
-            if input == "Y" or input == "Yes" or input == "Ye" or input == "es":
-                pass
-            else:
-                return
+            self.data = pd.DataFrame()
 
-        print("\nLoading all data...")
+
+        print("\nLoading All Data...\n")
 
         self._load_base_behavior()
 
