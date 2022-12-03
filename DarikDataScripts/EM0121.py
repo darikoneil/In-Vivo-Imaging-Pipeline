@@ -8,10 +8,10 @@ import seaborn as sns
 
 
 from ExperimentManagement.ExperimentHierarchy import ExperimentData
-from ImagingAnalysis.StaticProcessing import Processing
+from ImagingAnalysis.DataProcessing import Processing
 from ComputationalAnalysis.SupportVectorMachine import SVM
 
-EM0121 = ExperimentData.loadHierarchy("D:\\EM0121")
+EM0121 = ExperimentData.load_experiments("D:\\EM0121")
 SpikeTimes = EM0121.Retrieval.folder_dictionary.get("10Hz").load_cascade_exports()[0]
 SpikeTimes = Processing.generateSpikeMatrix(SpikeTimes, 26352)
 SpikeTimes_Matrix = Processing.trial_matrix_org(EM0121.Retrieval.data_frame.copy(deep=True), SpikeTimes)

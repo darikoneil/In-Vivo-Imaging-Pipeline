@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Analysis of Force">
-      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="QoL function to behavioral stage code">
+      <change afterPath="$PROJECT_DIR$/ImagingAnalysis/PowerSpectrum.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0121.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -320,21 +320,7 @@
       <workItem from="1669661862861" duration="3968000" />
       <workItem from="1669676523890" duration="130000" />
       <workItem from="1669676923029" duration="11348000" />
-      <workItem from="1669833637361" duration="23289000" />
-    </task>
-    <task id="LOCAL-00075" summary="Colorizer Functions Added">
-      <created>1668195399419</created>
-      <option name="number" value="00075" />
-      <option name="presentableId" value="LOCAL-00075" />
-      <option name="project" value="LOCAL" />
-      <updated>1668195399419</updated>
-    </task>
-    <task id="LOCAL-00076" summary="namespace changes">
-      <created>1668201619602</created>
-      <option name="number" value="00076" />
-      <option name="presentableId" value="LOCAL-00076" />
-      <option name="project" value="LOCAL" />
-      <updated>1668201619602</updated>
+      <workItem from="1669833637361" duration="27850000" />
     </task>
     <task id="LOCAL-00077" summary="namespace changes">
       <created>1668201972633</created>
@@ -665,7 +651,21 @@
       <option name="project" value="LOCAL" />
       <updated>1669935584090</updated>
     </task>
-    <option name="localTasksCounter" value="124" />
+    <task id="LOCAL-00124" summary="QoL function to behavioral stage code">
+      <created>1669937709207</created>
+      <option name="number" value="00124" />
+      <option name="presentableId" value="LOCAL-00124" />
+      <option name="project" value="LOCAL" />
+      <updated>1669937709207</updated>
+    </task>
+    <task id="LOCAL-00125" summary="QoL function to behavioral stage code">
+      <created>1669937783553</created>
+      <option name="number" value="00125" />
+      <option name="presentableId" value="LOCAL-00125" />
+      <option name="project" value="LOCAL" />
+      <updated>1669937783553</updated>
+    </task>
+    <option name="localTasksCounter" value="126" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -684,7 +684,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Updated Docstrings" />
     <MESSAGE value="Type Conversion for Suite2P" />
     <MESSAGE value="Slight" />
     <MESSAGE value="IGNORE" />
@@ -709,7 +708,8 @@
     <MESSAGE value="dlc stuff" />
     <MESSAGE value="plotting" />
     <MESSAGE value="Analysis of Force" />
-    <option name="LAST_COMMIT_MESSAGE" value="Analysis of Force" />
+    <MESSAGE value="QoL function to behavioral stage code" />
+    <option name="LAST_COMMIT_MESSAGE" value="QoL function to behavioral stage code" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
