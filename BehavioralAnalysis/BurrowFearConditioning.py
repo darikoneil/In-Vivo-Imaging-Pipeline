@@ -14,7 +14,7 @@ import seaborn as sns
 import ExperimentManagement.ExperimentHierarchy
 from ExperimentManagement.ExperimentHierarchy import BehavioralStage, CollectedDataFolder
 from MigrationTools.Converters import convertFromPy27_Array, convertFromPy27_Dict
-from BehavioralAnalysis.Utilities import extract_specific_data, lowpass_filter
+from BehavioralAnalysis.Utilities import extract_specific_data, lowpass_filter, convert_to_mean_zero
 
 
 class FearConditioning(BehavioralStage):
@@ -232,17 +232,17 @@ class FearConditioning(BehavioralStage):
             _old_min = 0
             _old_max = 800
 
-        _dlc = DeepLabModule(self.folder_dictionary['deep_lab_cut_data'], self.folder_dictionary['behavioral_exports'])
+        _dlc = DeepLabData(self.folder_dictionary['deep_lab_cut_data'], self.folder_dictionary['behavioral_exports'])
 
         _convert = kwargs.get("convert", True)
 
         if _convert:
-            _dlc.trial_data = DeepLabModule.convert_dataframe_to_physical_units(_dlc.trial_data, _old_min, _old_max,
-                                                                                 ("X1", "X2"))
-            _dlc.pre_trial_data = DeepLabModule.convert_dataframe_to_physical_units(_dlc.pre_trial_data, _old_min, _old_max,
-                                                                                     ("X1", "X2"))
-            _dlc.trial_data = DeepLabModule.convert_to_mean_zero(_dlc.trial_data, ("Y1", "Y2"))
-            _dlc.pre_trial_data = DeepLabModule.convert_to_mean_zero(_dlc.pre_trial_data, ("Y1", "Y2"))
+            _dlc.trial_data = DeepLabData.convert_dataframe_to_physical_units(_dlc.trial_data, _old_min, _old_max,
+                                                                              ("X1", "X2"))
+            _dlc.pre_trial_data = DeepLabData.convert_dataframe_to_physical_units(_dlc.pre_trial_data, _old_min, _old_max,
+                                                                                  ("X1", "X2"))
+            _dlc.trial_data = DeepLabData.convert_to_mean_zero(_dlc.trial_data, ("Y1", "Y2"))
+            _dlc.pre_trial_data = DeepLabData.convert_to_mean_zero(_dlc.pre_trial_data, ("Y1", "Y2"))
 
         # Check Efficacy
         try:
@@ -255,7 +255,7 @@ class FearConditioning(BehavioralStage):
             return
 
         # noinspection PyArgumentList
-        self.data = DeepLabModule.merge_dlc_data(self.data, _dlc, self.state_index)
+        self.data = DeepLabData.merge_dlc_data(self.data, _dlc, self.state_index)
 
         print("\nFinished.")
 
@@ -469,7 +469,7 @@ class FearConditioning(BehavioralStage):
             return False, detected_trials
 
 
-class DeepLabModule:
+class DeepLabData:
     """
     Module for importing deeplabcut data
     """
@@ -581,8 +581,8 @@ class DeepLabModule:
 
         return DataFrame
 
-    @classmethod
-    def convert_to_mean_zero(cls, DataFrame: pd.DataFrame, idx: Union[str, Tuple[str]]) -> pd.DataFrame:
+    @staticmethod
+    def convert_to_mean_zero(DataFrame: pd.DataFrame, idx: Union[str, Tuple[str]]) -> pd.DataFrame:
         """
         Converts data range to mean zero
 
@@ -600,14 +600,14 @@ class DeepLabModule:
         return DataFrame
 
     @classmethod
-    def merge_dlc_data(cls, DataFrame: pd.DataFrame, DLC: DeepLabModule, StateCastDict: dict) -> pd.DataFrame:
+    def merge_dlc_data(cls, DataFrame: pd.DataFrame, DLC: DeepLabData, StateCastDict: dict) -> pd.DataFrame:
         """
         Function to merge DLC data with some DataFrame
 
         :param DataFrame: Data to merge with
         :type DataFrame: pd.DataFrame
         :param DLC: Data to merge
-        :type DLC: DeepLabModule
+        :type DLC: DeepLabData
         :param StateCastDict: dictionary relating the state integers with pre-trial and trial states
         :type StateCastDict: dict
         :return: the DataFrame with DLC data merged and time-matched

@@ -6,7 +6,6 @@ import pandas as pd
 import scipy.signal as signal
 
 
-
 def extract_specific_data(DataFrame: pd.DataFrame,
                           KeyValuePairs: Union[Tuple[Tuple[str, Union[str, int, float, list]]],
                                                Tuple[str, Union[str, int, float, list]]],
