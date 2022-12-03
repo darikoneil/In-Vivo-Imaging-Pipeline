@@ -14,7 +14,7 @@ import seaborn as sns
 import ExperimentManagement.ExperimentHierarchy
 from ExperimentManagement.ExperimentHierarchy import BehavioralStage, CollectedDataFolder
 from MigrationTools.Converters import convertFromPy27_Array, convertFromPy27_Dict
-from BehavioralAnalysis.Utilities import extract_specific_data, lowpass_filter, convert_to_mean_zero
+from BehavioralAnalysis.Utilities import extract_specific_data, lowpass_filter
 
 
 class FearConditioning(BehavioralStage):
