@@ -22,56 +22,18 @@ class FearConditioning(BehavioralStage):
     Instance Factory for Fear Conditioning Data
 
     See BehavioralStage for more information
-
-    **Keyword Arguments**
-        | *TrialsPerStim* : Number of trials per stimulus (int, default 5)
-        | *NumStim* : Number of stimuli (int, default 2)
-
-    **Self Methods**
-        | *self.generate_file_id* : Generate a file ID for a particular sort of data
-        | *self.fill_folder_dictionary* : Function to index subfolders containing behavioral data
-
-    **Class Methods**
-        | *cls.load_analog_data* : Loads Analog Data from a burrow behavioral session
-        | *cls.load_digital_data* : Loads Digital Data from a burrow behavioral session
-        | *cls.load_state_data* : Loads State Data from a burrow behavioral session
-        | *cls.load_dictionary_data* : Loads Dictionary Data from a burrow behavioral session
-        | *cls.loadBehavioralData* : Loads Behavioral Data from a burrow behavioral session
-
     """
     def __init__(self, Meta: Tuple[str, str], Stage: str):
 
         super().__init__(Meta, Stage)
 
-        def fill_folder_dictionary() -> Self:
-            """
-            Constructs folder data folder structures
+        self.__fill_folder_dictionary()
 
-            :rtype: Any
-            """
-            nonlocal self
-
-            self.folder_dictionary['behavioral_exports'] = CollectedDataFolder(
-                self.folder_dictionary.get('behavior_folder') +
-                "\\BehavioralExports")
-            self.folder_dictionary['deep_lab_cut_data'] = CollectedDataFolder(
-                self.folder_dictionary.get('behavior_folder') +
-                "\\DeepLabCutData")
-            self.folder_dictionary['raw_behavioral_data'] = CollectedDataFolder(
-                self.folder_dictionary.get('behavior_folder') +
-                "\\RawBehavioralData")
-
-        fill_folder_dictionary()
-
-        # PROTECT ME
-        _stage = Stage
-
-        # Super Protected
-        self.__stage_id = _stage
-
-    @property
-    def stage_id(self) -> str:
-        return self._FearConditioning__stage_id
+        # noinspection PyBroadException
+        try:
+            self.load_data()
+        except Exception:
+            print(sys.exc_info())
 
     @property
     def num_trials(self) -> int:
@@ -117,7 +79,8 @@ class FearConditioning(BehavioralStage):
             _ = [0]
             return None
 
-    def load_data(self, ImagingParameters: Optional[dict] = None, *args: Optional[Tuple[int, int]], **kwargs) -> Self:
+    def load_data(self, ImagingParameters: Optional[Union[dict, list[dict]]] = None, *args: Optional[Tuple[int, int]],
+                  **kwargs) -> Self:
         """
         Loads all data (Convenience Function)
 
@@ -128,24 +91,72 @@ class FearConditioning(BehavioralStage):
         :rtype: Any
         """
 
+        if self.data is not None:
+            input("\nDetected there is currently data loaded!\n Would you like to Overwrite?(Y/N)\n")
+            if input == "Y" or input == "Yes" or input == "Ye" or input == "es":
+                pass
+            else:
+                return
+
         print("\nLoading all data...")
 
         self.__load_base_behavior()
 
         if args:
             # noinspection PyArgumentList
-            self.load_dlc_data(*args, **kwargs)
+            self.__load_dlc_data(*args, **kwargs)
         else:
             # noinspection PyArgumentList
-            self.load_dlc_data(**kwargs)
+            self.__load_dlc_data(**kwargs)
 
         if ImagingParameters is not None:
-            self.load_bruker_data(ImagingParameters)
+            self.__load_bruker_meta_data()
 
-        if ImagingParameters.get(("preprocessing", "grouped-z project bin size")):
-            self.data = self.__sync_grouped_z_projected_images(self.data, self.meta, ImagingParameters)
+        if args and ImagingParameters is not None:
+            if isinstance(ImagingParameters, dict):
+                self.data = self.__sync_bruker_recordings(self.data, self.__load_bruker_analog_recordings(), self.meta,
+                                                          self.state_index, ("State Integer", " TrialIndicator"), ImagingParameters)
+                if ImagingParameters.get(("preprocessing", "grouped-z project bin size")):
+                    self.data = self.__sync_grouped_z_projected_images(self.data, self.meta, ImagingParameters)
+            elif isinstance(ImagingParameters, list) and isinstance(ImagingParameters[-1], dict):
+                self.data = self.__sync_bruker_recordings(self.data, self.__load_bruker_analog_recordings(), self.meta,
+                                                          self.state_index, ("State Integer", " TrialIndicator"), ImagingParameters[0])
+                for _sampling in range(1, ImagingParameters.__len__(), 1):
+                    self.data = self.__sync_grouped_z_projected_images(
+                        self.data, self.meta, ImagingParameters[_sampling],
+                        "".join(["Downsampled Imaging Frame Set ", str(_sampling)]))
 
         print("\nFinished loading all data.")
+
+    @staticmethod
+    def check_sync_plot(DataFrame: pd.DataFrame) -> None:
+        """
+        Visualized syncing of the data
+
+        :param DataFrame: The data
+        :return: Plots in matplotlib
+        :rtype: None
+        """
+        fig1 = plt.figure(1)
+
+        ax1 = fig1.add_subplot(311)
+        ax1.title.set_text("Merge")
+        ax1.plot(DataFrame.index.to_numpy(), DataFrame["State Integer"].to_numpy(), color="blue")
+        ax1.plot(DataFrame.index.to_numpy(), DataFrame[" TrialIndicator"].to_numpy(), color="orange")
+
+        ax2 = fig1.add_subplot(312)
+        ax2.title.set_text("State Integer")
+        ax2.plot(DataFrame.index.to_numpy(), DataFrame["State Integer"].to_numpy(), color="blue")
+        ax2.set_xlabel("Time (s)")
+        ax2.set_ylabel("State")
+
+        ax3 = fig1.add_subplot(313)
+        ax3.title.set_text("Trial Indicator")
+        ax3.plot(DataFrame.index.to_numpy(), DataFrame[" TrialIndicator"].to_numpy(), color="orange")
+        ax3.set_xlabel("Time (s)")
+        ax3.set_ylabel("Trial Flag")
+
+        fig1.tight_layout()
 
     def __load_base_behavior(self) -> Self:
         """
@@ -156,26 +167,26 @@ class FearConditioning(BehavioralStage):
 
         print("Loading Base Data...")
         # Analog
-        _analog_file = self.generate_file_id('Analog')
-        _analog_data = FearConditioning.load_analog_data(_analog_file)
+        _analog_file = self.__generate_file_id('Analog')
+        _analog_data = FearConditioning.__load_analog_data(_analog_file)
         if type(_analog_data) == str and _analog_data == "ERROR":
             return print("Could not find analog data!")
 
         # Digital
-        _digital_file = self.generate_file_id('Digital')
-        _digital_data = FearConditioning.load_digital_data(_digital_file)
+        _digital_file = self.__generate_file_id('Digital')
+        _digital_data = FearConditioning.__load_digital_data(_digital_file)
         if type(_digital_data) == str and _digital_data == "ERROR":
             return print("Could not find digital data!")
 
         # State
-        _state_file = self.generate_file_id('State')
-        _state_data = FearConditioning.load_state_data(_state_file)
+        _state_file = self.__generate_file_id('State')
+        _state_data = FearConditioning.__load_state_data(_state_file)
         if _state_data[0] == "ERROR": # 0 because it's an array of strings so ambiguous str comparison
             return print("Could not find state data!")
 
         # Dictionary
-        _dictionary_file = self.generate_file_id('Dictionary')
-        _dictionary_data = FearConditioning.load_dictionary_data(_dictionary_file)
+        _dictionary_file = self.__generate_file_id('Dictionary')
+        _dictionary_data = FearConditioning.__load_dictionary_data(_dictionary_file)
         try:
             self.trial_parameters = _dictionary_data.copy() # For Safety
         except AttributeError:
@@ -193,14 +204,14 @@ class FearConditioning(BehavioralStage):
                                                                                   _state_data)
 
         # Add CS information
-        self.data = self.merge_cs_index_into_dataframe(self.data, np.array(self.trial_parameters.get("stimulusTypes")))
+        self.data = self.__merge_cs_index_into_dataframe(self.data, np.array(self.trial_parameters.get("stimulusTypes")))
 
         # Post-Processing
         self.data["Force"] = lowpass_filter(self.data["Force"].to_numpy(), 1000, 100)
 
         print("Finished.")
 
-    def load_dlc_data(self, *args: Optional[Tuple[int, int]], **kwargs: bool) -> Self:
+    def __load_dlc_data(self, *args: Optional[Tuple[int, int]], **kwargs: bool) -> Self:
         """
         This function loads deep lab cut data
 
@@ -248,23 +259,7 @@ class FearConditioning(BehavioralStage):
 
         print("\nFinished.")
 
-    def load_bruker_data(self, Parameters) -> Self:
-        """
-        This function loads bruker data
-
-        :rtype: Any
-        """
-        print("\nLoading Bruker Data...")
-        _analog_recordings = self.__load_bruker_analog_recordings()
-        if self.validate_bruker_recordings_completion(_analog_recordings, self.num_trials)[0]:
-            self.data = self.__sync_bruker_recordings(self.data.copy(deep=True),
-                                                      _analog_recordings, self.meta, self.state_index,
-                                                      ("State Integer", " TrialIndicator"), Parameters)
-        else:
-            print('Not Yet Implemented')
-        print("\nFinished.")
-
-    def generate_file_id(self, SaveType: str) -> Union[str, None]:
+    def __generate_file_id(self, SaveType: str) -> Union[str, None]:
         """
         Generate a file ID for a particular sort of data
 
@@ -291,8 +286,25 @@ class FearConditioning(BehavioralStage):
 
         return filename
 
+    def __fill_behavior_folder_dictionary(self) -> Self:
+        """
+        Constructs behavior folder data folder structures
+
+        :rtype: Any
+        """
+
+        self.folder_dictionary['behavioral_exports'] = CollectedDataFolder(
+            self.folder_dictionary.get('behavior_folder') +
+            "\\BehavioralExports")
+        self.folder_dictionary['deep_lab_cut_data'] = CollectedDataFolder(
+            self.folder_dictionary.get('behavior_folder') +
+            "\\DeepLabCutData")
+        self.folder_dictionary['raw_behavioral_data'] = CollectedDataFolder(
+            self.folder_dictionary.get('behavior_folder') +
+            "\\RawBehavioralData")
+
     @staticmethod
-    def load_analog_data(Filename: str) -> np.ndarray:
+    def __load_analog_data(Filename: str) -> np.ndarray:
         """
         Loads Analog Data from a burrow behavioral session
 
@@ -309,7 +321,7 @@ class FearConditioning(BehavioralStage):
         return analogData
 
     @staticmethod
-    def load_digital_data(Filename: str) -> np.ndarray:
+    def __load_digital_data(Filename: str) -> np.ndarray:
         """
         Loads Digital Data from a burrow behavioral session
 
@@ -330,7 +342,7 @@ class FearConditioning(BehavioralStage):
         return digitalData
 
     @staticmethod
-    def load_state_data(Filename: str) -> np.ndarray:
+    def __load_state_data(Filename: str) -> np.ndarray:
         """
         Loads State Data from a burrow behavioral session
 
@@ -348,7 +360,7 @@ class FearConditioning(BehavioralStage):
         return stateData
 
     @staticmethod
-    def load_dictionary_data(Filename: str) -> dict:
+    def __load_dictionary_data(Filename: str) -> dict:
         """
         Loads Dictionary Data from a burrow behavioral session
 
@@ -376,7 +388,7 @@ class FearConditioning(BehavioralStage):
         return dictionaryData
 
     @staticmethod
-    def merge_cs_index_into_dataframe(DataFrame: pd.DataFrame, CSIndex: np.ndarray) -> pd.DataFrame:
+    def __merge_cs_index_into_dataframe(DataFrame: pd.DataFrame, CSIndex: np.ndarray) -> pd.DataFrame:
         """
         Merged CS identities into dataframe
 
@@ -417,7 +429,7 @@ class FearConditioning(BehavioralStage):
         return DataFrame
 
     @staticmethod
-    def validate_bruker_recordings_labels(AnalogRecordings: pd.DataFrame, NumTrials: int) -> pd.DataFrame:
+    def __validate_bruker_recordings_labels(AnalogRecordings: pd.DataFrame, NumTrials: int) -> pd.DataFrame:
         """
         Validate correct labeling of indicator vector for syncing data
 
@@ -437,7 +449,7 @@ class FearConditioning(BehavioralStage):
             return AnalogRecordings
 
     @staticmethod
-    def validate_bruker_recordings_completion(AnalogRecordings: pd.DataFrame, NumTrials: int) -> Tuple[bool, int]:
+    def __validate_bruker_recordings_completion(AnalogRecordings: pd.DataFrame, NumTrials: int) -> Tuple[bool, int]:
         """
         Determines whether bruker analog dataset contains all trials
 
@@ -455,36 +467,6 @@ class FearConditioning(BehavioralStage):
             return True, detected_trials
         except AssertionError:
             return False, detected_trials
-
-    @staticmethod
-    def check_sync_plot(DataFrame: pd.DataFrame) -> None:
-        """
-        Visualized syncing of the data
-
-        :param DataFrame: The data
-        :return: Plots in matplotlib
-        :rtype: None
-        """
-        fig1 = plt.figure(1)
-
-        ax1 = fig1.add_subplot(311)
-        ax1.title.set_text("Merge")
-        ax1.plot(DataFrame.index.to_numpy(), DataFrame["State Integer"].to_numpy(), color="blue")
-        ax1.plot(DataFrame.index.to_numpy(), DataFrame[" TrialIndicator"].to_numpy(), color="orange")
-
-        ax2 = fig1.add_subplot(312)
-        ax2.title.set_text("State Integer")
-        ax2.plot(DataFrame.index.to_numpy(), DataFrame["State Integer"].to_numpy(), color="blue")
-        ax2.set_xlabel("Time (s)")
-        ax2.set_ylabel("State")
-
-        ax3 = fig1.add_subplot(313)
-        ax3.title.set_text("Trial Indicator")
-        ax3.plot(DataFrame.index.to_numpy(), DataFrame[" TrialIndicator"].to_numpy(), color="orange")
-        ax3.set_xlabel("Time (s)")
-        ax3.set_ylabel("Trial Flag")
-
-        fig1.tight_layout()
 
 
 class DeepLabModule:

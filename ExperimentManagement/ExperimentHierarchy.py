@@ -618,6 +618,7 @@ class BehavioralStage:
         # PROTECTED
         self.__mouse_id = Meta[1]
         self.__instance_date = ExperimentData.get_date()
+        self.__stage_id = Stage
         # PUBLIC
         self.data = None
         self.folder_dictionary = dict()
@@ -653,6 +654,10 @@ class BehavioralStage:
         :rtype: str
         """
         return self._BehavioralStage__mouse_id
+
+    @property
+    def stage_id(self) -> str:
+        return self._FearConditioning__stage_id
 
     def add_image_sampling_folder(self, SamplingRate: int) -> Self:
         """
@@ -694,7 +699,8 @@ class BehavioralStage:
                 return
 
         self.__load_base_behavior()
-        self.__load_bruker_meta_data()
+        if ImagingParameters is not None:
+            self.__load_bruker_meta_data()
         if args and ImagingParameters is not None:
             if isinstance(ImagingParameters, dict):
                 self.data = self.__sync_bruker_recordings(self.data, self.__load_bruker_analog_recordings(), self.meta,

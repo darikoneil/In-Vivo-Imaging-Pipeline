@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Power spectrum prairie one">
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Abstracted out some methods because I was getting annoyed by single-use function clutter in namespace">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0122.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DarikDataScripts/EM0137_Encoding2.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/DarikDataScripts/EM0137_Encoding2.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ExperimentManagement/BrukerMetaModule.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/BrukerMetaModule.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -324,14 +321,7 @@
       <workItem from="1669676523890" duration="130000" />
       <workItem from="1669676923029" duration="11348000" />
       <workItem from="1669833637361" duration="27850000" />
-      <workItem from="1670086696995" duration="5710000" />
-    </task>
-    <task id="LOCAL-00078" summary="namespace changes">
-      <created>1668203503220</created>
-      <option name="number" value="00078" />
-      <option name="presentableId" value="LOCAL-00078" />
-      <option name="project" value="LOCAL" />
-      <updated>1668203503220</updated>
+      <workItem from="1670086696995" duration="6519000" />
     </task>
     <task id="LOCAL-00079" summary="namespace changes">
       <created>1668208242295</created>
@@ -669,7 +659,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670086833956</updated>
     </task>
-    <option name="localTasksCounter" value="127" />
+    <task id="LOCAL-00127" summary="Abstracted out some methods because I was getting annoyed by single-use function clutter in namespace">
+      <created>1670103996600</created>
+      <option name="number" value="00127" />
+      <option name="presentableId" value="LOCAL-00127" />
+      <option name="project" value="LOCAL" />
+      <updated>1670103996600</updated>
+    </task>
+    <option name="localTasksCounter" value="128" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -688,7 +685,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Slight" />
     <MESSAGE value="IGNORE" />
     <MESSAGE value="Backup of scratch/working colorizing code." />
     <MESSAGE value="Docstring" />
@@ -713,7 +709,8 @@
     <MESSAGE value="Analysis of Force" />
     <MESSAGE value="QoL function to behavioral stage code" />
     <MESSAGE value="Power spectrum prairie one" />
-    <option name="LAST_COMMIT_MESSAGE" value="Power spectrum prairie one" />
+    <MESSAGE value="Abstracted out some methods because I was getting annoyed by single-use function clutter in namespace" />
+    <option name="LAST_COMMIT_MESSAGE" value="Abstracted out some methods because I was getting annoyed by single-use function clutter in namespace" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
