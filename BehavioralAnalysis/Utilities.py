@@ -4,6 +4,7 @@ from tqdm.auto import tqdm
 from typing import Tuple, List, Optional, Union
 import pandas as pd
 import scipy.signal as signal
+from BehavioralAnalysis.BurrowFearConditioning import FearConditioning
 
 
 def extract_specific_data(DataFrame: pd.DataFrame,
@@ -96,3 +97,34 @@ def lowpass_filter(Data: np.ndarray, SamplingFrequency: float,
         Order = 2
 
     return signal.filtfilt(*signal.butter(Order, Cutoff/(0.5*SamplingFrequency)), Data)
+
+
+def time_spent_in_burrow(BehavioralObject: FearConditioning, *args: int) -> Tuple[float]:
+    """
+    Calculates time spent in burrow via the gate signal
+
+    :param BehavioralObject: FearConditioning Behavioral Stage Object
+    :type BehavioralObject: Any
+    :param args: Number of trials per stimulus to drop due to forced retraction
+    :type args: int
+    :return: Time spent in burrow (%) per stage
+    :rtype: Tuple[float]
+    """
+
+    def extract_gate_data(_stim) -> np.ndarray:
+        nonlocal BehavioralObject
+        return extract_specific_data(BehavioralObject.data,
+                                     (("State Integer", BehavioralObject.state_index.get("Trial")),
+                                      ("Trial Set", list(BehavioralObject.trial_groups[_stim]))))["Gate"].to_numpy()
+
+    def calculate_time_spent_in_burrow(_gate_data) -> float:
+        return (np.sum(_gate_data)/_gate_data.shape[0])*100.0
+
+    # extract
+    _gate_by_stim = [extract_gate_data(_stim) for _stim in range(BehavioralObject.num_stim)]
+    # calculate
+    if args:
+        _times = [calculate_time_spent_in_burrow(_gate_data) for _gate_data in _gate_by_stim]
+        return tuple(_times/((BehavioralObject.trials_per_stim-args[0])/BehavioralObject.trials_per_stim))
+    else:
+        return tuple([calculate_time_spent_in_burrow(_gate_data) for _gate_data in _gate_by_stim])

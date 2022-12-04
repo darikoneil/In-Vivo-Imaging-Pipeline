@@ -766,3 +766,4 @@ def plot_trial(BehavioralObject: FearConditioning, ColumnNames: list[str],
 
     plt.tight_layout()
     return fig
+

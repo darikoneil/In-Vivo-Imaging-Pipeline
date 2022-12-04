@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Abstracted out some methods because I was getting annoyed by single-use function clutter in namespace">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/Utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/Utilities.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -318,14 +320,7 @@
       <workItem from="1669676523890" duration="130000" />
       <workItem from="1669676923029" duration="11348000" />
       <workItem from="1669833637361" duration="27850000" />
-      <workItem from="1670086696995" duration="10047000" />
-    </task>
-    <task id="LOCAL-00084" summary="misc">
-      <created>1668377075575</created>
-      <option name="number" value="00084" />
-      <option name="presentableId" value="LOCAL-00084" />
-      <option name="project" value="LOCAL" />
-      <updated>1668377075575</updated>
+      <workItem from="1670086696995" duration="14635000" />
     </task>
     <task id="LOCAL-00085" summary="func to save space by deleting old videos that have been processed">
       <created>1668549185956</created>
@@ -663,7 +658,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670107078311</updated>
     </task>
-    <option name="localTasksCounter" value="133" />
+    <task id="LOCAL-00133" summary="Abstracted out some methods because I was getting annoyed by single-use function clutter in namespace">
+      <created>1670108352214</created>
+      <option name="number" value="00133" />
+      <option name="presentableId" value="LOCAL-00133" />
+      <option name="project" value="LOCAL" />
+      <updated>1670108352214</updated>
+    </task>
+    <option name="localTasksCounter" value="134" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
