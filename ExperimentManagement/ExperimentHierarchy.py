@@ -10,6 +10,7 @@ import pandas as pd
 from IPython import get_ipython
 import pathlib
 import math
+from tqdm import tqdm
 
 from ExperimentManagement.BrukerMetaModule import BrukerMeta
 from ImagingAnalysis.IO import save_raw_binary
@@ -544,9 +545,14 @@ class ExperimentData:
 
         :rtype: Any
         """
+        _pbar = tqdm(total=dir(self).__len__())
+        _pbar.set_description("Updating Folder Dictionaries")
         for _key in dir(self):
             if isinstance(self.__getattribute__(_key), BehavioralStage):
                 self.__dict__.get(_key).update_folder_dictionary()
+            _pbar.update(1)
+
+        _pbar.close()
 
     # noinspection All
     def start_log(self) -> Self:

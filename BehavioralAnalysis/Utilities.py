@@ -1,10 +1,8 @@
 from __future__ import annotations
 import numpy as np
-from tqdm.auto import tqdm
 from typing import Tuple, List, Optional, Union
 import pandas as pd
 import scipy.signal as signal
-from BehavioralAnalysis.BurrowFearConditioning import FearConditioning
 
 
 def extract_specific_data(DataFrame: pd.DataFrame,
