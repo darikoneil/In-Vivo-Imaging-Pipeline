@@ -1734,8 +1734,8 @@ class CollectedImagingAnalysisFolder(CollectedDataFolder):
 
         # Dynamic imports because \m/_(>.<)_\m/
         print("Loading Suite2p...")
-        from ImagingAnalysis.Suite2PModule import Suite2PModule
-        suite2p_module = Suite2PModule(self.folders.get(_folder), self.path, file_type="binary")
+        from ImagingAnalysis.Suite2PModule import Suite2PAnalysis
+        suite2p_module = Suite2PAnalysis(self.folders.get(_folder), self.path, file_type="binary")
         suite2p_module.load_files() # load the files
         suite2p_module.db = suite2p_module.ops # make sure db never overwrites ops
         print("Finished.")
