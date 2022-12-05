@@ -1,0 +1,158 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="DuplicatedCode" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <Languages>
+        <language minSize="1281" name="Python" />
+      </Languages>
+    </inspection_tool>
+    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="MarkdownIncorrectTableFormatting" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="23">
+            <item index="0" class="java.lang.String" itemvalue="sphinx" />
+            <item index="1" class="java.lang.String" itemvalue="pytest" />
+            <item index="2" class="java.lang.String" itemvalue="sphinx-rtd-theme" />
+            <item index="3" class="java.lang.String" itemvalue="pytest-benchmark" />
+            <item index="4" class="java.lang.String" itemvalue="pytest-timeout" />
+            <item index="5" class="java.lang.String" itemvalue="numba" />
+            <item index="6" class="java.lang.String" itemvalue="pywinpty" />
+            <item index="7" class="java.lang.String" itemvalue="tornado" />
+            <item index="8" class="java.lang.String" itemvalue="threadpoolctl" />
+            <item index="9" class="java.lang.String" itemvalue="pandocfilters" />
+            <item index="10" class="java.lang.String" itemvalue="kiwisolver" />
+            <item index="11" class="java.lang.String" itemvalue="typing-extensions" />
+            <item index="12" class="java.lang.String" itemvalue="llvmlite" />
+            <item index="13" class="java.lang.String" itemvalue="mkl-random" />
+            <item index="14" class="java.lang.String" itemvalue="pyrsistent" />
+            <item index="15" class="java.lang.String" itemvalue="mkl-fft" />
+            <item index="16" class="java.lang.String" itemvalue="jupyterlab-widgets" />
+            <item index="17" class="java.lang.String" itemvalue="colorama" />
+            <item index="18" class="java.lang.String" itemvalue="PyQt5" />
+            <item index="19" class="java.lang.String" itemvalue="argon2-cffi" />
+            <item index="20" class="java.lang.String" itemvalue="entrypoints" />
+            <item index="21" class="java.lang.String" itemvalue="pyparsing" />
+            <item index="22" class="java.lang.String" itemvalue="Pillow" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyPep8Inspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="E501" />
+          <option value="E402" />
+          <option value="E127" />
+          <option value="E261" />
+          <option value="E303" />
+          <option value="E128" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyPep8NamingInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="N802" />
+          <option value="N806" />
+          <option value="N803" />
+          <option value="N801" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="BurrowStates.Burrow.state" />
+          <option value="BurrowStates.Burrow.falseTrial" />
+          <option value="BurrowStates.Burrow.returnToSetup" />
+          <option value="BurrowStates.Burrow.graduateReleasing" />
+          <option value="BurrowStates.Burrow.graduateRetracting" />
+          <option value="BurrowStates.Burrow.startRetracting" />
+          <option value="BurrowStates.Burrow.graduatePre" />
+          <option value="BurrowStates.Burrow.graduateITI" />
+          <option value="BurrowStates.Burrow.graduateHabituation" />
+          <option value="BurrowStates.Burrow.startBehavior" />
+          <option value="BurrowStates.Burrow.graduateCooldownRetract" />
+          <option value="AnalysisModules.FissaAnalysis.SeparationModule.save_separated" />
+          <option value="AnalysisModules.FissaAnalysis.SeparationModule.save_prep" />
+          <option value="AnalysisModules.FissaAnalysis.SeparationModule.separation_prep" />
+          <option value="AnalysisModules.FissaAnalysis.SeparationModule.roi_polys" />
+          <option value="AnalysisModules.FissaAnalysis.SeparationModule.raw" />
+          <option value="AnalysisModules.FissaAnalysis.SeparationModule.means" />
+          <option value="AnalysisModules.FissaAnalysis.SeparationModule.separate" />
+          <option value="AnalysisModules.NewDecoders.LogisticRegressionDecoder.score" />
+          <option value="BasicStartle.StartleTask.*" />
+          <option value="PyQt6.QtGui.QPalette.Base" />
+          <option value="BasicStartle2.StartleTask.*" />
+          <option value="TwoCameras.BehavCamMaster.start" />
+          <option value="StartleMachine.StartleTask.state" />
+          <option value="BehavioralCameras.BehavCamMaster.start" />
+          <option value="StartleMachine.StartleTask.*" />
+          <option value="StartleMachine2.StartleTask.beginSaving" />
+          <option value="StartleMachine2.StartleTask.state" />
+          <option value="StartleMachine2.StartleTask.finishedSaving" />
+          <option value="StartleMachine2.StartleTask.Null_PPI_ITI_2_NullxPPI" />
+          <option value="StartleMachine2.StartleTask.null2ITI" />
+          <option value="StartleMachine2.StartleTask.pre2gap" />
+          <option value="StartleMachine2.StartleTask.proceed2PPI" />
+          <option value="StartleMachine2.StartleTask.proceed2Null" />
+          <option value="StartleMachine2.StartleTask.additionalThreshold" />
+          <option value="StartleMachine2.StartleTask.*" />
+          <option value="StartleMachine3.StartleTask.startBehavior" />
+          <option value="StartleMachine3.StartleTask.state" />
+          <option value="StartleMachine3.StartleTask.graduateHabituation" />
+          <option value="StartleMachine3.StartleTask.graduateLocomotion" />
+          <option value="StartleMachine3.StartleTask.baseline2ITI" />
+          <option value="StartleMachine3.StartleTask.graduateBaseline" />
+          <option value="StartleMachine3.StartleTask.additionalBaseline" />
+          <option value="StartleMachine3.StartleTask.threshold2ITI" />
+          <option value="StartleMachine3.StartleTask.graduateThreshold" />
+          <option value="StartleMachine3.StartleTask.proceed2Null" />
+          <option value="StartleMachine3.StartleTask.additionalThreshold" />
+          <option value="StartleMachine3.StartleTask.proceed2PPI" />
+          <option value="StartleMachine3.StartleTask.null2ITI" />
+          <option value="StartleMachine3.StartleTask.beginSaving" />
+          <option value="StartleMachine3.StartleTask.Null_PPI_ITI_2_NullxPPI" />
+          <option value="StartleMachine3.StartleTask.pre2gap" />
+          <option value="StartleMachine3.StartleTask.gap2post" />
+          <option value="StartleMachine3.StartleTask.post2ITI" />
+          <option value="StartleMachine3.StartleTask.finishedSaving" />
+          <option value="Scratch.StartleMachine3.StartleTask.state" />
+          <option value="StartleMachine_4.StartleTask.state" />
+          <option value="LickBehaviorMachines.BurrowPreferenceTask.state" />
+          <option value="LickBehaviorMachines.BurrowPreferenceTask.*" />
+          <option value="BurrowPreferenceMachine.BurrowPreferenceTask.state" />
+          <option value="BurrowPreferenceMachine.BurrowPreferenceTask.startBehavior" />
+          <option value="BurrowPreferenceMachine.BurrowPreferenceTask.graduatehabituation" />
+          <option value="BurrowPreferenceMachine.BurrowPreferenceTask.graduatePreference" />
+          <option value="BurrowPreferenceMachine.BurrowPreferenceTask.saving_complete" />
+          <option value="BurrowPreferenceMachine.BurrowPreferenceTask.finishedSaving" />
+          <option value="BurrowPreferenceMachine.BurrowPreferenceTask.graduateHabituation" />
+          <option value="StartleStuff.StartleMachine.StartleTask.state" />
+          <option value="BurrowPreferenceMachine.BurrowPreferenceTask.stop" />
+          <option value="BurrowPreferenceMachine.BurrowPreferenceTask.graduateRetract" />
+          <option value="BurrowPreferenceMachine.BurrowPreferenceTask.graduateRetraction" />
+          <option value="BurrowPreferenceMachine.BurrowPreferenceTask.graduateRelease" />
+          <option value="SucrosePreferenceMachine.SucrosePreferenceTask.state" />
+          <option value="SucrosePreferenceMachine.SucrosePreferenceTask.startBehavior" />
+          <option value="SucrosePreferenceMachine.SucrosePreferenceTask.checkStageTime" />
+          <option value="SucrosePreferenceMachine.SucrosePreferenceTask.graduateRetraction" />
+          <option value="SucrosePreferenceMachine.SucrosePreferenceTask.graduateHabituation" />
+          <option value="SucrosePreferenceMachine.SucrosePreferenceTask.graduateRelease" />
+          <option value="SucrosePreferenceMachine.SucrosePreferenceTask.running_trial_index" />
+          <option value="SucrosePreferenceMachine.SucrosePreferenceTask.swapping2Saving" />
+          <option value="SucrosePreferenceMachine.SucrosePreferenceTask.swapping2Rotating" />
+          <option value="SucrosePreferenceMachine.SucrosePreferenceTask.swapping2Deceiving" />
+          <option value="SucrosePreferenceMachine.SucrosePreferenceTask.rotating2Preference" />
+          <option value="SucrosePreferenceMachine.SucrosePreferenceTask.deceiving2Preference" />
+          <option value="SucrosePreferenceMachine.SucrosePreferenceTask.finishedSaving" />
+          <option value="int.__getitem__" />
+          <option value="BurrowPreferenceTask.BurrowPreferenceMachine.BurrowPreferenceTask.state" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnusedLocalInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+  </profile>
+</component>
