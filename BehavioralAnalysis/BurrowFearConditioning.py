@@ -27,7 +27,7 @@ class FearConditioning(BehavioralStage):
 
         super().__init__(Meta, Stage)
 
-        self.__fill_folder_dictionary()
+        self._fill_behavior_folder_dictionary()
 
         # noinspection PyBroadException
         try:
