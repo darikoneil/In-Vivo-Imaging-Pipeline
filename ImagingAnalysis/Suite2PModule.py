@@ -478,7 +478,7 @@ class Suite2PAnalysis:
         :rtype: dict
         """
         ops = {
-                'fs': 30,
+                'fs': 10,
                 'keep_movie_raw': True,
                 'nimg_init': 1000,
                 'batch_size': 7000,
