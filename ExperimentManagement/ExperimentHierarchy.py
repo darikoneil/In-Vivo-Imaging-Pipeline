@@ -1729,7 +1729,11 @@ class CollectedImagingAnalysisFolder(CollectedDataFolder):
         except Exception:
             print("Unable to locate processed inferences file")
             ProcessedInferences = dict()
-        return SpikeTimes, SpikeProb, DiscreteApproximation, {**ProcessedInferences}
+
+        if isinstance(ProcessedInferences, dict):
+            return SpikeTimes, SpikeProb, DiscreteApproximation, ProcessedInferences
+        else:
+            return SpikeTimes, SpikeProb, DiscreteApproximation, {**ProcessedInferences.__dict__}
 
     def load_suite2p(self, *args: str):
 
