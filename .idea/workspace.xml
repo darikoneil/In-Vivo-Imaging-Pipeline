@@ -5,11 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="updated gitignore">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Suite2PModule.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Suite2PModule.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/USNAP/DariksSecretFunctions.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/USNAP/USNAP.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -326,14 +324,8 @@
       <workItem from="1670252345818" duration="13465000" />
       <workItem from="1670279043971" duration="5715000" />
       <workItem from="1670288718973" duration="1070000" />
-      <workItem from="1670337420764" duration="54000" />
-    </task>
-    <task id="LOCAL-00090" summary="Clean up some of the awful pandas code for syncing data. some edge cases still don't work, be alert">
-      <created>1668901083782</created>
-      <option name="number" value="00090" />
-      <option name="presentableId" value="LOCAL-00090" />
-      <option name="project" value="LOCAL" />
-      <updated>1668901083782</updated>
+      <workItem from="1670337420764" duration="1383000" />
+      <workItem from="1670445340978" duration="3382000" />
     </task>
     <task id="LOCAL-00091" summary="Clean up some of the awful pandas code for syncing data. some edge cases still don't work, be alert">
       <created>1668901101666</created>
@@ -671,7 +663,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670283239160</updated>
     </task>
-    <option name="localTasksCounter" value="139" />
+    <task id="LOCAL-00139" summary="updated gitignore">
+      <created>1670337495086</created>
+      <option name="number" value="00139" />
+      <option name="presentableId" value="LOCAL-00139" />
+      <option name="project" value="LOCAL" />
+      <updated>1670337495086</updated>
+    </task>
+    <option name="localTasksCounter" value="140" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

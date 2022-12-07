@@ -218,7 +218,7 @@ class ExperimentData:
 
         print("Logging file assigned as :" + self.log_file)
 
-    def create_experimental_stage(self, Stage: str, Type: Optional[str] = "ExperimentStage", **kwargs) -> Self:
+    def create_experimental_stage(self, Stage: str, Type: Optional[str, object] = "ExperimentStage", **kwargs) -> Self:
         """
         Generates an experiment stage folder and attribute
 
@@ -227,7 +227,7 @@ class ExperimentData:
         :param Stage: Name of experimental stage
         :type Stage: str
         :param Type: Type of experimental stage (Optional, default = ExperimentStage)
-        :type Type: Optional[str]
+        :type Type: Optional[str, object]
         :rtype: Any
         """
         # Construct Folder
@@ -235,8 +235,11 @@ class ExperimentData:
         self._generate_experiment_stage_directory(self.directory, Stage, **kwargs)
 
         # Construct Class Instance as Attribute
-        _type_constructor = "".join([Type, "(self.pass_meta(), Stage)"])
-        setattr(self, Stage, eval(_type_constructor))
+        if isinstance(Type, str):
+            _type_constructor = "".join([Type, "(self.pass_meta(), Stage)"])
+            setattr(self, Stage, eval(_type_constructor))
+        else:
+            setattr(self, Stage, Type(self.pass_meta(), Stage))
 
         # Record-Keeping
         self.stages.append(Stage)
@@ -481,6 +484,7 @@ class ExperimentData:
         _include_behavior = kwargs.get('Behavior', True)
         _include_imaging = kwargs.get('Imaging', True)
         _include_computation = kwargs.get('Computation', True)
+        _include_figures = kwargs.get("Figures", True)
         _stage_directory = "".join([MouseDirectory, "\\", Stage])
 
         if _include_behavior:
@@ -489,6 +493,8 @@ class ExperimentData:
             cls._generate_imaging_subdirectory(_stage_directory)
         if _include_computation:
             cls._generate_computation_subdirectory(_stage_directory)
+        if _include_figures:
+            os.makedirs("".join([_stage_directory, "\\Figures"]))
 
     @classmethod
     def _generate_behavior_subdirectory(cls, StageDirectory: str) -> None:
@@ -621,10 +627,10 @@ class ExperimentStage:
         self._fill_imaging_folder_dictionary()
 
         # noinspection PyBroadException
-        try:
-            self.load_data()
-        except Exception:
-            print(sys.exc_info())
+        # try:
+        #    self.load_data()
+        # except Exception:
+        #    print(sys.exc_info())
 
     @property
     def instance_date(self) -> str:
@@ -732,6 +738,7 @@ class ExperimentStage:
             'computation_folder': _stage_directory + "\\Computation",
             'imaging_folder': _stage_directory + "\\Imaging",
             'behavior_folder': _stage_directory + "\\Behavior",
+            "figures": CollectedFiguresFolder("".join([_stage_directory, "\\Figures"])),
         }
 
     def _fill_imaging_folder_dictionary(self) -> Self:
@@ -895,10 +902,10 @@ class BehavioralStage(ExperimentStage):
         self.trial_parameters = dict()
 
         # noinspection PyBroadException
-        try:
-            self.load_data()
-        except Exception:
-            print(sys.exc_info())
+        # Try:
+        #    self.load_data()
+        # except Exception:
+        #    print(sys.exc_info())
 
     def load_data(self, ImagingParameters: Optional[Union[dict, list[dict]]] = None, *args: Optional[Tuple[str, str]], **kwargs) -> Self:
         """
@@ -1740,3 +1747,27 @@ class CollectedImagingAnalysisFolder(CollectedDataFolder):
         suite2p_module.db = suite2p_module.ops # make sure db never overwrites ops
         print("Finished.")
         return suite2p_module
+
+
+class CollectedFiguresFolder(CollectedDataFolder):
+    """
+    A class for storing figures, inherits collected data folder
+
+    """
+
+    def __init__(self, Path: str):
+        super().__init__(Path)
+
+
+    def view_figure(self, Name: str) -> plt.Figure:
+        """ Function identifies and views a figure based on supplied name
+
+        :param Name: Name of figure (can be partial)
+        :type Name: str
+
+        :return: the plotted figure
+        :rtype: Any
+        """
+
+        _filename = self.find_matching_files(Name)[0]
+        return plt.imread(_filename)

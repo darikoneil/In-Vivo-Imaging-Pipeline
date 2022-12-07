@@ -10,6 +10,7 @@ import matplotlib
 matplotlib.use('Qt5Agg')
 from matplotlib import pyplot as plt
 import seaborn as sns
+import sys
 
 import ExperimentManagement.ExperimentHierarchy
 from ExperimentManagement.ExperimentHierarchy import BehavioralStage, CollectedDataFolder
@@ -30,10 +31,10 @@ class FearConditioning(BehavioralStage):
         self._fill_behavior_folder_dictionary()
 
         # noinspection PyBroadException
-        try:
-            self.load_data()
-        except Exception:
-            print(sys.exc_info())
+        # try:
+        #    self.load_data()
+        # except Exception:
+        #    print(sys.exc_info())
 
     @property
     def num_trials(self) -> int:
@@ -161,6 +162,14 @@ class FearConditioning(BehavioralStage):
 
         :rtype: Any
         """
+        _dictionary_file = \
+            self.folder_dictionary.get("raw_behavioral_data").find_matching_files("StimulusInfo")[0]
+        _dictionary_data = FearConditioning._load_dictionary_data(_dictionary_file)
+        try:
+            self.trial_parameters = _dictionary_data.copy() # For Safety
+        except AttributeError:
+            print(_dictionary_data)
+
 
         print("Loading Base Data...")
         # Analog
