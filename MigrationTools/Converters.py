@@ -2,6 +2,8 @@ import io
 import numpy as np
 import pickle as pkl
 
+import ImagingAnalysis.FissaModule
+
 
 class RenameUnpickler(pkl.Unpickler):
     """
@@ -25,7 +27,8 @@ class RenameUnpickler(pkl.Unpickler):
             renamed_module = "ImagingAnalysis.CascadeModule"
         elif module == "Imaging Analysis.Denoising":
             renamed_module = "ImagingAnalysis.DenoisingModule"
-
+        elif module == "ImagingAnalysis.FissaModule.ProcessedTracesModule":
+            renamed_module = "ImagingAnalysis.FissaModule.ProcessedTracesDictionary"
         return super(RenameUnpickler, self).find_class(renamed_module, name)
 
 

@@ -20,9 +20,23 @@ def load_bruker_tiffs(ImageDirectory: str) -> np.ndarray:
     :return: complete_image:  All tiff files in the directory compiled into a single array (Z x Y x X, uint16)
     :rtype: Any
      """
+
+    def get_dimensions():
+        nonlocal ImageDirectory
+        return np.asarray(Image.open("".join([ImageDirectory, "\\", _fnames[0]]))).shape
+
+    def load_image():
+        nonlocal ImageDirectory
+        nonlocal _fnames
+        nonlocal _fname
+        return np.asarray(Image.open("".join([ImageDirectory, "\\", _fnames[_fname]])))
+
     _fnames = os.listdir(ImageDirectory)
     _num_frames = len(_fnames)
-    complete_image = np.full((_num_frames, 512, 512), 0, dtype=np.uint16)
+    # Bruker is usually saved to .tif in 0-65536 (uint16) even though recording says 8192 (uint13)
+    complete_image = np.full((_num_frames, *get_dimensions()), 0, dtype=np.uint16)
+
+
 
     for _fname in tqdm(
             range(_num_frames),
@@ -30,18 +44,17 @@ def load_bruker_tiffs(ImageDirectory: str) -> np.ndarray:
             desc="Loading Image...",
             disable=False,
     ):
-        complete_image[_fname, :, :] = np.asarray(Image.open(ImageDirectory + "\\" + _fnames[_fname]))
+        complete_image[_fname, :, :] = load_image()
+
     return complete_image
 
 
-def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str) -> None:
+def _repackage_bruker_tiffs_original(ImageDirectory: str, OutputDirectory: str) -> None:
     """
     Repackages a sequence of tiff files within a directory to a smaller sequence
     of tiff stacks.
-
     Designed to compile the outputs of a certain imaging utility
     that exports recordings such that each frame is saved as a single tiff.
-
     :param ImageDirectory: Directory containing a sequence of single frame tiff files
     :type ImageDirectory: str
     :param OutputDirectory: Empty directory where tiff stacks will be saved
@@ -84,6 +97,129 @@ def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str) -> None:
     return print("Finished Repackaging Bruker Tiffs")
 
 
+def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str) -> None:
+    """
+    Repackages a sequence of tiff files within a directory to a smaller sequence
+    of tiff stacks.
+    Designed to compile the outputs of a certain imaging utility
+    that exports recordings such that each frame is saved as a single tiff.
+    :param ImageDirectory: Directory containing a sequence of single frame tiff files
+    :type ImageDirectory: str
+    :param OutputDirectory: Empty directory where tiff stacks will be saved
+    :type OutputDirectory: str
+    :rtype: None
+    """
+
+    def get_dimensions():
+        nonlocal ImageDirectory
+        return np.asarray(Image.open("".join([ImageDirectory, "\\", _fnames[0]]))).shape
+
+    def load_image():
+        nonlocal ImageDirectory
+        nonlocal _fnames
+        nonlocal _fname
+        nonlocal _offset
+        return np.asarray(Image.open(ImageDirectory + "\\" + _fnames[_fname + _offset]))
+
+    print("Repackaging...")
+    _fnames = os.listdir(ImageDirectory)
+    _y, _x = get_dimensions()
+    _num_frames = len(_fnames)
+    # noinspection PyTypeChecker
+    _chunks = math.ceil(_num_frames/7000)
+
+    c_idx = 1
+    _offset = int()
+    for _chunk in range(0, _num_frames, 7000):
+
+        _start_idx = _chunk
+        _offset = _start_idx
+        _end_idx = _chunk + 7000
+        _chunk_frames = _end_idx-_start_idx
+        # If this is the last chunk which may not contain a full 7000 frames...
+        if _end_idx > _num_frames:
+            _end_idx = _num_frames
+            _chunk_frames = _end_idx - _start_idx
+            _end_idx += 1
+
+        image_chunk = np.full((_chunk_frames, _y, _x), 0, dtype=np.uint16)
+        for _fname in tqdm(
+            range(_chunk_frames),
+            total=_chunk_frames,
+            desc="Loading Images...",
+            disable=False,
+        ):
+            image_chunk[_fname, :, :] = load_image()
+        if c_idx < 10:
+            save_single_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_0" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
+        else:
+            save_single_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
+        c_idx += 1
+    return print("Finished Repackaging Bruker Tiffs")
+
+
+def _repackage_bruker_tiffs_slow(ImageDirectory: str, OutputDirectory: str) -> None:
+    """
+    Repackages a sequence of tiff files within a directory to a smaller sequence
+    of tiff stacks.
+
+    Designed to compile the outputs of a certain imaging utility
+    that exports recordings such that each frame is saved as a single tiff.
+
+    :param ImageDirectory: Directory containing a sequence of single frame tiff files
+    :type ImageDirectory: str
+    :param OutputDirectory: Empty directory where tiff stacks will be saved
+    :type OutputDirectory: str
+    :rtype: None
+    """
+
+    def get_dimensions():
+        nonlocal ImageDirectory
+        return np.asarray(Image.open("".join([ImageDirectory, "\\", _fnames[0]]))).shape
+
+    def load_image(_fname_):
+        nonlocal ImageDirectory
+        return np.asarray(Image.open("".join([ImageDirectory, "\\", _fname_])))
+
+
+    print("Repackaging...")
+    _fnames = os.listdir(ImageDirectory)
+    _y, _x = get_dimensions()
+    _num_frames = len(_fnames)
+    # noinspection PyTypeChecker
+    _chunks = math.ceil(_num_frames/7000)
+
+    c_idx = 1
+    _offset = int()
+
+    for _chunk in tqdm(
+        range(0, _num_frames, 7000),
+        total=range(0, _num_frames, 7000).__len__(),
+        desc="Loading Image Chunk..",
+        disable=False,
+    ):
+        _start_idx = _chunk
+        _offset = _start_idx
+        _end_idx = _chunk + 7000
+        _chunk_frames = _end_idx-_start_idx
+        # If this is the last chunk which may not contain a full 7000 frames...
+        if _end_idx > _num_frames:
+            _end_idx = _num_frames
+            _chunk_frames = _end_idx - _start_idx
+            _end_idx += 1
+
+        # Bruker is usually saved to .tif in 0-65536 (uint16) even though recording says 8192 (uint13)
+        image_chunk = np.full((_chunk_frames, _y, _x), 0, dtype=np.uint16)
+
+        image_chunk = np.array([load_image(_fname) for _fname in _fnames[_offset:_end_idx]])
+        if c_idx < 10:
+            save_single_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_0" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
+        else:
+            save_single_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
+        c_idx += 1
+    return print("Finished Repackaging Bruker Tiffs")
+
+
 def load_single_tiff(Filename: str, NumFrames: int) -> np.ndarray:
     """
     Load a single tiff file
@@ -112,7 +248,7 @@ def load_all_tiffs(ImageDirectory: str) -> np.ndarray:
     _num_frames = [] # initialize
     [_num_frames.append(len(tifffile.TiffFile(ImageDirectory + "\\" + _fname).pages)) for _fname in _fnames]
     _total_frames = sum(_num_frames)
-    complete_image = np.full((_total_frames, y_pix, x_pix), 0, dtype=np.int16) # not sure if correct x,y order
+    complete_image = np.full((_total_frames, y_pix, x_pix), 0, dtype=np.int16)
     _last_frame = 0
 
     for _fname in tqdm(
@@ -196,7 +332,7 @@ def load_mapped_binary(Filename: str, MetaFile: str, *args: Optional[str], **kwa
     return np.memmap(Filename, dtype=_type, shape=(_num_frames, _y_pixels, _x_pixels), mode=_mode)
 
 
-def save_single_tiff(Images: np.ndarray, Filename: str) -> None:
+def save_single_tiff(Images: np.ndarray, Filename: str, Type: Optional[np.dtype] = np.int16) -> None:
     """
     Save a numpy array to a single tiff file as type int16
 
@@ -204,14 +340,16 @@ def save_single_tiff(Images: np.ndarray, Filename: str) -> None:
     :type Images: Any
     :param Filename: filename
     :type Filename: str
+    :param Type: type for saving
+    :type Type: Optional[Any]
     :rtype: None
     """
     with tifffile.TiffWriter(Filename) as tif:
-        for frame in np.floor(Images).astype(np.int16):
+        for frame in np.floor(Images).astype(Type):
             tif.save(frame)
 
 
-def save_tiff_stack(Images: str, OutputDirectory: str) -> None:
+def save_tiff_stack(Images: str, OutputDirectory: str, Type: Optional[np.dtype] = np.int16) -> None:
     """
     Save a numpy array to a sequence of tiff stacks
 
@@ -219,6 +357,8 @@ def save_tiff_stack(Images: str, OutputDirectory: str) -> None:
     :type Images: Any
     :param OutputDirectory: A directory to save the sequence of tiff stacks in int16
     :type OutputDirectory: str
+    :param Type: type for saving
+    :type Type: Optional[Any]
     :rtype: None
     """
     _num_frames = Images.shape[0]

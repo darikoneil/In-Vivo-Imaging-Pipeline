@@ -5,8 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Added figures folder and changes to experiment stage type constructor">
+      <change afterPath="$PROJECT_DIR$/Exemplar.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Exemplar10.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Exemplar11.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Exemplar12.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Exemplar13.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Exemplar18.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Exemplar2.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Exemplar2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Exemplar3.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Exemplar5.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Exemplar6.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Exemplar7.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Exemplar8.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Exemplar9.eps" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Exemplar90.eps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/IO.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/IO.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/Visualization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MigrationTools/Converters.py" beforeDir="false" afterPath="$PROJECT_DIR$/MigrationTools/Converters.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -324,14 +342,8 @@
       <workItem from="1670279043971" duration="5715000" />
       <workItem from="1670288718973" duration="1070000" />
       <workItem from="1670337420764" duration="1383000" />
-      <workItem from="1670445340978" duration="4074000" />
-    </task>
-    <task id="LOCAL-00092" summary="Clean up some of the awful pandas code for syncing data. some edge cases still don't work, be alert">
-      <created>1668909023771</created>
-      <option name="number" value="00092" />
-      <option name="presentableId" value="LOCAL-00092" />
-      <option name="project" value="LOCAL" />
-      <updated>1668909023771</updated>
+      <workItem from="1670445340978" duration="22839000" />
+      <workItem from="1670512738539" duration="7573000" />
     </task>
     <task id="LOCAL-00093" summary="Clean up some of the awful pandas code for syncing data. some edge cases still don't work, be alert">
       <created>1668910370439</created>
@@ -669,7 +681,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670449280779</updated>
     </task>
-    <option name="localTasksCounter" value="141" />
+    <task id="LOCAL-00141" summary="Added figures folder and changes to experiment stage type constructor">
+      <created>1670450015676</created>
+      <option name="number" value="00141" />
+      <option name="presentableId" value="LOCAL-00141" />
+      <option name="project" value="LOCAL" />
+      <updated>1670450015676</updated>
+    </task>
+    <option name="localTasksCounter" value="142" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -714,6 +733,17 @@
     <MESSAGE value="updated gitignore" />
     <MESSAGE value="Added figures folder and changes to experiment stage type constructor" />
     <option name="LAST_COMMIT_MESSAGE" value="Added figures folder and changes to experiment stage type constructor" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py</url>
+          <line>1602</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Calcium_Imaging_Analysis_Pipeline$a.coverage" NAME="a Coverage Results" MODIFIED="1664464028437" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AnalysisModules" />

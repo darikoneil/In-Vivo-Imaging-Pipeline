@@ -1627,7 +1627,7 @@ class CollectedImagingAnalysisFolder(CollectedDataFolder):
                 with open(Filename, "rb") as _file:
                     _ = renamed_load(_file)
                 _file.close()
-                with open(sFilename, "wb") as _file:
+                with open(Filename, "wb") as _file:
                     pkl.dump(_, _file)
                 _file.close()
                 # noinspection PyBroadException
@@ -1656,7 +1656,10 @@ class CollectedImagingAnalysisFolder(CollectedDataFolder):
             print("Could not locate processed traces file")
             ProcessedTraces = dict()
 
-        return {**Prepared}, {**Separated}, {**ProcessedTraces}
+        if isinstance(ProcessedTraces, dict):
+            return {**Prepared}, {**Separated}, {**ProcessedTraces}
+        else:
+            return {**Prepared}, {**Separated}, {**ProcessedTraces.__dict__}
 
     def load_cascade_exports(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray, dict]:
         """
