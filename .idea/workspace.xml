@@ -20,7 +20,8 @@
       <change afterPath="$PROJECT_DIR$/Exemplar8.eps" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Exemplar9.eps" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Exemplar90.eps" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/IO.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/IO.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -339,14 +340,7 @@
       <workItem from="1670288718973" duration="1070000" />
       <workItem from="1670337420764" duration="1383000" />
       <workItem from="1670445340978" duration="22839000" />
-      <workItem from="1670512738539" duration="18393000" />
-    </task>
-    <task id="LOCAL-00096" summary="Removed unused, broken functions in behavioral stage">
-      <created>1669225489032</created>
-      <option name="number" value="00096" />
-      <option name="presentableId" value="LOCAL-00096" />
-      <option name="project" value="LOCAL" />
-      <updated>1669225489032</updated>
+      <workItem from="1670512738539" duration="22588000" />
     </task>
     <task id="LOCAL-00097" summary="namespace">
       <created>1669227887756</created>
@@ -684,7 +678,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670611415613</updated>
     </task>
-    <option name="localTasksCounter" value="145" />
+    <task id="LOCAL-00145" summary="Function to identify folder contents">
+      <created>1670611884542</created>
+      <option name="number" value="00145" />
+      <option name="presentableId" value="LOCAL-00145" />
+      <option name="project" value="LOCAL" />
+      <updated>1670611884542</updated>
+    </task>
+    <option name="localTasksCounter" value="146" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

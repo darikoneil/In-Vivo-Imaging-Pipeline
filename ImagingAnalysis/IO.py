@@ -1,4 +1,7 @@
 from __future__ import annotations
+
+import itertools
+
 import numpy as np
 import os
 from PIL import Image
@@ -8,6 +11,35 @@ import tifffile
 from typing import Callable, List, Tuple, Sequence, Optional, Union
 import math
 import pathlib
+from prettytable import PrettyTable
+
+
+def _pretty_print_bruker_command(Channels, Planes, Frames, Height, Width) -> None:
+    """
+    Function simply prints the bruker folder contents detected
+
+    :param Channels: Number of Channels
+    :type Channels: int
+    :param Planes: Number of Planes
+    :type Planes: int
+    :param Frames: Number of Frames
+    :type Frames: int
+    :param Height: Height of Image (Y Pixels)
+    :type Height: int
+    :param Width:  Width of Image (X Pixels)
+    :type Width:
+    :rtype: None
+    """
+    _table = PrettyTable()
+    _table.header = False
+    _table.add_row(["Total Images Detected", Channels * Planes * Frames])
+    _table.add_row(["Channels", Channels])
+    _table.add_row(["Planes", Planes])
+    _table.add_row(["Frames", Frames])
+    _table.add_row(["Height", Height])
+    _table.add_row(["Width", Width])
+    print("\n")
+    print(_table)
 
 
 def determine_bruker_folder_contents(ImageDirectory: str) -> Tuple[int, int, int, int, int]:
@@ -84,40 +116,86 @@ def load_bruker_tiffs(ImageDirectory: str) -> Union[np.ndarray, Tuple[np.ndarray
      """
 
     _channels, _planes, _frames, _y_pixels, _x_pixels = determine_bruker_folder_contents(ImageDirectory)
+    _pretty_print_bruker_command(_channels, _planes, _frames, _y_pixels, _x_pixels)
 
-    try:
-        assert(_channels == 1)
-    except AssertionError:
-        print("Folder contains multiple channels")
-        return
-    try:
-        assert(_planes == 1)
-    except AssertionError:
-        print("Folder contains multiple planes")
-        return
-
-    def load_image():
+    def find_files(Tag: Union[str, list[str]]):
         nonlocal ImageDirectory
         nonlocal _files
-        nonlocal _file
-        return np.asarray(Image.open(str(_files[_file])))
+
+        def check_file_contents(Tag_: str, File_: pathlib.WindowsPath) -> bool:
+            if Tag_ in str(File_).split("_"):
+                return True
+            else:
+                return False
+
+        # reset, rather maintain code as is then make a new temporary variable since this
+        # is basically instant
+        _files = [_file for _file in pathlib.Path(ImageDirectory).rglob("*.tif")]
+
+        # now find
+        if isinstance(Tag, list):
+            Tag = "".join([Tag[0], Tag[1]])
+            _files = [_file for _file in _files if Tag in str(_file.stem)]
+        else:
+            _files = [_file for _file in _files if check_file_contents(Tag, _file)]
+
+    def load_images():
+        nonlocal _files
+        nonlocal _frames
+        nonlocal _y_pixels
+        nonlocal _x_pixels
+        nonlocal _tqdm_desc
+
+        def load_image():
+            nonlocal ImageDirectory
+            nonlocal _files
+            nonlocal _file
+            return np.asarray(Image.open(str(_files[_file])))
+
+        # Bruker is usually saved to .tif in 0-65536 (uint16) even though recording says 8192 (uint13)
+        complete_image = np.full((_frames, _y_pixels, _x_pixels), 0, dtype=np.uint16)
+        for _file in tqdm(
+                range(_frames),
+                total=_frames,
+                desc=_tqdm_desc,
+                disable=False,
+        ):
+            complete_image[_file, :, :] = load_image()
+
+        return complete_image
 
     _files = [_file for _file in pathlib.Path(ImageDirectory).rglob("*.tif")]
 
-    # Bruker is usually saved to .tif in 0-65536 (uint16) even though recording says 8192 (uint13)
-    complete_image = np.full((_frames, _y_pixels, _x_pixels), 0, dtype=np.uint16)
-
-
-
-    for _file in tqdm(
-            range(_frames),
-            total=_frames,
-            desc="Loading Image...",
-            disable=False,
-    ):
-        complete_image[_file, :, :] = load_image()
-
-    return complete_image
+    if _channels == 1 and _planes == 1:
+        _tqdm_desc = "Loading Images..."
+        return load_images()
+    elif _channels > 1 and _planes == 1:
+        images = []
+        for _channel in range(_channels):
+            _tqdm_desc = "".join(["Loading Channel ", str(_channel+1), " Images..."])
+            _tag = "".join(["Ch", str(_channel+1)])
+            find_files(_tag)
+            images.append(load_images())
+        return images
+    elif _channels == 1 and _planes > 1:
+        images = []
+        _base_tag = "00000"
+        for _plane in range(_planes):
+            _tqdm_desc = "".join(["Loading Plane ", str(_plane), " Images..."])
+            _tag = "".join([_base_tag, str(_plane+1), ".ome"])
+            find_files(_tag)
+            images.append(load_images())
+        return images
+    elif _channels > 1 and _planes > 1:
+        images = []
+        _base_tag = "00000"
+        for _channel, _plane in itertools.combinations(range(_channels), range(_planes)):
+            _tqdm_desc = "".join(["Loading Plane ", str(_plane),
+                                  " Channel ", str(_channel), " Images..."])
+            _tag = ["".join(["Ch", str(_channel)]), "".join([_base_tag, str(_plane+1), ".ome"])]
+            find_files(_tag)
+            images.append(load_images())
+        return images
 
 
 def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str) -> None:
@@ -142,6 +220,7 @@ def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str) -> None:
 
     _files = [_file for _file in pathlib.Path(ImageDirectory).rglob("*.tif")]
     _channels, _planes, _frames, _y_pixels, _x_pixels = determine_bruker_folder_contents(ImageDirectory)
+    _pretty_print_bruker_command(_channels, _planes, _frames, _y_pixels, _x_pixels)
 
     try:
         assert(_channels == 1)
