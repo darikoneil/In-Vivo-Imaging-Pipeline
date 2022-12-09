@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Added support for 256x256">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Function to identify folder contents">
       <change afterPath="$PROJECT_DIR$/Exemplar.eps" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Exemplar10.eps" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Exemplar11.eps" afterDir="false" />
@@ -20,10 +20,7 @@
       <change afterPath="$PROJECT_DIR$/Exemplar8.eps" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Exemplar9.eps" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Exemplar90.eps" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/YUSTE.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/IO.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/IO.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -342,21 +339,7 @@
       <workItem from="1670288718973" duration="1070000" />
       <workItem from="1670337420764" duration="1383000" />
       <workItem from="1670445340978" duration="22839000" />
-      <workItem from="1670512738539" duration="17792000" />
-    </task>
-    <task id="LOCAL-00094" summary="Clean up some of the awful pandas code for syncing data. some edge cases still don't work, be alert">
-      <created>1669064092369</created>
-      <option name="number" value="00094" />
-      <option name="presentableId" value="LOCAL-00094" />
-      <option name="project" value="LOCAL" />
-      <updated>1669064092369</updated>
-    </task>
-    <task id="LOCAL-00095" summary="Conv values -&gt; to_numpy()">
-      <created>1669225005205</created>
-      <option name="number" value="00095" />
-      <option name="presentableId" value="LOCAL-00095" />
-      <option name="project" value="LOCAL" />
-      <updated>1669225005205</updated>
+      <workItem from="1670512738539" duration="18393000" />
     </task>
     <task id="LOCAL-00096" summary="Removed unused, broken functions in behavioral stage">
       <created>1669225489032</created>
@@ -687,7 +670,21 @@
       <option name="project" value="LOCAL" />
       <updated>1670541153808</updated>
     </task>
-    <option name="localTasksCounter" value="143" />
+    <task id="LOCAL-00143" summary="Function to identify folder contents">
+      <created>1670611293952</created>
+      <option name="number" value="00143" />
+      <option name="presentableId" value="LOCAL-00143" />
+      <option name="project" value="LOCAL" />
+      <updated>1670611293953</updated>
+    </task>
+    <task id="LOCAL-00144" summary="Function to identify folder contents">
+      <created>1670611415613</created>
+      <option name="number" value="00144" />
+      <option name="presentableId" value="LOCAL-00144" />
+      <option name="project" value="LOCAL" />
+      <updated>1670611415613</updated>
+    </task>
+    <option name="localTasksCounter" value="145" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -706,7 +703,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="namespace changes" />
     <MESSAGE value="misc" />
     <MESSAGE value="func to save space by deleting old videos that have been processed" />
     <MESSAGE value="touch up communication between modules" />
@@ -731,14 +727,15 @@
     <MESSAGE value="updated gitignore" />
     <MESSAGE value="Added figures folder and changes to experiment stage type constructor" />
     <MESSAGE value="Added support for 256x256" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added support for 256x256" />
+    <MESSAGE value="Function to identify folder contents" />
+    <option name="LAST_COMMIT_MESSAGE" value="Function to identify folder contents" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py</url>
-          <line>1680</line>
+          <line>1689</line>
           <option name="timeStamp" value="17" />
         </line-breakpoint>
       </breakpoints>

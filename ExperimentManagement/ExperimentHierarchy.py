@@ -1456,6 +1456,48 @@ class CollectedImagingFolder(CollectedDataFolder):
     def __init__(self, Path: str):
         super().__init__(Path)
 
+    def reorganize_bruker_files(self) -> None:
+        """
+        This function extracts out the meta files and saves in a new directory
+
+        :rtype: None
+        """
+
+        _parent_directory = pathlib.Path(self.path).parents[0]
+        _bruker_meta_folder = "".join([str(_parent_directory), "\\", "BrukerMetaData"])
+
+        try:
+            os.mkdir(_bruker_meta_folder)
+        except FileExistsError:
+            pass
+
+        try:
+            _reference_folder = pathlib.Path(self.folders.get("References"))
+            _files = [_file for _file in _reference_folder.rglob("*") if _file.is_file()]
+            for _file in _files:
+                _file.rename("".join([_bruker_meta_folder, "\\", _file.name]))
+
+            # Only remove folder if nothing left!!!
+            if [_folder for _folder in _reference_folder.rglob("*") if not _folder.is_file()].__len__() == 0:
+                _reference_folder.unlink()
+
+        except FileNotFoundError:
+            print("Could not locate a bruker reference folder")
+
+        for _meta_file in self.meta_files:
+            _meta_file.rename("".join([_bruker_meta_folder, "\\", _meta_file.name]))
+
+        for _file in self.find_all_ext(".csv"):
+            pathlib.Path(_file).rename("".join([_bruker_meta_folder, "\\", pathlib.Path(_file).name]))
+
+        if self.planes > 1 and self.channels == 1:
+            for _plane in range(self.planes):
+                _plane_folder = "".join([_parent_directory, "\\", "raw_imaging_data_plane_", str(_plane)])
+                try:
+                    os.mkdir(_plane_folder)
+                except FileExistsError:
+                    pass
+
     @property
     def file_format(self):
         # Needs modified for edge cases !!!!
@@ -1512,39 +1554,6 @@ class CollectedImagingFolder(CollectedDataFolder):
     @property
     def height(self):
         return determine_bruker_folder_contents(self.path)[3]
-
-    def reorganize_bruker_files(self) -> None:
-        """
-        This function extracts out the meta files and saves in a new directory
-
-        :rtype: None
-        """
-        _parent_directory = pathlib.Path(self.path).parents[0]
-        _bruker_meta_folder = "".join([str(_parent_directory), "\\", "BrukerMetaData"])
-
-        try:
-            os.mkdir(_bruker_meta_folder)
-        except FileExistsError:
-            pass
-
-        try:
-            _reference_folder = pathlib.Path(self.folders.get("References"))
-            _files = [_file for _file in _reference_folder.rglob("*") if _file.is_file()]
-            for _file in _files:
-                _file.rename("".join([_bruker_meta_folder, "\\", _file.name]))
-
-            # Only remove folder if nothing left!!!
-            if [_folder for _folder in _reference_folder.rglob("*") if not _folder.is_file()].__len__() == 0:
-                _reference_folder.unlink()
-
-        except FileNotFoundError:
-            print("Could not locate a bruker reference folder")
-
-        for _meta_file in self.meta_files:
-            _meta_file.rename("".join([_bruker_meta_folder, "\\", _meta_file.name]))
-
-        for _file in self.find_all_ext(".csv"):
-            pathlib.Path(_file).rename("".join([_bruker_meta_folder, "\\", pathlib.Path(_file).name]))
 
 
 class CollectedImagingAnalysisFolder(CollectedDataFolder):
