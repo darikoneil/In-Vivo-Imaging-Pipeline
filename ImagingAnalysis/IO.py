@@ -198,7 +198,7 @@ def load_bruker_tiffs(ImageDirectory: str) -> Union[np.ndarray, Tuple[np.ndarray
         return images
 
 
-def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str) -> None:
+def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str, *args: Tuple[int, int]) -> None:
     """
     Repackages a sequence of tiff files within a directory to a smaller sequence
     of tiff stacks.
@@ -208,6 +208,8 @@ def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str) -> None:
     :type ImageDirectory: str
     :param OutputDirectory: Empty directory where tiff stacks will be saved
     :type OutputDirectory: str
+    :param args: optional argument to indicate the repackaging of a specific channel and/or plane
+    :type args: Tuple[int, int]
     :rtype: None
     """
 
@@ -216,23 +218,62 @@ def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str) -> None:
         nonlocal _files
         nonlocal _file
         nonlocal _offset
-        return np.asarray(Image.open(ImageDirectory + "\\" + _files[_file + _offset]))
+        return np.asarray(Image.open(str(_files[_file + _offset])))
+
+    def find_files(Tag: Union[str, list[str]]):
+        nonlocal ImageDirectory
+        nonlocal _files
+
+        def check_file_contents(Tag_: str, File_: pathlib.WindowsPath) -> bool:
+            if Tag_ in str(File_).split("_"):
+                return True
+            else:
+                return False
+
+        # reset, rather maintain code as is then make a new temporary variable since this
+        # is basically instant
+        _files = [_file for _file in pathlib.Path(ImageDirectory).rglob("*.tif")]
+
+        # now find
+        if isinstance(Tag, list):
+            Tag = "".join([Tag[0], "_", Tag[1]])
+            _files = [_file for _file in _files if Tag in str(_file.stem)]
+        else:
+            _files = [_file for _file in _files if check_file_contents(Tag, _file)]
 
     _files = [_file for _file in pathlib.Path(ImageDirectory).rglob("*.tif")]
-    _channels, _planes, _frames, _y_pixels, _x_pixels = determine_bruker_folder_contents(ImageDirectory)
-    _pretty_print_bruker_command(_channels, _planes, _frames, _y_pixels, _x_pixels)
+    _channels, _planes, _frames, _y, _x = determine_bruker_folder_contents(ImageDirectory)
+    _pretty_print_bruker_command(_channels, _planes, _frames, _y, _x)
 
-    try:
-        assert(_channels == 1)
-    except AssertionError:
-        print("Folder contains multiple channels")
-        return
-
-    try:
-        assert(_planes == 1)
-    except AssertionError:
-        print("Folder contains multiple planes")
-        return
+    if args:
+        if _channels > 1 and _planes > 1 and args.__len__() >= 2:
+            _base_tag = "00000"
+            _tag = ["".join(["Ch", str(args[0])]), "".join([_base_tag, str(args[1]), ".ome"])]
+            find_files(_tag)
+        elif _channels == 1 and _planes > 1 and len(args) == 1:
+            _base_tag = "00000"
+            _tag = "".join([_base_tag, str(args[0]), ".ome"])
+            find_files(_tag)
+        elif _channels == 1 and _planes > 1 and len(args) >= 2:
+            _base_tag = "00000"
+            _tag = "".join([_base_tag, str(args[1]), ".ome"])
+            find_files(_tag)
+        elif _channels > 1 and _planes == 1:
+            _tag = "".join(["Ch", str(args[0])])
+            find_files(_tag)
+        else:
+            pass
+    else:
+        try:
+            assert(_channels == 1)
+        except AssertionError:
+            print("Folder contains multiple channels")
+            return
+        try:
+            assert(_planes == 1)
+        except AssertionError:
+            print("Folder contains multiple planes")
+            return
 
     # noinspection PyTypeChecker
     _chunks = math.ceil(_frames/7000)
@@ -249,14 +290,14 @@ def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str) -> None:
         _end_idx = _chunk + 7000
         _chunk_frames = _end_idx-_start_idx
         # If this is the last chunk which may not contain a full 7000 frames...
-        if _end_idx > _num_frames:
-            _end_idx = _num_frames
+        if _end_idx > _frames:
+            _end_idx = _frames
             _chunk_frames = _end_idx - _start_idx
             _end_idx += 1
 
         image_chunk = np.full((_chunk_frames, _y, _x), 0, dtype=np.uint16)
 
-        for _file in _chunk_frames:
+        for _file in range(_chunk_frames):
             image_chunk[_file, :, :] = load_image()
             _pbar.update(1)
 
