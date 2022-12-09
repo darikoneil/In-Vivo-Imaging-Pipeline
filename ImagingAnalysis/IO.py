@@ -3,12 +3,74 @@ import numpy as np
 import os
 from PIL import Image
 from tqdm.auto import tqdm
+from tqdm import tqdm as tq
 import tifffile
 from typing import Callable, List, Tuple, Sequence, Optional, Union
 import math
+import pathlib
 
 
-def load_bruker_tiffs(ImageDirectory: str) -> np.ndarray:
+def determine_bruker_folder_contents(ImageDirectory: str) -> Tuple[int, int, int, int, int]:
+    """
+    Function determine contents of the bruker folder
+
+    :param ImageDirectory: Directory containing bruker imaging data
+    :type ImageDirectory: str
+    :rtype: tuple
+    """
+    _directory = pathlib.Path(ImageDirectory)
+    _files = [_file for _file in _directory.rglob("*.tif") if _file.is_file()]
+    # preallocate
+
+    def parser(Tag_: str, SplitStrs: list) -> str:
+        return [_tag for _tag in SplitStrs if Tag_ in _tag]
+
+    def find_unique_substrings(Tag: str) -> int:
+        nonlocal _files
+        _hits = [parser(Tag, str(_file).split("_")) for _file in _files]
+        _hits = [_hit for _nested_hit in _hits for _hit in _nested_hit]
+        return list(dict.fromkeys(_hits)).__len__()
+
+    def find_unique_strings_given_substring(StaticTag: str) -> int:
+        nonlocal _files
+        return [parser(StaticTag, str(_file).split("_")) for _file in _files].__len__()
+
+    def find_channels() -> int:
+        return find_unique_substrings("Ch")
+
+    def is_multiplane() -> bool:
+        if find_unique_substrings("Cycle") > 1:
+            return True
+        else:
+            return False
+
+    def find_planes() -> int:
+        nonlocal channels
+
+        if is_multiplane():
+            return find_unique_strings_given_substring("Cycle00001")//channels
+        else:
+            return 1
+
+    def find_frames() -> int:
+        nonlocal channels
+        if is_multiplane():
+            return find_unique_strings_given_substring("000001.ome")//channels
+        else:
+            return find_unique_strings_given_substring("Cycle00001")//channels
+
+    def find_dimensions() -> Tuple[int, int]:
+        nonlocal ImageDirectory
+        nonlocal _files
+        return np.asarray(Image.open("".join(str(_files[0])))).shape
+
+    channels = find_channels()
+
+    # noinspection PyTypeChecker
+    return (channels, find_planes(), find_frames(), *find_dimensions())
+
+
+def load_bruker_tiffs(ImageDirectory: str) -> Union[np.ndarray, Tuple[np.ndarray]]:
     """
     Load a sequence of tiff files from a directory.
 
@@ -21,80 +83,41 @@ def load_bruker_tiffs(ImageDirectory: str) -> np.ndarray:
     :rtype: Any
      """
 
-    def get_dimensions():
-        nonlocal ImageDirectory
-        return np.asarray(Image.open("".join([ImageDirectory, "\\", _fnames[0]]))).shape
+    _channels, _planes, _frames, _y_pixels, _x_pixels = determine_bruker_folder_contents(ImageDirectory)
+
+    try:
+        assert(_channels == 1)
+    except AssertionError:
+        print("Folder contains multiple channels")
+        return
+    try:
+        assert(_planes == 1)
+    except AssertionError:
+        print("Folder contains multiple planes")
+        return
 
     def load_image():
         nonlocal ImageDirectory
-        nonlocal _fnames
-        nonlocal _fname
-        return np.asarray(Image.open("".join([ImageDirectory, "\\", _fnames[_fname]])))
+        nonlocal _files
+        nonlocal _file
+        return np.asarray(Image.open(str(_files[_file])))
 
-    _fnames = os.listdir(ImageDirectory)
-    _num_frames = len(_fnames)
+    _files = [_file for _file in pathlib.Path(ImageDirectory).rglob("*.tif")]
+
     # Bruker is usually saved to .tif in 0-65536 (uint16) even though recording says 8192 (uint13)
-    complete_image = np.full((_num_frames, *get_dimensions()), 0, dtype=np.uint16)
+    complete_image = np.full((_frames, _y_pixels, _x_pixels), 0, dtype=np.uint16)
 
 
 
-    for _fname in tqdm(
-            range(_num_frames),
-            total=_num_frames,
+    for _file in tqdm(
+            range(_frames),
+            total=_frames,
             desc="Loading Image...",
             disable=False,
     ):
-        complete_image[_fname, :, :] = load_image()
+        complete_image[_file, :, :] = load_image()
 
     return complete_image
-
-
-def _repackage_bruker_tiffs_original(ImageDirectory: str, OutputDirectory: str) -> None:
-    """
-    Repackages a sequence of tiff files within a directory to a smaller sequence
-    of tiff stacks.
-    Designed to compile the outputs of a certain imaging utility
-    that exports recordings such that each frame is saved as a single tiff.
-    :param ImageDirectory: Directory containing a sequence of single frame tiff files
-    :type ImageDirectory: str
-    :param OutputDirectory: Empty directory where tiff stacks will be saved
-    :type OutputDirectory: str
-    :rtype: None
-    """
-    print("Repackaging...")
-    _fnames = os.listdir(ImageDirectory)
-    _num_frames = len(_fnames)
-    # noinspection PyTypeChecker
-    _chunks = math.ceil(_num_frames/7000)
-
-    c_idx = 1
-    _offset = int()
-    for _chunk in range(0, _num_frames, 7000):
-
-        _start_idx = _chunk
-        _offset = _start_idx
-        _end_idx = _chunk + 7000
-        _chunk_frames = _end_idx-_start_idx
-        # If this is the last chunk which may not contain a full 7000 frames...
-        if _end_idx > _num_frames:
-            _end_idx = _num_frames
-            _chunk_frames = _end_idx - _start_idx
-            _end_idx += 1
-
-        image_chunk = np.full((_chunk_frames, 512, 512), 0, dtype=np.uint16)
-        for _fname in tqdm(
-            range(_chunk_frames),
-            total=_chunk_frames,
-            desc="Loading Images...",
-            disable=False,
-        ):
-            image_chunk[_fname, :, :] = np.asarray(Image.open(ImageDirectory + "\\" + _fnames[_fname + _offset]))
-        if c_idx < 10:
-            save_single_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_0" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
-        else:
-            save_single_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
-        c_idx += 1
-    return print("Finished Repackaging Bruker Tiffs")
 
 
 def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str) -> None:
@@ -110,27 +133,37 @@ def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str) -> None:
     :rtype: None
     """
 
-    def get_dimensions():
-        nonlocal ImageDirectory
-        return np.asarray(Image.open("".join([ImageDirectory, "\\", _fnames[0]]))).shape
-
     def load_image():
         nonlocal ImageDirectory
-        nonlocal _fnames
-        nonlocal _fname
+        nonlocal _files
+        nonlocal _file
         nonlocal _offset
-        return np.asarray(Image.open(ImageDirectory + "\\" + _fnames[_fname + _offset]))
+        return np.asarray(Image.open(ImageDirectory + "\\" + _files[_file + _offset]))
 
-    print("Repackaging...")
-    _fnames = os.listdir(ImageDirectory)
-    _y, _x = get_dimensions()
-    _num_frames = len(_fnames)
+    _files = [_file for _file in pathlib.Path(ImageDirectory).rglob("*.tif")]
+    _channels, _planes, _frames, _y_pixels, _x_pixels = determine_bruker_folder_contents(ImageDirectory)
+
+    try:
+        assert(_channels == 1)
+    except AssertionError:
+        print("Folder contains multiple channels")
+        return
+
+    try:
+        assert(_planes == 1)
+    except AssertionError:
+        print("Folder contains multiple planes")
+        return
+
     # noinspection PyTypeChecker
-    _chunks = math.ceil(_num_frames/7000)
-
+    _chunks = math.ceil(_frames/7000)
     c_idx = 1
     _offset = int()
-    for _chunk in range(0, _num_frames, 7000):
+
+    _pbar = tq(total=_frames)
+    _pbar.set_description("Repackaging Bruker Tiffs...")
+
+    for _chunk in range(0, _frames, 7000):
 
         _start_idx = _chunk
         _offset = _start_idx
@@ -143,81 +176,17 @@ def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str) -> None:
             _end_idx += 1
 
         image_chunk = np.full((_chunk_frames, _y, _x), 0, dtype=np.uint16)
-        for _fname in tqdm(
-            range(_chunk_frames),
-            total=_chunk_frames,
-            desc="Loading Images...",
-            disable=False,
-        ):
-            image_chunk[_fname, :, :] = load_image()
+
+        for _file in _chunk_frames:
+            image_chunk[_file, :, :] = load_image()
+            _pbar.update(1)
+
         if c_idx < 10:
             save_single_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_0" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
         else:
             save_single_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
         c_idx += 1
-    return print("Finished Repackaging Bruker Tiffs")
-
-
-def _repackage_bruker_tiffs_slow(ImageDirectory: str, OutputDirectory: str) -> None:
-    """
-    Repackages a sequence of tiff files within a directory to a smaller sequence
-    of tiff stacks.
-
-    Designed to compile the outputs of a certain imaging utility
-    that exports recordings such that each frame is saved as a single tiff.
-
-    :param ImageDirectory: Directory containing a sequence of single frame tiff files
-    :type ImageDirectory: str
-    :param OutputDirectory: Empty directory where tiff stacks will be saved
-    :type OutputDirectory: str
-    :rtype: None
-    """
-
-    def get_dimensions():
-        nonlocal ImageDirectory
-        return np.asarray(Image.open("".join([ImageDirectory, "\\", _fnames[0]]))).shape
-
-    def load_image(_fname_):
-        nonlocal ImageDirectory
-        return np.asarray(Image.open("".join([ImageDirectory, "\\", _fname_])))
-
-
-    print("Repackaging...")
-    _fnames = os.listdir(ImageDirectory)
-    _y, _x = get_dimensions()
-    _num_frames = len(_fnames)
-    # noinspection PyTypeChecker
-    _chunks = math.ceil(_num_frames/7000)
-
-    c_idx = 1
-    _offset = int()
-
-    for _chunk in tqdm(
-        range(0, _num_frames, 7000),
-        total=range(0, _num_frames, 7000).__len__(),
-        desc="Loading Image Chunk..",
-        disable=False,
-    ):
-        _start_idx = _chunk
-        _offset = _start_idx
-        _end_idx = _chunk + 7000
-        _chunk_frames = _end_idx-_start_idx
-        # If this is the last chunk which may not contain a full 7000 frames...
-        if _end_idx > _num_frames:
-            _end_idx = _num_frames
-            _chunk_frames = _end_idx - _start_idx
-            _end_idx += 1
-
-        # Bruker is usually saved to .tif in 0-65536 (uint16) even though recording says 8192 (uint13)
-        image_chunk = np.full((_chunk_frames, _y, _x), 0, dtype=np.uint16)
-
-        image_chunk = np.array([load_image(_fname) for _fname in _fnames[_offset:_end_idx]])
-        if c_idx < 10:
-            save_single_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_0" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
-        else:
-            save_single_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
-        c_idx += 1
-    return print("Finished Repackaging Bruker Tiffs")
+    return
 
 
 def load_single_tiff(Filename: str, NumFrames: int) -> np.ndarray:

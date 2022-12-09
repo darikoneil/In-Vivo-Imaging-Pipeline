@@ -1328,9 +1328,11 @@ This is a class for managing a folder of unorganized data files
         self._path_assigned = False
 
         # Properties
+        self._folders = []
         self._files = []
         self.path = Path
         self.files = self.path
+        self.folders = self.path
 
     @property
     def files(self) -> List[str]:
@@ -1343,10 +1345,33 @@ This is a class for managing a folder of unorganized data files
 
         :param Path: Directory to check
         :type Path: str
-        :return: Any
+        :rtype: Any
         """
 
         self._files = [_file for _file in pathlib.Path(Path).rglob("*") if _file.is_file()]
+
+    @property
+    def folders(self) -> dict:
+        """
+        Dictionary of folders in path
+
+        :rtype: dict
+        """
+        return self._folders
+
+    @folders.setter
+    def folders(self, Path: str) -> Self:
+        """
+        function to quickly fill folders recursively
+
+        :param Path: Directory to check
+        :type Path: str
+        :rtype: Any
+        """
+        _folders_list = [_folder for _folder in pathlib.Path(Path).rglob("*") if not _folder.is_file()]
+        self._folders = dict() # Reset
+        for _folder in _folders_list:
+            self._folders[_folder.stem] = str(_folder)
 
     @property
     def instance_date(self) -> str:
@@ -1457,7 +1482,7 @@ class CollectedImagingFolder(CollectedDataFolder):
     def meta_files(self):
         if self.files.__len__() != 0:
             _exts = [file.suffix for file in self.files]
-            return [file for file in self.files if file.suffix in [".xml", ".txt"]]
+            return [file for file in self.files if file.suffix in [".xml", ".txt", ".env"]]
         else:
             return 0
 
@@ -1467,6 +1492,59 @@ class CollectedImagingFolder(CollectedDataFolder):
             return self.meta_files.__len__()
         else:
             return 0
+
+    @property
+    def multiplane(self):
+        return
+
+    @property
+    def channels(self):
+        return
+
+    @property
+    def frames(self):
+        return
+
+    @property
+    def width(self):
+        return
+
+    @property
+    def height(self):
+        return
+
+    def reorganize_bruker_files(self) -> None:
+        """
+        This function extracts out the meta files and saves in a new directory
+
+        :rtype: None
+        """
+        _parent_directory = pathlib.Path(self.path).parents[0]
+        _bruker_meta_folder = "".join([str(_parent_directory), "\\", "BrukerMetaData"])
+
+        try:
+            os.mkdir(_bruker_meta_folder)
+        except FileExistsError:
+            pass
+
+        try:
+            _reference_folder = pathlib.Path(self.folders.get("References"))
+            _files = [_file for _file in _reference_folder.rglob("*") if _file.is_file()]
+            for _file in _files:
+                _file.rename("".join([_bruker_meta_folder, "\\", _file.name]))
+
+            # Only remove folder if nothing left!!!
+            if [_folder for _folder in _reference_folder.rglob("*") if not _folder.is_file()].__len__() == 0:
+                _reference_folder.unlink()
+
+        except FileNotFoundError:
+            print("Could not locate a bruker reference folder")
+
+        for _meta_file in self.meta_files:
+            _meta_file.rename("".join([_bruker_meta_folder, "\\", _meta_file.name]))
+
+        for _file in self.find_all_ext(".csv"):
+            pathlib.Path(_file).rename("".join([_bruker_meta_folder, "\\", pathlib.Path(_file).name]))
 
 
 class CollectedImagingAnalysisFolder(CollectedDataFolder):
