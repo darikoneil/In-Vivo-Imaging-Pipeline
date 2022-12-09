@@ -1,4 +1,4 @@
-from ImagingAnalysis.model_3DUnet import UNet3D
+from Imaging.ModifiedDenoising.model_3DUnet import UNet3D
 import torch.nn as nn
 
 class Network_3D_Unet(nn.Module):

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import sys
 from typing import Union, Tuple, List, Optional
 import os
 from datetime import date, datetime
@@ -9,11 +8,10 @@ import numpy as np
 import pandas as pd
 from IPython import get_ipython
 import pathlib
-import math
 from tqdm import tqdm
 
 from ExperimentManagement.BrukerMetaModule import BrukerMeta
-from ImagingAnalysis.IO import save_raw_binary, determine_bruker_folder_contents
+from Imaging.IO import save_raw_binary, determine_bruker_folder_contents
 from MigrationTools.Converters import renamed_load
 
 
@@ -1604,7 +1602,7 @@ class CollectedImagingAnalysisFolder(CollectedDataFolder):
         elif self.find_matching_files("denoised").__len__() >= 1:
             return "Suite2P: ROI Detection"
         elif self.find_matching_files("suite2p").__len__() >= 2:
-            return "DeepCAD: Denoising"
+            return "DeepCAD: ModifiedDenoising"
         else:
             return "Motion Correction"
 
@@ -1835,7 +1833,7 @@ class CollectedImagingAnalysisFolder(CollectedDataFolder):
 
         # Dynamic imports because \m/_(>.<)_\m/
         print("Loading Suite2p...")
-        from ImagingAnalysis.Suite2PModule import Suite2PAnalysis
+        from Imaging.ToolWrappers.Suite2PModule import Suite2PAnalysis
         suite2p_module = Suite2PAnalysis(self.folders.get(_folder), self.path, file_type="binary")
         suite2p_module.load_files() # load the files
         suite2p_module.db = suite2p_module.ops # make sure db never overwrites ops

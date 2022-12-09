@@ -1,7 +1,7 @@
 import numpy as np
 import pickle as pkl
 from sklearn import linear_model
-from ComputationalAnalysis.DecodingAnalysis import DecodingModule, PerformanceMetrics
+from Theory.DecodingAnalysis import DecodingModule, PerformanceMetrics
 
 
 class LogisticRegression(DecodingModule):

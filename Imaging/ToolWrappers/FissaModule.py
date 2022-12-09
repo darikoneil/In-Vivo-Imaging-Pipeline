@@ -7,7 +7,7 @@ import pickle as pkl
 import fissa
 import pathlib
 from typing import Tuple, List
-from ImagingAnalysis.IO import load_raw_binary
+from Imaging.IO import load_raw_binary
 
 
 # /// /// Main Module /// ///

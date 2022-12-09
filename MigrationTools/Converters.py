@@ -2,8 +2,6 @@ import io
 import numpy as np
 import pickle as pkl
 
-import ImagingAnalysis.FissaModule
-
 
 class RenameUnpickler(pkl.Unpickler):
     """
@@ -12,23 +10,23 @@ class RenameUnpickler(pkl.Unpickler):
     def find_class(self, module, name):
         renamed_module = module
         if module == "AnalysisModules.BurrowFearConditioning":
-            renamed_module = "BehavioralAnalysis.BurrowFearConditioning"
+            renamed_module = "Behavior.BurrowFearConditioning"
         elif module == "AnalysisModules.ExperimentHierarchy":
             renamed_module = "ExperimentManagement.ExperimentHierarchy"
         elif module == "AnalysisModules.Suite2PAnalysis":
-            renamed_module = "ImagingAnalysis.Suite2PAnalysis"
+            renamed_module = "Imaging.Suite2PAnalysis"
         elif module == "AnalysisModules.CascadeAnalysis":
-            renamed_module = "ImagingAnalysis.CascadeAnalysis"
+            renamed_module = "Imaging.CascadeAnalysis"
         elif module == "AnalysisModules.FissaAnalysis":
-            renamed_module = "ImagingAnalysis.FissaAnalysis"
-        elif module == "ImagingAnalysis.FissaAnalysis":
-            renamed_module = "ImagingAnalysis.FissaModule"
-        elif module == "ImagingAnalysis.CascadeAnalysis":
-            renamed_module = "ImagingAnalysis.CascadeModule"
-        elif module == "Imaging Analysis.Denoising":
-            renamed_module = "ImagingAnalysis.DenoisingModule"
-        elif module == "ImagingAnalysis.FissaModule.ProcessedTracesModule":
-            renamed_module = "ImagingAnalysis.FissaModule.ProcessedTracesDictionary"
+            renamed_module = "Imaging.FissaAnalysis"
+        elif module == "Imaging.FissaAnalysis":
+            renamed_module = "Imaging.FissaModule"
+        elif module == "Imaging.CascadeAnalysis":
+            renamed_module = "Imaging.CascadeModule"
+        elif module == "Imaging Analysis.ModifiedDenoising":
+            renamed_module = "Imaging.DenoisingModule"
+        elif module == "Imaging.FissaModule.ProcessedTracesModule":
+            renamed_module = "Imaging.FissaModule.ProcessedTracesDictionary"
         return super(RenameUnpickler, self).find_class(renamed_module, name)
 
 

@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 import numpy as np
 from tqdm.auto import tqdm
-from ImagingAnalysis.PreprocessingImages import PreProcessing
+from Imaging.PreprocessingImages import PreProcessing
 import sklearn
 import imageio as iio
 import cv2

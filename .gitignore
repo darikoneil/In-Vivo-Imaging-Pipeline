@@ -116,7 +116,7 @@ DebugData/separated.npz
 DebugData/suite2p/plane0/iscell.npy
 DebugData/suite2p/plane0/ops.npy
 DebugData/suite2p/plane0/reg_tif/file001_chan0.tif
-DebugData/suite2p/plane0/reg_tif/file002_chan0.tif
+DebugData/file002_chan0.tif
 DebugData/suite2p/plane0/stat.npy
 DebugData/suite2p/run.log
 AnalysisModules/.ipynb_checkpoints/NewImageAnalysis-checkpoint.ipynb
@@ -149,7 +149,7 @@ __pycache__/PreprocessingImages.cpython-37.pyc
 requirements.txt
 AnalysisModules/TestFreeze.py
 Notebooks/ExperimentalHierarchyExample.ipynb
-ImagingAnalysis/XXX.py
+Imaging/XXX.py
 AnalysisModules/s.py
 AnalysisModules/personal1.py
 *.mat

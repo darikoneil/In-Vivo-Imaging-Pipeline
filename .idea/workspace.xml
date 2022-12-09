@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="Function to identify and load channels/planes as separate">
+    <list default="true" id="ba21a12d-051a-4737-8adb-b3b64d802073" name="Changes" comment="LATEST UPDATE - RAS - CONFIRMED">
       <change afterPath="$PROJECT_DIR$/Exemplar.eps" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Exemplar10.eps" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Exemplar11.eps" afterDir="false" />
@@ -20,8 +20,35 @@
       <change afterPath="$PROJECT_DIR$/Exemplar8.eps" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Exemplar9.eps" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Exemplar90.eps" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/IO.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/IO.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/BurrowFearConditioning.py" beforeDir="false" afterPath="$PROJECT_DIR$/Behavior/BurrowFearConditioning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BehavioralAnalysis/Utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/Behavior/Utilities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ComputationalAnalysis/DecodingAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/Theory/DecodingAnalysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ComputationalAnalysis/LSTMRegression.py" beforeDir="false" afterPath="$PROJECT_DIR$/Theory/LSTMRegression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ComputationalAnalysis/LinearNonLinearRegression.py" beforeDir="false" afterPath="$PROJECT_DIR$/Theory/LinearNonLinearRegression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ComputationalAnalysis/LinearRegression.py" beforeDir="false" afterPath="$PROJECT_DIR$/Theory/LinearRegression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ComputationalAnalysis/LogisticRegression.py" beforeDir="false" afterPath="$PROJECT_DIR$/Theory/LogisticRegression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ComputationalAnalysis/ModifiedDecoders.py" beforeDir="false" afterPath="$PROJECT_DIR$/Theory/ModifiedDecoders.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ComputationalAnalysis/SupportVectorMachine.py" beforeDir="false" afterPath="$PROJECT_DIR$/Theory/SupportVectorMachine.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/CascadeModule.py" beforeDir="false" afterPath="$PROJECT_DIR$/Imaging/ToolWrappers/CascadeModule.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Colorizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Imaging/Colorizer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/DenoisingModule.py" beforeDir="false" afterPath="$PROJECT_DIR$/Imaging/ToolWrappers/DenoisingModule.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/FissaModule.py" beforeDir="false" afterPath="$PROJECT_DIR$/Imaging/ToolWrappers/FissaModule.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/IO.py" beforeDir="false" afterPath="$PROJECT_DIR$/Imaging/IO.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/ImageProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/Imaging/ImageProcessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/PowerSpectrum.py" beforeDir="false" afterPath="$PROJECT_DIR$/Imaging/PowerSpectrum.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/SignalProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/Imaging/SignalProcessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Suite2PModule.py" beforeDir="false" afterPath="$PROJECT_DIR$/Imaging/ToolWrappers/Suite2PModule.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/Imaging/Utilities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/Visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/Imaging/Visualization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/buildingblocks.py" beforeDir="false" afterPath="$PROJECT_DIR$/Imaging/ModifiedDenoising/buildingblocks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/data_process.py" beforeDir="false" afterPath="$PROJECT_DIR$/Imaging/ModifiedDenoising/data_process.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/model_3DUnet.py" beforeDir="false" afterPath="$PROJECT_DIR$/Imaging/ModifiedDenoising/model_3DUnet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/network.py" beforeDir="false" afterPath="$PROJECT_DIR$/Imaging/ModifiedDenoising/network.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImagingAnalysis/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/Imaging/ModifiedDenoising/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MigrationTools/Converters.py" beforeDir="false" afterPath="$PROJECT_DIR$/MigrationTools/Converters.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,11 +125,11 @@
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\USNAP" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ScratchPad" />
-      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline" />
-      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\Notebooks" />
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DebugData" />
       <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ImagingAnalysis" />
-      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\DebugData\suite2p\plane0\Goob" />
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\ImagingToolWrappers" />
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline" />
+      <recent name="C:\ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\Denoising" />
     </key>
   </component>
   <component name="RunManager" selected="Python tests.pytest for InstallationTests.test_gpu_packages">
@@ -340,14 +367,7 @@
       <workItem from="1670288718973" duration="1070000" />
       <workItem from="1670337420764" duration="1383000" />
       <workItem from="1670445340978" duration="22839000" />
-      <workItem from="1670512738539" duration="25945000" />
-    </task>
-    <task id="LOCAL-00100" summary="PEP8">
-      <created>1669315535586</created>
-      <option name="number" value="00100" />
-      <option name="presentableId" value="LOCAL-00100" />
-      <option name="project" value="LOCAL" />
-      <updated>1669315535586</updated>
+      <workItem from="1670512738539" duration="26628000" />
     </task>
     <task id="LOCAL-00101" summary="PEP8">
       <created>1669316648841</created>
@@ -685,7 +705,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670619535085</updated>
     </task>
-    <option name="localTasksCounter" value="149" />
+    <task id="LOCAL-00149" summary="LATEST UPDATE - RAS - CONFIRMED">
+      <created>1670620660297</created>
+      <option name="number" value="00149" />
+      <option name="presentableId" value="LOCAL-00149" />
+      <option name="project" value="LOCAL" />
+      <updated>1670620660297</updated>
+    </task>
+    <option name="localTasksCounter" value="150" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -704,7 +731,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="func to save space by deleting old videos that have been processed" />
     <MESSAGE value="touch up communication between modules" />
     <MESSAGE value="fixed typo that messed up indicator of current analysis stage" />
     <MESSAGE value="fixed typo in clean-up imaging function" />
@@ -729,14 +755,15 @@
     <MESSAGE value="Added support for 256x256" />
     <MESSAGE value="Function to identify folder contents" />
     <MESSAGE value="Function to identify and load channels/planes as separate" />
-    <option name="LAST_COMMIT_MESSAGE" value="Function to identify and load channels/planes as separate" />
+    <MESSAGE value="LATEST UPDATE - RAS - CONFIRMED" />
+    <option name="LAST_COMMIT_MESSAGE" value="LATEST UPDATE - RAS - CONFIRMED" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/ExperimentManagement/ExperimentHierarchy.py</url>
-          <line>1689</line>
+          <line>1687</line>
           <option name="timeStamp" value="17" />
         </line-breakpoint>
       </breakpoints>

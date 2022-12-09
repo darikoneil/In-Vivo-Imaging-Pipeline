@@ -8,7 +8,7 @@ from natsort import natsorted
 import os
 import glob
 from ExperimentManagement.ExperimentHierarchy import ExperimentData
-from ImagingAnalysis.IO import load_raw_binary, save_raw_binary
+from Imaging.IO import load_raw_binary, save_raw_binary
 from typing import Tuple, List, Union, Optional
 
 
