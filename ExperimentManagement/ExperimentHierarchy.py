@@ -13,7 +13,7 @@ import math
 from tqdm import tqdm
 
 from ExperimentManagement.BrukerMetaModule import BrukerMeta
-from ImagingAnalysis.IO import save_raw_binary
+from ImagingAnalysis.IO import save_raw_binary, determine_bruker_folder_contents
 from MigrationTools.Converters import renamed_load
 
 
@@ -1494,24 +1494,24 @@ class CollectedImagingFolder(CollectedDataFolder):
             return 0
 
     @property
-    def multiplane(self):
-        return
+    def planes(self):
+        return determine_bruker_folder_contents(self.path)[1]
 
     @property
     def channels(self):
-        return
+        return determine_bruker_folder_contents(self.path)[0]
 
     @property
     def frames(self):
-        return
+        return determine_bruker_folder_contents(self.path)[2]
 
     @property
     def width(self):
-        return
+        return determine_bruker_folder_contents(self.path)[4]
 
     @property
     def height(self):
-        return
+        return determine_bruker_folder_contents(self.path)[3]
 
     def reorganize_bruker_files(self) -> None:
         """
