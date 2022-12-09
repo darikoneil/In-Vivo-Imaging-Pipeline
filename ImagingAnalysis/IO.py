@@ -198,7 +198,7 @@ def load_bruker_tiffs(ImageDirectory: str) -> Union[np.ndarray, Tuple[np.ndarray
         return images
 
 
-def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str, *args: Tuple[int, int]) -> None:
+def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str, *args: Union[int]) -> None:
     """
     Repackages a sequence of tiff files within a directory to a smaller sequence
     of tiff stacks.
@@ -209,7 +209,7 @@ def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str, *args: Tup
     :param OutputDirectory: Empty directory where tiff stacks will be saved
     :type OutputDirectory: str
     :param args: optional argument to indicate the repackaging of a specific channel and/or plane
-    :type args: Tuple[int, int]
+    :type args: int
     :rtype: None
     """
 
@@ -246,7 +246,14 @@ def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str, *args: Tup
     _pretty_print_bruker_command(_channels, _planes, _frames, _y, _x)
 
     if args:
-        if _channels > 1 and _planes > 1 and args.__len__() >= 2:
+
+        # unpack if necessary
+        if isinstance(args[0], tuple):
+            _c = args[0][0]
+            _p = args[0][1]
+            args = tuple([_c, _p])
+
+        if _channels > 1 and _planes > 1 and len(args) >= 2:
             _base_tag = "00000"
             _tag = ["".join(["Ch", str(args[0])]), "".join([_base_tag, str(args[1]), ".ome"])]
             find_files(_tag)
@@ -306,6 +313,7 @@ def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str, *args: Tup
         else:
             save_single_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
         c_idx += 1
+    _pbar.close()
     return
 
 

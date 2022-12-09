@@ -20,7 +20,6 @@
       <change afterPath="$PROJECT_DIR$/Exemplar8.eps" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Exemplar9.eps" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Exemplar90.eps" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ImagingAnalysis/IO.py" beforeDir="false" afterPath="$PROJECT_DIR$/ImagingAnalysis/IO.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -340,14 +339,7 @@
       <workItem from="1670288718973" duration="1070000" />
       <workItem from="1670337420764" duration="1383000" />
       <workItem from="1670445340978" duration="22839000" />
-      <workItem from="1670512738539" duration="23987000" />
-    </task>
-    <task id="LOCAL-00098" summary="namespace">
-      <created>1669229633264</created>
-      <option name="number" value="00098" />
-      <option name="presentableId" value="LOCAL-00098" />
-      <option name="project" value="LOCAL" />
-      <updated>1669229633264</updated>
+      <workItem from="1670512738539" duration="24962000" />
     </task>
     <task id="LOCAL-00099" summary="namespace">
       <created>1669314371933</created>
@@ -685,7 +677,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670617233744</updated>
     </task>
-    <option name="localTasksCounter" value="147" />
+    <task id="LOCAL-00147" summary="Function to identify and load channels/planes as separate">
+      <created>1670618829473</created>
+      <option name="number" value="00147" />
+      <option name="presentableId" value="LOCAL-00147" />
+      <option name="project" value="LOCAL" />
+      <updated>1670618829473</updated>
+    </task>
+    <option name="localTasksCounter" value="148" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
