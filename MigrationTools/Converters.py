@@ -19,14 +19,18 @@ class RenameUnpickler(pkl.Unpickler):
             renamed_module = "Imaging.CascadeAnalysis"
         elif module == "AnalysisModules.FissaAnalysis":
             renamed_module = "Imaging.FissaAnalysis"
-        elif module == "Imaging.FissaAnalysis":
-            renamed_module = "Imaging.FissaModule"
-        elif module == "Imaging.CascadeAnalysis":
-            renamed_module = "Imaging.CascadeModule"
+        elif module == "ImagingAnalysis.FissaModule":
+            renamed_module = "Imaging.ToolWrappers.FissaModule"
+        elif module == "ImagingAnalysis.CascadeModule":
+            renamed_module = "Imaging.ToolWrappers.CascadeModule"
         elif module == "Imaging Analysis.ModifiedDenoising":
             renamed_module = "Imaging.DenoisingModule"
         elif module == "Imaging.FissaModule.ProcessedTracesModule":
             renamed_module = "Imaging.FissaModule.ProcessedTracesDictionary"
+        elif module == "Imaging.FissaModule.ProcessedTracesDictionary":
+            renamed_module = "Imaging.ToolWrappers.FissaModule.ProcessedTracesDictionary"
+        elif module == "BehavioralAnalysis.BurrowFearConditioning":
+            renamed_module = "Behavior.BurrowFearConditioning"
         return super(RenameUnpickler, self).find_class(renamed_module, name)
 
 
