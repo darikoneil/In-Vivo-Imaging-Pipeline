@@ -2,7 +2,7 @@ import numpy as np
 import pickle as pkl
 import pathlib
 
-
+# Warnin', all code in this folder is generally gross and hasty
 # Metrics functions from Neural Decoding Package from Joshua Glaser while in Kording Lab
 from Neural_Decoding.Neural_Decoding.metrics import get_R2
 
