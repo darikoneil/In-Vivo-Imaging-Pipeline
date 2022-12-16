@@ -31,6 +31,8 @@ class RenameUnpickler(pkl.Unpickler):
             renamed_module = "Imaging.ToolWrappers.FissaModule.ProcessedTracesDictionary"
         elif module == "BehavioralAnalysis.BurrowFearConditioning":
             renamed_module = "Behavior.BurrowFearConditioning"
+        elif module == "ImagingAnalysis.Suite2PAnalysis":
+            renamed_module = "Imaging.ToolWrappers.Suite2PModule"
         return super(RenameUnpickler, self).find_class(renamed_module, name)
 
 
