@@ -423,7 +423,10 @@ class ExperimentData:
         if _gen_roi_matching_index:
             cls._generate_roi_matching_index_directory(MouseDirectory)
         if _gen_lab_notebook:
-            os.makedirs(MouseDirectory + "\\LabNotebook")
+            try:
+                os.makedirs(MouseDirectory + "\\LabNotebook")
+            except FileExistsError:
+                pass
 
     @classmethod
     def _generate_histology_directory(cls, MouseDirectory: str, **kwargs) -> None:
@@ -449,8 +452,11 @@ class ExperimentData:
 
         _read_me_file = _visual_hist_dir + "\\ReadMe.txt"
 
-        os.makedirs(_base_hist_dir)
-        os.makedirs(_visual_hist_dir)
+        try:
+            os.makedirs(_base_hist_dir)
+            os.makedirs(_visual_hist_dir)
+        except FileExistsError:
+            pass
 
         cls._generate_read_me(_read_me_file, "Read-Me for Associated Histological Data")
 
@@ -464,9 +470,12 @@ class ExperimentData:
         _roi_matching_index_dir = MouseDirectory + "\\ROIMatchingIndex"
         _roi_matching_index_read_me = _roi_matching_index_dir + "\\ReadMe.txt"
 
-        os.makedirs(_roi_matching_index_dir)
-        cls._generate_read_me(_roi_matching_index_read_me,
-                           "Read-Me for Index of Longitudinally-Matched ROIs")
+        try:
+            os.makedirs(_roi_matching_index_dir)
+            cls._generate_read_me(_roi_matching_index_read_me,
+                            "Read-Me for Index of Longitudinally-Matched ROIs")
+        except FileExistsError:
+            pass
 
     @classmethod
     def _generate_experiment_stage_directory(cls, MouseDirectory: str, Stage: str, **kwargs) -> None:
@@ -508,10 +517,22 @@ class ExperimentData:
         _raw_behavioral_data = _base_behav_dir + "\\RawBehavioralData"
         _behavioral_exports = _base_behav_dir + "\\BehavioralExports"
         _deep_lab_cut_data = _base_behav_dir + "\\DeepLabCutData"
-        os.makedirs(_base_behav_dir)
-        os.makedirs(_raw_behavioral_data)
-        os.makedirs(_behavioral_exports)
-        os.makedirs(_deep_lab_cut_data)
+        try:
+            os.makedirs(_base_behav_dir)
+        except FileExistsError:
+            pass
+        try:
+            os.makedirs(_raw_behavioral_data)
+        except FileExistsError:
+            pass
+        try:
+            os.makedirs(_behavioral_exports)
+        except FileExistsError:
+            pass
+        try:
+            os.makedirs(_deep_lab_cut_data)
+        except FileExistsError:
+            pass
 
     @classmethod
     def _generate_imaging_subdirectory(cls, StageDirectory: str) -> None:
@@ -530,9 +551,18 @@ class ExperimentData:
         _base_image_dir = StageDirectory + "\\Imaging"
         _raw_imaging_data = _base_image_dir + "\\RawImagingData"
         _bruker_meta_data = _base_image_dir + "\\BrukerMetaData"
-        os.makedirs(_base_image_dir)
-        os.makedirs(_raw_imaging_data)
-        os.makedirs(_bruker_meta_data)
+        try:
+            os.makedirs(_base_image_dir)
+        except FileExistsError:
+            pass
+        try:
+            os.makedirs(_raw_imaging_data)
+        except FileExistsError:
+            pass
+        try:
+            os.makedirs(_bruker_meta_data)
+        except FileExistsError:
+            pass
 
     @classmethod
     def _generate_computation_subdirectory(cls, StageDirectory: str, **kwargs) -> None:
@@ -552,8 +582,14 @@ class ExperimentData:
         _base_comp_dir = StageDirectory + "\\Computational"
         _neural_data_dir = _base_comp_dir + "\\NeuralData"
         _analysis_dir = _base_comp_dir + "\\" + _analysis_title
-        os.makedirs(_base_comp_dir)
-        os.makedirs(_neural_data_dir)
+        try:
+            os.makedirs(_base_comp_dir)
+        except FileExistsError:
+            pass
+        try:
+            os.makedirs(_neural_data_dir)
+        except FileExistsError:
+            pass
 
     @classmethod
     def _generate_analysis_technique_subdirectory(cls, BaseCompDirectory: str, AnalysisTitle: str) -> None:
@@ -567,8 +603,11 @@ class ExperimentData:
         :rtype: None
         """
         _analysis_dir = BaseCompDirectory + "\\" + AnalysisTitle
-        os.makedirs(_analysis_dir)
-        cls._generate_read_me(_analysis_dir + "\\ReadMe.txt", "Read-Me for Analysis Technique")
+        try:
+            os.makedirs(_analysis_dir)
+            cls._generate_read_me(_analysis_dir + "\\ReadMe.txt", "Read-Me for Analysis Technique")
+        except FileExistsError:
+            pass
 
     @staticmethod
     def _generate_read_me(AbsoluteFilePath: str, Text: str) -> None:
@@ -1572,8 +1611,7 @@ class CollectedImagingAnalysisFolder(CollectedDataFolder):
     def __init__(self, Path: str):
         super().__init__(Path)
         self.parameters = dict()
-        self.folders = None
-        self.default_folders()
+        # self.default_folders()
 
     @property
     def current_stage(self) -> str:
