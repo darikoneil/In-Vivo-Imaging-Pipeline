@@ -1,7 +1,5 @@
 from __future__ import annotations
-
 import itertools
-
 import numpy as np
 import os
 from PIL import Image
@@ -12,6 +10,7 @@ from typing import Callable, List, Tuple, Sequence, Optional, Union
 import math
 import pathlib
 from prettytable import PrettyTable
+from imageio import mimwrite
 
 
 def determine_bruker_folder_contents(ImageDirectory: str) -> Tuple[int, int, int, int, int]:
@@ -282,7 +281,7 @@ def load_mapped_binary(Filename: str, MetaFile: str, *args: Optional[str], **kwa
     return np.memmap(Filename, dtype=_type, shape=(_num_frames, _y_pixels, _x_pixels), mode=_mode)
 
 
-def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str, *args: Union[int]) -> None:
+def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str, *args: Union[int, tuple[int]]) -> None:
     """
     Repackages a sequence of tiff files within a directory to a smaller sequence
     of tiff stacks.
@@ -482,6 +481,34 @@ def save_raw_binary(Images: np.ndarray, ImageDirectory: str) -> None:
 
     Images.tofile(_video_file)
     print("Finished saving images as a binary file.")
+
+
+def save_video(Images: np.ndarray, Filename: str, fps: Union[float, int] = 30) -> None:
+    """
+    Function writes video to .mp4
+
+    :param Images: Images to be written
+    :type Images: Any
+    :param Filename: Filename  (Or Complete Filename Path)
+    :type Filename: str
+    :param fps: frame rate
+    :type fps: Union[float, int]
+    :rtype: None
+    """
+
+    if "\\" not in Filename:
+        Filename = "".join([os.getcwd(), "\\", Filename])
+
+    if ".mp4" not in Filename:
+        Filename = "".join([Filename, ".mp4"])
+
+    if Images.dtype.type != np.uint8:
+        print("\nForcing to unsigned 8-bit\n")
+        Images = Images.astype(np.uint8)
+
+    print("\nWriting Images to .mp4...\n")
+    mimwrite(Filename, Images, fps=fps, quality=10, macro_block_size=4)
+    print("\nFinished writing images to .mp4.\n")
 
 
 def _pretty_print_bruker_command(Channels, Planes, Frames, Height, Width) -> None:
