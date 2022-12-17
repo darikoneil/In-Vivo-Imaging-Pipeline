@@ -501,7 +501,10 @@ class ExperimentData:
         if _include_computation:
             cls._generate_computation_subdirectory(_stage_directory)
         if _include_figures:
-            os.makedirs("".join([_stage_directory, "\\Figures"]))
+            try:
+                os.makedirs("".join([_stage_directory, "\\Figures"]))
+            except FileExistsError:
+                pass
 
     @classmethod
     def _generate_behavior_subdirectory(cls, StageDirectory: str) -> None:
@@ -1483,6 +1486,7 @@ This is a class for managing a folder of unorganized data files
         """
 
         self.files = self.path
+        self.folders = self.path
 
 
 class CollectedImagingFolder(CollectedDataFolder):
@@ -1516,7 +1520,7 @@ class CollectedImagingFolder(CollectedDataFolder):
 
             # Only remove folder if nothing left!!!
             if [_folder for _folder in _reference_folder.rglob("*") if not _folder.is_file()].__len__() == 0:
-                _reference_folder.unlink()
+                _reference_folder.rmdir()
 
         except FileNotFoundError:
             print("Could not locate a bruker reference folder")
