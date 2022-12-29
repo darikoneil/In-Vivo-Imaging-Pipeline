@@ -31,7 +31,6 @@ colorama==0.4.5
 colorful==0.5.4
 cPython==0.0.6
 cryptography==37.0.4
-cupy @ file:///D:/bld/cupy_1659019985890/work
 cycler==0.11.0
 dask==2022.2.0
 debugpy==1.6.3
