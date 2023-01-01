@@ -1,7 +1,0 @@
-dos2unix module
-===============
-
-.. automodule:: dos2unix
-   :members:
-   :undoc-members:
-   :show-inheritance:
