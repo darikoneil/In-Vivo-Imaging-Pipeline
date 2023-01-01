@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IO module &mdash; In-Vivo-Imaging-Pipeline 0.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> In-Vivo-Imaging-Pipeline
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ExperimentManagement.html">ExperimentManagement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Behavior.html">Behavior</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">In-Vivo-Imaging-Pipeline</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">IO module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/IO.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-IO">
+<span id="io-module"></span><h1>IO module<a class="headerlink" href="#module-IO" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="IO.determine_bruker_folder_contents">
+<span class="sig-prename descclassname"><span class="pre">IO.</span></span><span class="sig-name descname"><span class="pre">determine_bruker_folder_contents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ImageDirectory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#IO.determine_bruker_folder_contents" title="Permalink to this definition"></a></dt>
+<dd><p>Function determine contents of the bruker folder</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ImageDirectory</strong> (<em>str</em>) – Directory containing bruker imaging data</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="IO.load_all_tiffs">
+<span class="sig-prename descclassname"><span class="pre">IO.</span></span><span class="sig-name descname"><span class="pre">load_all_tiffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ImageDirectory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#IO.load_all_tiffs" title="Permalink to this definition"></a></dt>
+<dd><p>Load a sequence of tiff stacks</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ImageDirectory</strong> (<em>str</em>) – Directory containing a sequence of tiff stacks</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>complete_image numpy array [Z x Y x X] as int16</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="IO.load_binary_meta">
+<span class="sig-prename descclassname"><span class="pre">IO.</span></span><span class="sig-name descname"><span class="pre">load_binary_meta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#IO.load_binary_meta" title="Permalink to this definition"></a></dt>
+<dd><p>Loads meta file for binary video</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>Filename</strong> (<em>str</em>) – The meta file (.txt ext)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A tuple containing the number of frames, y pixels, and x pixels [Z x Y x X]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple[int, int, int, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="IO.load_bruker_tiffs">
+<span class="sig-prename descclassname"><span class="pre">IO.</span></span><span class="sig-name descname"><span class="pre">load_bruker_tiffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ImageDirectory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#IO.load_bruker_tiffs" title="Permalink to this definition"></a></dt>
+<dd><p>Load a sequence of tiff files from a directory.</p>
+<p>Designed to compile the outputs of a certain imaging utility
+that exports recordings such that each frame is saved as a single tiff.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ImageDirectory</strong> (<em>str</em>) – Directory containing a sequence of single frame tiff files</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>complete_image:  All tiff files in the directory compiled into a single array (Z x Y x X, uint16)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="IO.load_mapped_binary">
+<span class="sig-prename descclassname"><span class="pre">IO.</span></span><span class="sig-name descname"><span class="pre">load_mapped_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MetaFile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">memmap</span></span></span><a class="headerlink" href="#IO.load_mapped_binary" title="Permalink to this definition"></a></dt>
+<dd><p>Loads a raw binary file in the workspace without loading into memory</p>
+<p>Enter the path to autofill (assumes Filename &amp; meta are path + binary_video, video_meta.txt)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Filename</strong> (<em>str</em>) – filename for binary video</p></li>
+<li><p><strong>MetaFile</strong> (<em>str</em>) – filename for meta file</p></li>
+<li><p><strong>args</strong> (<em>str</em>) – Path</p></li>
+<li><p><strong>mode</strong> – pass mode to numpy.memmap (str, default = “r”)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>memmap(numpy) array [Z x Y x X]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="IO.load_raw_binary">
+<span class="sig-prename descclassname"><span class="pre">IO.</span></span><span class="sig-name descname"><span class="pre">load_raw_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MetaFile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#IO.load_raw_binary" title="Permalink to this definition"></a></dt>
+<dd><p>Loads a raw binary file</p>
+<p>Enter the path to autofill (assumes Filename &amp; meta are path + binary_video, video_meta.txt)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Filename</strong> (<em>str</em>) – filename for binary video</p></li>
+<li><p><strong>MetaFile</strong> (<em>str</em>) – filename for meta file</p></li>
+<li><p><strong>args</strong> (<em>str</em>) – path to a directory containing Filename and MetaFile</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>numpy array [Z x Y x X]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="IO.load_single_tiff">
+<span class="sig-prename descclassname"><span class="pre">IO.</span></span><span class="sig-name descname"><span class="pre">load_single_tiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NumFrames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#IO.load_single_tiff" title="Permalink to this definition"></a></dt>
+<dd><p>Load a single tiff file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Filename</strong> (<em>str</em>) – filename</p></li>
+<li><p><strong>NumFrames</strong> (<em>int</em>) – number of frames</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>numpy array [Z x Y x X]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="IO.repackage_bruker_tiffs">
+<span class="sig-prename descclassname"><span class="pre">IO.</span></span><span class="sig-name descname"><span class="pre">repackage_bruker_tiffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ImageDirectory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">OutputDirectory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#IO.repackage_bruker_tiffs" title="Permalink to this definition"></a></dt>
+<dd><p>Repackages a sequence of tiff files within a directory to a smaller sequence
+of tiff stacks.
+Designed to compile the outputs of a certain imaging utility
+that exports recordings such that each frame is saved as a single tiff.
+:param ImageDirectory: Directory containing a sequence of single frame tiff files
+:type ImageDirectory: str
+:param OutputDirectory: Empty directory where tiff stacks will be saved
+:type OutputDirectory: str
+:param args: optional argument to indicate the repackaging of a specific channel and/or plane
+:type args: int
+:rtype: None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="IO.save_raw_binary">
+<span class="sig-prename descclassname"><span class="pre">IO.</span></span><span class="sig-name descname"><span class="pre">save_raw_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Images</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ImageDirectory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#IO.save_raw_binary" title="Permalink to this definition"></a></dt>
+<dd><p>This function saves a tiff stack as a binary file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Images</strong> (<em>np.ndarray</em>) – Images to be saved [Z x Y x X]</p></li>
+<li><p><strong>ImageDirectory</strong> (<em>str</em>) – Directory to save images in</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="IO.save_single_tiff">
+<span class="sig-prename descclassname"><span class="pre">IO.</span></span><span class="sig-name descname"><span class="pre">save_single_tiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Images:</span> <span class="pre">~numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Filename:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Type:</span> <span class="pre">~typing.Optional[~numpy.dtype]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'numpy.int16'&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#IO.save_single_tiff" title="Permalink to this definition"></a></dt>
+<dd><p>Save a numpy array to a single tiff file as type int16</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Images</strong> (<em>Any</em>) – numpy array [frames, y pixels, x pixels]</p></li>
+<li><p><strong>Filename</strong> (<em>str</em>) – filename</p></li>
+<li><p><strong>Type</strong> (<em>Optional</em><em>[</em><em>Any</em><em>]</em>) – type for saving</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="IO.save_tiff_stack">
+<span class="sig-prename descclassname"><span class="pre">IO.</span></span><span class="sig-name descname"><span class="pre">save_tiff_stack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Images:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">OutputDirectory:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Type:</span> <span class="pre">~typing.Optional[~numpy.dtype]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'numpy.int16'&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#IO.save_tiff_stack" title="Permalink to this definition"></a></dt>
+<dd><p>Save a numpy array to a sequence of tiff stacks</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Images</strong> (<em>Any</em>) – A numpy array containing a tiff stack [Z x Y x X]</p></li>
+<li><p><strong>OutputDirectory</strong> (<em>str</em>) – A directory to save the sequence of tiff stacks in int16</p></li>
+<li><p><strong>Type</strong> (<em>Optional</em><em>[</em><em>Any</em><em>]</em>) – type for saving</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="IO.save_video">
+<span class="sig-prename descclassname"><span class="pre">IO.</span></span><span class="sig-name descname"><span class="pre">save_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Images</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#IO.save_video" title="Permalink to this definition"></a></dt>
+<dd><p>Function writes video to .mp4</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Images</strong> (<em>Any</em>) – Images to be written</p></li>
+<li><p><strong>Filename</strong> (<em>str</em>) – Filename  (Or Complete Filename Path)</p></li>
+<li><p><strong>fps</strong> (<em>Union</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em>) – frame rate</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Darik A. O&#39;Neil.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

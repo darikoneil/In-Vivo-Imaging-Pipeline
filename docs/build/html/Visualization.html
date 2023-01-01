@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visualization module &mdash; In-Vivo-Imaging-Pipeline 0.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Theory" href="Theory.html" />
+    <link rel="prev" title="Utilities module" href="Utilities.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> In-Vivo-Imaging-Pipeline
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ExperimentManagement.html">ExperimentManagement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Behavior.html">Behavior</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="Imaging.html">Imaging</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Coloring.html">Coloring module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Colorizer.html">Colorizer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="IO.html">IO module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ImageProcessing.html">ImageProcessing module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PowerSpectrum.html">PowerSpectrum module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SignalProcessing.html">SignalProcessing module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Utilities.html">Utilities module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Visualization module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Theory.html">Theory</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">In-Vivo-Imaging-Pipeline</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="Imaging.html">Imaging</a></li>
+      <li class="breadcrumb-item active">Visualization module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Visualization.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-Visualization">
+<span id="visualization-module"></span><h1>Visualization module<a class="headerlink" href="#module-Visualization" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="Visualization.assessSpikeInference">
+<span class="sig-prename descclassname"><span class="pre">Visualization.</span></span><span class="sig-name descname"><span class="pre">assessSpikeInference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">SpikeProb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SpikeTimes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Traces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FrameRate</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Visualization.assessSpikeInference" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Visualization.compareTraces">
+<span class="sig-prename descclassname"><span class="pre">Visualization.</span></span><span class="sig-name descname"><span class="pre">compareTraces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">RawTraces</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SmoothTraces</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FrameRate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Frames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#Visualization.compareTraces" title="Permalink to this definition"></a></dt>
+<dd><p>Compare two sets of traces interactively</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>RawTraces</strong> (<em>Any</em>) – Trace Set 1</p></li>
+<li><p><strong>SmoothTraces</strong> (<em>Any</em>) – Trace Set 2</p></li>
+<li><p><strong>FrameRate</strong> (<em>float</em>) – FrameRate</p></li>
+<li><p><strong>Frames</strong> (<em>int</em>) – Number of Frames</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Visualization.compareTraces2">
+<span class="sig-prename descclassname"><span class="pre">Visualization.</span></span><span class="sig-name descname"><span class="pre">compareTraces2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">RawTraces</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SmoothTraces</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FrameRate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Frames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#Visualization.compareTraces2" title="Permalink to this definition"></a></dt>
+<dd><p>Compare two sets of traces interactively</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>RawTraces</strong> (<em>Any</em>) – Trace Set 1</p></li>
+<li><p><strong>SmoothTraces</strong> (<em>Any</em>) – Trace Set 2</p></li>
+<li><p><strong>FrameRate</strong> (<em>float</em>) – FrameRate</p></li>
+<li><p><strong>Frames</strong> (<em>int</em>) – Number of Frames</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Visualization.compareTraces3">
+<span class="sig-prename descclassname"><span class="pre">Visualization.</span></span><span class="sig-name descname"><span class="pre">compareTraces3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">RawTraces</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SmoothTraces</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FrameRate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Frames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#Visualization.compareTraces3" title="Permalink to this definition"></a></dt>
+<dd><p>Compare two sets of traces interactively</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>RawTraces</strong> (<em>Any</em>) – Trace Set 1</p></li>
+<li><p><strong>SmoothTraces</strong> (<em>Any</em>) – Trace Set 2</p></li>
+<li><p><strong>FrameRate</strong> (<em>float</em>) – FrameRate</p></li>
+<li><p><strong>Frames</strong> (<em>int</em>) – Number of Frames</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Visualization.interactive_traces">
+<span class="sig-prename descclassname"><span class="pre">Visualization.</span></span><span class="sig-name descname"><span class="pre">interactive_traces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Traces</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FrameRate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#Visualization.interactive_traces" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Visualization.plotFiringRateMatrix">
+<span class="sig-prename descclassname"><span class="pre">Visualization.</span></span><span class="sig-name descname"><span class="pre">plotFiringRateMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">FiringRates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FrameRate</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Visualization.plotFiringRateMatrix" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Visualization.plotNeuralHeatMap">
+<span class="sig-prename descclassname"><span class="pre">Visualization.</span></span><span class="sig-name descname"><span class="pre">plotNeuralHeatMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NeuralActivity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FrameRate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#Visualization.plotNeuralHeatMap" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Visualization.plotNoise">
+<span class="sig-prename descclassname"><span class="pre">Visualization.</span></span><span class="sig-name descname"><span class="pre">plotNoise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Traces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FrameRate</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Visualization.plotNoise" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Visualization.plotROC">
+<span class="sig-prename descclassname"><span class="pre">Visualization.</span></span><span class="sig-name descname"><span class="pre">plotROC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">TPR</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FPR</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Visualization.plotROC" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Visualization.plotSpikeInference">
+<span class="sig-prename descclassname"><span class="pre">Visualization.</span></span><span class="sig-name descname"><span class="pre">plotSpikeInference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">SpikeProb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SpikeTimes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Traces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FrameRate</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Visualization.plotSpikeInference" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Visualization.view_image">
+<span class="sig-prename descclassname"><span class="pre">Visualization.</span></span><span class="sig-name descname"><span class="pre">view_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Images</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FPS</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#Visualization.view_image" title="Permalink to this definition"></a></dt>
+<dd><p>Visualize a numpy array [Z x Y x X] as a video</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Images</strong> (<em>Any</em>) – A numpy array [Z x Y x X]</p></li>
+<li><p><strong>FPS</strong> (<em>float</em>) – Frames Per Second</p></li>
+<li><p><strong>cmap</strong> – colormap (str, default binary_r)</p></li>
+<li><p><strong>interpolation</strong> – interpolation method (str, default none)</p></li>
+<li><p><strong>SpeedUp</strong> – FPS multiplier (int, default 1)</p></li>
+<li><p><strong>Vmin</strong> – minimum value of colormap (int, default 0)</p></li>
+<li><p><strong>Vmax</strong> – maximum value of colormap (int, default 32000)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Figure Animation</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[matplotlib.pyplot.figure, matplotlib.pyplot.axes, matplotlib.pyplot.axes,</p>
+</dd>
+</dl>
+<p>matplotlib.pyplot.axes, Any, Any]</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Utilities.html" class="btn btn-neutral float-left" title="Utilities module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Theory.html" class="btn btn-neutral float-right" title="Theory" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Darik A. O&#39;Neil.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
