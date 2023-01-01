@@ -9,5 +9,4 @@ Theory
    LinearNonLinearRegression
    LinearRegression
    LogisticRegression
-   ModifiedDecoders
    SupportVectorMachine

@@ -30,9 +30,9 @@ html_static_path = ['_static']
 
 
 # Add all modules
-
 import os
 import sys
+import pathlib
 module_names = (
     "ExperimentManagement",
     "Behavior",
@@ -40,6 +40,7 @@ module_names = (
     "Theory"
 )
 
+Parent = pathlib.Path(os.getcwd()).parents[0]
+
 for _name in module_names:
-    _path = "".join(["..", "\\", _name])
-    sys.path.insert(0, os.path.abspath(_path))
+    sys.path.insert(0, str(Parent.with_name(_name)))
