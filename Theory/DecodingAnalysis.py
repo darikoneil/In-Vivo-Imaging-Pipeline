@@ -15,7 +15,7 @@ import itertools
 
 # Visualization
 from matplotlib import pyplot as plt
-from Imaging.StaticPlotting import plotROC
+from Imaging.Visualization import plotROC
 
 
 class DecodingModule:

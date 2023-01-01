@@ -15,7 +15,7 @@ import sys
 import ExperimentManagement.ExperimentHierarchy
 from ExperimentManagement.ExperimentHierarchy import BehavioralStage, CollectedDataFolder
 from MigrationTools.Converters import convertFromPy27_Array, convertFromPy27_Dict
-from Behavior.Utilities import extract_specific_data, lowpass_filter
+from Behavior.BehaviorUtilities import extract_specific_data, lowpass_filter
 
 
 class FearConditioning(BehavioralStage):

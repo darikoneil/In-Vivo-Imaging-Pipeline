@@ -272,6 +272,7 @@ class ExperimentData:
         :type args: str
         :rtype: Any
         """
+
         # noinspection PyTypeChecker
         self.modifications.append((self.get_date(), self.get_time(), *args))
 
@@ -285,6 +286,7 @@ class ExperimentData:
         :type args: str
         :rtype: Any
         """
+
         if args:
             self.record_mod(args[0])
         else:
