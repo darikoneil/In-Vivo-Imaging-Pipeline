@@ -1,5 +1,5 @@
 # from ExperimentManagement.ExperimentHierarchy import ExperimentData
-from IO.metadata import Metadata
+from SamIO.metadata import Metadata
 
 
 class BrukerMeta:

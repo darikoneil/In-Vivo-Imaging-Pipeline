@@ -6,10 +6,9 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 import numpy as np
 from tqdm.auto import tqdm
-from Imaging.PreprocessingImages import PreProcessing
 import sklearn
-import imageio as iio
 import cv2
+from Imaging.IO import save_video
 
 
 def colorize_video(Images: np.ndarray, Stats: np.ndarray, ROIs: Optional[List[int]] = None,
@@ -37,21 +36,56 @@ def colorize_video(Images: np.ndarray, Stats: np.ndarray, ROIs: Optional[List[in
     :type Stats: Any
     :param ROIs: A List of ROIs
     :type ROIs: list[int]
-    :param Cutoffs: Percentile cutoffs for rescaling data. Data below or above these cutoffs
-    will be replaced by the smallest or largest value in the data type
+    :param Cutoffs: Percentile cutoffs for rescaling data. Data below or above these cutoffs will be replaced by the smallest or largest value in the data type
     :type Cutoffs: tuple[float]
-    :keyword: cmap Colormap to use on ROIs (str, default None)
-    :keyword colors: colors which will be used to generate custom colormap (default None, overrides cmap is not None)
-    (Tuple of Tuples of Floats, RGB, ranged 0.0-1.0)(default None)
-    :keyword background: boolean indicating whether to overlay on a blank image or the background of input image
-    (default True)
-    :keyword white_background: Boolean indicating whether to use a white or black background (default False,
-    requires background = False)
+    :keyword cmap: Colormap to use on ROIs (str, default None)
+    :keyword colors: colors which will be used to generate custom colormap (default None, overrides cmap is not None) (Tuple of Tuples of Floats, RGB, ranged 0.0-1.0)(default None)
+    :keyword background: boolean indicating whether to overlay on a blank image or the background of input image (default True)
+    :keyword white_background: Boolean indicating whether to use a white or black background (default False, requires background = False)
     :keyword write: boolean indicating whether to write video to file (default False)
     :keyword filename: str file path for saving video(default None, which saves to current directory)
     :return: Colorized Images
     :rtype: Any
     """
+
+    def generate_colors():
+        nonlocal _colors
+        nonlocal _cmap
+
+        # use specific colors
+        if _colors is not None and _cmap is None:
+            _cmap = generate_custom_map(_colors)
+        # use specific cmap
+        elif _colors is None and _cmap is not None:
+            try:
+                _cmap = plt.cm.get_cmap(_cmap)
+            except ValueError:
+                print("".join(["Unable to locate ", _cmap, " colormap. Reverting to jet."]))
+                _cmap = plt.cm.get_cmap("jet")
+        # edge case
+        elif _colors is not None and _cmap is not None:
+            print("".join(["Cmap specified as ", _cmap, " but colors additional specified. Reverting to jet."]))
+            _cmap = plt.cm.get_cmap("jet")
+        # when in doubt
+        else:
+            _cmap = plt.cm.get_cmap("jet")
+
+    def generate_background():
+        nonlocal Images
+        nonlocal Cutoffs
+        nonlocal _include_background
+        nonlocal _white_background
+
+        # dumb but works
+        _background_image_ = rescale_images(Images, Cutoffs[0], Cutoffs[1])
+        _background_image_ = convert_grayscale_to_color(_background_image_)
+
+        if not _include_background:
+            _background_image_[:, :, :, :] = 0
+            if _white_background:
+                _background_image_[:, :, :, :] = 255
+
+        return _background_image_
 
     _cmap = kwargs.get("cmap", None)
     _colors = kwargs.get("colors", None)
@@ -64,44 +98,25 @@ def colorize_video(Images: np.ndarray, Stats: np.ndarray, ROIs: Optional[List[in
         ROIs = np.array(range(Stats.shape[0]))
 
     if Cutoffs is None:
-        Cutoffs = tuple([1.0, 99.75, 1.0, 99.75])
+        Cutoffs = tuple([0, 100, 0, 100])
     elif len(Cutoffs) == 2:
         Cutoffs = tuple([*Cutoffs, *Cutoffs])
 
-    if _colors is not None and _cmap is None:
-        _cmap = generate_custom_map(_colors)
-    elif _colors is None and _cmap is not None:
-        try:
-            _cmap = plt.cm.get_cmap(_cmap)
-        except ValueError:
-            print("".join(["Unable to locate ", _cmap, " colormap. Reverting to jet."]))
-            _cmap = plt.cm.get_cmap("jet")
-    elif _colors is not None and _cmap is not None:
-        print("".join(["Cmap specified as ", _cmap, " but colors additional specified. Reverting to jet."]))
-        _cmap = plt.cm.get_cmap("jet")
-    else:
-        _cmap = plt.cm.get_cmap("jet")
+    generate_colors()
 
-    _color_image = rescale_images(Images, Cutoffs[2], Cutoffs[3])
-    ColorizedVideo = colorize_rois(_color_image, Stats, ROIs, _cmap)
+    _background_image = generate_background()
 
-    _background_image = rescale_images(Images, Cutoffs[0], Cutoffs[1])
-    _background_image = convert_grayscale_to_color(_background_image)
-
-    # dumb but works
-    if not _include_background:
-        _background_image[:, :, :, :] = 0
-        if _white_background:
-            _background_image[:, :, :, :] = 255
-
-    # not include alpha right now... debug
+    # make color image
+    _scaled_image = rescale_images(Images, Cutoffs[2], Cutoffs[3])
+    ColorizedVideo = colorize_rois(_scaled_image, Stats, ROIs, _cmap)
     ColorizedVideo = overlay_colorized_rois(_background_image.copy(), ColorizedVideo)
     ColorizedVideo = merge_background(_background_image, ColorizedVideo, generate_pixel_pairs(Stats, ROIs))
 
+    # write if desired
     if _write and _filename is not None:
-        write_video(ColorizedVideo, _filename)
+        save_video(ColorizedVideo, _filename)
     elif _write and _filename is None:
-        write_video(ColorizedVideo, "".join([os.getcwd(), "\\colorized_video.mp4"]))
+        save_video(ColorizedVideo, "".join([os.getcwd(), "\\colorized_video.mp4"]))
 
     return ColorizedVideo
 
@@ -184,7 +199,7 @@ def colorize_rois(Images: np.ndarray, Stats: np.ndarray, ROIs: Optional[List[int
     if ROIs is None:
         ROIs = np.array(range(Stats.shape[0]))
 
-    ColorImage = colorize(Images, cmap)
+    ColorImage = colorize_complete_image(Images, cmap)
     _y = []
     _x = []
     for _roi in ROIs:
@@ -215,22 +230,6 @@ def colorize_complete_image(Images: np.ndarray, cmap: Union[plt.cm.colors.Colorm
         return np.uint8(cmap(normalize_image(Images)) * 255)
 
 
-def convert_grayscale_to_color(Image: np.ndarray) -> np.ndarray:
-    """
-    Converts Image to Grayscale
-
-    :param Image: Image to be converted
-    :type Image: Any
-    :return: Color-Grayscale Image
-    :rtype: Any
-    """
-    ColorGrayScaleImage = np.full((*Image.shape, 3), 0, dtype=Image.dtype)
-    for _dim in range(3):
-        ColorGrayScaleImage[:, :, :, _dim] = Image
-
-    return np.uint8(normalize_image(ColorGrayScaleImage) * 255)
-
-
 def merge_background(Background: np.ndarray, NewVideo: np.ndarray, PixelPairs: Tuple[Tuple[int, int]]) -> np.ndarray:
     """
     Merges background video and new video at each specified pixel pair
@@ -244,9 +243,51 @@ def merge_background(Background: np.ndarray, NewVideo: np.ndarray, PixelPairs: T
     :return: Merged Image
     :rtype: Any
     """
+    _y = Background.shape[1]
+    _x = Background.shape[2]
+
     for _pair in PixelPairs:
-        Background[:, _pair[0], _pair[1], :] = NewVideo[:, _pair[0], _pair[1], :]
+        if _pair[0] < 0:
+            _yy = 0
+        elif _pair[0] >= _y:
+            _yy = _y-1
+        else:
+            _yy = _pair[0]
+
+        if _pair[1] < 0:
+            _xx = 0
+        elif _pair[1] >= _x:
+            _xx = _x-1
+        else:
+            _xx = _pair[1]
+
+        Background[:, _yy, _xx, :] = NewVideo[:, _yy, _xx, :]
     return Background
+
+
+def _generate_pixel_pairs(Stats: np.ndarray, ROIs: List[int]) -> Tuple[Tuple[int, int]]:
+    """
+    Generates a tuple containing a list of each pixel pair from every ROI
+
+    :param Stats: Suite2P Stats
+    :type Stats: Any
+    :param ROIs: List of ROIs
+    :type ROIs: list[int]
+    :return: List of each pixel for every ROI
+    :rtype: tuple[tuple[int, int]]
+    """
+    def flatten(list_of_zips):
+        return tuple([item for zips in list_of_zips for item in zips])
+
+    PixelPairs = []
+    for _roi in ROIs:
+        # PixelPairs.append(zip(list(Stats[_roi].get("ypix")[Stats[_roi].get("soma_crop")]),
+        # list(Stats[_roi].get("xpix")[Stats[_roi].get("soma_crop")])))
+        PixelPairs.append(zip(list(Stats[_roi].get("ypix")),
+                     list(Stats[_roi].get("xpix"))))
+    PixelPairs = flatten(PixelPairs)
+    # noinspection PyTypeChecker
+    return PixelPairs
 
 
 def generate_pixel_pairs(Stats: np.ndarray, ROIs: List[int]) -> Tuple[Tuple[int, int]]:
@@ -263,10 +304,22 @@ def generate_pixel_pairs(Stats: np.ndarray, ROIs: List[int]) -> Tuple[Tuple[int,
     def flatten(list_of_zips):
         return tuple([item for zips in list_of_zips for item in zips])
 
+    def points_in_circle(radius, x0=0, y0=0, ):
+        x_ = np.arange(x0 - radius - 1, x0 + radius + 1, dtype=int)
+        y_ = np.arange(y0 - radius - 1, y0 + radius + 1, dtype=int)
+        x, y = np.where((x_[:, np.newaxis] - x0) ** 2 + (y_ - y0) ** 2 <= radius ** 2)
+        # x, y = np.where((np.hypot((x_-x0)[:,np.newaxis], y_-y0)<= radius)) # alternative implementation
+        for x, y in zip(x_[x], y_[y]):
+            yield x, y
+
     PixelPairs = []
     for _roi in ROIs:
-        PixelPairs.append(zip(list(Stats[_roi].get("ypix")[Stats[_roi].get("soma_crop")]),
-                     list(Stats[_roi].get("xpix")[Stats[_roi].get("soma_crop")])))
+        # PixelPairs.append(zip(list(Stats[_roi].get("ypix")[Stats[_roi].get("soma_crop")]),
+        # list(Stats[_roi].get("xpix")[Stats[_roi].get("soma_crop")])))
+        # PixelPairs.append(zip(list(Stats[_roi].get("ypix")),
+        # list(Stats[_roi].get("xpix"))))
+        PixelPairs.append([points for points in points_in_circle(Stats[_roi].get("radius"),
+                                                                     *Stats[_roi].get("med"))])
     PixelPairs = flatten(PixelPairs)
     # noinspection PyTypeChecker
     return PixelPairs
@@ -289,72 +342,5 @@ def generate_custom_map(Colors: List[str]) -> plt.cm.colors.Colormap:
         return plt.cm.jet
 
 
-def rescale_images(Images: np.ndarray, LowCut: float, HighCut: float) -> np.ndarray:
-    """
-    Rescale Images within percentiles
-
-    :param Images: Images to be rescaled
-    :type Images: Any
-    :param LowCut: Low Percentile Cutoff
-    :type LowCut: float
-    :param HighCut: High Percentile Cutoff
-    :type HighCut: float
-    :return: Rescaled Images
-    :rtype: Any
-    """
 
 
-    def rescale(vector: np.ndarray, current_range: Tuple[float, float],
-                desired_range: Tuple[float, float]) -> np.ndarray:
-        return desired_range[0] + ((vector - current_range[0]) * (desired_range[1] - desired_range[0])) / (
-                    current_range[1] - current_range[0])
-
-    assert(0.0 <= LowCut < HighCut <= 100.0)
-
-    _num_frames, _y_pixels, _x_pixels = Images.shape
-    _linearized_image = Images.flatten()
-    _linearized_image = rescale(_linearized_image, (np.percentile(_linearized_image, LowCut),
-                                                    np.percentile(_linearized_image, HighCut)), (0, 255))
-    _linearized_image = np.reshape(_linearized_image, (_num_frames, _y_pixels, _x_pixels))
-    _linearized_image[_linearized_image <= 0] = 0
-    _linearized_image[_linearized_image >= 255] = 255
-
-    return _linearized_image
-
-
-def normalize_image(Image: np.ndarray) -> np.ndarray:
-    """
-    Normalizes an image for color-mapping
-
-    :param Image: Image to be normalized
-    :type Image: Any
-    :return: Normalized Image
-    :rtype: Any
-    """
-
-    _image = Image.astype(np.float32)
-    _image -= _image.min()
-    _image /= _image.max()
-    return _image
-
-
-def write_video(Video: np.ndarray, Filename: str) -> None:
-    """
-    Function writes video to .mp4
-
-    :param Video: Images to be written
-    :type Video: Any
-    :param Filename: Filename  (Or Complete Filename Path)
-    :type Filename: str
-    :rtype: None
-    """
-
-    if "\\" not in Filename:
-        Filename = "".join([os.getcwd(), "\\", Filename])
-
-    if Video.dtype.type != np.uint8:
-        Video = Video.astype(np.uint8)
-
-    print("\nWriting Images...\n")
-    iio.mimwrite(Filename, Video, fps=30, quality=10, macro_block_size=4)
-    print("Finished.")
