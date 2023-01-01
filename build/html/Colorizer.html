@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Colorizer module &mdash; In-Vivo-Imaging-Pipeline 0.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> In-Vivo-Imaging-Pipeline
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ExperimentManagement.html">ExperimentManagement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Behavior.html">Behavior</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">In-Vivo-Imaging-Pipeline</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Colorizer module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Colorizer.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-Colorizer">
+<span id="colorizer-module"></span><h1>Colorizer module<a class="headerlink" href="#module-Colorizer" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="Colorizer.colorize_complete_image">
+<span class="sig-prename descclassname"><span class="pre">Colorizer.</span></span><span class="sig-name descname"><span class="pre">colorize_complete_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Images</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Colormap</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#Colorizer.colorize_complete_image" title="Permalink to this definition"></a></dt>
+<dd><p>Colorizes an Image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Images</strong> (<em>Any</em>) – Image to be colorized</p></li>
+<li><p><strong>cmap</strong> – Matplotlib colormap [Object or str]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Type</dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Colorized Image</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Colorizer.colorize_rois">
+<span class="sig-prename descclassname"><span class="pre">Colorizer.</span></span><span class="sig-name descname"><span class="pre">colorize_rois</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Images</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Stats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ROIs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Colormap</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#Colorizer.colorize_rois" title="Permalink to this definition"></a></dt>
+<dd><p>Generates a colorized roi overlay video</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Images</strong> (<em>Any</em>) – Images To Extract ROI Overlay</p></li>
+<li><p><strong>Stats</strong> (<em>Any</em>) – Suite2P Stats</p></li>
+<li><p><strong>ROIs</strong> (<em>list</em><em>[</em><em>int</em><em>]</em><em>|</em><em>None</em>) – Subset of ROIs</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Colorized ROIs</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Colorizer.colorize_video">
+<span class="sig-prename descclassname"><span class="pre">Colorizer.</span></span><span class="sig-name descname"><span class="pre">colorize_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Images</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Stats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ROIs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cutoffs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#Colorizer.colorize_video" title="Permalink to this definition"></a></dt>
+<dd><p>This function generates a video (i.e., numpy array [Z x Y x X])
+in which the ROIs or subsets of ROIs utilize a different colormap</p>
+<blockquote>
+<div><dl>
+<dt><strong>Keyword Arguments</strong></dt><dd><div class="line-block">
+<div class="line"><em>cmap</em> : Colormap to use on ROIs (str, default None)</div>
+<div class="line"><em>colors</em> : colors which will be used to generate custom colormap</div>
+<div class="line">(tuple[tuple[float]], default None)</div>
+<div class="line">Example -&gt; ((0, 0, 0), (0.074, 0.624, 1.000), (0.074, 0.624, 1.000))</div>
+<div class="line"><em>background</em> : boolean indicating whether to overlay on a blank image</div>
+<div class="line">or the background of input image (bool , default True)</div>
+<div class="line"><em>white_background</em> : boolean indicating whether to use a white or black background</div>
+<div class="line">(bool, default False)</div>
+<div class="line"><em>write</em> : boolean indicating whether to write video to file</div>
+<div class="line">(bool, default False)</div>
+<div class="line"><em>filename</em> : file path for saving video (str, default None)</div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Images</strong> (<em>Any</em>) – The images to be colorized</p></li>
+<li><p><strong>Stats</strong> (<em>Any</em>) – Suite2P Stats file</p></li>
+<li><p><strong>ROIs</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – A List of ROIs</p></li>
+<li><p><strong>Cutoffs</strong> (<em>tuple</em><em>[</em><em>float</em><em>]</em>) – Percentile cutoffs for rescaling data. Data below or above these cutoffs will be replaced by the smallest or largest value in the data type</p></li>
+<li><p><strong>cmap</strong> – Colormap to use on ROIs (str, default None)</p></li>
+<li><p><strong>colors</strong> – colors which will be used to generate custom colormap (default None, overrides cmap is not None) (Tuple of Tuples of Floats, RGB, ranged 0.0-1.0)(default None)</p></li>
+<li><p><strong>background</strong> – boolean indicating whether to overlay on a blank image or the background of input image (default True)</p></li>
+<li><p><strong>white_background</strong> – Boolean indicating whether to use a white or black background (default False, requires background = False)</p></li>
+<li><p><strong>write</strong> – boolean indicating whether to write video to file (default False)</p></li>
+<li><p><strong>filename</strong> – str file path for saving video(default None, which saves to current directory)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Colorized Images</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Colorizer.generate_custom_map">
+<span class="sig-prename descclassname"><span class="pre">Colorizer.</span></span><span class="sig-name descname"><span class="pre">generate_custom_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Colors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Colormap</span></span></span><a class="headerlink" href="#Colorizer.generate_custom_map" title="Permalink to this definition"></a></dt>
+<dd><p>Generates a custom linearized colormap</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>Colors</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – List of colors included</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Colormap</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Colorizer.generate_pixel_pairs">
+<span class="sig-prename descclassname"><span class="pre">Colorizer.</span></span><span class="sig-name descname"><span class="pre">generate_pixel_pairs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Stats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ROIs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#Colorizer.generate_pixel_pairs" title="Permalink to this definition"></a></dt>
+<dd><p>Generates a tuple containing a list of each pixel pair from every ROI</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Stats</strong> (<em>Any</em>) – Suite2P Stats</p></li>
+<li><p><strong>ROIs</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – List of ROIs</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of each pixel for every ROI</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple[tuple[int, int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Colorizer.merge_background">
+<span class="sig-prename descclassname"><span class="pre">Colorizer.</span></span><span class="sig-name descname"><span class="pre">merge_background</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Background</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NewVideo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PixelPairs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#Colorizer.merge_background" title="Permalink to this definition"></a></dt>
+<dd><p>Merges background video and new video at each specified pixel pair</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Background</strong> (<em>Any</em>) – Background video</p></li>
+<li><p><strong>NewVideo</strong> (<em>Any</em>) – Images to merge with</p></li>
+<li><p><strong>PixelPairs</strong> (<em>tuple</em><em>[</em><em>tuple</em><em>[</em><em>int</em><em>,</em><em>int</em><em>]</em><em>]</em>) – Pairs of pixels at which merging will occur</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Merged Image</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Colorizer.overlay_colorized_rois">
+<span class="sig-prename descclassname"><span class="pre">Colorizer.</span></span><span class="sig-name descname"><span class="pre">overlay_colorized_rois</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Background</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ColorizedVideo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#Colorizer.overlay_colorized_rois" title="Permalink to this definition"></a></dt>
+<dd><p>This function overlays colorized videos onto background video</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">param Background</dt>
+<dd class="field-odd"><p>Background Images in Grayscale</p>
+</dd>
+<dt class="field-even">type Background</dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+<dt class="field-odd">param ColorizedVideo</dt>
+<dd class="field-odd"><p>Colorized Overlays In Colormap Space + Alpha Channel</p>
+</dd>
+<dt class="field-even">type ColorizedVideo</dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+<dt class="field-odd">param args</dt>
+<dd class="field-odd"><p>Alpha for Background</p>
+</dd>
+<dt class="field-even">type args</dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">return</dt>
+<dd class="field-odd"><p>Merged Images</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Darik A. O&#39;Neil.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

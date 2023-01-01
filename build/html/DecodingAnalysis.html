@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DecodingAnalysis module &mdash; In-Vivo-Imaging-Pipeline 0.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="LSTMRegression module" href="LSTMRegression.html" />
+    <link rel="prev" title="Theory" href="Theory.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> In-Vivo-Imaging-Pipeline
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ExperimentManagement.html">ExperimentManagement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Behavior.html">Behavior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Imaging.html">Imaging</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="Theory.html">Theory</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">DecodingAnalysis module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LSTMRegression.html">LSTMRegression module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LinearNonLinearRegression.html">LinearNonLinearRegression module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LinearRegression.html">LinearRegression module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LogisticRegression.html">LogisticRegression module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ModifiedDecoders.html">ModifiedDecoders module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SupportVectorMachine.html">SupportVectorMachine module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">In-Vivo-Imaging-Pipeline</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="Theory.html">Theory</a></li>
+      <li class="breadcrumb-item active">DecodingAnalysis module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/DecodingAnalysis.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-DecodingAnalysis">
+<span id="decodinganalysis-module"></span><h1>DecodingAnalysis module<a class="headerlink" href="#module-DecodingAnalysis" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">DecodingAnalysis.</span></span><span class="sig-name descname"><span class="pre">DecodingModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This a super class passing conserved functions for decoding modules</p>
+<dl>
+<dt><strong>Properties</strong></dt><dd><div class="line-block">
+<div class="line"><strong>imported_neural_organization</strong> : the structure of the passed neural data</div>
+<div class="line"><strong>imported_feature_organization</strong> : the structure of the passed feature data</div>
+</div>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.assessFit">
+<span class="sig-name descname"><span class="pre">assessFit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.assessFit" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.cleanKwargs">
+<span class="sig-name descname"><span class="pre">cleanKwargs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.cleanKwargs" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.collapseFeatures">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">collapseFeatures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Features</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.collapseFeatures" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.commonAssessment">
+<span class="sig-name descname"><span class="pre">commonAssessment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.commonAssessment" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.createTrialIndicator">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">createTrialIndicator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NumTrials</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FramesPerTrial</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.createTrialIndicator" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.dep_shuffle_trials">
+<span class="sig-name descname"><span class="pre">dep_shuffle_trials</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.dep_shuffle_trials" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.feature_matrix">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">feature_matrix</span></span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.feature_matrix" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.feature_tensor">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">feature_tensor</span></span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.feature_tensor" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.fitModel">
+<span class="sig-name descname"><span class="pre">fitModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.fitModel" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.fullAssessment">
+<span class="sig-name descname"><span class="pre">fullAssessment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.fullAssessment" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.imported_feature_organization">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">imported_feature_organization</span></span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.imported_feature_organization" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.imported_neural_organization">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">imported_neural_organization</span></span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.imported_neural_organization" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.loadFeatures">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">loadFeatures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">FeatureFile</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.loadFeatures" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.loadFeaturesFile">
+<span class="sig-name descname"><span class="pre">loadFeaturesFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_feature_data_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.loadFeaturesFile" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.makePrediction">
+<span class="sig-name descname"><span class="pre">makePrediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.makePrediction" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.neural_matrix">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">neural_matrix</span></span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.neural_matrix" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.neural_tensor">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">neural_tensor</span></span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.neural_tensor" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.num_frames">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_frames</span></span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.num_frames" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.num_neurons">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_neurons</span></span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.num_neurons" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.num_trials">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_trials</span></span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.num_trials" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.plotROCs">
+<span class="sig-name descname"><span class="pre">plotROCs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.plotROCs" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.printAssessment">
+<span class="sig-name descname"><span class="pre">printAssessment</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.printAssessment" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.saveModel">
+<span class="sig-name descname"><span class="pre">saveModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">OutputFolder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.saveModel" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.shuffleByTrialIndex">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shuffleByTrialIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NeuralActivityInTrialForm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TrialIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.shuffleByTrialIndex" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.shuffleEachNeuron">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shuffleEachNeuron</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NeuralActivityInMatrixForm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.shuffleEachNeuron" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.shuffleFrames">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shuffleFrames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">DataInMatrixForm</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.shuffleFrames" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.shuffleLabels">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shuffleLabels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Labels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.shuffleLabels" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.shuffle_trial_labels">
+<span class="sig-name descname"><span class="pre">shuffle_trial_labels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.shuffle_trial_labels" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.shuffle_trials">
+<span class="sig-name descname"><span class="pre">shuffle_trials</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.shuffle_trials" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.shuffled_trials_by_group">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shuffled_trials_by_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NumTrials</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TrialIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.shuffled_trials_by_group" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.splitData">
+<span class="sig-name descname"><span class="pre">splitData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.splitData" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.split_by_trials">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">split_by_trials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NeuralDataTensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FeatureDataTensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DataSplits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">TrialGroups</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.split_by_trials" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.structural_report">
+<span class="sig-name descname"><span class="pre">structural_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.structural_report" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DecodingAnalysis.DecodingModule.validate_data_sets">
+<span class="sig-name descname"><span class="pre">validate_data_sets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.DecodingModule.validate_data_sets" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="DecodingAnalysis.PerformanceMetrics">
+<span class="sig-prename descclassname"><span class="pre">DecodingAnalysis.</span></span><span class="sig-name descname"><span class="pre">PerformanceMetrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NumberOfSplits</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DecodingAnalysis.PerformanceMetrics" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Theory.html" class="btn btn-neutral float-left" title="Theory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="LSTMRegression.html" class="btn btn-neutral float-right" title="LSTMRegression module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Darik A. O&#39;Neil.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
