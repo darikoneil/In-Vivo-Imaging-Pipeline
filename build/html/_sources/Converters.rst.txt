@@ -1,7 +1,0 @@
-Converters module
-=================
-
-.. automodule:: Converters
-   :members:
-   :undoc-members:
-   :show-inheritance:
