@@ -15,8 +15,6 @@ from Imaging.IO import save_raw_binary, determine_bruker_folder_contents
 from MigrationTools.Converters import renamed_load
 
 
-# DEPRECATED!!!!
-
 class Mouse:
     """
     Class for Organizing & Managing Experimental Data Across Sessions
@@ -713,8 +711,8 @@ class Experiment:
             os.makedirs(_folder_name)
         except FileExistsError:
             print("The sampling folder already exists. Adding to folder dictionary")
-        # setattr(self, _attr_name, CollectedImagingAnalysisFolder(_folder_name)) changing to be in folder dictionary
-        self.folder_dictionary[_key_name] = CollectedImagingAnalysisFolder(_folder_name)
+        # setattr(self, _attr_name, ImagingAnalysis(_folder_name)) changing to be in folder dictionary
+        self.folder_dictionary[_key_name] = ImagingAnalysis(_folder_name)
         self._generate_imaging_sampling_rate_subdirectory(_folder_name)
         self.update_folder_dictionary()
 
@@ -752,17 +750,17 @@ class Experiment:
 
         # noinspection PyTypeChecker
         _update_keys = [_key for _key in self.folder_dictionary.keys()
-                            if isinstance(self.folder_dictionary.get(_key), CollectedDataFolder)]
+                        if isinstance(self.folder_dictionary.get(_key), Data)]
 
         for _key in _update_keys:
             self.folder_dictionary.get(_key).reindex()
 
         # for _key in self.folder_dictionary.keys():
-        #   if isinstance(self.folder_dictionary.get(_key), CollectedDataFolder):
+        #   if isinstance(self.folder_dictionary.get(_key), Data):
         #        self.folder_dictionary.get(_key).reindex()
-        #    elif isinstance(self.folder_dictionary.get(_key), CollectedImagingFolder):
+        #    elif isinstance(self.folder_dictionary.get(_key), Images):
         #        self.folder_dictionary.get(_key).reindex()
-        #    elif isinstance(self.folder_dictionary.get(_key), CollectedImagingAnalysisFolder):
+        #    elif isinstance(self.folder_dictionary.get(_key), ImagingAnalysis):
         #        self.folder_dictionary.get(_key).reindex()
 
     def _create_folder_dictionary(self, MouseDirectory: str, Stage: str) -> Self:
@@ -782,7 +780,7 @@ class Experiment:
             'computation_folder': _stage_directory + "\\Computation",
             'imaging_folder': _stage_directory + "\\Imaging",
             'behavior_folder': _stage_directory + "\\Behavior",
-            "figures": CollectedFiguresFolder("".join([_stage_directory, "\\Figures"])),
+            "figures": Figures("".join([_stage_directory, "\\Figures"])),
         }
 
     def _fill_imaging_folder_dictionary(self) -> Self:
@@ -797,14 +795,14 @@ class Experiment:
             os.makedirs(_raw_data_folder)
         except FileExistsError:
             print("Existing Raw Data Folder Detected")
-        self.folder_dictionary['raw_imaging_data'] = CollectedImagingFolder(_raw_data_folder)
+        self.folder_dictionary['raw_imaging_data'] = Images(_raw_data_folder)
         # META
         _bruker_meta_folder = self.folder_dictionary['imaging_folder'] + "\\BrukerMetaData"
         try:
             os.makedirs(_bruker_meta_folder)
         except FileExistsError:
             print("Existing Bruker Meta Data Folder Detected")
-        self.folder_dictionary['bruker_meta_data'] = CollectedDataFolder(_bruker_meta_folder)
+        self.folder_dictionary['bruker_meta_data'] = Data(_bruker_meta_folder)
 
     def _load_bruker_analog_recordings(self) -> pd.DataFrame:
         """
@@ -1348,7 +1346,7 @@ class BehavioralExperiment(Experiment):
         return DataFrame
 
 
-class CollectedDataFolder:
+class Data:
     """
 This is a class for managing a folder of unorganized data files
 
@@ -1493,7 +1491,7 @@ This is a class for managing a folder of unorganized data files
         self.folders = self.path
 
 
-class CollectedImagingFolder(CollectedDataFolder):
+class Images(Data):
     """
     Class specifically for folders containing raw images, inherits collected data folder
     """
@@ -1601,7 +1599,7 @@ class CollectedImagingFolder(CollectedDataFolder):
         return determine_bruker_folder_contents(self.path)[3]
 
 
-class CollectedImagingAnalysisFolder(CollectedDataFolder):
+class ImagingAnalysis(Data):
     """
     Class specifically for imaging analysis folders, inherits collected data folder
 
@@ -1887,7 +1885,7 @@ class CollectedImagingAnalysisFolder(CollectedDataFolder):
         return suite2p_module
 
 
-class CollectedFiguresFolder(CollectedDataFolder):
+class Figures(Data):
     """
     A class for storing figures, inherits collected data folder
 
