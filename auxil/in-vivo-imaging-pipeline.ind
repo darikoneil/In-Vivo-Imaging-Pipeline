@@ -1,0 +1,589 @@
+\begin{theindex}
+
+  \item \spxentry{add\_image\_sampling\_folder()}\spxextra{ExperimentHierarchy.ExperimentStage method}, 
+		\hyperpage{9}
+  \item \spxentry{add\_notes()}\spxextra{ExperimentHierarchy.CollectedImagingAnalysisFolder method}, 
+		\hyperpage{4}
+  \item \spxentry{anisotropic\_diffusion()}\spxextra{in module SignalProcessing}, 
+		\hyperpage{25}
+  \item \spxentry{anisotropicDiffusion()}\spxextra{in module SignalProcessing}, 
+		\hyperpage{25}
+  \item \spxentry{assessFit()}\spxextra{DecodingAnalysis.DecodingModule method}, 
+		\hyperpage{29}
+  \item \spxentry{assessFit()}\spxextra{LinearNonLinearRegression.LinearNonLinearRegression method}, 
+		\hyperpage{31}
+  \item \spxentry{assessFit()}\spxextra{LinearRegression.LinearRegression method}, 
+		\hyperpage{31}
+  \item \spxentry{assessFit()}\spxextra{LogisticRegression.LogisticRegression method}, 
+		\hyperpage{32}
+  \item \spxentry{assessFit()}\spxextra{SupportVectorMachine.SVM method}, 
+		\hyperpage{32}
+  \item \spxentry{assessSpikeInference()}\spxextra{in module Visualization}, 
+		\hyperpage{26}
+
+  \indexspace
+
+  \item \spxentry{background}\spxextra{Coloring.ColorImages property}, 
+		\hyperpage{15}
+  \item \spxentry{background\_cutoffs}\spxextra{Coloring.ColorImages property}, 
+		\hyperpage{15}
+  \item \spxentry{background\_style}\spxextra{Coloring.ColorImages property}, 
+		\hyperpage{15}
+  \item \spxentry{BehavioralStage}\spxextra{class in ExperimentHierarchy}, 
+		\hyperpage{1}
+  \item \spxentry{BehaviorUtilities}
+    \subitem \spxentry{module}, \hyperpage{11}
+  \item \spxentry{bin\_data()}\spxextra{in module SignalProcessing}, 
+		\hyperpage{25}
+  \item \spxentry{bind\_data()}\spxextra{in module SignalProcessing}, 
+		\hyperpage{25}
+  \item \spxentry{blockwise\_fast\_filter\_tiff()}\spxextra{in module ImageProcessing}, 
+		\hyperpage{23}
+  \item \spxentry{BrukerMeta}\spxextra{class in BrukerMetaModule}, 
+		\hyperpage{1}
+  \item \spxentry{BrukerMetaModule}
+    \subitem \spxentry{module}, \hyperpage{1}
+  \item \spxentry{BurrowFearConditioning}
+    \subitem \spxentry{module}, \hyperpage{12}
+
+  \indexspace
+
+  \item \spxentry{calculate\_dFoF()}\spxextra{in module SignalProcessing}, 
+		\hyperpage{25}
+  \item \spxentry{calculate\_distance()}\spxextra{BurrowFearConditioning.DeepLabData static method}, 
+		\hyperpage{12}
+  \item \spxentry{calculate\_mean\_firing\_rate()}\spxextra{in module SignalProcessing}, 
+		\hyperpage{25}
+  \item \spxentry{calculate\_standardized\_noise()}\spxextra{in module SignalProcessing}, 
+		\hyperpage{25}
+  \item \spxentry{calculateFiringRate()}\spxextra{in module SignalProcessing}, 
+		\hyperpage{25}
+  \item \spxentry{channels}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}, 
+		\hyperpage{5}
+  \item \spxentry{check\_log()}\spxextra{ExperimentHierarchy.ExperimentData method}, 
+		\hyperpage{6}
+  \item \spxentry{check\_path()}\spxextra{ExperimentHierarchy.ExperimentData class method}, 
+		\hyperpage{7}
+  \item \spxentry{check\_sync\_plot()}\spxextra{BurrowFearConditioning.FearConditioning static method}, 
+		\hyperpage{13}
+  \item \spxentry{clean\_up\_compilation()}\spxextra{ExperimentHierarchy.CollectedImagingAnalysisFolder method}, 
+		\hyperpage{4}
+  \item \spxentry{clean\_up\_motion\_correction()}\spxextra{ExperimentHierarchy.CollectedImagingAnalysisFolder method}, 
+		\hyperpage{4}
+  \item \spxentry{cleanKwargs()}\spxextra{DecodingAnalysis.DecodingModule method}, 
+		\hyperpage{29}
+  \item \spxentry{collapseFeatures()}\spxextra{DecodingAnalysis.DecodingModule class method}, 
+		\hyperpage{29}
+  \item \spxentry{CollectedDataFolder}\spxextra{class in ExperimentHierarchy}, 
+		\hyperpage{2}
+  \item \spxentry{CollectedFiguresFolder}\spxextra{class in ExperimentHierarchy}, 
+		\hyperpage{3}
+  \item \spxentry{CollectedImagingAnalysisFolder}\spxextra{class in ExperimentHierarchy}, 
+		\hyperpage{3}
+  \item \spxentry{CollectedImagingFolder}\spxextra{class in ExperimentHierarchy}, 
+		\hyperpage{5}
+  \item \spxentry{color\_video}\spxextra{Coloring.ColorImages property}, 
+		\hyperpage{15}
+  \item \spxentry{ColorImages}\spxextra{class in Coloring}, 
+		\hyperpage{15}
+  \item \spxentry{Coloring}
+    \subitem \spxentry{module}, \hyperpage{15}
+  \item \spxentry{colorize\_complete\_image()}\spxextra{in module Coloring}, 
+		\hyperpage{15}
+  \item \spxentry{colorize\_complete\_image()}\spxextra{in module Colorizer}, 
+		\hyperpage{18}
+  \item \spxentry{colorize\_rois()}\spxextra{in module Coloring}, 
+		\hyperpage{16}
+  \item \spxentry{colorize\_rois()}\spxextra{in module Colorizer}, 
+		\hyperpage{18}
+  \item \spxentry{colorize\_video()}\spxextra{in module Colorizer}, 
+		\hyperpage{18}
+  \item \spxentry{Colorizer}
+    \subitem \spxentry{module}, \hyperpage{18}
+  \item \spxentry{commonAssessment()}\spxextra{DecodingAnalysis.DecodingModule method}, 
+		\hyperpage{29}
+  \item \spxentry{commonAssessment()}\spxextra{LinearRegression.LinearRegression method}, 
+		\hyperpage{31}
+  \item \spxentry{commonAssessment()}\spxextra{LogisticRegression.LogisticRegression method}, 
+		\hyperpage{32}
+  \item \spxentry{commonAssessment()}\spxextra{SupportVectorMachine.SVM method}, 
+		\hyperpage{32}
+  \item \spxentry{compareTraces()}\spxextra{in module Visualization}, 
+		\hyperpage{26}
+  \item \spxentry{compareTraces2()}\spxextra{in module Visualization}, 
+		\hyperpage{26}
+  \item \spxentry{compareTraces3()}\spxextra{in module Visualization}, 
+		\hyperpage{26}
+  \item \spxentry{convert\_dataframe\_to\_physical\_units()}\spxextra{BurrowFearConditioning.DeepLabData class method}, 
+		\hyperpage{12}
+  \item \spxentry{convert\_grayscale\_to\_color()}\spxextra{in module Coloring}, 
+		\hyperpage{16}
+  \item \spxentry{convert\_to\_mean\_zero()}\spxextra{BurrowFearConditioning.DeepLabData static method}, 
+		\hyperpage{12}
+  \item \spxentry{create()}\spxextra{ExperimentHierarchy.ExperimentData method}, 
+		\hyperpage{7}
+  \item \spxentry{create\_experimental\_stage()}\spxextra{ExperimentHierarchy.ExperimentData method}, 
+		\hyperpage{7}
+  \item \spxentry{create\_log\_file()}\spxextra{ExperimentHierarchy.ExperimentData method}, 
+		\hyperpage{7}
+  \item \spxentry{createTrialIndicator()}\spxextra{DecodingAnalysis.DecodingModule static method}, 
+		\hyperpage{29}
+  \item \spxentry{current\_stage}\spxextra{ExperimentHierarchy.CollectedImagingAnalysisFolder property}, 
+		\hyperpage{4}
+
+  \indexspace
+
+  \item \spxentry{DecodingAnalysis}
+    \subitem \spxentry{module}, \hyperpage{29}
+  \item \spxentry{DecodingModule}\spxextra{class in DecodingAnalysis}, 
+		\hyperpage{29}
+  \item \spxentry{DeepLabData}\spxextra{class in BurrowFearConditioning}, 
+		\hyperpage{12}
+  \item \spxentry{default\_folders()}\spxextra{ExperimentHierarchy.CollectedImagingAnalysisFolder method}, 
+		\hyperpage{4}
+  \item \spxentry{dep\_shuffle\_trials()}\spxextra{DecodingAnalysis.DecodingModule method}, 
+		\hyperpage{29}
+  \item \spxentry{determine\_bruker\_folder\_contents()}\spxextra{in module IO}, 
+		\hyperpage{21}
+  \item \spxentry{detrendTraces()}\spxextra{in module SignalProcessing}, 
+		\hyperpage{25}
+  \item \spxentry{detrendTraces\_TiffOrg()}\spxextra{in module SignalProcessing}, 
+		\hyperpage{25}
+
+  \indexspace
+
+  \item \spxentry{end\_log()}\spxextra{ExperimentHierarchy.ExperimentData method}, 
+		\hyperpage{7}
+  \item \spxentry{experimental\_condition}\spxextra{ExperimentHierarchy.ExperimentData property}, 
+		\hyperpage{7}
+  \item \spxentry{ExperimentData}\spxextra{class in ExperimentHierarchy}, 
+		\hyperpage{5}
+  \item \spxentry{ExperimentHierarchy}
+    \subitem \spxentry{module}, \hyperpage{1}
+  \item \spxentry{ExperimentStage}\spxextra{class in ExperimentHierarchy}, 
+		\hyperpage{8}
+  \item \spxentry{export\_registration\_to\_denoised()}\spxextra{ExperimentHierarchy.CollectedImagingAnalysisFolder method}, 
+		\hyperpage{4}
+  \item \spxentry{extract\_specific\_data()}\spxextra{in module BehaviorUtilities}, 
+		\hyperpage{11}
+
+  \indexspace
+
+  \item \spxentry{fast\_filter\_images()}\spxextra{in module ImageProcessing}, 
+		\hyperpage{24}
+  \item \spxentry{FearConditioning}\spxextra{class in BurrowFearConditioning}, 
+		\hyperpage{13}
+  \item \spxentry{feature\_matrix}\spxextra{DecodingAnalysis.DecodingModule property}, 
+		\hyperpage{29}
+  \item \spxentry{feature\_tensor}\spxextra{DecodingAnalysis.DecodingModule property}, 
+		\hyperpage{29}
+  \item \spxentry{file\_format}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}, 
+		\hyperpage{5}
+  \item \spxentry{files}\spxextra{ExperimentHierarchy.CollectedDataFolder property}, 
+		\hyperpage{2}
+  \item \spxentry{filter\_images()}\spxextra{in module ImageProcessing}, 
+		\hyperpage{24}
+  \item \spxentry{find\_all\_ext()}\spxextra{ExperimentHierarchy.CollectedDataFolder method}, 
+		\hyperpage{2}
+  \item \spxentry{find\_matching\_files()}\spxextra{ExperimentHierarchy.CollectedDataFolder method}, 
+		\hyperpage{3}
+  \item \spxentry{fit()}\spxextra{LinearRegression.WienerFilterDecoder method}, 
+		\hyperpage{31}
+  \item \spxentry{fit()}\spxextra{LogisticRegression.LogisticRegressionDecoder method}, 
+		\hyperpage{32}
+  \item \spxentry{fitModel()}\spxextra{DecodingAnalysis.DecodingModule method}, 
+		\hyperpage{29}
+  \item \spxentry{fitModel()}\spxextra{LinearNonLinearRegression.LinearNonLinearRegression method}, 
+		\hyperpage{31}
+  \item \spxentry{fitModel()}\spxextra{LinearRegression.LinearRegression method}, 
+		\hyperpage{31}
+  \item \spxentry{fitModel()}\spxextra{LogisticRegression.LogisticRegression method}, 
+		\hyperpage{32}
+  \item \spxentry{fitModel()}\spxextra{LSTMRegression.LongShortTermMemoryRegression method}, 
+		\hyperpage{30}
+  \item \spxentry{fitModel()}\spxextra{SupportVectorMachine.SVM method}, 
+		\hyperpage{32}
+  \item \spxentry{folders}\spxextra{ExperimentHierarchy.CollectedDataFolder property}, 
+		\hyperpage{3}
+  \item \spxentry{frames}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}, 
+		\hyperpage{5}
+  \item \spxentry{fullAssessment()}\spxextra{DecodingAnalysis.DecodingModule method}, 
+		\hyperpage{29}
+  \item \spxentry{fullAssessment()}\spxextra{LinearRegression.LinearRegression method}, 
+		\hyperpage{31}
+
+  \indexspace
+
+  \item \spxentry{generate\_background()}\spxextra{in module Coloring}, 
+		\hyperpage{16}
+  \item \spxentry{generate\_custom\_map()}\spxextra{in module Coloring}, 
+		\hyperpage{16}
+  \item \spxentry{generate\_custom\_map()}\spxextra{in module Colorizer}, 
+		\hyperpage{19}
+  \item \spxentry{generate\_features()}\spxextra{in module Utilities}, 
+		\hyperpage{26}
+  \item \spxentry{generate\_pixel\_pairs()}\spxextra{in module Coloring}, 
+		\hyperpage{16}
+  \item \spxentry{generate\_pixel\_pairs()}\spxextra{in module Colorizer}, 
+		\hyperpage{19}
+  \item \spxentry{generateCovarianceMatrix()}\spxextra{in module Utilities}, 
+		\hyperpage{26}
+  \item \spxentry{generateSpikeMatrix()}\spxextra{in module Utilities}, 
+		\hyperpage{26}
+  \item \spxentry{get\_date()}\spxextra{ExperimentHierarchy.ExperimentData class method}, 
+		\hyperpage{7}
+  \item \spxentry{get\_time()}\spxextra{ExperimentHierarchy.ExperimentData class method}, 
+		\hyperpage{7}
+  \item \spxentry{grouped\_z\_project()}\spxextra{in module ImageProcessing}, 
+		\hyperpage{24}
+
+  \indexspace
+
+  \item \spxentry{height}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}, 
+		\hyperpage{5}
+
+  \indexspace
+
+  \item \spxentry{ImageProcessing}
+    \subitem \spxentry{module}, \hyperpage{23}
+  \item \spxentry{imaging\_files}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}, 
+		\hyperpage{5}
+  \item \spxentry{import\_meta\_data()}\spxextra{BrukerMetaModule.BrukerMeta method}, 
+		\hyperpage{1}
+  \item \spxentry{imported\_feature\_organization}\spxextra{DecodingAnalysis.DecodingModule property}, 
+		\hyperpage{29}
+  \item \spxentry{imported\_neural\_organization}\spxextra{DecodingAnalysis.DecodingModule property}, 
+		\hyperpage{29}
+  \item \spxentry{instance\_date}\spxextra{ExperimentHierarchy.CollectedDataFolder property}, 
+		\hyperpage{3}
+  \item \spxentry{instance\_date}\spxextra{ExperimentHierarchy.ExperimentData property}, 
+		\hyperpage{7}
+  \item \spxentry{instance\_date}\spxextra{ExperimentHierarchy.ExperimentStage property}, 
+		\hyperpage{9}
+  \item \spxentry{interactive\_traces()}\spxextra{in module Visualization}, 
+		\hyperpage{27}
+  \item \spxentry{IO}
+    \subitem \spxentry{module}, \hyperpage{21}
+
+  \indexspace
+
+  \item \spxentry{LinearNonLinearRegression}
+    \subitem \spxentry{module}, \hyperpage{31}
+  \item \spxentry{LinearNonLinearRegression}\spxextra{class in LinearNonLinearRegression}, 
+		\hyperpage{31}
+  \item \spxentry{LinearRegression}
+    \subitem \spxentry{module}, \hyperpage{31}
+  \item \spxentry{LinearRegression}\spxextra{class in LinearRegression}, 
+		\hyperpage{31}
+  \item \spxentry{load\_all\_tiffs()}\spxextra{in module IO}, 
+		\hyperpage{21}
+  \item \spxentry{load\_binary\_meta()}\spxextra{in module IO}, 
+		\hyperpage{21}
+  \item \spxentry{load\_bruker\_tiffs()}\spxextra{in module IO}, 
+		\hyperpage{21}
+  \item \spxentry{load\_cascade\_exports()}\spxextra{ExperimentHierarchy.CollectedImagingAnalysisFolder method}, 
+		\hyperpage{4}
+  \item \spxentry{load\_data()}\spxextra{BurrowFearConditioning.DeepLabData class method}, 
+		\hyperpage{13}
+  \item \spxentry{load\_data()}\spxextra{BurrowFearConditioning.FearConditioning method}, 
+		\hyperpage{13}
+  \item \spxentry{load\_data()}\spxextra{ExperimentHierarchy.BehavioralStage method}, 
+		\hyperpage{2}
+  \item \spxentry{load\_data()}\spxextra{ExperimentHierarchy.ExperimentStage method}, 
+		\hyperpage{9}
+  \item \spxentry{load\_experiments()}\spxextra{ExperimentHierarchy.ExperimentData class method}, 
+		\hyperpage{7}
+  \item \spxentry{load\_fissa\_exports()}\spxextra{ExperimentHierarchy.CollectedImagingAnalysisFolder method}, 
+		\hyperpage{5}
+  \item \spxentry{load\_mapped\_binary()}\spxextra{in module IO}, 
+		\hyperpage{21}
+  \item \spxentry{load\_meta\_data()}\spxextra{BrukerMetaModule.BrukerMeta static method}, 
+		\hyperpage{1}
+  \item \spxentry{load\_raw\_binary()}\spxextra{in module IO}, 
+		\hyperpage{22}
+  \item \spxentry{load\_single\_tiff()}\spxextra{in module IO}, 
+		\hyperpage{22}
+  \item \spxentry{load\_suite2p()}\spxextra{ExperimentHierarchy.CollectedImagingAnalysisFolder method}, 
+		\hyperpage{5}
+  \item \spxentry{loadFeatures()}\spxextra{DecodingAnalysis.DecodingModule class method}, 
+		\hyperpage{29}
+  \item \spxentry{loadFeaturesFile()}\spxextra{DecodingAnalysis.DecodingModule method}, 
+		\hyperpage{29}
+  \item \spxentry{log\_file}\spxextra{ExperimentHierarchy.ExperimentData property}, 
+		\hyperpage{8}
+  \item \spxentry{LogisticRegression}
+    \subitem \spxentry{module}, \hyperpage{32}
+  \item \spxentry{LogisticRegression}\spxextra{class in LogisticRegression}, 
+		\hyperpage{32}
+  \item \spxentry{LogisticRegressionDecoder}\spxextra{class in LogisticRegression}, 
+		\hyperpage{32}
+  \item \spxentry{LongShortTermMemoryRegression}\spxextra{class in LSTMRegression}, 
+		\hyperpage{30}
+  \item \spxentry{lowpass\_filter()}\spxextra{in module BehaviorUtilities}, 
+		\hyperpage{11}
+  \item \spxentry{LSTMRegression}
+    \subitem \spxentry{module}, \hyperpage{30}
+
+  \indexspace
+
+  \item \spxentry{makeAllPredictions()}\spxextra{LinearRegression.LinearRegression method}, 
+		\hyperpage{31}
+  \item \spxentry{makeAllPredictions()}\spxextra{LogisticRegression.LogisticRegression method}, 
+		\hyperpage{32}
+  \item \spxentry{makeAllPredictions()}\spxextra{LSTMRegression.LongShortTermMemoryRegression method}, 
+		\hyperpage{30}
+  \item \spxentry{makeAllPredictions()}\spxextra{SupportVectorMachine.SVM method}, 
+		\hyperpage{32}
+  \item \spxentry{makePrediction()}\spxextra{DecodingAnalysis.DecodingModule method}, 
+		\hyperpage{30}
+  \item \spxentry{makePrediction()}\spxextra{LinearNonLinearRegression.LinearNonLinearRegression method}, 
+		\hyperpage{31}
+  \item \spxentry{makePrediction()}\spxextra{LinearRegression.LinearRegression method}, 
+		\hyperpage{31}
+  \item \spxentry{makePrediction()}\spxextra{LogisticRegression.LogisticRegression method}, 
+		\hyperpage{32}
+  \item \spxentry{makePrediction()}\spxextra{LSTMRegression.LongShortTermMemoryRegression method}, 
+		\hyperpage{30}
+  \item \spxentry{makePrediction()}\spxextra{SupportVectorMachine.SVM method}, 
+		\hyperpage{32}
+  \item \spxentry{merge\_background()}\spxextra{in module Coloring}, 
+		\hyperpage{17}
+  \item \spxentry{merge\_background()}\spxextra{in module Colorizer}, 
+		\hyperpage{20}
+  \item \spxentry{merge\_dlc\_data()}\spxextra{BurrowFearConditioning.DeepLabData class method}, 
+		\hyperpage{13}
+  \item \spxentry{mergeTraces()}\spxextra{in module Utilities}, 
+		\hyperpage{26}
+  \item \spxentry{meta\_files}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}, 
+		\hyperpage{5}
+  \item \spxentry{module}
+    \subitem \spxentry{BehaviorUtilities}, \hyperpage{11}
+    \subitem \spxentry{BrukerMetaModule}, \hyperpage{1}
+    \subitem \spxentry{BurrowFearConditioning}, \hyperpage{12}
+    \subitem \spxentry{Coloring}, \hyperpage{15}
+    \subitem \spxentry{Colorizer}, \hyperpage{18}
+    \subitem \spxentry{DecodingAnalysis}, \hyperpage{29}
+    \subitem \spxentry{ExperimentHierarchy}, \hyperpage{1}
+    \subitem \spxentry{ImageProcessing}, \hyperpage{23}
+    \subitem \spxentry{IO}, \hyperpage{21}
+    \subitem \spxentry{LinearNonLinearRegression}, \hyperpage{31}
+    \subitem \spxentry{LinearRegression}, \hyperpage{31}
+    \subitem \spxentry{LogisticRegression}, \hyperpage{32}
+    \subitem \spxentry{LSTMRegression}, \hyperpage{30}
+    \subitem \spxentry{PowerSpectrum}, \hyperpage{25}
+    \subitem \spxentry{SignalProcessing}, \hyperpage{25}
+    \subitem \spxentry{SupportVectorMachine}, \hyperpage{32}
+    \subitem \spxentry{Utilities}, \hyperpage{26}
+    \subitem \spxentry{Visualization}, \hyperpage{26}
+  \item \spxentry{mouse\_id}\spxextra{ExperimentHierarchy.ExperimentData property}, 
+		\hyperpage{8}
+  \item \spxentry{mouse\_id}\spxextra{ExperimentHierarchy.ExperimentStage property}, 
+		\hyperpage{9}
+
+  \indexspace
+
+  \item \spxentry{neural\_matrix}\spxextra{DecodingAnalysis.DecodingModule property}, 
+		\hyperpage{30}
+  \item \spxentry{neural\_tensor}\spxextra{DecodingAnalysis.DecodingModule property}, 
+		\hyperpage{30}
+  \item \spxentry{neuron\_subsets}\spxextra{Coloring.ColorImages property}, 
+		\hyperpage{15}
+  \item \spxentry{neuronal\_ids}\spxextra{Coloring.ColorImages property}, 
+		\hyperpage{15}
+  \item \spxentry{normalize\_image()}\spxextra{in module Coloring}, 
+		\hyperpage{17}
+  \item \spxentry{normalizeSmoothFiringRates()}\spxextra{in module SignalProcessing}, 
+		\hyperpage{25}
+  \item \spxentry{num\_frames}\spxextra{Coloring.ColorImages property}, 
+		\hyperpage{15}
+  \item \spxentry{num\_frames}\spxextra{DecodingAnalysis.DecodingModule property}, 
+		\hyperpage{30}
+  \item \spxentry{num\_imaging\_files}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}, 
+		\hyperpage{5}
+  \item \spxentry{num\_meta\_files}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}, 
+		\hyperpage{5}
+  \item \spxentry{num\_neurons}\spxextra{Coloring.ColorImages property}, 
+		\hyperpage{15}
+  \item \spxentry{num\_neurons}\spxextra{DecodingAnalysis.DecodingModule property}, 
+		\hyperpage{30}
+  \item \spxentry{num\_stim}\spxextra{BurrowFearConditioning.FearConditioning property}, 
+		\hyperpage{14}
+  \item \spxentry{num\_trials}\spxextra{BurrowFearConditioning.FearConditioning property}, 
+		\hyperpage{14}
+  \item \spxentry{num\_trials}\spxextra{DecodingAnalysis.DecodingModule property}, 
+		\hyperpage{30}
+
+  \indexspace
+
+  \item \spxentry{overlay\_colorized\_rois()}\spxextra{in module Coloring}, 
+		\hyperpage{17}
+  \item \spxentry{overlay\_colorized\_rois()}\spxextra{in module Colorizer}, 
+		\hyperpage{20}
+  \item \spxentry{overlays}\spxextra{Coloring.ColorImages property}, 
+		\hyperpage{15}
+
+  \indexspace
+
+  \item \spxentry{pass\_meta()}\spxextra{ExperimentHierarchy.ExperimentData method}, 
+		\hyperpage{8}
+  \item \spxentry{path}\spxextra{ExperimentHierarchy.CollectedDataFolder property}, 
+		\hyperpage{3}
+  \item \spxentry{PerformanceMetrics()}\spxextra{in module DecodingAnalysis}, 
+		\hyperpage{30}
+  \item \spxentry{planes}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}, 
+		\hyperpage{5}
+  \item \spxentry{plot\_burrow\_coordinates()}\spxextra{in module BurrowFearConditioning}, 
+		\hyperpage{14}
+  \item \spxentry{plot\_column\_by\_trial\_type()}\spxextra{in module BurrowFearConditioning}, 
+		\hyperpage{14}
+  \item \spxentry{plot\_trial()}\spxextra{in module BurrowFearConditioning}, 
+		\hyperpage{14}
+  \item \spxentry{plotFiringRateMatrix()}\spxextra{in module Visualization}, 
+		\hyperpage{27}
+  \item \spxentry{plotNeuralHeatMap()}\spxextra{in module Visualization}, 
+		\hyperpage{27}
+  \item \spxentry{plotNoise()}\spxextra{in module Visualization}, 
+		\hyperpage{27}
+  \item \spxentry{plotROC()}\spxextra{in module Visualization}, 
+		\hyperpage{27}
+  \item \spxentry{plotROCs()}\spxextra{DecodingAnalysis.DecodingModule method}, 
+		\hyperpage{30}
+  \item \spxentry{plotSpikeInference()}\spxextra{in module Visualization}, 
+		\hyperpage{27}
+  \item \spxentry{PowerSpectrum}
+    \subitem \spxentry{module}, \hyperpage{25}
+  \item \spxentry{predict()}\spxextra{LinearRegression.WienerFilterDecoder method}, 
+		\hyperpage{31}
+  \item \spxentry{predict()}\spxextra{LogisticRegression.LogisticRegressionDecoder method}, 
+		\hyperpage{32}
+  \item \spxentry{preview\_background()}\spxextra{Coloring.ColorImages method}, 
+		\hyperpage{15}
+  \item \spxentry{preview\_color()}\spxextra{Coloring.ColorImages method}, 
+		\hyperpage{15}
+  \item \spxentry{printAssessment()}\spxextra{DecodingAnalysis.DecodingModule method}, 
+		\hyperpage{30}
+  \item \spxentry{pruneNaN()}\spxextra{in module Utilities}, 
+		\hyperpage{26}
+  \item \spxentry{pruneTracesByNeuronalIndex()}\spxextra{in module Utilities}, 
+		\hyperpage{26}
+
+  \indexspace
+
+  \item \spxentry{record\_mod()}\spxextra{ExperimentHierarchy.ExperimentData method}, 
+		\hyperpage{8}
+  \item \spxentry{record\_mod()}\spxextra{ExperimentHierarchy.ExperimentStage method}, 
+		\hyperpage{9}
+  \item \spxentry{record\_stage\_mod()}\spxextra{ExperimentHierarchy.ExperimentData method}, 
+		\hyperpage{8}
+  \item \spxentry{reindex()}\spxextra{ExperimentHierarchy.CollectedDataFolder method}, 
+		\hyperpage{3}
+  \item \spxentry{remove\_shuttle\_artifact()}\spxextra{in module ImageProcessing}, 
+		\hyperpage{24}
+  \item \spxentry{reorganize\_bruker\_files()}\spxextra{ExperimentHierarchy.CollectedImagingFolder method}, 
+		\hyperpage{5}
+  \item \spxentry{repackage\_bruker\_tiffs()}\spxextra{in module IO}, 
+		\hyperpage{22}
+  \item \spxentry{rescale\_images()}\spxextra{in module Coloring}, 
+		\hyperpage{17}
+
+  \indexspace
+
+  \item \spxentry{save\_experiments()}\spxextra{ExperimentHierarchy.ExperimentData method}, 
+		\hyperpage{8}
+  \item \spxentry{save\_raw\_binary()}\spxextra{in module IO}, 
+		\hyperpage{22}
+  \item \spxentry{save\_single\_tiff()}\spxextra{in module IO}, 
+		\hyperpage{22}
+  \item \spxentry{save\_tiff\_stack()}\spxextra{in module IO}, 
+		\hyperpage{23}
+  \item \spxentry{save\_video()}\spxextra{in module IO}, \hyperpage{23}
+  \item \spxentry{saveModel()}\spxextra{DecodingAnalysis.DecodingModule method}, 
+		\hyperpage{30}
+  \item \spxentry{shuffle\_trial\_labels()}\spxextra{DecodingAnalysis.DecodingModule method}, 
+		\hyperpage{30}
+  \item \spxentry{shuffle\_trials()}\spxextra{DecodingAnalysis.DecodingModule method}, 
+		\hyperpage{30}
+  \item \spxentry{shuffleByTrialIndex()}\spxextra{DecodingAnalysis.DecodingModule static method}, 
+		\hyperpage{30}
+  \item \spxentry{shuffled\_trials\_by\_group()}\spxextra{DecodingAnalysis.DecodingModule static method}, 
+		\hyperpage{30}
+  \item \spxentry{shuffleEachNeuron()}\spxextra{DecodingAnalysis.DecodingModule class method}, 
+		\hyperpage{30}
+  \item \spxentry{shuffleFrames()}\spxextra{DecodingAnalysis.DecodingModule class method}, 
+		\hyperpage{30}
+  \item \spxentry{shuffleLabels()}\spxextra{DecodingAnalysis.DecodingModule class method}, 
+		\hyperpage{30}
+  \item \spxentry{SignalProcessing}
+    \subitem \spxentry{module}, \hyperpage{25}
+  \item \spxentry{smoothTraces()}\spxextra{in module SignalProcessing}, 
+		\hyperpage{25}
+  \item \spxentry{smoothTraces\_TiffOrg()}\spxextra{in module SignalProcessing}, 
+		\hyperpage{26}
+  \item \spxentry{split\_by\_trials()}\spxextra{DecodingAnalysis.DecodingModule class method}, 
+		\hyperpage{30}
+  \item \spxentry{splitData()}\spxextra{DecodingAnalysis.DecodingModule method}, 
+		\hyperpage{30}
+  \item \spxentry{stage\_id}\spxextra{ExperimentHierarchy.ExperimentStage property}, 
+		\hyperpage{10}
+  \item \spxentry{start\_log()}\spxextra{ExperimentHierarchy.ExperimentData method}, 
+		\hyperpage{8}
+  \item \spxentry{structural\_report()}\spxextra{DecodingAnalysis.DecodingModule method}, 
+		\hyperpage{30}
+  \item \spxentry{SupportVectorMachine}
+    \subitem \spxentry{module}, \hyperpage{32}
+  \item \spxentry{SVM}\spxextra{class in SupportVectorMachine}, 
+		\hyperpage{32}
+
+  \indexspace
+
+  \item \spxentry{time\_spent\_in\_burrow()}\spxextra{in module BehaviorUtilities}, 
+		\hyperpage{11}
+  \item \spxentry{total\_rois}\spxextra{Coloring.ColorImages property}, 
+		\hyperpage{15}
+  \item \spxentry{trial\_groups}\spxextra{BurrowFearConditioning.FearConditioning property}, 
+		\hyperpage{14}
+  \item \spxentry{trial\_matrix\_org()}\spxextra{in module Utilities}, 
+		\hyperpage{26}
+  \item \spxentry{trials\_per\_stim}\spxextra{BurrowFearConditioning.FearConditioning property}, 
+		\hyperpage{14}
+
+  \indexspace
+
+  \item \spxentry{unique\_stim}\spxextra{BurrowFearConditioning.FearConditioning property}, 
+		\hyperpage{14}
+  \item \spxentry{update\_all\_folder\_dictionaries()}\spxextra{ExperimentHierarchy.ExperimentData method}, 
+		\hyperpage{8}
+  \item \spxentry{update\_folder\_dictionary()}\spxextra{ExperimentHierarchy.ExperimentStage method}, 
+		\hyperpage{10}
+  \item \spxentry{Utilities}
+    \subitem \spxentry{module}, \hyperpage{26}
+
+  \indexspace
+
+  \item \spxentry{validate\_data\_sets()}\spxextra{DecodingAnalysis.DecodingModule method}, 
+		\hyperpage{30}
+  \item \spxentry{view\_figure()}\spxextra{ExperimentHierarchy.CollectedFiguresFolder method}, 
+		\hyperpage{3}
+  \item \spxentry{view\_image()}\spxextra{in module Visualization}, 
+		\hyperpage{27}
+  \item \spxentry{Visualization}
+    \subitem \spxentry{module}, \hyperpage{26}
+
+  \indexspace
+
+  \item \spxentry{width}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}, 
+		\hyperpage{5}
+  \item \spxentry{WienerFilterDecoder}\spxextra{class in LinearRegression}, 
+		\hyperpage{31}
+
+  \indexspace
+
+  \item \spxentry{xpix}\spxextra{Coloring.ColorImages property}, 
+		\hyperpage{15}
+
+  \indexspace
+
+  \item \spxentry{ypix}\spxextra{Coloring.ColorImages property}, 
+		\hyperpage{15}
+
+\end{theindex}
