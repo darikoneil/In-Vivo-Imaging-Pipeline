@@ -1,25 +1,35 @@
+from __future__ import annotations
+from typing import Optional
 from json_tricks import dumps, loads
 from os import getcwd
 
 
-
-def config_generator() -> None:
+def config_generator(Config: Optional[dict] = None) -> None:
     """
     Generates a configuration file
 
-    :return:
+    :param Config: Configuration to write to file (Optional)
+    :type Config: dict
+    :rtype: None
     """
 
-    _parameters = {
-        "shutter artifact length": 1000,
-        "chunk size": 7000,
-        "grouped-z project bin size": 3,
-        "median filter tensor size": (7, 3, 3)
-    }
+    if Config is None:
+        Config = {
+            "preprocessing": {
+                "shutter artifact length": 1000,
+                "grouped-z project bin size": 3,
+                "median filter tensor size": (7, 3, 3),
+                "test": {0, 1, 2}
+            },
+            "postprocesssing": {
+                "color": "blue",
+                "name": "test"
+            }
+        }
 
     _config_filename = "".join([getcwd(), "\\config.json"])
 
-    _serialized_parameters = dumps(_parameters)
+    _serialized_parameters = dumps(Config, indent=0, maintain_tuples=True)
 
     with open(_config_filename, "w") as _file:
         _file.write(_serialized_parameters)
@@ -27,11 +37,14 @@ def config_generator() -> None:
     _file.close()
 
 
-def config_reader() -> dict:
+def config_reader(File: Optional[str]) -> dict:
     """
     Reads config into a dictionary
 
-    :return:
+    :param File: Configuration File (Optional)
+    :type File: str
+    :return: Configuration
+    :rtype: dict
     """
 
     _config_filename = "".join([getcwd(), "\\config.json"])

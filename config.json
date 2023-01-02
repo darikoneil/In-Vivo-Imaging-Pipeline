@@ -1,1 +1,24 @@
-{"shutter artifact length": 1000, "chunk size": 7000, "grouped-z project bin size": 3, "median filter tensor size": [7, 3, 3]}
+{
+"preprocessing": {
+"shutter artifact length": 1000,
+"grouped-z project bin size": 3,
+"median filter tensor size": {
+"__tuple__": [
+3,
+3,
+7
+]
+},
+"test": {
+"__set__": [
+0,
+1,
+2
+]
+}
+},
+"postprocesssing": {
+"color": "blue",
+"name": "test"
+}
+}

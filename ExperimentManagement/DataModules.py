@@ -17,7 +17,7 @@ from MigrationTools.Converters import renamed_load
 
 # DEPRECATED!!!!
 
-class ExperimentData:
+class Mouse:
     """
     Class for Organizing & Managing Experimental Data Across Sessions
 
@@ -632,7 +632,7 @@ class ExperimentData:
             _read_me.close()
 
 
-class ExperimentStage:
+class Experiment:
     """ Data Class for a generic experiment stage
         **Required Inputs**
         | *Meta* : Passed meta from experimental hierarchy (directory, mouse_id)
@@ -903,7 +903,7 @@ class ExperimentStage:
         return meta
 
 
-class BehavioralStage(ExperimentStage):
+class BehavioralExperiment(Experiment):
     """
     Data Class for a generic day of a behavioral task
 
