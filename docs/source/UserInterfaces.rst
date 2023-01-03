@@ -1,7 +1,7 @@
-LSTMRegression module
+UserInterfaces module
 =====================
 
-.. automodule:: LSTMRegression
+.. automodule:: UserInterfaces
    :members:
    :undoc-members:
    :show-inheritance:

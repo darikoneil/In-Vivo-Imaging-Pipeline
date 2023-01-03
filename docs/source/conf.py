@@ -7,6 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'In-Vivo-Imaging-Pipeline'
+# noinspection PyShadowingBuiltins
 copyright = "2023, Darik A. O'Neil"
 author = "Darik A. O'Neil"
 release = '0.0.0'
@@ -34,7 +35,7 @@ import os
 import sys
 import pathlib
 module_names = (
-    "ExperimentManagement",
+    "Management",
     "Behavior",
     "Imaging",
     "Theory"

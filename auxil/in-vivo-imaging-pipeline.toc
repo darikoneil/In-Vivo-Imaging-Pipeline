@@ -1,25 +1,6 @@
 \babel@toc {english}{}\relax 
-\contentsline {chapter}{\numberline {1}ExperimentManagement}{1}{chapter.1}%
-\contentsline {section}{\numberline {1.1}BrukerMetaModule module}{1}{section.1.1}%
-\contentsline {section}{\numberline {1.2}ExperimentHierarchy module}{1}{section.1.2}%
-\contentsline {chapter}{\numberline {2}Behavior}{11}{chapter.2}%
-\contentsline {section}{\numberline {2.1}BehaviorUtilities module}{11}{section.2.1}%
-\contentsline {section}{\numberline {2.2}BurrowFearConditioning module}{12}{section.2.2}%
-\contentsline {chapter}{\numberline {3}Imaging}{15}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Coloring module}{15}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Colorizer module}{18}{section.3.2}%
-\contentsline {section}{\numberline {3.3}IO module}{21}{section.3.3}%
-\contentsline {section}{\numberline {3.4}ImageProcessing module}{23}{section.3.4}%
-\contentsline {section}{\numberline {3.5}PowerSpectrum module}{25}{section.3.5}%
-\contentsline {section}{\numberline {3.6}SignalProcessing module}{25}{section.3.6}%
-\contentsline {section}{\numberline {3.7}Utilities module}{26}{section.3.7}%
-\contentsline {section}{\numberline {3.8}Visualization module}{26}{section.3.8}%
-\contentsline {chapter}{\numberline {4}Theory}{29}{chapter.4}%
-\contentsline {section}{\numberline {4.1}DecodingAnalysis module}{29}{section.4.1}%
-\contentsline {section}{\numberline {4.2}LSTMRegression module}{30}{section.4.2}%
-\contentsline {section}{\numberline {4.3}LinearNonLinearRegression module}{31}{section.4.3}%
-\contentsline {section}{\numberline {4.4}LinearRegression module}{31}{section.4.4}%
-\contentsline {section}{\numberline {4.5}LogisticRegression module}{32}{section.4.5}%
-\contentsline {section}{\numberline {4.6}SupportVectorMachine module}{32}{section.4.6}%
-\contentsline {chapter}{\numberline {5}Indices and tables}{33}{chapter.5}%
-\contentsline {chapter}{Python Module Index}{35}{section*.237}%
+\contentsline {chapter}{\numberline {1}Management}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Organization module}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}UserInterfaces module}{10}{section.1.2}%
+\contentsline {chapter}{\numberline {2}Indices and tables}{11}{chapter.2}%
+\contentsline {chapter}{Python Module Index}{13}{section*.69}%

@@ -1,4 +1,3 @@
-# from ExperimentManagement.ExperimentHierarchy import ExperimentData
 from SamIO.metadata import Metadata
 
 

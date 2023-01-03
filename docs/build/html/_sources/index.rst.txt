@@ -7,13 +7,10 @@ Welcome to In Vivo Imaging Pipeline's documentation!
 ====================================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Contents:
 
-   ExperimentManagement
-   Behavior
-   Imaging
-   Theory
+   Management
 
 
 
