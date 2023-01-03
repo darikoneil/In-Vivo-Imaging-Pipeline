@@ -51,7 +51,7 @@ def determine_bruker_folder_contents(ImageDirectory: str) -> Tuple[int, int, int
         nonlocal channels
 
         if is_multiplane():
-            return find_unique_strings_given_substring("Cycle00001")//channels
+            return find_unique_substrings("Cycle00001")//channels
         else:
             return 1
 
