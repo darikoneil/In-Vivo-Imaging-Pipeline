@@ -3,7 +3,6 @@
 
 ### To-Do
 
-+ JSON Serialization for resilience of experiment loading / saving
 + JSON Config Parameterization (or npy?)
 + Full implementation for multi-plane
 + Full implementation for multi-color "coloring"
