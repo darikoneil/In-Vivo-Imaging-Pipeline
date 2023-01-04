@@ -3,6 +3,6 @@
 
 ### To-Do
 
-+ JSON Config Parameterization (or npy?)
++ Seperate Large NDARRAY & Dataframes from JSON to binary?
 + Full implementation for multi-plane
 + Full implementation for multi-color "coloring"
