@@ -898,7 +898,6 @@ class ImagingExperiment(Experiment):
         return meta
 
 
-
 class BehavioralExperiment(Experiment):
     """
     :class:`Experiment <Management.Organization.Experiment>` class for a generic day of a behavioral task
@@ -1417,19 +1416,21 @@ class ImagingBehaviorExperiment(ImagingExperiment, BehavioralExperiment):
 
 class Data:
     """
-This is a class for managing a folder of unorganized data files
+    This is a class for managing a folder of unorganized data files
 
-**Required Inputs**
-    | *Path* : path to folder
+    **Required Inputs**
+        | *Path* : absolute filepath for data folder
 
-**Self Methods**
+    **Self Methods**
+        | *find_all_ext* :  Finds all files with specific extension
         | *find_matching_files* : Finds all matching files
         | *reindex* : Function that indexed the files within folder again
-        | *find_all_ext* :  Finds all files with specific extension
-**Properties**
+
+    **Properties**
+        | *files* : List of files in folder
         | *instance_data* : Data created
         | *path* : path to folder
-        | *files* : List of files in folder
+
     """
 
     def __init__(self, Path: str):
@@ -1564,6 +1565,9 @@ class Images(Data):
     """
     :class:`Data Folder <Management.Organization.Data>` specifically for folders containing raw images.
 
+    **Required Inputs**
+        | *Path* : absolute filepath for data folder
+
     """
 
     def __init__(self, Path: str):
@@ -1673,6 +1677,8 @@ class ImagingAnalysis(Data):
     """
     :class:`Data Folder <Management.Organization.Data>` specifically for imaging analysis folders.
 
+    **Required Inputs**
+        | *Path* : absolute filepath for data folder
     **Self Methods**
         | *load_fissa_exports* : loads fissa exported files
         | *load_cascade_exports* : loads cascade exported files
@@ -1681,7 +1687,11 @@ class ImagingAnalysis(Data):
         | *clean_up_motion_correction* : This function removes the reg_tif folder and registered.bin generated during motion correction.
         | *clean_up_compilation* : This function removes the compiled tif files
         | *add_notes* : Function adds notes
-
+    **Properties**
+        | *files* : List of files in folder
+        | *folders* : List of sub-folders in folder
+        | *instance_data* : Data created
+        | *path* : path to folder
     """
 
     def __init__(self, Path: str):
@@ -1690,7 +1700,7 @@ class ImagingAnalysis(Data):
         # self.default_folders()
 
     @property
-    def current_experiment(self) -> str:
+    def current_experiment_step(self) -> str:
         """
         Current stage in imaging analysis
 
@@ -1980,6 +1990,8 @@ class Figures(Data):
     """
     :class:`Data Folder <Management.Organization.Data>` specifically for storing figures.
 
+    **Required Inputs**
+        | *Path* : absolute filepath for data folder
     """
 
     def __init__(self, Path: str):
