@@ -81,14 +81,14 @@ class Mouse:
         :keyword StudyMouse: Study ID (str, default None)
         """
         # Hidden
-        self._mouse_id_assigned = False  # to make sure mouse id only set once
         self._mouse_id = None
-        self._log_file_assigned = False  # to make sure log file only set once
-        self._experimental_condition_assigned = False  # to make set condition only once
+        self._experimental_condition = None
+        self._log_file = None
+
         # Protected In Practice
-        self._log_file = kwargs.get('LogFile', None)
+        self.log_file = kwargs.get('LogFile', None)
         self.mouse_id = kwargs.get('Mouse', None)
-        self._experimental_condition = kwargs.get('Condition', None)
+        self.experimental_condition = kwargs.get('Condition', None)
         self.__instance_date = get_date()
         #
         self.directory = kwargs.get('Directory', None)
@@ -98,7 +98,7 @@ class Mouse:
         self.experiments = []
 
         # Create log file if one does not exist
-        if self._log_file_assigned is False and self.mouse_id is not None:
+        if self.log_file is None and self.mouse_id is not None:
             if self.directory is None:
                 self.directory = os.getcwd()
             self.create()
@@ -106,7 +106,7 @@ class Mouse:
 
 
         # start logging if log file exists
-        if self._log_file_assigned:
+        if self.log_file is not None:
             self.start_log()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -123,9 +123,8 @@ class Mouse:
 
     @experimental_condition.setter
     def experimental_condition(self, Condition: str) -> Self:
-        if self._experimental_condition_assigned is False:
+        if self._experimental_condition is None and Condition is not None:
             self._experimental_condition = Condition
-            self._experimental_condition_assigned = True
         else:
             print("Experimental condition can only be assigned ONCE.")
 
@@ -140,9 +139,8 @@ class Mouse:
 
     @log_file.setter
     def log_file(self, LogFile: str) -> Self:
-        if self._log_file_assigned is False:
+        if self._log_file is None and LogFile is not None:
             self._log_file = LogFile
-            self._log_file_assigned = True
         else:
             print("Log file can only be assigned ONCE.")
 
@@ -157,9 +155,9 @@ class Mouse:
 
     @mouse_id.setter
     def mouse_id(self, ID: str) -> Self:
-        if self._mouse_id_assigned is False and ID is not None and ID != self._mouse_id:
+        # This is a way to adjust if you really wanted to
+        if self._mouse_id is None and ID is not None:
             self._mouse_id = ID
-            self._mouse_id_assigned = True
         else:
             print("Mouse ID can only be set ONCE.")
 
@@ -226,7 +224,7 @@ class Mouse:
 
         print("Logging file assigned as :" + self.log_file)
 
-    def create_experiment(self, ExperimentName: str, Type: Optional[str, object] = "Experiment", **kwargs) -> Self:
+    def create_experiment(self, ExperimentName: str, Type: Optional[str, Experiment] = "Experiment", **kwargs) -> Self:
         """
         Generates an experiment ExperimentName folder and attribute
 
@@ -234,8 +232,8 @@ class Mouse:
 
         :param ExperimentName: Name of experimental ExperimentName
         :type ExperimentName: str
-        :param Type: Type of experimental ExperimentName (Optional, default = Experiment)
-        :type Type: Optional[str, object]
+        :param Type: Type of experiment (Optional, default = Experiment)
+        :type Type: Optional[str, Experiment]
         :rtype: Any
         """
         # Construct Folder
@@ -246,8 +244,11 @@ class Mouse:
         if isinstance(Type, str):
             _type_constructor = "".join([Type, "(self.pass_meta(), ExperimentName)"])
             setattr(self, ExperimentName, eval(_type_constructor))
-        else:
+        elif issubclass(Type, Experiment):
+            # noinspection PyCallingNonCallable
             setattr(self, ExperimentName, Type(self.pass_meta(), ExperimentName))
+        else:
+            raise TypeError("Unable to determine specified Type of experiment. Make sure the Type is imported")
 
         # Record-Keeping
         self.experiments.append(ExperimentName)
@@ -258,8 +259,7 @@ class Mouse:
         _interactive = kwargs.get("interactive", True)
         if _interactive:
             # noinspection PyProtectedMember
-            self.__getattribute__(ExperimentName).copy_raw_imaging_data()
-            self.__getattribute__(ExperimentName).folder_dictionary.get("raw_imaging_data").reorganize_bruker_files()
+            self.__getattribute__(ExperimentName).copy_data()
 
     # noinspection All
     def end_log(self) -> Self:
@@ -400,15 +400,17 @@ class Mouse:
             self._generate_figures_subdirectory(_experiment_directory)
 
     @classmethod
-    def load(cls, Directory: str) -> Mouse:
+    def load(cls, Directory: Optional[str] = None) -> Mouse:
         """
         Function that loads the entire mouse
 
         :param Directory: Directory containing the organization.json file and associated data
-        :type Directory: str
+        :type Directory: Optional[str]
         :return: Mouse
         :rtype: ExperimentManagement.Organization.Mouse
         """
+        if Directory is None:
+            Directory = select_directory(title="Select folder containing mouse (organization.json)", mustexist=True)
         print("Loading Experiments...")
         _input_file = Directory + "\\organization.json"
         with open(_input_file, "r") as f:
@@ -424,7 +426,7 @@ class Mouse:
                 MouseData.__dict__.get(_key).folder_dictionary = dict(MouseData.__dict__.get(_key).folder_dictionary)
 
         print("Finished.")
-        if MouseData._log_file_assigned:
+        if MouseData._log_file is not None:
             MouseData.start_log()
         return MouseData
 
@@ -593,7 +595,7 @@ class Mouse:
 
 class Experiment:
     """
-     Class for a generic experiment
+     Experiment class for a generic experiment
 
     **Required Inputs**
         | *Meta* : Passed meta from mouse (directory, mouse_id)
@@ -606,13 +608,11 @@ class Experiment:
     **Attributes**
         | *data* : a pandas dataframe containing synchronized data
         | *folder_dictionary* : A dictionary of relevant folders for this experiment
-        | *meta* : bruker metadata
         | *modifications* : List of modifications made to this experiment
 
-
     **Public Methods**
-        | *add_image_sampling_folder* : Generates a folder for containing imaging data of a specific sampling rate
-        | *load_data* : Loads all data
+        | *copy_data* : Interactive tool to copy data to directory (Intended to be overwritten during inheritance)
+        | *load_data* : Loads all data (Intended to be overwritten during inheritance)
         | *record_mod* :  Records a modification made to the experiment (Date & Time)
         | *update_folder_dictionary* : This function re-indexes all folders in the folder dictionary
 
@@ -626,11 +626,9 @@ class Experiment:
         # PUBLIC
         self.data = None
         self.folder_dictionary = dict()
-        self.meta = None
         self.modifications = [(get_date(), get_time())]
         _directory = Meta[0]
         self._create_folder_dictionary(_directory, ExperimentName)
-        self._fill_imaging_folder_dictionary()
 
     @property
     def instance_date(self) -> str:
@@ -654,52 +652,13 @@ class Experiment:
     def experiment_id(self) -> str:
         return self._Experiment__experiment_id
 
-    def add_image_sampling_folder(self, SamplingRate: int) -> Self:
+    def copy_data(self) -> Self:
         """
-        Generates a folder for containing imaging data of a specific sampling rate
-
-        :param SamplingRate: Sampling Rate of Dataset in Hz
-        :type SamplingRate: int
-        :rtype: Any
-        """
-        SamplingRate = str(SamplingRate)  # Because we know I'll always forget and send an int anyway
-        _folder_name = "".join([self.folder_dictionary['imaging_folder'], "\\", SamplingRate, "Hz"])
-        _key_name = "".join(["imaging_", SamplingRate, "Hz"])
-        try:
-            os.makedirs(_folder_name)
-        except FileExistsError:
-            print("The sampling folder already exists. Adding to folder dictionary")
-        # setattr(self, _attr_name, ImagingAnalysis(_folder_name)) changing to be in folder dictionary
-        self.folder_dictionary[_key_name] = ImagingAnalysis(_folder_name)
-        self._generate_imaging_sampling_rate_subdirectory(_folder_name)
-        self.update_folder_dictionary()
-
-    def copy_raw_imaging_data(self) -> Self:
-        """
-        This function copies raw imaging data to the appropriate folder
+        Interactive tool to copy data to directory
 
         :rtype: Any
         """
-
-        _raw_imaging_data_path = select_directory(title="Select folder containing raw imaging data", mustexist=True)
-        verbose_copying(_raw_imaging_data_path, self.folder_dictionary.get("raw_imaging_data").path)
-
-    def load_data(self, ImagingParameters: Optional[Union[dict, list[dict]]] = None, *args: Optional[Tuple[str, str]], **kwargs) -> Self:
-        """
-        Loads all data
-
-        :param ImagingParameters: Parameters for some imaging dataset or list of datasets (e.g., for two different sampling rates)
-        :type ImagingParameters: Optional[dict]
-        :param args: Optionally pass Sync Key to synchronize bruker recordings
-        :type args: Tuple[str, str]
-        :param kwargs: passed to internal functions taking kwargs
-        :rtype: Any
-        :rtype: Any
-        """
-
-        # Load Imaging Meta
-        if ImagingParameters is not None:
-            self._load_bruker_meta_data()
+        return
 
     def record_mod(self) -> Self:
         """
@@ -723,14 +682,6 @@ class Experiment:
         for _key in _update_keys:
             self.folder_dictionary.get(_key).reindex()
 
-        # for _key in self.folder_dictionary.keys():
-        #   if isinstance(self.folder_dictionary.get(_key), Data):
-        #        self.folder_dictionary.get(_key).reindex()
-        #    elif isinstance(self.folder_dictionary.get(_key), Images):
-        #        self.folder_dictionary.get(_key).reindex()
-        #    elif isinstance(self.folder_dictionary.get(_key), ImagingAnalysis):
-        #        self.folder_dictionary.get(_key).reindex()
-
     def _create_folder_dictionary(self, Directory: str, ExperimentName: str) -> Self:
         """
         Creates a dictionary of locations for specific files
@@ -750,6 +701,46 @@ class Experiment:
             'behavior_folder': _experiment_directory + "\\Behavior",
             "figures_folder": Figures("".join([_experiment_directory, "\\Figures"])),
         }
+
+
+class ImagingExperiment(Experiment):
+    """
+    :class:`Experiment <Management.Organization.Experiment>` class for a generic imaging experiment
+
+    **Required Inputs**
+        | *Meta* : Passed meta from mouse  (directory, mouse_id)
+        | *ExperimentName* : Title of experiment
+
+    **Properties**
+        | *mouse_id* : Identifies which mouse this data belongs to
+        | *instance_data* : Identifies when this experiment was created
+
+    **Attributes**
+        | *data* : a pandas dataframe containing synchronized data
+        | *folder_dictionary* : A dictionary of relevant folders for this experiment
+        | *meta* : bruker metadata
+        | *modifications* : List of modifications made to this experiment
+
+    **Public Methods**
+        | *add_image_sampling_folder* : Generates a folder for containing imaging data of a specific sampling rate
+        | *copy_raw_imaging_data* : Interactive tool for copying raw imaging data
+        | *load_data* : Loads all data
+        | *record_mod* :  Records a modification made to the experiment (Date & Time)
+        | *update_folder_dictionary* : This function re-indexes all folders in the folder dictionary
+
+    """
+
+    def __init__(self, Meta: Tuple[str, str], ExperimentName: str):
+        """
+        :param Meta: Passed Meta from experimental hierarchy
+        :type Meta: tuple[str, str]
+        :param ExperimentName: Title of ExperimentName
+        :type ExperimentName: str
+        """
+        super().__init__(Meta, ExperimentName)
+
+        self.meta = None
+        self._fill_imaging_folder_dictionary()
 
     def _fill_imaging_folder_dictionary(self) -> Self:
         """
@@ -795,6 +786,59 @@ class Experiment:
         _files = [_files[0], _files[2], _files[1]]
         # Rearrange as Imaging, Voltage Recording, Voltage Output
         self.meta = self._load_bruker_meta_file(_files)
+
+    def add_image_sampling_folder(self, SamplingRate: int) -> Self:
+        """
+        Generates a folder for containing imaging data of a specific sampling rate
+
+        :param SamplingRate: Sampling Rate of Dataset in Hz
+        :type SamplingRate: int
+        :rtype: Any
+        """
+        SamplingRate = str(SamplingRate)  # Because we know I'll always forget and send an int anyway
+        _folder_name = "".join([self.folder_dictionary['imaging_folder'], "\\", SamplingRate, "Hz"])
+        _key_name = "".join(["imaging_", SamplingRate, "Hz"])
+        try:
+            os.makedirs(_folder_name)
+        except FileExistsError:
+            print("The sampling folder already exists. Adding to folder dictionary")
+        # setattr(self, _attr_name, ImagingAnalysis(_folder_name)) changing to be in folder dictionary
+        self.folder_dictionary[_key_name] = ImagingAnalysis(_folder_name)
+        self._generate_imaging_sampling_rate_subdirectory(_folder_name)
+        self.update_folder_dictionary()
+
+    def copy_data(self) -> Self:
+        self.copy_raw_imaging_data()
+
+    def copy_raw_imaging_data(self) -> Self:
+        """
+        This function copies raw imaging data to the appropriate folder
+
+        :rtype: Any
+        """
+
+        _raw_imaging_data_path = select_directory(title="Select folder containing raw imaging data", mustexist=True)
+        verbose_copying(_raw_imaging_data_path, self.folder_dictionary.get("raw_imaging_data").path)
+
+    def load_data(self, ImagingParameters: Optional[Union[dict, list[dict]]] = None) -> Self:
+        """
+        Loads all data
+
+        :param ImagingParameters: Parameters for some imaging dataset or list of datasets (e.g., for two different sampling rates)
+        :type ImagingParameters: Optional[dict]
+        :rtype: Any
+        """
+        # Load Behavior
+        if self.data is not None:
+            input("\nDetected there is currently data loaded!\n Would you like to Overwrite?(Y/N)\n")
+            if input == "Y" or input == "Yes" or input == "Ye" or input == "es":
+                pass
+            else:
+                return
+
+        # Load Imaging Meta
+        if ImagingParameters is not None:
+            self._load_bruker_meta_data()
 
     @classmethod
     def _generate_imaging_sampling_rate_subdirectory(cls, SampFreqDirectory: str) -> None:
@@ -854,9 +898,10 @@ class Experiment:
         return meta
 
 
+
 class BehavioralExperiment(Experiment):
     """
-    Data Class for a generic day of a behavioral task
+    :class:`Experiment <Management.Organization.Experiment>` class for a generic day of a behavioral task
 
     **Required Inputs**
         | *Meta* : Passed meta from experimental hierarchy (directory, mouse_id)
@@ -870,13 +915,12 @@ class BehavioralExperiment(Experiment):
         | *data* : Pandas dataframe of synced data
         | *folder_dictionary* : A dictionary of relevant folders for this behavioral ExperimentName
         | *modifications* : List of modifications made to this behavioral ExperimentName
-        | *meta* : bruker metadata
         | *multi_index*: Pandas multi-index of behavioral components
         | *state_index* : look-up table / index relating states to integers
         | *trial_parameters* : behavioral parameters
 
     **Methods**
-        | *add_image_sampling_folder* : Generates a folder for containing imaging data of a specific sampling rate
+        | *copy_raw_behavioral_data* : Interactive tool for copying raw behavioral data
         | *load_data* : Loads all data
         | *record_mod* :  Records a modification made to the behavioral ExperimentName (Date & Time)
         | *update_folder_dictionary* : This function re-indexes all folders in the folder dictionary
@@ -896,21 +940,10 @@ class BehavioralExperiment(Experiment):
         self.state_index = dict()
         self.trial_parameters = dict()
 
-        # noinspection PyBroadException
-        # Try:
-        #    self.load_data()
-        # except Exception:
-        #    print(sys.exc_info())
-
-    def load_data(self, ImagingParameters: Optional[Union[dict, list[dict]]] = None, *args: Optional[Tuple[str, str]], **kwargs) -> Self:
+    def load_data(self) -> Self:
         """
-         Loads all data
+         Loads behavioral data
 
-        :param ImagingParameters: Parameters for some imaging dataset or list of datasets (e.g., for two different sampling rates)
-        :type ImagingParameters: Optional[dict]
-        :param args: Optionally pass Sync Key to synchronize bruker recordings
-        :type args: Tuple[str, str]
-        :param kwargs: passed to internal functions taking kwargs
         :rtype: Any
         """
 
@@ -924,24 +957,15 @@ class BehavioralExperiment(Experiment):
 
         self._load_base_behavior()
 
-        # Load Imaging Meta
-        if ImagingParameters is not None:
-            self._load_bruker_meta_data()
+    def copy_raw_behavioral_data(self) -> Self:
+        """
+        Interactive tool for copying raw behavioral data
 
-        # Sync Imaging Data
-        if args and ImagingParameters is not None:
-            if isinstance(ImagingParameters, dict):
-                self.data = self._sync_bruker_recordings(self.data, self._load_bruker_analog_recordings(), self.meta,
-                                                         self.state_index, *args, ImagingParameters)
-                if ImagingParameters.get(("preprocessing", "grouped-z project bin size")):
-                    self.data = self._sync_grouped_z_projected_images(self.data, self.meta, ImagingParameters)
-            elif isinstance(ImagingParameters, list) and isinstance(ImagingParameters[-1], dict):
-                self.data = self._sync_bruker_recordings(self.data, self._load_bruker_analog_recordings(), self.meta,
-                                                         self.state_index, *args, ImagingParameters[0])
-                for _sampling in range(1, ImagingParameters.__len__(), 1):
-                    self.data = self._sync_grouped_z_projected_images(
-                        self.data, self.meta, ImagingParameters[_sampling],
-                        "".join(["Down-sampled Imaging Frame Set ", str(_sampling)]))
+        :rtype: Any
+        """
+
+        raw_behavioral_data_path = select_directory(title="Select folder containing raw behavioral data", mustexist=True)
+        verbose_copying(_raw_imaging_data_path, self.folder_dictionary.get("raw_behavioral_data").path)
 
     def _load_base_behavior(self) -> Self:
         """
@@ -1137,6 +1161,94 @@ class BehavioralExperiment(Experiment):
 
         return OrganizedData, StateCastedDict, MultiIndex
 
+
+class ImagingBehaviorExperiment(ImagingExperiment, BehavioralExperiment):
+    """
+    :class:`Experiment <Management.Organization.Experiment>` class for a generic day of an
+    :class:`Imaging <Management.Organization.ImagingExperiment>` /
+    :class:`Behavioral <Management.Organization.BehavioralExperiment>` experiment
+
+    **Required Inputs**
+        | *Meta* : Passed meta from experimental hierarchy (directory, mouse_id)
+        | *ExperimentName* : Title of ExperimentName
+
+    **Properties**
+        | *mouse_id* : Identifies which mouse this data belongs to
+        | *instance_data* : Identifies when this behavioral ExperimentName was created
+
+    **Attributes**
+        | *data* : Pandas dataframe of synced data
+        | *folder_dictionary* : A dictionary of relevant folders for this behavioral ExperimentName
+        | *modifications* : List of modifications made to this behavioral ExperimentName
+        | *meta* : bruker metadata
+        | *multi_index*: Pandas multi-index of behavioral components
+        | *state_index* : look-up table / index relating states to integers
+        | *trial_parameters* : behavioral parameters
+
+    **Methods**
+        | *copy_raw_imaging_data* : Interactive tool for copying raw imaging data
+        | *copy_raw_behavioral_data* : Interactive tool for copying raw behavioral data
+        | *load_data* : Loads all data
+        | *record_mod* :  Records a modification made to the experiment (Date & Time)
+        | *update_folder_dictionary* : This function re-indexes all folders in the folder dictionary
+
+    """
+
+    def __init__(self, Meta: Tuple[str, str], ExperimentName: str):
+        """
+        :param Meta: Passed Meta from experimental hierarchy
+        :type Meta: tuple[str, str]
+        :param ExperimentName: Title of ExperimentName
+        :type ExperimentName: str
+        """
+        super().__init__(Meta, ExperimentName)
+
+    def load_data(self, ImagingParameters: Optional[Union[dict, list[dict]]] = None,
+                  *args: Optional[Tuple[str, str]], **kwargs) -> Self:
+        """
+         Loads all data
+
+        :param ImagingParameters: Parameters for some imaging dataset or list of datasets
+        (e.g., for two different sampling rates)
+        :type ImagingParameters: Optional[dict]
+        :param args: Optionally pass Sync Key to synchronize bruker recordings
+        :type args: Tuple[str, str]
+        :param kwargs: passed to internal functions taking kwargs
+        :rtype: Any
+        """
+        # Load Behavior
+        if self.data is not None:
+            input("\nDetected there is currently data loaded!\n Would you like to Overwrite?(Y/N)\n")
+            if input == "Y" or input == "Yes" or input == "Ye" or input == "es":
+                pass
+            else:
+                return
+
+        self._load_base_behavior()
+
+        # Load Imaging Meta
+        if ImagingParameters is not None:
+            self._load_bruker_meta_data()
+
+        # Sync Imaging Data
+        if args and ImagingParameters is not None:
+            if isinstance(ImagingParameters, dict):
+                self.data = self._sync_bruker_recordings(self.data, self._load_bruker_analog_recordings(), self.meta,
+                                                         self.state_index, *args, ImagingParameters)
+                if ImagingParameters.get(("preprocessing", "grouped-z project bin size")):
+                    self.data = self._sync_grouped_z_projected_images(self.data, self.meta, ImagingParameters)
+            elif isinstance(ImagingParameters, list) and isinstance(ImagingParameters[-1], dict):
+                self.data = self._sync_bruker_recordings(self.data, self._load_bruker_analog_recordings(), self.meta,
+                                                         self.state_index, *args, ImagingParameters[0])
+                for _sampling in range(1, ImagingParameters.__len__(), 1):
+                    self.data = self._sync_grouped_z_projected_images(
+                        self.data, self.meta, ImagingParameters[_sampling],
+                        "".join(["Down-sampled Imaging Frame Set ", str(_sampling)]))
+
+    def copy_data(self) -> Self:
+        self.copy_raw_imaging_data()
+        self.copy_raw_behavioral_data()
+
     @staticmethod
     def _sync_bruker_recordings(DataFrame: pd.DataFrame, AnalogRecordings: pd.DataFrame, MetaData: BrukerMeta,
                                 StateCastedDict: dict,
@@ -1178,8 +1290,10 @@ class BehavioralExperiment(Experiment):
             _first_peak_diff *= -1
             _AR_signal = pd.DataFrame(AnalogRecordings.iloc[_first_peak_diff:, 1:].to_numpy(),
                                       index=np.around(
-                                          (AnalogRecordings.index.to_numpy()[_first_peak_diff:] - _first_peak_diff) /
-                                          int(MetaData.acquisition_rate), decimals=3) + DataFrame.index.to_numpy()[0])
+                                          (AnalogRecordings.index.to_numpy()[
+                                           _first_peak_diff:] - _first_peak_diff) /
+                                          int(MetaData.acquisition_rate), decimals=3) + DataFrame.index.to_numpy()[
+                                                0])
             _AR_signal.columns = AnalogRecordings.columns[1:]
 
             _frames = pd.Series(np.arange(0, MetaData.imaging_metadata.get("relativeTimes").__len__(), 1),
@@ -1244,7 +1358,8 @@ class BehavioralExperiment(Experiment):
         return DataFrame
 
     @staticmethod
-    def _sync_grouped_z_projected_images(DataFrame: pd.DataFrame, MetaData: BrukerMeta, Parameters: dict, *args: str) -> \
+    def _sync_grouped_z_projected_images(DataFrame: pd.DataFrame, MetaData: BrukerMeta, Parameters: dict,
+                                         *args: str) -> \
             pd.DataFrame:
         print("\nSyncing Images...")
 
@@ -1270,13 +1385,14 @@ class BehavioralExperiment(Experiment):
             _additional_crop_downsample = _artifact_free_downsample_frames % _chunk_size
             _first_downsample_frame = _artifact_free_downsample_frames + _additional_crop_downsample
         _projected_frames = np.arange(_first_downsample_frame, _num_frames, 3)
-        _projected_first_frame = _projected_frames[0]*3
+        _projected_first_frame = _projected_frames[0] * 3
         _matching_frames = np.arange(_projected_first_frame, _num_frames, 3) + 1
         # make the center frame the timestamp instead of the first frame
         _time_stamp = np.full(_matching_frames.shape, -1, dtype=np.float64)
         for _frame in range(_matching_frames.__len__()):
             try:
-                _time_stamp[_frame] = DataFrame.index.to_numpy()[np.where(DataFrame["Imaging Frame"].to_numpy() == _matching_frames[_frame])[0]]
+                _time_stamp[_frame] = DataFrame.index.to_numpy()[
+                    np.where(DataFrame["Imaging Frame"].to_numpy() == _matching_frames[_frame])[0]]
             except ValueError:
                 pass
         _true_idx = np.where(_time_stamp != -1)[0]
@@ -1446,7 +1562,8 @@ This is a class for managing a folder of unorganized data files
 
 class Images(Data):
     """
-    Class specifically for folders containing raw images, inherits collected data folder
+    :class:`Data Folder <Management.Organization.Data>` specifically for folders containing raw images.
+
     """
 
     def __init__(self, Path: str):
@@ -1554,7 +1671,7 @@ class Images(Data):
 
 class ImagingAnalysis(Data):
     """
-    Class specifically for imaging analysis folders, inherits collected data folder
+    :class:`Data Folder <Management.Organization.Data>` specifically for imaging analysis folders.
 
     **Self Methods**
         | *load_fissa_exports* : loads fissa exported files
@@ -1840,7 +1957,7 @@ class ImagingAnalysis(Data):
 
 class Figures(Data):
     """
-    A class for storing figures, inherits collected data folder
+    :class:`Data Folder <Management.Organization.Data>` specifically for storing figures.
 
     """
 

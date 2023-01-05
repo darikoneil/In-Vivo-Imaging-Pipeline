@@ -12,7 +12,7 @@ def select_directory(**kwargs) -> str:
 
     # collect path & format
     # noinspection PyArgumentList
-    path = askdirectory()
+    path = askdirectory(**kwargs)
     path = str(pathlib.Path(path))
 
     # destroy root
@@ -27,6 +27,10 @@ def verbose_copying(src, dst) -> None:
         src = pathlib.Path(src)
     if isinstance(dst, pathlib.Path):
         dst = str(dst)
+
+    # Make sure destination is not the source
+    if src == dst:
+        raise ValueError("Destination and source files are identical")
 
     _num_files = sum([1 for _file in src.rglob("*") if _file.is_file()])
     _pbar = tqdm(total=_num_files)
