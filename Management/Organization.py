@@ -23,7 +23,7 @@ class Study:
 
 class Mouse:
     """
-    Class for Organizing & Managing Experimental Data Across Sessions
+    Class for organizing & managing experimental data within one mouse.
 
     **Keyword Arguments**
         | *Logfile* : Path to existing log file (str, default None)
@@ -34,17 +34,17 @@ class Mouse:
         | *StudyMouse* : Study ID (str, default None)
 
     **Properties**
-        | *mouse_id* : ID of Mouse
-        | *log_file* : Log Filename Path
         | *experimental_condition* : Experiment condition of the mouse
+        | *log_file* : Log Filename Path
         | *instance_data* : Date when this experimental hierarchy was created
+        | *mouse_id* : ID of Mouse
 
     **Attributes**
         | *directory* : Experimental Hierarchy Directory
         | *experiments* : Names of included experiments
+        | *modifications* : modifications made to this file
         | *study* : Study
         | *study_mouse* : ID of mouse in study
-        | *modifications* : modifications made to this file
 
     **Public Class Methods**
         | *load* : Function that loads the entire mouse
@@ -1690,9 +1690,24 @@ class ImagingAnalysis(Data):
         # self.default_folders()
 
     @property
-    def current_ExperimentName(self) -> str:
+    def current_experiment(self) -> str:
         """
-        ExperimentName of Analysis
+        Current stage in imaging analysis
+
+            | 1. Compilation
+            | 2. Pre-Processing
+            | 3. Motion Correction `Suite2P <https://github.com/MouseLand/suite2p>`_
+            | 4. Denoising (Optional) `DeepCAD <https://github.com/cabooster/DeepCAD>`_
+            | 5. ROI Detection `CellPose <https://github.com/MouseLand/cellpose>`_
+            | 6. Float-32 Trace Extraction `Suite2P <https://github.com/MouseLand/suite2p>`_
+            | 7. ROI Classification `CellPose <https://github.com/MouseLand/cellpose>`_
+            | 8. Spike Inference [Formality] `Suite2P <https://github.com/MouseLand/suite2p>`_
+            | 9. Float-64 Trace Extraction `Fissa <https://github.com/rochefort-lab/fissa>`_
+            | 10. Post-Processing
+            | 11. Source-Separation `Fissa <https://github.com/rochefort-lab/fissa>`_
+            | 12. Infer Spike Probability `Cascade <https://github.com/HelmchenLabSoftware/Cascade>`_
+            | 13. Discrete Event Inference `Cascade <https://github.com/HelmchenLabSoftware/Cascade>`_
+            | 14. Ready for Analysis
 
         :rtype: str
         """
@@ -1701,10 +1716,12 @@ class ImagingAnalysis(Data):
             return "Ready for Analysis"
         elif 1 < self.find_matching_files("cascade").__len__() < 3:
             return "Cascade: Discrete Inference"
-        elif self.find_matching_files("fissa").__len__() >= 2:
+        elif self.find_matching_files("fissa").__len__() >= 3:
             return "Cascade: Spike Probability"
-        elif 1 <= self.find_matching_files("fissa").__len__() < 2:
+        elif 2 <= self.find_matching_files("fissa").__len__() < 3:
             return "Fissa: Source-Separation"
+        elif self.find_matching_files("fissa").__len__() == 1:
+            return "Post-Processing"
         elif self.find_matching_files("spks.npy", "suite2p\\plane0").__len__() > 0:
             return "Fissa: Trace Extraction"
         elif self.find_matching_files("iscell.npy", "suite2p\\plane0").__len__() > 0:
@@ -1716,9 +1733,13 @@ class ImagingAnalysis(Data):
         elif self.find_matching_files("denoised").__len__() >= 1:
             return "Suite2P: ROI Detection"
         elif self.find_matching_files("suite2p").__len__() >= 2:
-            return "DeepCAD: ModifiedDenoising"
+            return "DeepCAD: Denoising"
+        elif self.find_matching_files("meta", "compiled").__len__() > 0:
+            return "Suite2P: Motion Correction"
+        elif self.find_matching_files("compiled", "compiled").__len__() >= 1:
+            return "Pre-Processing"
         else:
-            return "Motion Correction"
+            return "Compilation"
 
     def add_notes(self, Step: str, KeyOrDict: Union[str, dict], Notes: Optional[Any] = None) -> Self:
         """
