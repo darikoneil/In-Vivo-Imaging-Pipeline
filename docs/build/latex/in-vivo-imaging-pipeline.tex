@@ -61,7 +61,7 @@
 
 
 \title{In\sphinxhyphen{}Vivo\sphinxhyphen{}Imaging\sphinxhyphen{}Pipeline}
-\date{Jan 03, 2023}
+\date{Jan 04, 2023}
 \release{0.0.0}
 \author{Darik A.\@{} O\textquotesingle{}Neil}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -90,6 +90,59 @@
 \sphinxstepscope
 
 
+\section{ConfigHandling module}
+\label{\detokenize{ConfigHandling:module-ConfigHandling}}\label{\detokenize{ConfigHandling:confighandling-module}}\label{\detokenize{ConfigHandling::doc}}\index{module@\spxentry{module}!ConfigHandling@\spxentry{ConfigHandling}}\index{ConfigHandling@\spxentry{ConfigHandling}!module@\spxentry{module}}\index{config\_generator() (in module ConfigHandling)@\spxentry{config\_generator()}\spxextra{in module ConfigHandling}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{ConfigHandling:ConfigHandling.config_generator}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{ConfigHandling.}}\sphinxbfcode{\sphinxupquote{config\_generator}}}{\emph{\DUrole{n}{Config}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}dict\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{{ $\rightarrow$ None}}
+\pysigstopsignatures
+\sphinxAtStartPar
+Generates a configuration file
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{Config}} (\sphinxstyleliteralemphasis{\sphinxupquote{dict}}) \textendash{} Configuration to write to file (Optional)
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+None
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{config\_reader() (in module ConfigHandling)@\spxentry{config\_reader()}\spxextra{in module ConfigHandling}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{ConfigHandling:ConfigHandling.config_reader}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{ConfigHandling.}}\sphinxbfcode{\sphinxupquote{config\_reader}}}{\emph{\DUrole{n}{File}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}}}{{ $\rightarrow$ dict}}
+\pysigstopsignatures
+\sphinxAtStartPar
+Reads config into a dictionary
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{File}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} Configuration File (Optional)
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+Configuration
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+dict
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+\sphinxstepscope
+
+
 \section{Organization module}
 \label{\detokenize{Organization:module-Organization}}\label{\detokenize{Organization:organization-module}}\label{\detokenize{Organization::doc}}\index{module@\spxentry{module}!Organization@\spxentry{Organization}}\index{Organization@\spxentry{Organization}!module@\spxentry{module}}\index{BehavioralExperiment (class in Organization)@\spxentry{BehavioralExperiment}\spxextra{class in Organization}}
 
@@ -102,7 +155,7 @@
 Bases: {\hyperref[\detokenize{Organization:Organization.Experiment}]{\sphinxcrossref{\sphinxcode{\sphinxupquote{Experiment}}}}}
 
 \sphinxAtStartPar
-Data Class for a generic day of a behavioral task
+\sphinxcode{\sphinxupquote{Experiment}} class for a generic day of a behavioral task
 \begin{description}
 \sphinxlineitem{\sphinxstylestrong{Required Inputs}}
 \begin{DUlineblock}{0em}
@@ -121,7 +174,6 @@ Data Class for a generic day of a behavioral task
 \item[] \sphinxstyleemphasis{data} : Pandas dataframe of synced data
 \item[] \sphinxstyleemphasis{folder\_dictionary} : A dictionary of relevant folders for this behavioral ExperimentName
 \item[] \sphinxstyleemphasis{modifications} : List of modifications made to this behavioral ExperimentName
-\item[] \sphinxstyleemphasis{meta} : bruker metadata
 \item[] \sphinxstyleemphasis{multi\_index}: Pandas multi\sphinxhyphen{}index of behavioral components
 \item[] \sphinxstyleemphasis{state\_index} : look\sphinxhyphen{}up table / index relating states to integers
 \item[] \sphinxstyleemphasis{trial\_parameters} : behavioral parameters
@@ -129,40 +181,43 @@ Data Class for a generic day of a behavioral task
 
 \sphinxlineitem{\sphinxstylestrong{Methods}}
 \begin{DUlineblock}{0em}
-\item[] \sphinxstyleemphasis{add\_image\_sampling\_folder} : Generates a folder for containing imaging data of a specific sampling rate
+\item[] \sphinxstyleemphasis{copy\_raw\_behavioral\_data} : Interactive tool for copying raw behavioral data
 \item[] \sphinxstyleemphasis{load\_data} : Loads all data
 \item[] \sphinxstyleemphasis{record\_mod} :  Records a modification made to the behavioral ExperimentName (Date \& Time)
 \item[] \sphinxstyleemphasis{update\_folder\_dictionary} : This function re\sphinxhyphen{}indexes all folders in the folder dictionary
 \end{DUlineblock}
 
 \end{description}
+\index{copy\_raw\_behavioral\_data() (Organization.BehavioralExperiment method)@\spxentry{copy\_raw\_behavioral\_data()}\spxextra{Organization.BehavioralExperiment method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Organization:Organization.BehavioralExperiment.copy_raw_behavioral_data}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{copy\_raw\_behavioral\_data}}}{}{{ $\rightarrow$ Self}}
+\pysigstopsignatures
+\sphinxAtStartPar
+Interactive tool for copying raw behavioral data
+\begin{quote}\begin{description}
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+Any
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
 \index{load\_data() (Organization.BehavioralExperiment method)@\spxentry{load\_data()}\spxextra{Organization.BehavioralExperiment method}}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{Organization:Organization.BehavioralExperiment.load_data}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{load\_data}}}{\emph{\DUrole{n}{ImagingParameters}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}Union\DUrole{p}{{[}}dict\DUrole{p}{,}\DUrole{w}{  }list\DUrole{p}{{[}}dict\DUrole{p}{{]}}\DUrole{p}{{]}}\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{o}{*}\DUrole{n}{args}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}Tuple\DUrole{p}{{[}}str\DUrole{p}{,}\DUrole{w}{  }str\DUrole{p}{{]}}\DUrole{p}{{]}}}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{{ $\rightarrow$ Self}}
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{load\_data}}}{}{{ $\rightarrow$ Self}}
 \pysigstopsignatures\begin{quote}
 
 \sphinxAtStartPar
-Loads all data
+Loads behavioral data
 \end{quote}
 \begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{ImagingParameters}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxstyleliteralemphasis{\sphinxupquote{dict}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \textendash{} Parameters for some imaging dataset or list of datasets (e.g., for two different sampling rates)
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{args}} (\sphinxstyleliteralemphasis{\sphinxupquote{Tuple}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxstyleliteralemphasis{\sphinxupquote{str}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{str}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \textendash{} Optionally pass Sync Key to synchronize bruker recordings
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{kwargs}} \textendash{} passed to internal functions taking kwargs
-
-\end{itemize}
-
 \sphinxlineitem{Return type}
 \sphinxAtStartPar
 Any
@@ -356,7 +411,7 @@ Bases: \sphinxcode{\sphinxupquote{object}}
 \begin{quote}
 
 \sphinxAtStartPar
-Class for a generic experiment
+Experiment class for a generic experiment
 \end{quote}
 \begin{description}
 \sphinxlineitem{\sphinxstylestrong{Required Inputs}}
@@ -375,42 +430,28 @@ Class for a generic experiment
 \begin{DUlineblock}{0em}
 \item[] \sphinxstyleemphasis{data} : a pandas dataframe containing synchronized data
 \item[] \sphinxstyleemphasis{folder\_dictionary} : A dictionary of relevant folders for this experiment
-\item[] \sphinxstyleemphasis{meta} : bruker metadata
 \item[] \sphinxstyleemphasis{modifications} : List of modifications made to this experiment
 \end{DUlineblock}
 
 \sphinxlineitem{\sphinxstylestrong{Public Methods}}
 \begin{DUlineblock}{0em}
-\item[] \sphinxstyleemphasis{add\_image\_sampling\_folder} : Generates a folder for containing imaging data of a specific sampling rate
-\item[] \sphinxstyleemphasis{load\_data} : Loads all data
+\item[] \sphinxstyleemphasis{copy\_data} : Interactive tool to copy data to directory (Intended to be overwritten during inheritance)
+\item[] \sphinxstyleemphasis{load\_data} : Loads all data (Intended to be overwritten during inheritance)
 \item[] \sphinxstyleemphasis{record\_mod} :  Records a modification made to the experiment (Date \& Time)
 \item[] \sphinxstyleemphasis{update\_folder\_dictionary} : This function re\sphinxhyphen{}indexes all folders in the folder dictionary
 \end{DUlineblock}
 
 \end{description}
-\index{ExperimentName\_id (Organization.Experiment property)@\spxentry{ExperimentName\_id}\spxextra{Organization.Experiment property}}
+\index{copy\_data() (Organization.Experiment method)@\spxentry{copy\_data()}\spxextra{Organization.Experiment method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{Organization:Organization.Experiment.ExperimentName_id}}
+\phantomsection\label{\detokenize{Organization:Organization.Experiment.copy_data}}
 \pysigstartsignatures
-\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{ExperimentName\_id}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }str}}}
-\pysigstopsignatures
-\end{fulllineitems}
-
-\index{add\_image\_sampling\_folder() (Organization.Experiment method)@\spxentry{add\_image\_sampling\_folder()}\spxextra{Organization.Experiment method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{Organization:Organization.Experiment.add_image_sampling_folder}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{add\_image\_sampling\_folder}}}{\emph{\DUrole{n}{SamplingRate}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{int}}}{{ $\rightarrow$ Self}}
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{copy\_data}}}{}{{ $\rightarrow$ Self}}
 \pysigstopsignatures
 \sphinxAtStartPar
-Generates a folder for containing imaging data of a specific sampling rate
+Interactive tool to copy data to directory
 \begin{quote}\begin{description}
-\sphinxlineitem{Parameters}
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{SamplingRate}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Sampling Rate of Dataset in Hz
-
 \sphinxlineitem{Return type}
 \sphinxAtStartPar
 Any
@@ -419,22 +460,13 @@ Any
 
 \end{fulllineitems}
 
-\index{copy\_raw\_imaging\_data() (Organization.Experiment method)@\spxentry{copy\_raw\_imaging\_data()}\spxextra{Organization.Experiment method}}
+\index{experiment\_id (Organization.Experiment property)@\spxentry{experiment\_id}\spxextra{Organization.Experiment property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{Organization:Organization.Experiment.copy_raw_imaging_data}}
+\phantomsection\label{\detokenize{Organization:Organization.Experiment.experiment_id}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{copy\_raw\_imaging\_data}}}{}{{ $\rightarrow$ Self}}
+\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{experiment\_id}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }str}}}
 \pysigstopsignatures
-\sphinxAtStartPar
-This function copies raw imaging data to the appropriate folder
-\begin{quote}\begin{description}
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-Any
-
-\end{description}\end{quote}
-
 \end{fulllineitems}
 
 \index{instance\_date (Organization.Experiment property)@\spxentry{instance\_date}\spxextra{Organization.Experiment property}}
@@ -450,43 +482,6 @@ Date created
 \sphinxlineitem{Return type}
 \sphinxAtStartPar
 str
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{load\_data() (Organization.Experiment method)@\spxentry{load\_data()}\spxextra{Organization.Experiment method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{Organization:Organization.Experiment.load_data}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{load\_data}}}{\emph{\DUrole{n}{ImagingParameters}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}Union\DUrole{p}{{[}}dict\DUrole{p}{,}\DUrole{w}{  }list\DUrole{p}{{[}}dict\DUrole{p}{{]}}\DUrole{p}{{]}}\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{o}{*}\DUrole{n}{args}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}Tuple\DUrole{p}{{[}}str\DUrole{p}{,}\DUrole{w}{  }str\DUrole{p}{{]}}\DUrole{p}{{]}}}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{{ $\rightarrow$ Self}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Loads all data
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{ImagingParameters}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxstyleliteralemphasis{\sphinxupquote{dict}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \textendash{} Parameters for some imaging dataset or list of datasets (e.g., for two different sampling rates)
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{args}} (\sphinxstyleliteralemphasis{\sphinxupquote{Tuple}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxstyleliteralemphasis{\sphinxupquote{str}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{str}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \textendash{} Optionally pass Sync Key to synchronize bruker recordings
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{kwargs}} \textendash{} passed to internal functions taking kwargs
-
-\end{itemize}
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-Any
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-Any
 
 \end{description}\end{quote}
 
@@ -560,7 +555,7 @@ Any
 Bases: {\hyperref[\detokenize{Organization:Organization.Data}]{\sphinxcrossref{\sphinxcode{\sphinxupquote{Data}}}}}
 
 \sphinxAtStartPar
-A class for storing figures, inherits collected data folder
+\sphinxcode{\sphinxupquote{Data Folder}} specifically for storing figures.
 \index{view\_figure() (Organization.Figures method)@\spxentry{view\_figure()}\spxextra{Organization.Figures method}}
 
 \begin{fulllineitems}
@@ -601,7 +596,7 @@ Any
 Bases: {\hyperref[\detokenize{Organization:Organization.Data}]{\sphinxcrossref{\sphinxcode{\sphinxupquote{Data}}}}}
 
 \sphinxAtStartPar
-Class specifically for folders containing raw images, inherits collected data folder
+\sphinxcode{\sphinxupquote{Data Folder}} specifically for folders containing raw images.
 \index{channels (Organization.Images property)@\spxentry{channels}\spxextra{Organization.Images property}}
 
 \begin{fulllineitems}
@@ -724,7 +719,7 @@ None
 Bases: {\hyperref[\detokenize{Organization:Organization.Data}]{\sphinxcrossref{\sphinxcode{\sphinxupquote{Data}}}}}
 
 \sphinxAtStartPar
-Class specifically for imaging analysis folders, inherits collected data folder
+\sphinxcode{\sphinxupquote{Data Folder}} specifically for imaging analysis folders.
 \begin{description}
 \sphinxlineitem{\sphinxstylestrong{Self Methods}}
 \begin{DUlineblock}{0em}
@@ -916,6 +911,229 @@ tuple{[}dict, dict, dict{]}
 
 \end{fulllineitems}
 
+\index{ImagingBehaviorExperiment (class in Organization)@\spxentry{ImagingBehaviorExperiment}\spxextra{class in Organization}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Organization:Organization.ImagingBehaviorExperiment}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{Organization.}}\sphinxbfcode{\sphinxupquote{ImagingBehaviorExperiment}}}{\emph{\DUrole{n}{Meta}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Tuple\DUrole{p}{{[}}str\DUrole{p}{,}\DUrole{w}{  }str\DUrole{p}{{]}}}}, \emph{\DUrole{n}{ExperimentName}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Bases: {\hyperref[\detokenize{Organization:Organization.ImagingExperiment}]{\sphinxcrossref{\sphinxcode{\sphinxupquote{ImagingExperiment}}}}}, {\hyperref[\detokenize{Organization:Organization.BehavioralExperiment}]{\sphinxcrossref{\sphinxcode{\sphinxupquote{BehavioralExperiment}}}}}
+
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{Experiment}} class for a generic day of an
+\sphinxcode{\sphinxupquote{Imaging}} /
+\sphinxcode{\sphinxupquote{Behavioral}} experiment
+\begin{description}
+\sphinxlineitem{\sphinxstylestrong{Required Inputs}}
+\begin{DUlineblock}{0em}
+\item[] \sphinxstyleemphasis{Meta} : Passed meta from experimental hierarchy (directory, mouse\_id)
+\item[] \sphinxstyleemphasis{ExperimentName} : Title of ExperimentName
+\end{DUlineblock}
+
+\sphinxlineitem{\sphinxstylestrong{Properties}}
+\begin{DUlineblock}{0em}
+\item[] \sphinxstyleemphasis{mouse\_id} : Identifies which mouse this data belongs to
+\item[] \sphinxstyleemphasis{instance\_data} : Identifies when this behavioral ExperimentName was created
+\end{DUlineblock}
+
+\sphinxlineitem{\sphinxstylestrong{Attributes}}
+\begin{DUlineblock}{0em}
+\item[] \sphinxstyleemphasis{data} : Pandas dataframe of synced data
+\item[] \sphinxstyleemphasis{folder\_dictionary} : A dictionary of relevant folders for this behavioral ExperimentName
+\item[] \sphinxstyleemphasis{modifications} : List of modifications made to this behavioral ExperimentName
+\item[] \sphinxstyleemphasis{meta} : bruker metadata
+\item[] \sphinxstyleemphasis{multi\_index}: Pandas multi\sphinxhyphen{}index of behavioral components
+\item[] \sphinxstyleemphasis{state\_index} : look\sphinxhyphen{}up table / index relating states to integers
+\item[] \sphinxstyleemphasis{trial\_parameters} : behavioral parameters
+\end{DUlineblock}
+
+\sphinxlineitem{\sphinxstylestrong{Methods}}
+\begin{DUlineblock}{0em}
+\item[] \sphinxstyleemphasis{copy\_raw\_imaging\_data} : Interactive tool for copying raw imaging data
+\item[] \sphinxstyleemphasis{copy\_raw\_behavioral\_data} : Interactive tool for copying raw behavioral data
+\item[] \sphinxstyleemphasis{load\_data} : Loads all data
+\item[] \sphinxstyleemphasis{record\_mod} :  Records a modification made to the experiment (Date \& Time)
+\item[] \sphinxstyleemphasis{update\_folder\_dictionary} : This function re\sphinxhyphen{}indexes all folders in the folder dictionary
+\end{DUlineblock}
+
+\end{description}
+\index{copy\_data() (Organization.ImagingBehaviorExperiment method)@\spxentry{copy\_data()}\spxextra{Organization.ImagingBehaviorExperiment method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Organization:Organization.ImagingBehaviorExperiment.copy_data}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{copy\_data}}}{}{{ $\rightarrow$ Self}}
+\pysigstopsignatures
+\sphinxAtStartPar
+Interactive tool to copy data to directory
+\begin{quote}\begin{description}
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+Any
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{load\_data() (Organization.ImagingBehaviorExperiment method)@\spxentry{load\_data()}\spxextra{Organization.ImagingBehaviorExperiment method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Organization:Organization.ImagingBehaviorExperiment.load_data}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{load\_data}}}{\emph{\DUrole{n}{ImagingParameters}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}Union\DUrole{p}{{[}}dict\DUrole{p}{,}\DUrole{w}{  }list\DUrole{p}{{[}}dict\DUrole{p}{{]}}\DUrole{p}{{]}}\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{o}{*}\DUrole{n}{args}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}Tuple\DUrole{p}{{[}}str\DUrole{p}{,}\DUrole{w}{  }str\DUrole{p}{{]}}\DUrole{p}{{]}}}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{{ $\rightarrow$ Self}}
+\pysigstopsignatures\begin{quote}
+
+\sphinxAtStartPar
+Loads all data
+\end{quote}
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{ImagingParameters}} \textendash{} Parameters for some imaging dataset or list of datasets
+
+\end{description}\end{quote}
+
+\sphinxAtStartPar
+(e.g., for two different sampling rates)
+:type ImagingParameters: Optional{[}dict{]}
+:param args: Optionally pass Sync Key to synchronize bruker recordings
+:type args: Tuple{[}str, str{]}
+:param kwargs: passed to internal functions taking kwargs
+:rtype: Any
+
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
+\index{ImagingExperiment (class in Organization)@\spxentry{ImagingExperiment}\spxextra{class in Organization}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Organization:Organization.ImagingExperiment}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{Organization.}}\sphinxbfcode{\sphinxupquote{ImagingExperiment}}}{\emph{\DUrole{n}{Meta}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Tuple\DUrole{p}{{[}}str\DUrole{p}{,}\DUrole{w}{  }str\DUrole{p}{{]}}}}, \emph{\DUrole{n}{ExperimentName}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Bases: {\hyperref[\detokenize{Organization:Organization.Experiment}]{\sphinxcrossref{\sphinxcode{\sphinxupquote{Experiment}}}}}
+
+\sphinxAtStartPar
+\sphinxcode{\sphinxupquote{Experiment}} class for a generic imaging experiment
+\begin{description}
+\sphinxlineitem{\sphinxstylestrong{Required Inputs}}
+\begin{DUlineblock}{0em}
+\item[] \sphinxstyleemphasis{Meta} : Passed meta from mouse  (directory, mouse\_id)
+\item[] \sphinxstyleemphasis{ExperimentName} : Title of experiment
+\end{DUlineblock}
+
+\sphinxlineitem{\sphinxstylestrong{Properties}}
+\begin{DUlineblock}{0em}
+\item[] \sphinxstyleemphasis{mouse\_id} : Identifies which mouse this data belongs to
+\item[] \sphinxstyleemphasis{instance\_data} : Identifies when this experiment was created
+\end{DUlineblock}
+
+\sphinxlineitem{\sphinxstylestrong{Attributes}}
+\begin{DUlineblock}{0em}
+\item[] \sphinxstyleemphasis{data} : a pandas dataframe containing synchronized data
+\item[] \sphinxstyleemphasis{folder\_dictionary} : A dictionary of relevant folders for this experiment
+\item[] \sphinxstyleemphasis{meta} : bruker metadata
+\item[] \sphinxstyleemphasis{modifications} : List of modifications made to this experiment
+\end{DUlineblock}
+
+\sphinxlineitem{\sphinxstylestrong{Public Methods}}
+\begin{DUlineblock}{0em}
+\item[] \sphinxstyleemphasis{add\_image\_sampling\_folder} : Generates a folder for containing imaging data of a specific sampling rate
+\item[] \sphinxstyleemphasis{copy\_raw\_imaging\_data} : Interactive tool for copying raw imaging data
+\item[] \sphinxstyleemphasis{load\_data} : Loads all data
+\item[] \sphinxstyleemphasis{record\_mod} :  Records a modification made to the experiment (Date \& Time)
+\item[] \sphinxstyleemphasis{update\_folder\_dictionary} : This function re\sphinxhyphen{}indexes all folders in the folder dictionary
+\end{DUlineblock}
+
+\end{description}
+\index{add\_image\_sampling\_folder() (Organization.ImagingExperiment method)@\spxentry{add\_image\_sampling\_folder()}\spxextra{Organization.ImagingExperiment method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Organization:Organization.ImagingExperiment.add_image_sampling_folder}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{add\_image\_sampling\_folder}}}{\emph{\DUrole{n}{SamplingRate}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{int}}}{{ $\rightarrow$ Self}}
+\pysigstopsignatures
+\sphinxAtStartPar
+Generates a folder for containing imaging data of a specific sampling rate
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{SamplingRate}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Sampling Rate of Dataset in Hz
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+Any
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{copy\_data() (Organization.ImagingExperiment method)@\spxentry{copy\_data()}\spxextra{Organization.ImagingExperiment method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Organization:Organization.ImagingExperiment.copy_data}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{copy\_data}}}{}{{ $\rightarrow$ Self}}
+\pysigstopsignatures
+\sphinxAtStartPar
+Interactive tool to copy data to directory
+\begin{quote}\begin{description}
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+Any
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{copy\_raw\_imaging\_data() (Organization.ImagingExperiment method)@\spxentry{copy\_raw\_imaging\_data()}\spxextra{Organization.ImagingExperiment method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Organization:Organization.ImagingExperiment.copy_raw_imaging_data}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{copy\_raw\_imaging\_data}}}{}{{ $\rightarrow$ Self}}
+\pysigstopsignatures
+\sphinxAtStartPar
+This function copies raw imaging data to the appropriate folder
+\begin{quote}\begin{description}
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+Any
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{load\_data() (Organization.ImagingExperiment method)@\spxentry{load\_data()}\spxextra{Organization.ImagingExperiment method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Organization:Organization.ImagingExperiment.load_data}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{load\_data}}}{\emph{\DUrole{n}{ImagingParameters}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}Union\DUrole{p}{{[}}dict\DUrole{p}{,}\DUrole{w}{  }list\DUrole{p}{{[}}dict\DUrole{p}{{]}}\DUrole{p}{{]}}\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{{ $\rightarrow$ Self}}
+\pysigstopsignatures
+\sphinxAtStartPar
+Loads all data
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{ImagingParameters}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxstyleliteralemphasis{\sphinxupquote{dict}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \textendash{} Parameters for some imaging dataset or list of datasets (e.g., for two different sampling rates)
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+Any
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
 \index{Mouse (class in Organization)@\spxentry{Mouse}\spxextra{class in Organization}}
 
 \begin{fulllineitems}
@@ -1027,7 +1245,7 @@ Any
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{Organization:Organization.Mouse.create_experiment}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{create\_experiment}}}{\emph{\DUrole{n}{ExperimentName}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{Type}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{,}\DUrole{w}{  }object\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{\textquotesingle{}Experiment\textquotesingle{}}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{{ $\rightarrow$ Self}}
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{create\_experiment}}}{\emph{\DUrole{n}{ExperimentName}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{Type}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{,}\DUrole{w}{  }{\hyperref[\detokenize{Organization:Organization.Experiment}]{\sphinxcrossref{Experiment}}}\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{\textquotesingle{}Experiment\textquotesingle{}}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{{ $\rightarrow$ Self}}
 \pysigstopsignatures
 \sphinxAtStartPar
 Generates an experiment ExperimentName folder and attribute
@@ -1042,7 +1260,7 @@ Kwargs are passed to underlying functions
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{Type}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxstyleliteralemphasis{\sphinxupquote{str}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{object}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \textendash{} Type of experimental ExperimentName (Optional, default = Experiment)
+\sphinxstyleliteralstrong{\sphinxupquote{Type}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxstyleliteralemphasis{\sphinxupquote{str}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}{\hyperref[\detokenize{Organization:Organization.Experiment}]{\sphinxcrossref{\sphinxstyleliteralemphasis{\sphinxupquote{Experiment}}}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \textendash{} Type of experiment (Optional, default = Experiment)
 
 \end{itemize}
 
@@ -1131,14 +1349,14 @@ str
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{Organization:Organization.Mouse.load}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{classmethod\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{load}}}{\emph{\DUrole{n}{Directory}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}}{{ $\rightarrow$ {\hyperref[\detokenize{Organization:Organization.Mouse}]{\sphinxcrossref{Mouse}}}}}
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{classmethod\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{load}}}{\emph{\DUrole{n}{Directory}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{{ $\rightarrow$ {\hyperref[\detokenize{Organization:Organization.Mouse}]{\sphinxcrossref{Mouse}}}}}
 \pysigstopsignatures
 \sphinxAtStartPar
 Function that loads the entire mouse
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{Directory}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} Directory containing the organization.json file and associated data
+\sphinxstyleliteralstrong{\sphinxupquote{Directory}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxstyleliteralemphasis{\sphinxupquote{str}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \textendash{} Directory containing the organization.json file and associated data
 
 \sphinxlineitem{Returns}
 \sphinxAtStartPar
@@ -1422,6 +1640,9 @@ None
 \renewcommand{\indexname}{Python Module Index}
 \begin{sphinxtheindex}
 \let\bigletter\sphinxstyleindexlettergroup
+\bigletter{c}
+\item\relax\sphinxstyleindexentry{ConfigHandling}\sphinxstyleindexpageref{ConfigHandling:\detokenize{module-ConfigHandling}}
+\indexspace
 \bigletter{o}
 \item\relax\sphinxstyleindexentry{Organization}\sphinxstyleindexpageref{Organization:\detokenize{module-Organization}}
 \indexspace

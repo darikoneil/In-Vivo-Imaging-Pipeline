@@ -1,270 +1,81 @@
-\indexentry{module@\spxentry{module}!BrukerMetaModule@\spxentry{BrukerMetaModule}|hyperpage}{1}
-\indexentry{BrukerMetaModule@\spxentry{BrukerMetaModule}!module@\spxentry{module}|hyperpage}{1}
-\indexentry{BrukerMeta (class in BrukerMetaModule)@\spxentry{BrukerMeta}\spxextra{class in BrukerMetaModule}|hyperpage}{1}
-\indexentry{import\_meta\_data() (BrukerMetaModule.BrukerMeta method)@\spxentry{import\_meta\_data()}\spxextra{BrukerMetaModule.BrukerMeta method}|hyperpage}{1}
-\indexentry{load\_meta\_data() (BrukerMetaModule.BrukerMeta static method)@\spxentry{load\_meta\_data()}\spxextra{BrukerMetaModule.BrukerMeta static method}|hyperpage}{1}
-\indexentry{module@\spxentry{module}!ExperimentHierarchy@\spxentry{ExperimentHierarchy}|hyperpage}{1}
-\indexentry{ExperimentHierarchy@\spxentry{ExperimentHierarchy}!module@\spxentry{module}|hyperpage}{1}
-\indexentry{BehavioralStage (class in ExperimentHierarchy)@\spxentry{BehavioralStage}\spxextra{class in ExperimentHierarchy}|hyperpage}{1}
-\indexentry{load\_data() (ExperimentHierarchy.BehavioralStage method)@\spxentry{load\_data()}\spxextra{ExperimentHierarchy.BehavioralStage method}|hyperpage}{2}
-\indexentry{CollectedDataFolder (class in ExperimentHierarchy)@\spxentry{CollectedDataFolder}\spxextra{class in ExperimentHierarchy}|hyperpage}{2}
-\indexentry{files (ExperimentHierarchy.CollectedDataFolder property)@\spxentry{files}\spxextra{ExperimentHierarchy.CollectedDataFolder property}|hyperpage}{2}
-\indexentry{find\_all\_ext() (ExperimentHierarchy.CollectedDataFolder method)@\spxentry{find\_all\_ext()}\spxextra{ExperimentHierarchy.CollectedDataFolder method}|hyperpage}{2}
-\indexentry{find\_matching\_files() (ExperimentHierarchy.CollectedDataFolder method)@\spxentry{find\_matching\_files()}\spxextra{ExperimentHierarchy.CollectedDataFolder method}|hyperpage}{3}
-\indexentry{folders (ExperimentHierarchy.CollectedDataFolder property)@\spxentry{folders}\spxextra{ExperimentHierarchy.CollectedDataFolder property}|hyperpage}{3}
-\indexentry{instance\_date (ExperimentHierarchy.CollectedDataFolder property)@\spxentry{instance\_date}\spxextra{ExperimentHierarchy.CollectedDataFolder property}|hyperpage}{3}
-\indexentry{path (ExperimentHierarchy.CollectedDataFolder property)@\spxentry{path}\spxextra{ExperimentHierarchy.CollectedDataFolder property}|hyperpage}{3}
-\indexentry{reindex() (ExperimentHierarchy.CollectedDataFolder method)@\spxentry{reindex()}\spxextra{ExperimentHierarchy.CollectedDataFolder method}|hyperpage}{3}
-\indexentry{CollectedFiguresFolder (class in ExperimentHierarchy)@\spxentry{CollectedFiguresFolder}\spxextra{class in ExperimentHierarchy}|hyperpage}{3}
-\indexentry{view\_figure() (ExperimentHierarchy.CollectedFiguresFolder method)@\spxentry{view\_figure()}\spxextra{ExperimentHierarchy.CollectedFiguresFolder method}|hyperpage}{3}
-\indexentry{CollectedImagingAnalysisFolder (class in ExperimentHierarchy)@\spxentry{CollectedImagingAnalysisFolder}\spxextra{class in ExperimentHierarchy}|hyperpage}{3}
-\indexentry{add\_notes() (ExperimentHierarchy.CollectedImagingAnalysisFolder method)@\spxentry{add\_notes()}\spxextra{ExperimentHierarchy.CollectedImagingAnalysisFolder method}|hyperpage}{4}
-\indexentry{clean\_up\_compilation() (ExperimentHierarchy.CollectedImagingAnalysisFolder method)@\spxentry{clean\_up\_compilation()}\spxextra{ExperimentHierarchy.CollectedImagingAnalysisFolder method}|hyperpage}{4}
-\indexentry{clean\_up\_motion\_correction() (ExperimentHierarchy.CollectedImagingAnalysisFolder method)@\spxentry{clean\_up\_motion\_correction()}\spxextra{ExperimentHierarchy.CollectedImagingAnalysisFolder method}|hyperpage}{4}
-\indexentry{current\_stage (ExperimentHierarchy.CollectedImagingAnalysisFolder property)@\spxentry{current\_stage}\spxextra{ExperimentHierarchy.CollectedImagingAnalysisFolder property}|hyperpage}{4}
-\indexentry{default\_folders() (ExperimentHierarchy.CollectedImagingAnalysisFolder method)@\spxentry{default\_folders()}\spxextra{ExperimentHierarchy.CollectedImagingAnalysisFolder method}|hyperpage}{4}
-\indexentry{export\_registration\_to\_denoised() (ExperimentHierarchy.CollectedImagingAnalysisFolder method)@\spxentry{export\_registration\_to\_denoised()}\spxextra{ExperimentHierarchy.CollectedImagingAnalysisFolder method}|hyperpage}{4}
-\indexentry{load\_cascade\_exports() (ExperimentHierarchy.CollectedImagingAnalysisFolder method)@\spxentry{load\_cascade\_exports()}\spxextra{ExperimentHierarchy.CollectedImagingAnalysisFolder method}|hyperpage}{4}
-\indexentry{load\_fissa\_exports() (ExperimentHierarchy.CollectedImagingAnalysisFolder method)@\spxentry{load\_fissa\_exports()}\spxextra{ExperimentHierarchy.CollectedImagingAnalysisFolder method}|hyperpage}{5}
-\indexentry{load\_suite2p() (ExperimentHierarchy.CollectedImagingAnalysisFolder method)@\spxentry{load\_suite2p()}\spxextra{ExperimentHierarchy.CollectedImagingAnalysisFolder method}|hyperpage}{5}
-\indexentry{CollectedImagingFolder (class in ExperimentHierarchy)@\spxentry{CollectedImagingFolder}\spxextra{class in ExperimentHierarchy}|hyperpage}{5}
-\indexentry{channels (ExperimentHierarchy.CollectedImagingFolder property)@\spxentry{channels}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}|hyperpage}{5}
-\indexentry{file\_format (ExperimentHierarchy.CollectedImagingFolder property)@\spxentry{file\_format}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}|hyperpage}{5}
-\indexentry{frames (ExperimentHierarchy.CollectedImagingFolder property)@\spxentry{frames}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}|hyperpage}{5}
-\indexentry{height (ExperimentHierarchy.CollectedImagingFolder property)@\spxentry{height}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}|hyperpage}{5}
-\indexentry{imaging\_files (ExperimentHierarchy.CollectedImagingFolder property)@\spxentry{imaging\_files}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}|hyperpage}{5}
-\indexentry{meta\_files (ExperimentHierarchy.CollectedImagingFolder property)@\spxentry{meta\_files}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}|hyperpage}{5}
-\indexentry{num\_imaging\_files (ExperimentHierarchy.CollectedImagingFolder property)@\spxentry{num\_imaging\_files}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}|hyperpage}{5}
-\indexentry{num\_meta\_files (ExperimentHierarchy.CollectedImagingFolder property)@\spxentry{num\_meta\_files}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}|hyperpage}{5}
-\indexentry{planes (ExperimentHierarchy.CollectedImagingFolder property)@\spxentry{planes}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}|hyperpage}{5}
-\indexentry{reorganize\_bruker\_files() (ExperimentHierarchy.CollectedImagingFolder method)@\spxentry{reorganize\_bruker\_files()}\spxextra{ExperimentHierarchy.CollectedImagingFolder method}|hyperpage}{5}
-\indexentry{width (ExperimentHierarchy.CollectedImagingFolder property)@\spxentry{width}\spxextra{ExperimentHierarchy.CollectedImagingFolder property}|hyperpage}{5}
-\indexentry{ExperimentData (class in ExperimentHierarchy)@\spxentry{ExperimentData}\spxextra{class in ExperimentHierarchy}|hyperpage}{5}
-\indexentry{check\_log() (ExperimentHierarchy.ExperimentData method)@\spxentry{check\_log()}\spxextra{ExperimentHierarchy.ExperimentData method}|hyperpage}{6}
-\indexentry{check\_path() (ExperimentHierarchy.ExperimentData class method)@\spxentry{check\_path()}\spxextra{ExperimentHierarchy.ExperimentData class method}|hyperpage}{7}
-\indexentry{create() (ExperimentHierarchy.ExperimentData method)@\spxentry{create()}\spxextra{ExperimentHierarchy.ExperimentData method}|hyperpage}{7}
-\indexentry{create\_experimental\_stage() (ExperimentHierarchy.ExperimentData method)@\spxentry{create\_experimental\_stage()}\spxextra{ExperimentHierarchy.ExperimentData method}|hyperpage}{7}
-\indexentry{create\_log\_file() (ExperimentHierarchy.ExperimentData method)@\spxentry{create\_log\_file()}\spxextra{ExperimentHierarchy.ExperimentData method}|hyperpage}{7}
-\indexentry{end\_log() (ExperimentHierarchy.ExperimentData method)@\spxentry{end\_log()}\spxextra{ExperimentHierarchy.ExperimentData method}|hyperpage}{7}
-\indexentry{experimental\_condition (ExperimentHierarchy.ExperimentData property)@\spxentry{experimental\_condition}\spxextra{ExperimentHierarchy.ExperimentData property}|hyperpage}{7}
-\indexentry{get\_date() (ExperimentHierarchy.ExperimentData class method)@\spxentry{get\_date()}\spxextra{ExperimentHierarchy.ExperimentData class method}|hyperpage}{7}
-\indexentry{get\_time() (ExperimentHierarchy.ExperimentData class method)@\spxentry{get\_time()}\spxextra{ExperimentHierarchy.ExperimentData class method}|hyperpage}{7}
-\indexentry{instance\_date (ExperimentHierarchy.ExperimentData property)@\spxentry{instance\_date}\spxextra{ExperimentHierarchy.ExperimentData property}|hyperpage}{7}
-\indexentry{load\_experiments() (ExperimentHierarchy.ExperimentData class method)@\spxentry{load\_experiments()}\spxextra{ExperimentHierarchy.ExperimentData class method}|hyperpage}{7}
-\indexentry{log\_file (ExperimentHierarchy.ExperimentData property)@\spxentry{log\_file}\spxextra{ExperimentHierarchy.ExperimentData property}|hyperpage}{8}
-\indexentry{mouse\_id (ExperimentHierarchy.ExperimentData property)@\spxentry{mouse\_id}\spxextra{ExperimentHierarchy.ExperimentData property}|hyperpage}{8}
-\indexentry{pass\_meta() (ExperimentHierarchy.ExperimentData method)@\spxentry{pass\_meta()}\spxextra{ExperimentHierarchy.ExperimentData method}|hyperpage}{8}
-\indexentry{record\_mod() (ExperimentHierarchy.ExperimentData method)@\spxentry{record\_mod()}\spxextra{ExperimentHierarchy.ExperimentData method}|hyperpage}{8}
-\indexentry{record\_stage\_mod() (ExperimentHierarchy.ExperimentData method)@\spxentry{record\_stage\_mod()}\spxextra{ExperimentHierarchy.ExperimentData method}|hyperpage}{8}
-\indexentry{save\_experiments() (ExperimentHierarchy.ExperimentData method)@\spxentry{save\_experiments()}\spxextra{ExperimentHierarchy.ExperimentData method}|hyperpage}{8}
-\indexentry{start\_log() (ExperimentHierarchy.ExperimentData method)@\spxentry{start\_log()}\spxextra{ExperimentHierarchy.ExperimentData method}|hyperpage}{8}
-\indexentry{update\_all\_folder\_dictionaries() (ExperimentHierarchy.ExperimentData method)@\spxentry{update\_all\_folder\_dictionaries()}\spxextra{ExperimentHierarchy.ExperimentData method}|hyperpage}{8}
-\indexentry{ExperimentStage (class in ExperimentHierarchy)@\spxentry{ExperimentStage}\spxextra{class in ExperimentHierarchy}|hyperpage}{8}
-\indexentry{add\_image\_sampling\_folder() (ExperimentHierarchy.ExperimentStage method)@\spxentry{add\_image\_sampling\_folder()}\spxextra{ExperimentHierarchy.ExperimentStage method}|hyperpage}{9}
-\indexentry{instance\_date (ExperimentHierarchy.ExperimentStage property)@\spxentry{instance\_date}\spxextra{ExperimentHierarchy.ExperimentStage property}|hyperpage}{9}
-\indexentry{load\_data() (ExperimentHierarchy.ExperimentStage method)@\spxentry{load\_data()}\spxextra{ExperimentHierarchy.ExperimentStage method}|hyperpage}{9}
-\indexentry{mouse\_id (ExperimentHierarchy.ExperimentStage property)@\spxentry{mouse\_id}\spxextra{ExperimentHierarchy.ExperimentStage property}|hyperpage}{9}
-\indexentry{record\_mod() (ExperimentHierarchy.ExperimentStage method)@\spxentry{record\_mod()}\spxextra{ExperimentHierarchy.ExperimentStage method}|hyperpage}{9}
-\indexentry{stage\_id (ExperimentHierarchy.ExperimentStage property)@\spxentry{stage\_id}\spxextra{ExperimentHierarchy.ExperimentStage property}|hyperpage}{10}
-\indexentry{update\_folder\_dictionary() (ExperimentHierarchy.ExperimentStage method)@\spxentry{update\_folder\_dictionary()}\spxextra{ExperimentHierarchy.ExperimentStage method}|hyperpage}{10}
-\indexentry{module@\spxentry{module}!BehaviorUtilities@\spxentry{BehaviorUtilities}|hyperpage}{11}
-\indexentry{BehaviorUtilities@\spxentry{BehaviorUtilities}!module@\spxentry{module}|hyperpage}{11}
-\indexentry{extract\_specific\_data() (in module BehaviorUtilities)@\spxentry{extract\_specific\_data()}\spxextra{in module BehaviorUtilities}|hyperpage}{11}
-\indexentry{lowpass\_filter() (in module BehaviorUtilities)@\spxentry{lowpass\_filter()}\spxextra{in module BehaviorUtilities}|hyperpage}{11}
-\indexentry{time\_spent\_in\_burrow() (in module BehaviorUtilities)@\spxentry{time\_spent\_in\_burrow()}\spxextra{in module BehaviorUtilities}|hyperpage}{11}
-\indexentry{module@\spxentry{module}!BurrowFearConditioning@\spxentry{BurrowFearConditioning}|hyperpage}{12}
-\indexentry{BurrowFearConditioning@\spxentry{BurrowFearConditioning}!module@\spxentry{module}|hyperpage}{12}
-\indexentry{DeepLabData (class in BurrowFearConditioning)@\spxentry{DeepLabData}\spxextra{class in BurrowFearConditioning}|hyperpage}{12}
-\indexentry{calculate\_distance() (BurrowFearConditioning.DeepLabData static method)@\spxentry{calculate\_distance()}\spxextra{BurrowFearConditioning.DeepLabData static method}|hyperpage}{12}
-\indexentry{convert\_dataframe\_to\_physical\_units() (BurrowFearConditioning.DeepLabData class method)@\spxentry{convert\_dataframe\_to\_physical\_units()}\spxextra{BurrowFearConditioning.DeepLabData class method}|hyperpage}{12}
-\indexentry{convert\_to\_mean\_zero() (BurrowFearConditioning.DeepLabData static method)@\spxentry{convert\_to\_mean\_zero()}\spxextra{BurrowFearConditioning.DeepLabData static method}|hyperpage}{12}
-\indexentry{load\_data() (BurrowFearConditioning.DeepLabData class method)@\spxentry{load\_data()}\spxextra{BurrowFearConditioning.DeepLabData class method}|hyperpage}{13}
-\indexentry{merge\_dlc\_data() (BurrowFearConditioning.DeepLabData class method)@\spxentry{merge\_dlc\_data()}\spxextra{BurrowFearConditioning.DeepLabData class method}|hyperpage}{13}
-\indexentry{FearConditioning (class in BurrowFearConditioning)@\spxentry{FearConditioning}\spxextra{class in BurrowFearConditioning}|hyperpage}{13}
-\indexentry{check\_sync\_plot() (BurrowFearConditioning.FearConditioning static method)@\spxentry{check\_sync\_plot()}\spxextra{BurrowFearConditioning.FearConditioning static method}|hyperpage}{13}
-\indexentry{load\_data() (BurrowFearConditioning.FearConditioning method)@\spxentry{load\_data()}\spxextra{BurrowFearConditioning.FearConditioning method}|hyperpage}{13}
-\indexentry{num\_stim (BurrowFearConditioning.FearConditioning property)@\spxentry{num\_stim}\spxextra{BurrowFearConditioning.FearConditioning property}|hyperpage}{14}
-\indexentry{num\_trials (BurrowFearConditioning.FearConditioning property)@\spxentry{num\_trials}\spxextra{BurrowFearConditioning.FearConditioning property}|hyperpage}{14}
-\indexentry{trial\_groups (BurrowFearConditioning.FearConditioning property)@\spxentry{trial\_groups}\spxextra{BurrowFearConditioning.FearConditioning property}|hyperpage}{14}
-\indexentry{trials\_per\_stim (BurrowFearConditioning.FearConditioning property)@\spxentry{trials\_per\_stim}\spxextra{BurrowFearConditioning.FearConditioning property}|hyperpage}{14}
-\indexentry{unique\_stim (BurrowFearConditioning.FearConditioning property)@\spxentry{unique\_stim}\spxextra{BurrowFearConditioning.FearConditioning property}|hyperpage}{14}
-\indexentry{plot\_burrow\_coordinates() (in module BurrowFearConditioning)@\spxentry{plot\_burrow\_coordinates()}\spxextra{in module BurrowFearConditioning}|hyperpage}{14}
-\indexentry{plot\_column\_by\_trial\_type() (in module BurrowFearConditioning)@\spxentry{plot\_column\_by\_trial\_type()}\spxextra{in module BurrowFearConditioning}|hyperpage}{14}
-\indexentry{plot\_trial() (in module BurrowFearConditioning)@\spxentry{plot\_trial()}\spxextra{in module BurrowFearConditioning}|hyperpage}{14}
-\indexentry{module@\spxentry{module}!Coloring@\spxentry{Coloring}|hyperpage}{15}
-\indexentry{Coloring@\spxentry{Coloring}!module@\spxentry{module}|hyperpage}{15}
-\indexentry{ColorImages (class in Coloring)@\spxentry{ColorImages}\spxextra{class in Coloring}|hyperpage}{15}
-\indexentry{background (Coloring.ColorImages property)@\spxentry{background}\spxextra{Coloring.ColorImages property}|hyperpage}{15}
-\indexentry{background\_cutoffs (Coloring.ColorImages property)@\spxentry{background\_cutoffs}\spxextra{Coloring.ColorImages property}|hyperpage}{15}
-\indexentry{background\_style (Coloring.ColorImages property)@\spxentry{background\_style}\spxextra{Coloring.ColorImages property}|hyperpage}{15}
-\indexentry{color\_video (Coloring.ColorImages property)@\spxentry{color\_video}\spxextra{Coloring.ColorImages property}|hyperpage}{15}
-\indexentry{neuron\_subsets (Coloring.ColorImages property)@\spxentry{neuron\_subsets}\spxextra{Coloring.ColorImages property}|hyperpage}{15}
-\indexentry{neuronal\_ids (Coloring.ColorImages property)@\spxentry{neuronal\_ids}\spxextra{Coloring.ColorImages property}|hyperpage}{15}
-\indexentry{num\_frames (Coloring.ColorImages property)@\spxentry{num\_frames}\spxextra{Coloring.ColorImages property}|hyperpage}{15}
-\indexentry{num\_neurons (Coloring.ColorImages property)@\spxentry{num\_neurons}\spxextra{Coloring.ColorImages property}|hyperpage}{15}
-\indexentry{overlays (Coloring.ColorImages property)@\spxentry{overlays}\spxextra{Coloring.ColorImages property}|hyperpage}{15}
-\indexentry{preview\_background() (Coloring.ColorImages method)@\spxentry{preview\_background()}\spxextra{Coloring.ColorImages method}|hyperpage}{15}
-\indexentry{preview\_color() (Coloring.ColorImages method)@\spxentry{preview\_color()}\spxextra{Coloring.ColorImages method}|hyperpage}{15}
-\indexentry{total\_rois (Coloring.ColorImages property)@\spxentry{total\_rois}\spxextra{Coloring.ColorImages property}|hyperpage}{15}
-\indexentry{xpix (Coloring.ColorImages property)@\spxentry{xpix}\spxextra{Coloring.ColorImages property}|hyperpage}{15}
-\indexentry{ypix (Coloring.ColorImages property)@\spxentry{ypix}\spxextra{Coloring.ColorImages property}|hyperpage}{15}
-\indexentry{colorize\_complete\_image() (in module Coloring)@\spxentry{colorize\_complete\_image()}\spxextra{in module Coloring}|hyperpage}{15}
-\indexentry{colorize\_rois() (in module Coloring)@\spxentry{colorize\_rois()}\spxextra{in module Coloring}|hyperpage}{16}
-\indexentry{convert\_grayscale\_to\_color() (in module Coloring)@\spxentry{convert\_grayscale\_to\_color()}\spxextra{in module Coloring}|hyperpage}{16}
-\indexentry{generate\_background() (in module Coloring)@\spxentry{generate\_background()}\spxextra{in module Coloring}|hyperpage}{16}
-\indexentry{generate\_custom\_map() (in module Coloring)@\spxentry{generate\_custom\_map()}\spxextra{in module Coloring}|hyperpage}{16}
-\indexentry{generate\_pixel\_pairs() (in module Coloring)@\spxentry{generate\_pixel\_pairs()}\spxextra{in module Coloring}|hyperpage}{16}
-\indexentry{merge\_background() (in module Coloring)@\spxentry{merge\_background()}\spxextra{in module Coloring}|hyperpage}{17}
-\indexentry{normalize\_image() (in module Coloring)@\spxentry{normalize\_image()}\spxextra{in module Coloring}|hyperpage}{17}
-\indexentry{overlay\_colorized\_rois() (in module Coloring)@\spxentry{overlay\_colorized\_rois()}\spxextra{in module Coloring}|hyperpage}{17}
-\indexentry{rescale\_images() (in module Coloring)@\spxentry{rescale\_images()}\spxextra{in module Coloring}|hyperpage}{17}
-\indexentry{module@\spxentry{module}!Colorizer@\spxentry{Colorizer}|hyperpage}{18}
-\indexentry{Colorizer@\spxentry{Colorizer}!module@\spxentry{module}|hyperpage}{18}
-\indexentry{colorize\_complete\_image() (in module Colorizer)@\spxentry{colorize\_complete\_image()}\spxextra{in module Colorizer}|hyperpage}{18}
-\indexentry{colorize\_rois() (in module Colorizer)@\spxentry{colorize\_rois()}\spxextra{in module Colorizer}|hyperpage}{18}
-\indexentry{colorize\_video() (in module Colorizer)@\spxentry{colorize\_video()}\spxextra{in module Colorizer}|hyperpage}{18}
-\indexentry{generate\_custom\_map() (in module Colorizer)@\spxentry{generate\_custom\_map()}\spxextra{in module Colorizer}|hyperpage}{19}
-\indexentry{generate\_pixel\_pairs() (in module Colorizer)@\spxentry{generate\_pixel\_pairs()}\spxextra{in module Colorizer}|hyperpage}{19}
-\indexentry{merge\_background() (in module Colorizer)@\spxentry{merge\_background()}\spxextra{in module Colorizer}|hyperpage}{20}
-\indexentry{overlay\_colorized\_rois() (in module Colorizer)@\spxentry{overlay\_colorized\_rois()}\spxextra{in module Colorizer}|hyperpage}{20}
-\indexentry{module@\spxentry{module}!IO@\spxentry{IO}|hyperpage}{21}
-\indexentry{IO@\spxentry{IO}!module@\spxentry{module}|hyperpage}{21}
-\indexentry{determine\_bruker\_folder\_contents() (in module IO)@\spxentry{determine\_bruker\_folder\_contents()}\spxextra{in module IO}|hyperpage}{21}
-\indexentry{load\_all\_tiffs() (in module IO)@\spxentry{load\_all\_tiffs()}\spxextra{in module IO}|hyperpage}{21}
-\indexentry{load\_binary\_meta() (in module IO)@\spxentry{load\_binary\_meta()}\spxextra{in module IO}|hyperpage}{21}
-\indexentry{load\_bruker\_tiffs() (in module IO)@\spxentry{load\_bruker\_tiffs()}\spxextra{in module IO}|hyperpage}{21}
-\indexentry{load\_mapped\_binary() (in module IO)@\spxentry{load\_mapped\_binary()}\spxextra{in module IO}|hyperpage}{21}
-\indexentry{load\_raw\_binary() (in module IO)@\spxentry{load\_raw\_binary()}\spxextra{in module IO}|hyperpage}{22}
-\indexentry{load\_single\_tiff() (in module IO)@\spxentry{load\_single\_tiff()}\spxextra{in module IO}|hyperpage}{22}
-\indexentry{repackage\_bruker\_tiffs() (in module IO)@\spxentry{repackage\_bruker\_tiffs()}\spxextra{in module IO}|hyperpage}{22}
-\indexentry{save\_raw\_binary() (in module IO)@\spxentry{save\_raw\_binary()}\spxextra{in module IO}|hyperpage}{22}
-\indexentry{save\_single\_tiff() (in module IO)@\spxentry{save\_single\_tiff()}\spxextra{in module IO}|hyperpage}{22}
-\indexentry{save\_tiff\_stack() (in module IO)@\spxentry{save\_tiff\_stack()}\spxextra{in module IO}|hyperpage}{23}
-\indexentry{save\_video() (in module IO)@\spxentry{save\_video()}\spxextra{in module IO}|hyperpage}{23}
-\indexentry{module@\spxentry{module}!ImageProcessing@\spxentry{ImageProcessing}|hyperpage}{23}
-\indexentry{ImageProcessing@\spxentry{ImageProcessing}!module@\spxentry{module}|hyperpage}{23}
-\indexentry{blockwise\_fast\_filter\_tiff() (in module ImageProcessing)@\spxentry{blockwise\_fast\_filter\_tiff()}\spxextra{in module ImageProcessing}|hyperpage}{23}
-\indexentry{fast\_filter\_images() (in module ImageProcessing)@\spxentry{fast\_filter\_images()}\spxextra{in module ImageProcessing}|hyperpage}{24}
-\indexentry{filter\_images() (in module ImageProcessing)@\spxentry{filter\_images()}\spxextra{in module ImageProcessing}|hyperpage}{24}
-\indexentry{grouped\_z\_project() (in module ImageProcessing)@\spxentry{grouped\_z\_project()}\spxextra{in module ImageProcessing}|hyperpage}{24}
-\indexentry{remove\_shuttle\_artifact() (in module ImageProcessing)@\spxentry{remove\_shuttle\_artifact()}\spxextra{in module ImageProcessing}|hyperpage}{24}
-\indexentry{module@\spxentry{module}!PowerSpectrum@\spxentry{PowerSpectrum}|hyperpage}{25}
-\indexentry{PowerSpectrum@\spxentry{PowerSpectrum}!module@\spxentry{module}|hyperpage}{25}
-\indexentry{module@\spxentry{module}!SignalProcessing@\spxentry{SignalProcessing}|hyperpage}{25}
-\indexentry{SignalProcessing@\spxentry{SignalProcessing}!module@\spxentry{module}|hyperpage}{25}
-\indexentry{anisotropicDiffusion() (in module SignalProcessing)@\spxentry{anisotropicDiffusion()}\spxextra{in module SignalProcessing}|hyperpage}{25}
-\indexentry{anisotropic\_diffusion() (in module SignalProcessing)@\spxentry{anisotropic\_diffusion()}\spxextra{in module SignalProcessing}|hyperpage}{25}
-\indexentry{bin\_data() (in module SignalProcessing)@\spxentry{bin\_data()}\spxextra{in module SignalProcessing}|hyperpage}{25}
-\indexentry{bind\_data() (in module SignalProcessing)@\spxentry{bind\_data()}\spxextra{in module SignalProcessing}|hyperpage}{25}
-\indexentry{calculateFiringRate() (in module SignalProcessing)@\spxentry{calculateFiringRate()}\spxextra{in module SignalProcessing}|hyperpage}{25}
-\indexentry{calculate\_dFoF() (in module SignalProcessing)@\spxentry{calculate\_dFoF()}\spxextra{in module SignalProcessing}|hyperpage}{25}
-\indexentry{calculate\_mean\_firing\_rate() (in module SignalProcessing)@\spxentry{calculate\_mean\_firing\_rate()}\spxextra{in module SignalProcessing}|hyperpage}{25}
-\indexentry{calculate\_standardized\_noise() (in module SignalProcessing)@\spxentry{calculate\_standardized\_noise()}\spxextra{in module SignalProcessing}|hyperpage}{25}
-\indexentry{detrendTraces() (in module SignalProcessing)@\spxentry{detrendTraces()}\spxextra{in module SignalProcessing}|hyperpage}{25}
-\indexentry{detrendTraces\_TiffOrg() (in module SignalProcessing)@\spxentry{detrendTraces\_TiffOrg()}\spxextra{in module SignalProcessing}|hyperpage}{25}
-\indexentry{normalizeSmoothFiringRates() (in module SignalProcessing)@\spxentry{normalizeSmoothFiringRates()}\spxextra{in module SignalProcessing}|hyperpage}{25}
-\indexentry{smoothTraces() (in module SignalProcessing)@\spxentry{smoothTraces()}\spxextra{in module SignalProcessing}|hyperpage}{25}
-\indexentry{smoothTraces\_TiffOrg() (in module SignalProcessing)@\spxentry{smoothTraces\_TiffOrg()}\spxextra{in module SignalProcessing}|hyperpage}{26}
-\indexentry{module@\spxentry{module}!Utilities@\spxentry{Utilities}|hyperpage}{26}
-\indexentry{Utilities@\spxentry{Utilities}!module@\spxentry{module}|hyperpage}{26}
-\indexentry{generateCovarianceMatrix() (in module Utilities)@\spxentry{generateCovarianceMatrix()}\spxextra{in module Utilities}|hyperpage}{26}
-\indexentry{generateSpikeMatrix() (in module Utilities)@\spxentry{generateSpikeMatrix()}\spxextra{in module Utilities}|hyperpage}{26}
-\indexentry{generate\_features() (in module Utilities)@\spxentry{generate\_features()}\spxextra{in module Utilities}|hyperpage}{26}
-\indexentry{mergeTraces() (in module Utilities)@\spxentry{mergeTraces()}\spxextra{in module Utilities}|hyperpage}{26}
-\indexentry{pruneNaN() (in module Utilities)@\spxentry{pruneNaN()}\spxextra{in module Utilities}|hyperpage}{26}
-\indexentry{pruneTracesByNeuronalIndex() (in module Utilities)@\spxentry{pruneTracesByNeuronalIndex()}\spxextra{in module Utilities}|hyperpage}{26}
-\indexentry{trial\_matrix\_org() (in module Utilities)@\spxentry{trial\_matrix\_org()}\spxextra{in module Utilities}|hyperpage}{26}
-\indexentry{module@\spxentry{module}!Visualization@\spxentry{Visualization}|hyperpage}{26}
-\indexentry{Visualization@\spxentry{Visualization}!module@\spxentry{module}|hyperpage}{26}
-\indexentry{assessSpikeInference() (in module Visualization)@\spxentry{assessSpikeInference()}\spxextra{in module Visualization}|hyperpage}{26}
-\indexentry{compareTraces() (in module Visualization)@\spxentry{compareTraces()}\spxextra{in module Visualization}|hyperpage}{26}
-\indexentry{compareTraces2() (in module Visualization)@\spxentry{compareTraces2()}\spxextra{in module Visualization}|hyperpage}{26}
-\indexentry{compareTraces3() (in module Visualization)@\spxentry{compareTraces3()}\spxextra{in module Visualization}|hyperpage}{26}
-\indexentry{interactive\_traces() (in module Visualization)@\spxentry{interactive\_traces()}\spxextra{in module Visualization}|hyperpage}{27}
-\indexentry{plotFiringRateMatrix() (in module Visualization)@\spxentry{plotFiringRateMatrix()}\spxextra{in module Visualization}|hyperpage}{27}
-\indexentry{plotNeuralHeatMap() (in module Visualization)@\spxentry{plotNeuralHeatMap()}\spxextra{in module Visualization}|hyperpage}{27}
-\indexentry{plotNoise() (in module Visualization)@\spxentry{plotNoise()}\spxextra{in module Visualization}|hyperpage}{27}
-\indexentry{plotROC() (in module Visualization)@\spxentry{plotROC()}\spxextra{in module Visualization}|hyperpage}{27}
-\indexentry{plotSpikeInference() (in module Visualization)@\spxentry{plotSpikeInference()}\spxextra{in module Visualization}|hyperpage}{27}
-\indexentry{view\_image() (in module Visualization)@\spxentry{view\_image()}\spxextra{in module Visualization}|hyperpage}{27}
-\indexentry{module@\spxentry{module}!DecodingAnalysis@\spxentry{DecodingAnalysis}|hyperpage}{29}
-\indexentry{DecodingAnalysis@\spxentry{DecodingAnalysis}!module@\spxentry{module}|hyperpage}{29}
-\indexentry{DecodingModule (class in DecodingAnalysis)@\spxentry{DecodingModule}\spxextra{class in DecodingAnalysis}|hyperpage}{29}
-\indexentry{assessFit() (DecodingAnalysis.DecodingModule method)@\spxentry{assessFit()}\spxextra{DecodingAnalysis.DecodingModule method}|hyperpage}{29}
-\indexentry{cleanKwargs() (DecodingAnalysis.DecodingModule method)@\spxentry{cleanKwargs()}\spxextra{DecodingAnalysis.DecodingModule method}|hyperpage}{29}
-\indexentry{collapseFeatures() (DecodingAnalysis.DecodingModule class method)@\spxentry{collapseFeatures()}\spxextra{DecodingAnalysis.DecodingModule class method}|hyperpage}{29}
-\indexentry{commonAssessment() (DecodingAnalysis.DecodingModule method)@\spxentry{commonAssessment()}\spxextra{DecodingAnalysis.DecodingModule method}|hyperpage}{29}
-\indexentry{createTrialIndicator() (DecodingAnalysis.DecodingModule static method)@\spxentry{createTrialIndicator()}\spxextra{DecodingAnalysis.DecodingModule static method}|hyperpage}{29}
-\indexentry{dep\_shuffle\_trials() (DecodingAnalysis.DecodingModule method)@\spxentry{dep\_shuffle\_trials()}\spxextra{DecodingAnalysis.DecodingModule method}|hyperpage}{29}
-\indexentry{feature\_matrix (DecodingAnalysis.DecodingModule property)@\spxentry{feature\_matrix}\spxextra{DecodingAnalysis.DecodingModule property}|hyperpage}{29}
-\indexentry{feature\_tensor (DecodingAnalysis.DecodingModule property)@\spxentry{feature\_tensor}\spxextra{DecodingAnalysis.DecodingModule property}|hyperpage}{29}
-\indexentry{fitModel() (DecodingAnalysis.DecodingModule method)@\spxentry{fitModel()}\spxextra{DecodingAnalysis.DecodingModule method}|hyperpage}{29}
-\indexentry{fullAssessment() (DecodingAnalysis.DecodingModule method)@\spxentry{fullAssessment()}\spxextra{DecodingAnalysis.DecodingModule method}|hyperpage}{29}
-\indexentry{imported\_feature\_organization (DecodingAnalysis.DecodingModule property)@\spxentry{imported\_feature\_organization}\spxextra{DecodingAnalysis.DecodingModule property}|hyperpage}{29}
-\indexentry{imported\_neural\_organization (DecodingAnalysis.DecodingModule property)@\spxentry{imported\_neural\_organization}\spxextra{DecodingAnalysis.DecodingModule property}|hyperpage}{29}
-\indexentry{loadFeatures() (DecodingAnalysis.DecodingModule class method)@\spxentry{loadFeatures()}\spxextra{DecodingAnalysis.DecodingModule class method}|hyperpage}{29}
-\indexentry{loadFeaturesFile() (DecodingAnalysis.DecodingModule method)@\spxentry{loadFeaturesFile()}\spxextra{DecodingAnalysis.DecodingModule method}|hyperpage}{29}
-\indexentry{makePrediction() (DecodingAnalysis.DecodingModule method)@\spxentry{makePrediction()}\spxextra{DecodingAnalysis.DecodingModule method}|hyperpage}{30}
-\indexentry{neural\_matrix (DecodingAnalysis.DecodingModule property)@\spxentry{neural\_matrix}\spxextra{DecodingAnalysis.DecodingModule property}|hyperpage}{30}
-\indexentry{neural\_tensor (DecodingAnalysis.DecodingModule property)@\spxentry{neural\_tensor}\spxextra{DecodingAnalysis.DecodingModule property}|hyperpage}{30}
-\indexentry{num\_frames (DecodingAnalysis.DecodingModule property)@\spxentry{num\_frames}\spxextra{DecodingAnalysis.DecodingModule property}|hyperpage}{30}
-\indexentry{num\_neurons (DecodingAnalysis.DecodingModule property)@\spxentry{num\_neurons}\spxextra{DecodingAnalysis.DecodingModule property}|hyperpage}{30}
-\indexentry{num\_trials (DecodingAnalysis.DecodingModule property)@\spxentry{num\_trials}\spxextra{DecodingAnalysis.DecodingModule property}|hyperpage}{30}
-\indexentry{plotROCs() (DecodingAnalysis.DecodingModule method)@\spxentry{plotROCs()}\spxextra{DecodingAnalysis.DecodingModule method}|hyperpage}{30}
-\indexentry{printAssessment() (DecodingAnalysis.DecodingModule method)@\spxentry{printAssessment()}\spxextra{DecodingAnalysis.DecodingModule method}|hyperpage}{30}
-\indexentry{saveModel() (DecodingAnalysis.DecodingModule method)@\spxentry{saveModel()}\spxextra{DecodingAnalysis.DecodingModule method}|hyperpage}{30}
-\indexentry{shuffleByTrialIndex() (DecodingAnalysis.DecodingModule static method)@\spxentry{shuffleByTrialIndex()}\spxextra{DecodingAnalysis.DecodingModule static method}|hyperpage}{30}
-\indexentry{shuffleEachNeuron() (DecodingAnalysis.DecodingModule class method)@\spxentry{shuffleEachNeuron()}\spxextra{DecodingAnalysis.DecodingModule class method}|hyperpage}{30}
-\indexentry{shuffleFrames() (DecodingAnalysis.DecodingModule class method)@\spxentry{shuffleFrames()}\spxextra{DecodingAnalysis.DecodingModule class method}|hyperpage}{30}
-\indexentry{shuffleLabels() (DecodingAnalysis.DecodingModule class method)@\spxentry{shuffleLabels()}\spxextra{DecodingAnalysis.DecodingModule class method}|hyperpage}{30}
-\indexentry{shuffle\_trial\_labels() (DecodingAnalysis.DecodingModule method)@\spxentry{shuffle\_trial\_labels()}\spxextra{DecodingAnalysis.DecodingModule method}|hyperpage}{30}
-\indexentry{shuffle\_trials() (DecodingAnalysis.DecodingModule method)@\spxentry{shuffle\_trials()}\spxextra{DecodingAnalysis.DecodingModule method}|hyperpage}{30}
-\indexentry{shuffled\_trials\_by\_group() (DecodingAnalysis.DecodingModule static method)@\spxentry{shuffled\_trials\_by\_group()}\spxextra{DecodingAnalysis.DecodingModule static method}|hyperpage}{30}
-\indexentry{splitData() (DecodingAnalysis.DecodingModule method)@\spxentry{splitData()}\spxextra{DecodingAnalysis.DecodingModule method}|hyperpage}{30}
-\indexentry{split\_by\_trials() (DecodingAnalysis.DecodingModule class method)@\spxentry{split\_by\_trials()}\spxextra{DecodingAnalysis.DecodingModule class method}|hyperpage}{30}
-\indexentry{structural\_report() (DecodingAnalysis.DecodingModule method)@\spxentry{structural\_report()}\spxextra{DecodingAnalysis.DecodingModule method}|hyperpage}{30}
-\indexentry{validate\_data\_sets() (DecodingAnalysis.DecodingModule method)@\spxentry{validate\_data\_sets()}\spxextra{DecodingAnalysis.DecodingModule method}|hyperpage}{30}
-\indexentry{PerformanceMetrics() (in module DecodingAnalysis)@\spxentry{PerformanceMetrics()}\spxextra{in module DecodingAnalysis}|hyperpage}{30}
-\indexentry{module@\spxentry{module}!LSTMRegression@\spxentry{LSTMRegression}|hyperpage}{30}
-\indexentry{LSTMRegression@\spxentry{LSTMRegression}!module@\spxentry{module}|hyperpage}{30}
-\indexentry{LongShortTermMemoryRegression (class in LSTMRegression)@\spxentry{LongShortTermMemoryRegression}\spxextra{class in LSTMRegression}|hyperpage}{30}
-\indexentry{fitModel() (LSTMRegression.LongShortTermMemoryRegression method)@\spxentry{fitModel()}\spxextra{LSTMRegression.LongShortTermMemoryRegression method}|hyperpage}{30}
-\indexentry{makeAllPredictions() (LSTMRegression.LongShortTermMemoryRegression method)@\spxentry{makeAllPredictions()}\spxextra{LSTMRegression.LongShortTermMemoryRegression method}|hyperpage}{30}
-\indexentry{makePrediction() (LSTMRegression.LongShortTermMemoryRegression method)@\spxentry{makePrediction()}\spxextra{LSTMRegression.LongShortTermMemoryRegression method}|hyperpage}{30}
-\indexentry{module@\spxentry{module}!LinearNonLinearRegression@\spxentry{LinearNonLinearRegression}|hyperpage}{31}
-\indexentry{LinearNonLinearRegression@\spxentry{LinearNonLinearRegression}!module@\spxentry{module}|hyperpage}{31}
-\indexentry{LinearNonLinearRegression (class in LinearNonLinearRegression)@\spxentry{LinearNonLinearRegression}\spxextra{class in LinearNonLinearRegression}|hyperpage}{31}
-\indexentry{assessFit() (LinearNonLinearRegression.LinearNonLinearRegression method)@\spxentry{assessFit()}\spxextra{LinearNonLinearRegression.LinearNonLinearRegression method}|hyperpage}{31}
-\indexentry{fitModel() (LinearNonLinearRegression.LinearNonLinearRegression method)@\spxentry{fitModel()}\spxextra{LinearNonLinearRegression.LinearNonLinearRegression method}|hyperpage}{31}
-\indexentry{makePrediction() (LinearNonLinearRegression.LinearNonLinearRegression method)@\spxentry{makePrediction()}\spxextra{LinearNonLinearRegression.LinearNonLinearRegression method}|hyperpage}{31}
-\indexentry{module@\spxentry{module}!LinearRegression@\spxentry{LinearRegression}|hyperpage}{31}
-\indexentry{LinearRegression@\spxentry{LinearRegression}!module@\spxentry{module}|hyperpage}{31}
-\indexentry{LinearRegression (class in LinearRegression)@\spxentry{LinearRegression}\spxextra{class in LinearRegression}|hyperpage}{31}
-\indexentry{assessFit() (LinearRegression.LinearRegression method)@\spxentry{assessFit()}\spxextra{LinearRegression.LinearRegression method}|hyperpage}{31}
-\indexentry{commonAssessment() (LinearRegression.LinearRegression method)@\spxentry{commonAssessment()}\spxextra{LinearRegression.LinearRegression method}|hyperpage}{31}
-\indexentry{fitModel() (LinearRegression.LinearRegression method)@\spxentry{fitModel()}\spxextra{LinearRegression.LinearRegression method}|hyperpage}{31}
-\indexentry{fullAssessment() (LinearRegression.LinearRegression method)@\spxentry{fullAssessment()}\spxextra{LinearRegression.LinearRegression method}|hyperpage}{31}
-\indexentry{makeAllPredictions() (LinearRegression.LinearRegression method)@\spxentry{makeAllPredictions()}\spxextra{LinearRegression.LinearRegression method}|hyperpage}{31}
-\indexentry{makePrediction() (LinearRegression.LinearRegression method)@\spxentry{makePrediction()}\spxextra{LinearRegression.LinearRegression method}|hyperpage}{31}
-\indexentry{WienerFilterDecoder (class in LinearRegression)@\spxentry{WienerFilterDecoder}\spxextra{class in LinearRegression}|hyperpage}{31}
-\indexentry{fit() (LinearRegression.WienerFilterDecoder method)@\spxentry{fit()}\spxextra{LinearRegression.WienerFilterDecoder method}|hyperpage}{31}
-\indexentry{predict() (LinearRegression.WienerFilterDecoder method)@\spxentry{predict()}\spxextra{LinearRegression.WienerFilterDecoder method}|hyperpage}{31}
-\indexentry{module@\spxentry{module}!LogisticRegression@\spxentry{LogisticRegression}|hyperpage}{32}
-\indexentry{LogisticRegression@\spxentry{LogisticRegression}!module@\spxentry{module}|hyperpage}{32}
-\indexentry{LogisticRegression (class in LogisticRegression)@\spxentry{LogisticRegression}\spxextra{class in LogisticRegression}|hyperpage}{32}
-\indexentry{assessFit() (LogisticRegression.LogisticRegression method)@\spxentry{assessFit()}\spxextra{LogisticRegression.LogisticRegression method}|hyperpage}{32}
-\indexentry{commonAssessment() (LogisticRegression.LogisticRegression method)@\spxentry{commonAssessment()}\spxextra{LogisticRegression.LogisticRegression method}|hyperpage}{32}
-\indexentry{fitModel() (LogisticRegression.LogisticRegression method)@\spxentry{fitModel()}\spxextra{LogisticRegression.LogisticRegression method}|hyperpage}{32}
-\indexentry{makeAllPredictions() (LogisticRegression.LogisticRegression method)@\spxentry{makeAllPredictions()}\spxextra{LogisticRegression.LogisticRegression method}|hyperpage}{32}
-\indexentry{makePrediction() (LogisticRegression.LogisticRegression method)@\spxentry{makePrediction()}\spxextra{LogisticRegression.LogisticRegression method}|hyperpage}{32}
-\indexentry{LogisticRegressionDecoder (class in LogisticRegression)@\spxentry{LogisticRegressionDecoder}\spxextra{class in LogisticRegression}|hyperpage}{32}
-\indexentry{fit() (LogisticRegression.LogisticRegressionDecoder method)@\spxentry{fit()}\spxextra{LogisticRegression.LogisticRegressionDecoder method}|hyperpage}{32}
-\indexentry{predict() (LogisticRegression.LogisticRegressionDecoder method)@\spxentry{predict()}\spxextra{LogisticRegression.LogisticRegressionDecoder method}|hyperpage}{32}
-\indexentry{module@\spxentry{module}!SupportVectorMachine@\spxentry{SupportVectorMachine}|hyperpage}{32}
-\indexentry{SupportVectorMachine@\spxentry{SupportVectorMachine}!module@\spxentry{module}|hyperpage}{32}
-\indexentry{SVM (class in SupportVectorMachine)@\spxentry{SVM}\spxextra{class in SupportVectorMachine}|hyperpage}{32}
-\indexentry{assessFit() (SupportVectorMachine.SVM method)@\spxentry{assessFit()}\spxextra{SupportVectorMachine.SVM method}|hyperpage}{32}
-\indexentry{commonAssessment() (SupportVectorMachine.SVM method)@\spxentry{commonAssessment()}\spxextra{SupportVectorMachine.SVM method}|hyperpage}{32}
-\indexentry{fitModel() (SupportVectorMachine.SVM method)@\spxentry{fitModel()}\spxextra{SupportVectorMachine.SVM method}|hyperpage}{32}
-\indexentry{makeAllPredictions() (SupportVectorMachine.SVM method)@\spxentry{makeAllPredictions()}\spxextra{SupportVectorMachine.SVM method}|hyperpage}{32}
-\indexentry{makePrediction() (SupportVectorMachine.SVM method)@\spxentry{makePrediction()}\spxextra{SupportVectorMachine.SVM method}|hyperpage}{32}
+\indexentry{module@\spxentry{module}!ConfigHandling@\spxentry{ConfigHandling}|hyperpage}{1}
+\indexentry{ConfigHandling@\spxentry{ConfigHandling}!module@\spxentry{module}|hyperpage}{1}
+\indexentry{config\_generator() (in module ConfigHandling)@\spxentry{config\_generator()}\spxextra{in module ConfigHandling}|hyperpage}{1}
+\indexentry{config\_reader() (in module ConfigHandling)@\spxentry{config\_reader()}\spxextra{in module ConfigHandling}|hyperpage}{1}
+\indexentry{module@\spxentry{module}!Organization@\spxentry{Organization}|hyperpage}{1}
+\indexentry{Organization@\spxentry{Organization}!module@\spxentry{module}|hyperpage}{1}
+\indexentry{BehavioralExperiment (class in Organization)@\spxentry{BehavioralExperiment}\spxextra{class in Organization}|hyperpage}{1}
+\indexentry{copy\_raw\_behavioral\_data() (Organization.BehavioralExperiment method)@\spxentry{copy\_raw\_behavioral\_data()}\spxextra{Organization.BehavioralExperiment method}|hyperpage}{2}
+\indexentry{load\_data() (Organization.BehavioralExperiment method)@\spxentry{load\_data()}\spxextra{Organization.BehavioralExperiment method}|hyperpage}{2}
+\indexentry{Data (class in Organization)@\spxentry{Data}\spxextra{class in Organization}|hyperpage}{2}
+\indexentry{files (Organization.Data property)@\spxentry{files}\spxextra{Organization.Data property}|hyperpage}{2}
+\indexentry{find\_all\_ext() (Organization.Data method)@\spxentry{find\_all\_ext()}\spxextra{Organization.Data method}|hyperpage}{2}
+\indexentry{find\_matching\_files() (Organization.Data method)@\spxentry{find\_matching\_files()}\spxextra{Organization.Data method}|hyperpage}{3}
+\indexentry{folders (Organization.Data property)@\spxentry{folders}\spxextra{Organization.Data property}|hyperpage}{3}
+\indexentry{instance\_date (Organization.Data property)@\spxentry{instance\_date}\spxextra{Organization.Data property}|hyperpage}{3}
+\indexentry{path (Organization.Data property)@\spxentry{path}\spxextra{Organization.Data property}|hyperpage}{3}
+\indexentry{reindex() (Organization.Data method)@\spxentry{reindex()}\spxextra{Organization.Data method}|hyperpage}{3}
+\indexentry{Experiment (class in Organization)@\spxentry{Experiment}\spxextra{class in Organization}|hyperpage}{3}
+\indexentry{copy\_data() (Organization.Experiment method)@\spxentry{copy\_data()}\spxextra{Organization.Experiment method}|hyperpage}{4}
+\indexentry{experiment\_id (Organization.Experiment property)@\spxentry{experiment\_id}\spxextra{Organization.Experiment property}|hyperpage}{4}
+\indexentry{instance\_date (Organization.Experiment property)@\spxentry{instance\_date}\spxextra{Organization.Experiment property}|hyperpage}{4}
+\indexentry{mouse\_id (Organization.Experiment property)@\spxentry{mouse\_id}\spxextra{Organization.Experiment property}|hyperpage}{4}
+\indexentry{record\_mod() (Organization.Experiment method)@\spxentry{record\_mod()}\spxextra{Organization.Experiment method}|hyperpage}{4}
+\indexentry{update\_folder\_dictionary() (Organization.Experiment method)@\spxentry{update\_folder\_dictionary()}\spxextra{Organization.Experiment method}|hyperpage}{4}
+\indexentry{Figures (class in Organization)@\spxentry{Figures}\spxextra{class in Organization}|hyperpage}{4}
+\indexentry{view\_figure() (Organization.Figures method)@\spxentry{view\_figure()}\spxextra{Organization.Figures method}|hyperpage}{4}
+\indexentry{Images (class in Organization)@\spxentry{Images}\spxextra{class in Organization}|hyperpage}{5}
+\indexentry{channels (Organization.Images property)@\spxentry{channels}\spxextra{Organization.Images property}|hyperpage}{5}
+\indexentry{file\_format (Organization.Images property)@\spxentry{file\_format}\spxextra{Organization.Images property}|hyperpage}{5}
+\indexentry{frames (Organization.Images property)@\spxentry{frames}\spxextra{Organization.Images property}|hyperpage}{5}
+\indexentry{height (Organization.Images property)@\spxentry{height}\spxextra{Organization.Images property}|hyperpage}{5}
+\indexentry{imaging\_files (Organization.Images property)@\spxentry{imaging\_files}\spxextra{Organization.Images property}|hyperpage}{5}
+\indexentry{meta\_files (Organization.Images property)@\spxentry{meta\_files}\spxextra{Organization.Images property}|hyperpage}{5}
+\indexentry{num\_imaging\_files (Organization.Images property)@\spxentry{num\_imaging\_files}\spxextra{Organization.Images property}|hyperpage}{5}
+\indexentry{num\_meta\_files (Organization.Images property)@\spxentry{num\_meta\_files}\spxextra{Organization.Images property}|hyperpage}{5}
+\indexentry{planes (Organization.Images property)@\spxentry{planes}\spxextra{Organization.Images property}|hyperpage}{5}
+\indexentry{reorganize\_bruker\_files() (Organization.Images method)@\spxentry{reorganize\_bruker\_files()}\spxextra{Organization.Images method}|hyperpage}{5}
+\indexentry{width (Organization.Images property)@\spxentry{width}\spxextra{Organization.Images property}|hyperpage}{5}
+\indexentry{ImagingAnalysis (class in Organization)@\spxentry{ImagingAnalysis}\spxextra{class in Organization}|hyperpage}{5}
+\indexentry{add\_notes() (Organization.ImagingAnalysis method)@\spxentry{add\_notes()}\spxextra{Organization.ImagingAnalysis method}|hyperpage}{5}
+\indexentry{clean\_up\_compilation() (Organization.ImagingAnalysis method)@\spxentry{clean\_up\_compilation()}\spxextra{Organization.ImagingAnalysis method}|hyperpage}{6}
+\indexentry{clean\_up\_motion\_correction() (Organization.ImagingAnalysis method)@\spxentry{clean\_up\_motion\_correction()}\spxextra{Organization.ImagingAnalysis method}|hyperpage}{6}
+\indexentry{current\_ExperimentName (Organization.ImagingAnalysis property)@\spxentry{current\_ExperimentName}\spxextra{Organization.ImagingAnalysis property}|hyperpage}{6}
+\indexentry{default\_folders() (Organization.ImagingAnalysis method)@\spxentry{default\_folders()}\spxextra{Organization.ImagingAnalysis method}|hyperpage}{6}
+\indexentry{export\_registration\_to\_denoised() (Organization.ImagingAnalysis method)@\spxentry{export\_registration\_to\_denoised()}\spxextra{Organization.ImagingAnalysis method}|hyperpage}{6}
+\indexentry{load\_cascade\_exports() (Organization.ImagingAnalysis method)@\spxentry{load\_cascade\_exports()}\spxextra{Organization.ImagingAnalysis method}|hyperpage}{6}
+\indexentry{load\_fissa\_exports() (Organization.ImagingAnalysis method)@\spxentry{load\_fissa\_exports()}\spxextra{Organization.ImagingAnalysis method}|hyperpage}{6}
+\indexentry{load\_suite2p() (Organization.ImagingAnalysis method)@\spxentry{load\_suite2p()}\spxextra{Organization.ImagingAnalysis method}|hyperpage}{6}
+\indexentry{ImagingBehaviorExperiment (class in Organization)@\spxentry{ImagingBehaviorExperiment}\spxextra{class in Organization}|hyperpage}{6}
+\indexentry{copy\_data() (Organization.ImagingBehaviorExperiment method)@\spxentry{copy\_data()}\spxextra{Organization.ImagingBehaviorExperiment method}|hyperpage}{7}
+\indexentry{load\_data() (Organization.ImagingBehaviorExperiment method)@\spxentry{load\_data()}\spxextra{Organization.ImagingBehaviorExperiment method}|hyperpage}{7}
+\indexentry{ImagingExperiment (class in Organization)@\spxentry{ImagingExperiment}\spxextra{class in Organization}|hyperpage}{7}
+\indexentry{add\_image\_sampling\_folder() (Organization.ImagingExperiment method)@\spxentry{add\_image\_sampling\_folder()}\spxextra{Organization.ImagingExperiment method}|hyperpage}{8}
+\indexentry{copy\_data() (Organization.ImagingExperiment method)@\spxentry{copy\_data()}\spxextra{Organization.ImagingExperiment method}|hyperpage}{8}
+\indexentry{copy\_raw\_imaging\_data() (Organization.ImagingExperiment method)@\spxentry{copy\_raw\_imaging\_data()}\spxextra{Organization.ImagingExperiment method}|hyperpage}{8}
+\indexentry{load\_data() (Organization.ImagingExperiment method)@\spxentry{load\_data()}\spxextra{Organization.ImagingExperiment method}|hyperpage}{8}
+\indexentry{Mouse (class in Organization)@\spxentry{Mouse}\spxextra{class in Organization}|hyperpage}{8}
+\indexentry{check\_log() (Organization.Mouse method)@\spxentry{check\_log()}\spxextra{Organization.Mouse method}|hyperpage}{10}
+\indexentry{create() (Organization.Mouse method)@\spxentry{create()}\spxextra{Organization.Mouse method}|hyperpage}{10}
+\indexentry{create\_experiment() (Organization.Mouse method)@\spxentry{create\_experiment()}\spxextra{Organization.Mouse method}|hyperpage}{10}
+\indexentry{create\_log\_file() (Organization.Mouse method)@\spxentry{create\_log\_file()}\spxextra{Organization.Mouse method}|hyperpage}{10}
+\indexentry{end\_log() (Organization.Mouse method)@\spxentry{end\_log()}\spxextra{Organization.Mouse method}|hyperpage}{10}
+\indexentry{experimental\_condition (Organization.Mouse property)@\spxentry{experimental\_condition}\spxextra{Organization.Mouse property}|hyperpage}{10}
+\indexentry{instance\_date (Organization.Mouse property)@\spxentry{instance\_date}\spxextra{Organization.Mouse property}|hyperpage}{10}
+\indexentry{load() (Organization.Mouse class method)@\spxentry{load()}\spxextra{Organization.Mouse class method}|hyperpage}{10}
+\indexentry{log\_file (Organization.Mouse property)@\spxentry{log\_file}\spxextra{Organization.Mouse property}|hyperpage}{11}
+\indexentry{mouse\_id (Organization.Mouse property)@\spxentry{mouse\_id}\spxextra{Organization.Mouse property}|hyperpage}{11}
+\indexentry{pass\_meta() (Organization.Mouse method)@\spxentry{pass\_meta()}\spxextra{Organization.Mouse method}|hyperpage}{11}
+\indexentry{record\_experiment\_mod() (Organization.Mouse method)@\spxentry{record\_experiment\_mod()}\spxextra{Organization.Mouse method}|hyperpage}{11}
+\indexentry{record\_mod() (Organization.Mouse method)@\spxentry{record\_mod()}\spxextra{Organization.Mouse method}|hyperpage}{11}
+\indexentry{save() (Organization.Mouse method)@\spxentry{save()}\spxextra{Organization.Mouse method}|hyperpage}{11}
+\indexentry{start\_log() (Organization.Mouse method)@\spxentry{start\_log()}\spxextra{Organization.Mouse method}|hyperpage}{11}
+\indexentry{update\_all\_folder\_dictionaries() (Organization.Mouse method)@\spxentry{update\_all\_folder\_dictionaries()}\spxextra{Organization.Mouse method}|hyperpage}{11}
+\indexentry{Study (class in Organization)@\spxentry{Study}\spxextra{class in Organization}|hyperpage}{12}
+\indexentry{generate\_read\_me() (in module Organization)@\spxentry{generate\_read\_me()}\spxextra{in module Organization}|hyperpage}{12}
+\indexentry{get\_date() (in module Organization)@\spxentry{get\_date()}\spxextra{in module Organization}|hyperpage}{12}
+\indexentry{get\_time() (in module Organization)@\spxentry{get\_time()}\spxextra{in module Organization}|hyperpage}{12}
+\indexentry{module@\spxentry{module}!UserInterfaces@\spxentry{UserInterfaces}|hyperpage}{12}
+\indexentry{UserInterfaces@\spxentry{UserInterfaces}!module@\spxentry{module}|hyperpage}{12}
+\indexentry{select\_directory() (in module UserInterfaces)@\spxentry{select\_directory()}\spxextra{in module UserInterfaces}|hyperpage}{12}
+\indexentry{verbose\_copying() (in module UserInterfaces)@\spxentry{verbose\_copying()}\spxextra{in module UserInterfaces}|hyperpage}{12}

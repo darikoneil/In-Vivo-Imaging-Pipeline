@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.10) (preloaded format=pdflatex 2023.1.1)  1 JAN 2023 20:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.10) (preloaded format=pdflatex 2023.1.1)  4 JAN 2023 20:08
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -848,1075 +848,434 @@ File: t1txtt.fd 2000/12/15 v3.1
 LaTeX Font Info:    Font shape `T1/txtt/b/n' in size <10> not available
 (Font)              Font shape `T1/txtt/bx/n' tried instead on input line 99.
 LaTeX Font Info:    Font shape `T1/txtt/m/it' in size <10> not available
-(Font)              Font shape `T1/txtt/m/sl' tried instead on input line 140.
+(Font)              Font shape `T1/txtt/m/sl' tried instead on input line 106.
 
-Underfull \hbox (badness 10000) in paragraph at lines 146--146
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 152--152
+Underfull \hbox (badness 10000) in paragraph at lines 161--161
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 158--158
+Underfull \hbox (badness 10000) in paragraph at lines 167--167
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 169--169
+Underfull \hbox (badness 10000) in paragraph at lines 173--173
 
  []
 
 [1
 
 ]
-LaTeX Font Info:    Trying to load font information for TS1+qtm on input line 1
-90.
- (C:\Users\YUSTE\AppData\Local\Programs\MiKTeX\tex/latex/tex-gyre\ts1qtm.fd
-File: ts1qtm.fd 2009/09/25 v1.2 font definition file for TS1/qtm
-)
-Underfull \hbox (badness 10000) in paragraph at lines 229--229
+Underfull \hbox (badness 10000) in paragraph at lines 183--183
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 234--234
+Underfull \hbox (badness 10000) in paragraph at lines 246--246
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 241--241
+Underfull \hbox (badness 10000) in paragraph at lines 251--251
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 258--258
 
  []
 
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 440--440
-
- []
-
-[3] [4]
-Underfull \hbox (badness 10000) in paragraph at lines 766--766
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 776--776
-
- []
-
-[5]
-Underfull \hbox (badness 10000) in paragraph at lines 792--792
+LaTeX Font Info:    Trying to load font information for TS1+qtm on input line 3
+11.
+ (C:\Users\YUSTE\AppData\Local\Programs\MiKTeX\tex/latex/tex-gyre\ts1qtm.fd
+File: ts1qtm.fd 2009/09/25 v1.2 font definition file for TS1/qtm
+)
+Underfull \hbox (badness 10000) in paragraph at lines 418--418
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 797--797
+Underfull \hbox (badness 10000) in paragraph at lines 424--424
+
+ []
+
+[3]
+Underfull \hbox (badness 10000) in paragraph at lines 430--430
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 809--809
+Underfull \hbox (badness 10000) in paragraph at lines 437--437
+
+ []
+
+[4]
+Underfull \hbox (badness 10000) in paragraph at lines 725--725
+
+ []
+
+[5] [6]
+Underfull \hbox (badness 10000) in paragraph at lines 930--930
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 817--817
+Underfull \hbox (badness 10000) in paragraph at lines 936--936
 
  []
 
-[6] [7] [8] [9] [10]
+
+Underfull \hbox (badness 10000) in paragraph at lines 942--942
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 953--953
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1025--1025
+
+ []
+
+[7]
+Underfull \hbox (badness 10000) in paragraph at lines 1031--1031
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1037--1037
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1045--1045
+
+ []
+
+[8]
+Underfull \hbox (badness 10000) in paragraph at lines 1151--1151
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1161--1161
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1169--1169
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1178--1178
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1183--1183
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1195--1195
+
+ []
+
+[9] [10] [11] [12]
 Chapter 2.
+[13
 
-Underfull \hbox (badness 10000) in paragraph at lines 1388--1390
-[]\T1/txtt/bx/n/10 KeyValuePairs \T1/qtm/m/n/10 (\T1/txtt/m/sl/10 Union[tuple[s
-tr, Union[str, int, float]], tuple[str,
- []
+] [14
 
-[11
-
-] [12] [13] [14]
-Chapter 3.
-[15
-
-] [16] [17]
-Underfull \hbox (badness 10000) in paragraph at lines 2416--2416
-
- []
-
-[18] [19] [20] [21] [22] [23] [24] [25] [26] [27] [28
-
-]
-Chapter 4.
-
-Underfull \hbox (badness 10000) in paragraph at lines 3701--3701
-
- []
-
-[29] [30] [31] [32]
-Chapter 5.
-[33
-
-] [34
-
-] [35
+] [15
 
 
 ]
 (C:/ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\auxil\in-vivo-
 imaging-pipeline.ind
-Overfull \hbox (120.46242pt too wide) in paragraph at lines 3--5
-[]\T1/qtm/m/n/10 \spxentryadd_image_sampling_folder()\spxextraExperimentHierarc
-hy.ExperimentStage
+Overfull \hbox (98.24245pt too wide) in paragraph at lines 3--5
+[]\T1/qtm/m/n/10 \spxentryadd_image_sampling_folder()\spxextraOrganization.Imag
+ingExperiment
  []
 
 
-Overfull \hbox (110.67242pt too wide) in paragraph at lines 5--7
-[]\T1/qtm/m/n/10 \spxentryadd_notes()\spxextraExperimentHierarchy.CollectedImag
-ingAnalysisFolder
+Overfull \hbox (12.65245pt too wide) in paragraph at lines 5--7
+[]\T1/qtm/m/n/10 \spxentryadd_notes()\spxextraOrganization.ImagingAnalysis
  []
 
 
-Overfull \hbox (31.19244pt too wide) in paragraph at lines 11--13
-[]\T1/qtm/m/n/10 \spxentryassessFit()\spxextraDecodingAnalysis.DecodingModule
+Underfull \hbox (badness 10000) in paragraph at lines 17--19
+[]\T1/qtm/m/n/10 \spxentrycheck_log()\spxextraOrganization.Mouse
  []
 
 
-Overfull \hbox (114.84245pt too wide) in paragraph at lines 13--15
-[]\T1/qtm/m/n/10 \spxentryassessFit()\spxextraLinearNonLinearRegression.LinearN
-onLinearRegression
+Overfull \hbox (60.98245pt too wide) in paragraph at lines 19--21
+[]\T1/qtm/m/n/10 \spxentryclean_up_compilation()\spxextraOrganization.ImagingAn
+alysis
  []
 
 
-Overfull \hbox (28.60243pt too wide) in paragraph at lines 15--17
-[]\T1/qtm/m/n/10 \spxentryassessFit()\spxextraLinearRegression.LinearRegression
-
+Overfull \hbox (87.33244pt too wide) in paragraph at lines 21--23
+[]\T1/qtm/m/n/10 \spxentryclean_up_motion_correction()\spxextraOrganization.Ima
+gingAnalysis
  []
 
 
-Overfull \hbox (41.66243pt too wide) in paragraph at lines 17--19
-[]\T1/qtm/m/n/10 \spxentryassessFit()\spxextraLogisticRegression.LogisticRegres
-sion
+Underfull \hbox (badness 10000) in paragraph at lines 23--25
+[]\T1/qtm/m/n/10 \spxentryconfig_generator()\spxextrain mod-ule Con-
  []
 
 
-Overfull \hbox (2.36241pt too wide) in paragraph at lines 19--21
-[]\T1/qtm/m/n/10 \spxentryassessFit()\spxextraSupportVectorMachine.SVM
+Underfull \hbox (badness 10000) in paragraph at lines 29--31
+[]\T1/qtm/m/n/10 \spxentrycopy_data()\spxextraOrganization.Experiment
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 26--28
-[]\T1/qtm/m/n/10 \spxentrybackground\spxextraColoring.ColorImages
+Overfull \hbox (61.6224pt too wide) in paragraph at lines 31--33
+[]\T1/qtm/m/n/10 \spxentrycopy_data()\spxextraOrganization.ImagingBehaviorExper
+iment
  []
 
 
-Overfull \hbox (12.0424pt too wide) in paragraph at lines 28--30
-[]\T1/qtm/m/n/10 \spxentrybackground_cutoffs\spxextraColoring.ColorImages
+Overfull \hbox (25.26242pt too wide) in paragraph at lines 33--35
+[]\T1/qtm/m/n/10 \spxentrycopy_data()\spxextraOrganization.ImagingExperiment
  []
 
 
-Overfull \hbox (3.37239pt too wide) in paragraph at lines 30--32
-[]\T1/qtm/m/n/10 \spxentrybackground_style\spxextraColoring.ColorImages
+Overfull \hbox (102.11238pt too wide) in paragraph at lines 35--37
+[]\T1/qtm/m/n/10 \spxentrycopy_raw_behavioral_data()\spxextraOrganization.Behav
+ioralExperiment
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 32--34
-[]\T1/qtm/m/n/10 \spxentryBehavioralStage\spxextraclass in Ex-per-i-men-
+Overfull \hbox (82.7324pt too wide) in paragraph at lines 37--39
+[]\T1/qtm/m/n/10 \spxentrycopy_raw_imaging_data()\spxextraOrganization.ImagingE
+xperiment
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 40--42
-[]\T1/qtm/m/n/10 \spxentryblockwise_fast_filter_tiff()\spxextrain mod-ule
+Underfull \hbox (badness 10000) in paragraph at lines 39--41
+[]\T1/qtm/m/n/10 \spxentrycreate()\spxextraOrganization.Mouse method,
  []
 
 
-Overfull \hbox (81.91243pt too wide) in paragraph at lines 53--55
-[]\T1/qtm/m/n/10 \spxentrycalculate_distance()\spxextraBurrowFearConditioning.D
-eepLabData
+Overfull \hbox (5.20242pt too wide) in paragraph at lines 41--43
+[]\T1/qtm/m/n/10 \spxentrycreate_experiment()\spxextraOrganization.Mouse
  []
 
 
-Overfull \hbox (63.80243pt too wide) in paragraph at lines 61--63
-[]\T1/qtm/m/n/10 \spxentrychannels\spxextraExperimentHierarchy.CollectedImaging
-Folder
+Underfull \hbox (badness 10000) in paragraph at lines 43--45
+[]\T1/qtm/m/n/10 \spxentrycreate_log_file()\spxextraOrganization.Mouse
  []
 
 
-Overfull \hbox (44.54242pt too wide) in paragraph at lines 63--65
-[]\T1/qtm/m/n/10 \spxentrycheck_log()\spxextraExperimentHierarchy.ExperimentDat
-a
+Overfull \hbox (69.50243pt too wide) in paragraph at lines 45--47
+[]\T1/qtm/m/n/10 \spxentrycurrent_ExperimentName\spxextraOrganization.ImagingAn
+alysis
  []
 
 
-Overfull \hbox (48.98242pt too wide) in paragraph at lines 65--67
-[]\T1/qtm/m/n/10 \spxentrycheck_path()\spxextraExperimentHierarchy.ExperimentDa
-ta
+Overfull \hbox (31.99246pt too wide) in paragraph at lines 51--53
+[]\T1/qtm/m/n/10 \spxentrydefault_folders()\spxextraOrganization.ImagingAnalysi
+s
  []
 
 
-Overfull \hbox (90.44241pt too wide) in paragraph at lines 67--69
-[]\T1/qtm/m/n/10 \spxentrycheck_sync_plot()\spxextraBurrowFearConditioning.Fear
-Conditioning
+Overfull \hbox (2.09239pt too wide) in paragraph at lines 60--62
+[]\T1/qtm/m/n/10 \spxentryexperiment_id\spxextraOrganization.Experiment
  []
 
 
-Overfull \hbox (159.00243pt too wide) in paragraph at lines 69--71
-[]\T1/qtm/m/n/10 \spxentryclean_up_compilation()\spxextraExperimentHierarchy.Co
-llectedImagingAnalysisFolder
+Overfull \hbox (19.67241pt too wide) in paragraph at lines 62--64
+[]\T1/qtm/m/n/10 \spxentryexperimental_condition\spxextraOrganization.Mouse
  []
 
 
-Overfull \hbox (185.35242pt too wide) in paragraph at lines 71--73
-[]\T1/qtm/m/n/10 \spxentryclean_up_motion_correction()\spxextraExperimentHierar
-chy.CollectedImagingAnalysisFolder
+Overfull \hbox (101.28242pt too wide) in paragraph at lines 64--66
+[]\T1/qtm/m/n/10 \spxentryexport_registration_to_denoised()\spxextraOrganizatio
+n.ImagingAnalysis
  []
 
 
-Overfull \hbox (47.58246pt too wide) in paragraph at lines 73--75
-[]\T1/qtm/m/n/10 \spxentrycleanKwargs()\spxextraDecodingAnalysis.DecodingModule
-
+Underfull \hbox (badness 7851) in paragraph at lines 71--73
+[]\T1/qtm/m/n/10 \spxentryfile_format\spxextraOrganization.Images prop-
  []
 
 
-Overfull \hbox (62.23245pt too wide) in paragraph at lines 75--77
-[]\T1/qtm/m/n/10 \spxentrycollapseFeatures()\spxextraDecodingAnalysis.DecodingM
-odule
+Underfull \hbox (badness 10000) in paragraph at lines 75--77
+[]\T1/qtm/m/n/10 \spxentryfind_all_ext()\spxextraOrganization.Data
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 77--79
-[]\T1/qtm/m/n/10 \spxentryCollectedDataFolder\spxextraclass in Ex-per-i-
+Overfull \hbox (2.45245pt too wide) in paragraph at lines 77--79
+[]\T1/qtm/m/n/10 \spxentryfind_matching_files()\spxextraOrganization.Data
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 81--83
-[]\T1/qtm/m/n/10 \spxentryCollectedImagingAnalysisFolder\spxextraclass
+Underfull \hbox (badness 10000) in paragraph at lines 102--104
+[]\T1/qtm/m/n/10 \spxentryimaging_files\spxextraOrganization.Images
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 85--87
-[]\T1/qtm/m/n/10 \spxentrycolor_video\spxextraColoring.ColorImages
+Underfull \hbox (badness 10000) in paragraph at lines 106--108
+[]\T1/qtm/m/n/10 \spxentryImagingBehaviorExperiment\spxextraclass in
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 91--93
-[]\T1/qtm/m/n/10 \spxentrycolorize_complete_image()\spxextrain mod-ule
+Underfull \hbox (badness 6658) in paragraph at lines 110--112
+[]\T1/qtm/m/n/10 \spxentryinstance_date\spxextraOrganization.Data prop-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 93--95
-[]\T1/qtm/m/n/10 \spxentrycolorize_complete_image()\spxextrain mod-ule
+Underfull \hbox (badness 10000) in paragraph at lines 112--114
+[]\T1/qtm/m/n/10 \spxentryinstance_date\spxextraOrganization.Experiment
  []
 
-[36
+
+Underfull \hbox (badness 10000) in paragraph at lines 114--116
+[]\T1/qtm/m/n/10 \spxentryinstance_date\spxextraOrganization.Mouse
+ []
+
+[16
 
 
 ]
-Overfull \hbox (78.00244pt too wide) in paragraph at lines 103--105
-[]\T1/qtm/m/n/10 \spxentrycommonAssessment()\spxextraDecodingAnalysis.DecodingM
-odule
+Underfull \hbox (badness 10000) in paragraph at lines 119--121
+[]\T1/qtm/m/n/10 \spxentryload()\spxextraOrganization.Mouse class
  []
 
 
-Overfull \hbox (75.41243pt too wide) in paragraph at lines 105--107
-[]\T1/qtm/m/n/10 \spxentrycommonAssessment()\spxextraLinearRegression.LinearReg
-ression
+Overfull \hbox (59.75243pt too wide) in paragraph at lines 121--123
+[]\T1/qtm/m/n/10 \spxentryload_cascade_exports()\spxextraOrganization.ImagingAn
+alysis
  []
 
 
-Overfull \hbox (88.47243pt too wide) in paragraph at lines 107--109
-[]\T1/qtm/m/n/10 \spxentrycommonAssessment()\spxextraLogisticRegression.Logisti
-cRegression
+Overfull \hbox (33.59242pt too wide) in paragraph at lines 123--125
+[]\T1/qtm/m/n/10 \spxentryload_data()\spxextraOrganization.BehavioralExperiment
+
  []
 
 
-Overfull \hbox (49.17241pt too wide) in paragraph at lines 109--111
-[]\T1/qtm/m/n/10 \spxentrycommonAssessment()\spxextraSupportVectorMachine.SVM
+Overfull \hbox (59.70242pt too wide) in paragraph at lines 125--127
+[]\T1/qtm/m/n/10 \spxentryload_data()\spxextraOrganization.ImagingBehaviorExper
+iment
  []
 
 
-Overfull \hbox (158.33235pt too wide) in paragraph at lines 117--119
-[]\T1/qtm/m/n/10 \spxentryconvert_dataframe_to_physical_units()\spxextraBurrowF
-earConditioning.DeepLabData
+Overfull \hbox (23.34244pt too wide) in paragraph at lines 127--129
+[]\T1/qtm/m/n/10 \spxentryload_data()\spxextraOrganization.ImagingExperiment
  []
 
 
-Overfull \hbox (99.99237pt too wide) in paragraph at lines 121--123
-[]\T1/qtm/m/n/10 \spxentryconvert_to_mean_zero()\spxextraBurrowFearConditioning
-.DeepLabData
+Overfull \hbox (46.44241pt too wide) in paragraph at lines 129--131
+[]\T1/qtm/m/n/10 \spxentryload_fissa_exports()\spxextraOrganization.ImagingAnal
+ysis
  []
 
 
-Overfull \hbox (27.66241pt too wide) in paragraph at lines 123--125
-[]\T1/qtm/m/n/10 \spxentrycreate()\spxextraExperimentHierarchy.ExperimentData
+Overfull \hbox (23.21245pt too wide) in paragraph at lines 131--133
+[]\T1/qtm/m/n/10 \spxentryload_suite2p()\spxextraOrganization.ImagingAnalysis
  []
 
 
-Overfull \hbox (109.87239pt too wide) in paragraph at lines 125--127
-[]\T1/qtm/m/n/10 \spxentrycreate_experimental_stage()\spxextraExperimentHierarc
-hy.ExperimentData
- []
-
-
-Overfull \hbox (63.22241pt too wide) in paragraph at lines 127--129
-[]\T1/qtm/m/n/10 \spxentrycreate_log_file()\spxextraExperimentHierarchy.Experim
-entData
- []
-
-
-Overfull \hbox (74.89243pt too wide) in paragraph at lines 129--131
-[]\T1/qtm/m/n/10 \spxentrycreateTrialIndicator()\spxextraDecodingAnalysis.Decod
-ingModule
- []
-
-
-Overfull \hbox (117.18242pt too wide) in paragraph at lines 131--133
-[]\T1/qtm/m/n/10 \spxentrycurrent_stage\spxextraExperimentHierarchy.CollectedIm
-agingAnalysisFolder
+Underfull \hbox (badness 10000) in paragraph at lines 133--135
+[]\T1/qtm/m/n/10 \spxentrylog_file\spxextraOrganization.Mouse prop-erty,
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 138--140
-[]\T1/qtm/m/n/10 \spxentryDecodingModule\spxextraclass in De-codin-g-
+[]\T1/qtm/m/n/10 \spxentrymeta_files\spxextraOrganization.Images prop-
  []
 
 
-Overfull \hbox (130.01244pt too wide) in paragraph at lines 142--144
-[]\T1/qtm/m/n/10 \spxentrydefault_folders()\spxextraExperimentHierarchy.Collect
-edImagingAnalysisFolder
+Underfull \hbox (badness 10000) in paragraph at lines 145--147
+[]\T1/qtm/m/n/10 \spxentrymouse_id\spxextraOrganization.Experiment
  []
 
 
-Overfull \hbox (67.02243pt too wide) in paragraph at lines 144--146
-[]\T1/qtm/m/n/10 \spxentrydep_shuffle_trials()\spxextraDecodingAnalysis.Decodin
-gModule
+Underfull \hbox (badness 10000) in paragraph at lines 147--149
+[]\T1/qtm/m/n/10 \spxentrymouse_id\spxextraOrganization.Mouse prop-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 146--148
-[]\T1/qtm/m/n/10 \spxentrydetermine_bruker_folder_contents()\spxextrain
+Overfull \hbox (3.47244pt too wide) in paragraph at lines 152--154
+[]\T1/qtm/m/n/10 \spxentrynum_imaging_files\spxextraOrganization.Images
  []
 
 
-Overfull \hbox (36.0124pt too wide) in paragraph at lines 155--157
-[]\T1/qtm/m/n/10 \spxentryend_log()\spxextraExperimentHierarchy.ExperimentData
+Underfull \hbox (badness 10000) in paragraph at lines 154--156
+[]\T1/qtm/m/n/10 \spxentrynum_meta_files\spxextraOrganization.Images
  []
 
 
-Overfull \hbox (91.97237pt too wide) in paragraph at lines 157--159
-[]\T1/qtm/m/n/10 \spxentryexperimental_condition\spxextraExperimentHierarchy.Ex
-perimentData
+Underfull \hbox (badness 10000) in paragraph at lines 164--166
+[]\T1/qtm/m/n/10 \spxentrypass_meta()\spxextraOrganization.Mouse
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 159--161
-[]\T1/qtm/m/n/10 \spxentryExperimentData\spxextraclass in Ex-per-i-men-
+Overfull \hbox (29.65242pt too wide) in paragraph at lines 173--175
+[]\T1/qtm/m/n/10 \spxentryrecord_experiment_mod()\spxextraOrganization.Mouse
  []
 
 
-Overfull \hbox (199.3024pt too wide) in paragraph at lines 165--167
-[]\T1/qtm/m/n/10 \spxentryexport_registration_to_denoised()\spxextraExperimentH
-ierarchy.CollectedImagingAnalysisFolder
+Underfull \hbox (badness 10000) in paragraph at lines 175--177
+[]\T1/qtm/m/n/10 \spxentryrecord_mod()\spxextraOrganization.Experiment
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 174--176
-[]\T1/qtm/m/n/10 \spxentryFearConditioning\spxextraclass in Bur-
+Underfull \hbox (badness 10000) in paragraph at lines 177--179
+[]\T1/qtm/m/n/10 \spxentryrecord_mod()\spxextraOrganization.Mouse
  []
 
 
-Overfull \hbox (47.8424pt too wide) in paragraph at lines 176--178
-[]\T1/qtm/m/n/10 \spxentryfeature_matrix\spxextraDecodingAnalysis.DecodingModul
-e
- []
-
-
-Overfull \hbox (45.97243pt too wide) in paragraph at lines 178--180
-[]\T1/qtm/m/n/10 \spxentryfeature_tensor\spxextraDecodingAnalysis.DecodingModul
-e
- []
-
-
-Overfull \hbox (73.20241pt too wide) in paragraph at lines 180--182
-[]\T1/qtm/m/n/10 \spxentryfile_format\spxextraExperimentHierarchy.CollectedImag
-ingFolder
- []
-
-
-Overfull \hbox (31.18242pt too wide) in paragraph at lines 182--184
-[]\T1/qtm/m/n/10 \spxentryfiles\spxextraExperimentHierarchy.CollectedDataFolder
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 184--186
-[]\T1/qtm/m/n/10 \spxentryfilter_images()\spxextrain mod-ule Im-age-Pro-
- []
-
-
-Overfull \hbox (68.6024pt too wide) in paragraph at lines 186--188
-[]\T1/qtm/m/n/10 \spxentryfind_all_ext()\spxextraExperimentHierarchy.CollectedD
-ataFolder
- []
-
-
-Overfull \hbox (100.47243pt too wide) in paragraph at lines 188--190
-[]\T1/qtm/m/n/10 \spxentryfind_matching_files()\spxextraExperimentHierarchy.Col
-lectedDataFolder
- []
-
-
-Overfull \hbox (15.81245pt too wide) in paragraph at lines 190--192
-[]\T1/qtm/m/n/10 \spxentryfit()\spxextraLinearRegression.WienerFilterDecoder
- []
-
-
-Overfull \hbox (48.46243pt too wide) in paragraph at lines 192--194
-[]\T1/qtm/m/n/10 \spxentryfit()\spxextraLogisticRegression.LogisticRegressionDe
-coder
- []
-
-
-Overfull \hbox (30.23244pt too wide) in paragraph at lines 194--196
-[]\T1/qtm/m/n/10 \spxentryfitModel()\spxextraDecodingAnalysis.DecodingModule
- []
-
-
-Overfull \hbox (113.88245pt too wide) in paragraph at lines 196--198
-[]\T1/qtm/m/n/10 \spxentryfitModel()\spxextraLinearNonLinearRegression.LinearNo
-nLinearRegression
- []
-
-
-Overfull \hbox (27.64243pt too wide) in paragraph at lines 198--200
-[]\T1/qtm/m/n/10 \spxentryfitModel()\spxextraLinearRegression.LinearRegression
- []
-
-
-Overfull \hbox (40.70242pt too wide) in paragraph at lines 200--202
-[]\T1/qtm/m/n/10 \spxentryfitModel()\spxextraLogisticRegression.LogisticRegress
-ion
- []
-
-
-Overfull \hbox (100.59235pt too wide) in paragraph at lines 202--204
-[]\T1/qtm/m/n/10 \spxentryfitModel()\spxextraLSTMRegression.LongShortTermMemory
-Regression
- []
-
-
-Overfull \hbox (1.4024pt too wide) in paragraph at lines 204--206
-[]\T1/qtm/m/n/10 \spxentryfitModel()\spxextraSupportVectorMachine.SVM
- []
-
-
-Overfull \hbox (41.88243pt too wide) in paragraph at lines 206--208
-[]\T1/qtm/m/n/10 \spxentryfolders\spxextraExperimentHierarchy.CollectedDataFold
-er
- []
-
-
-Overfull \hbox (56.17242pt too wide) in paragraph at lines 208--210
-[]\T1/qtm/m/n/10 \spxentryframes\spxextraExperimentHierarchy.CollectedImagingFo
-lder
- []
-
-
-Overfull \hbox (56.89244pt too wide) in paragraph at lines 210--212
-[]\T1/qtm/m/n/10 \spxentryfullAssessment()\spxextraDecodingAnalysis.DecodingMod
-ule
- []
-
-[37]
-Overfull \hbox (54.30243pt too wide) in paragraph at lines 212--214
-[]\T1/qtm/m/n/10 \spxentryfullAssessment()\spxextraLinearRegression.LinearRegre
-ssion
- []
-
-
-Overfull \hbox (37.42241pt too wide) in paragraph at lines 233--235
-[]\T1/qtm/m/n/10 \spxentryget_date()\spxextraExperimentHierarchy.ExperimentData
-
- []
-
-
-Overfull \hbox (38.5424pt too wide) in paragraph at lines 235--237
-[]\T1/qtm/m/n/10 \spxentryget_time()\spxextraExperimentHierarchy.ExperimentData
-
- []
-
-
-Overfull \hbox (53.96242pt too wide) in paragraph at lines 242--244
-[]\T1/qtm/m/n/10 \spxentryheight\spxextraExperimentHierarchy.CollectedImagingFo
-lder
- []
-
-
-Overfull \hbox (83.41241pt too wide) in paragraph at lines 249--251
-[]\T1/qtm/m/n/10 \spxentryimaging_files\spxextraExperimentHierarchy.CollectedIm
-agingFolder
- []
-
-
-Overfull \hbox (53.1824pt too wide) in paragraph at lines 251--253
-[]\T1/qtm/m/n/10 \spxentryimport_meta_data()\spxextraBrukerMetaModule.BrukerMet
-a
- []
-
-
-Overfull \hbox (112.53242pt too wide) in paragraph at lines 253--255
-[]\T1/qtm/m/n/10 \spxentryimported_feature_organization\spxextraDecodingAnalysi
-s.DecodingModule
- []
-
-
-Overfull \hbox (110.11244pt too wide) in paragraph at lines 255--257
-[]\T1/qtm/m/n/10 \spxentryimported_neural_organization\spxextraDecodingAnalysis
-.DecodingModule
- []
-
-
-Overfull \hbox (68.79243pt too wide) in paragraph at lines 257--259
-[]\T1/qtm/m/n/10 \spxentryinstance_date\spxextraExperimentHierarchy.CollectedDa
-taFolder
- []
-
-
-Overfull \hbox (51.41241pt too wide) in paragraph at lines 259--261
-[]\T1/qtm/m/n/10 \spxentryinstance_date\spxextraExperimentHierarchy.ExperimentD
-ata
- []
-
-
-Overfull \hbox (54.30241pt too wide) in paragraph at lines 261--263
-[]\T1/qtm/m/n/10 \spxentryinstance_date\spxextraExperimentHierarchy.ExperimentS
-tage
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 272--274
-[]\T1/qtm/m/n/10 \spxentryLinearNonLinearRegression\spxextraclass in
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 276--278
-[]\T1/qtm/m/n/10 \spxentryLinearRegression\spxextraclass in Lin-ear-
- []
-
-
-Overfull \hbox (157.7724pt too wide) in paragraph at lines 284--286
-[]\T1/qtm/m/n/10 \spxentryload_cascade_exports()\spxextraExperimentHierarchy.Co
-llectedImagingAnalysisFolder
- []
-
-
-Overfull \hbox (47.63242pt too wide) in paragraph at lines 286--288
-[]\T1/qtm/m/n/10 \spxentryload_data()\spxextraBurrowFearConditioning.DeepLabDat
-a
- []
-
-
-Overfull \hbox (62.4624pt too wide) in paragraph at lines 288--290
-[]\T1/qtm/m/n/10 \spxentryload_data()\spxextraBurrowFearConditioning.FearCondit
-ioning
- []
-
-
-Overfull \hbox (42.28241pt too wide) in paragraph at lines 290--292
-[]\T1/qtm/m/n/10 \spxentryload_data()\spxextraExperimentHierarchy.BehavioralSta
-ge
- []
-
-
-Overfull \hbox (45.56241pt too wide) in paragraph at lines 292--294
-[]\T1/qtm/m/n/10 \spxentryload_data()\spxextraExperimentHierarchy.ExperimentSta
-ge
- []
-
-
-Overfull \hbox (74.74237pt too wide) in paragraph at lines 294--296
-[]\T1/qtm/m/n/10 \spxentryload_experiments()\spxextraExperimentHierarchy.Experi
-mentData
- []
-
-
-Overfull \hbox (144.46239pt too wide) in paragraph at lines 296--298
-[]\T1/qtm/m/n/10 \spxentryload_fissa_exports()\spxextraExperimentHierarchy.Coll
-ectedImagingAnalysisFolder
- []
-
-
-Underfull \hbox (badness 5696) in paragraph at lines 298--300
-[]\T1/qtm/m/n/10 \spxentryload_mapped_binary()\spxextrain mod-ule IO,
- []
-
-
-Overfull \hbox (43.48242pt too wide) in paragraph at lines 300--302
-[]\T1/qtm/m/n/10 \spxentryload_meta_data()\spxextraBrukerMetaModule.BrukerMeta
- []
-
-
-Overfull \hbox (121.23242pt too wide) in paragraph at lines 306--308
-[]\T1/qtm/m/n/10 \spxentryload_suite2p()\spxextraExperimentHierarchy.CollectedI
-magingAnalysisFolder
- []
-
-
-Overfull \hbox (46.68245pt too wide) in paragraph at lines 308--310
-[]\T1/qtm/m/n/10 \spxentryloadFeatures()\spxextraDecodingAnalysis.DecodingModul
-e
- []
-
-
-Overfull \hbox (62.09245pt too wide) in paragraph at lines 310--312
-[]\T1/qtm/m/n/10 \spxentryloadFeaturesFile()\spxextraDecodingAnalysis.DecodingM
-odule
- []
-
-
-Overfull \hbox (27.6924pt too wide) in paragraph at lines 312--314
-[]\T1/qtm/m/n/10 \spxentrylog_file\spxextraExperimentHierarchy.ExperimentData
- []
-
-
-Overfull \hbox (5.66235pt too wide) in paragraph at lines 320--322
-[]\T1/qtm/m/n/10 \spxentryLongShortTermMemoryRegression\spxextraclass
- []
-
-
-Overfull \hbox (72.43243pt too wide) in paragraph at lines 329--331
-[]\T1/qtm/m/n/10 \spxentrymakeAllPredictions()\spxextraLinearRegression.LinearR
-egression
- []
-
-
-Overfull \hbox (85.49243pt too wide) in paragraph at lines 331--333
-[]\T1/qtm/m/n/10 \spxentrymakeAllPredictions()\spxextraLogisticRegression.Logis
-ticRegression
- []
-
-
-Overfull \hbox (145.38235pt too wide) in paragraph at lines 333--335
-[]\T1/qtm/m/n/10 \spxentrymakeAllPredictions()\spxextraLSTMRegression.LongShort
-TermMemoryRegression
- []
-
-[38]
-Overfull \hbox (46.19241pt too wide) in paragraph at lines 335--337
-[]\T1/qtm/m/n/10 \spxentrymakeAllPredictions()\spxextraSupportVectorMachine.SVM
-
- []
-
-
-Overfull \hbox (58.35245pt too wide) in paragraph at lines 337--339
-[]\T1/qtm/m/n/10 \spxentrymakePrediction()\spxextraDecodingAnalysis.DecodingMod
-ule
- []
-
-
-Overfull \hbox (142.00246pt too wide) in paragraph at lines 339--341
-[]\T1/qtm/m/n/10 \spxentrymakePrediction()\spxextraLinearNonLinearRegression.Li
-nearNonLinearRegression
- []
-
-
-Overfull \hbox (55.76244pt too wide) in paragraph at lines 341--343
-[]\T1/qtm/m/n/10 \spxentrymakePrediction()\spxextraLinearRegression.LinearRegre
-ssion
- []
-
-
-Overfull \hbox (68.82243pt too wide) in paragraph at lines 343--345
-[]\T1/qtm/m/n/10 \spxentrymakePrediction()\spxextraLogisticRegression.LogisticR
-egression
- []
-
-
-Overfull \hbox (128.71236pt too wide) in paragraph at lines 345--347
-[]\T1/qtm/m/n/10 \spxentrymakePrediction()\spxextraLSTMRegression.LongShortTerm
-MemoryRegression
- []
-
-
-Overfull \hbox (29.52242pt too wide) in paragraph at lines 347--349
-[]\T1/qtm/m/n/10 \spxentrymakePrediction()\spxextraSupportVectorMachine.SVM
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 351--353
-[]\T1/qtm/m/n/10 \spxentrymerge_background()\spxextrain mod-ule Col-
- []
-
-
-Overfull \hbox (72.22243pt too wide) in paragraph at lines 353--355
-[]\T1/qtm/m/n/10 \spxentrymerge_dlc_data()\spxextraBurrowFearConditioning.DeepL
-abData
- []
-
+Overfull \hbox (27.52246pt too wide) in paragraph at lines 181--183
+[]\T1/qtm/m/n/10 \spxentryreorganize_bruker_files()\spxextraOrganization.Images
 
-Overfull \hbox (70.07242pt too wide) in paragraph at lines 357--359
-[]\T1/qtm/m/n/10 \spxentrymeta_files\spxextraExperimentHierarchy.CollectedImagi
-ngFolder
  []
 
 
-Overfull \hbox (36.0224pt too wide) in paragraph at lines 378--380
-[]\T1/qtm/m/n/10 \spxentrymouse_id\spxextraExperimentHierarchy.ExperimentData
+Underfull \hbox (badness 10000) in paragraph at lines 190--192
+[]\T1/qtm/m/n/10 \spxentrystart_log()\spxextraOrganization.Mouse
  []
 
 
-Overfull \hbox (38.9124pt too wide) in paragraph at lines 380--382
-[]\T1/qtm/m/n/10 \spxentrymouse_id\spxextraExperimentHierarchy.ExperimentStage
+Overfull \hbox (53.49245pt too wide) in paragraph at lines 197--199
+[]\T1/qtm/m/n/10 \spxentryupdate_all_folder_dictionaries()\spxextraOrganization
+.Mouse
  []
 
 
-Overfull \hbox (45.42242pt too wide) in paragraph at lines 385--387
-[]\T1/qtm/m/n/10 \spxentryneural_matrix\spxextraDecodingAnalysis.DecodingModule
-
- []
-
-
-Overfull \hbox (43.55244pt too wide) in paragraph at lines 387--389
-[]\T1/qtm/m/n/10 \spxentryneural_tensor\spxextraDecodingAnalysis.DecodingModule
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 389--391
-[]\T1/qtm/m/n/10 \spxentryneuron_subsets\spxextraColoring.ColorImages
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 391--393
-[]\T1/qtm/m/n/10 \spxentryneuronal_ids\spxextraColoring.ColorImages
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 397--399
-[]\T1/qtm/m/n/10 \spxentrynum_frames\spxextraColoring.ColorImages
- []
-
-
-Overfull \hbox (39.11244pt too wide) in paragraph at lines 399--401
-[]\T1/qtm/m/n/10 \spxentrynum_frames\spxextraDecodingAnalysis.DecodingModule
- []
-
-
-Overfull \hbox (106.19241pt too wide) in paragraph at lines 401--403
-[]\T1/qtm/m/n/10 \spxentrynum_imaging_files\spxextraExperimentHierarchy.Collect
-edImagingFolder
- []
-
-
-Overfull \hbox (92.85242pt too wide) in paragraph at lines 403--405
-[]\T1/qtm/m/n/10 \spxentrynum_meta_files\spxextraExperimentHierarchy.CollectedI
-magingFolder
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 405--407
-[]\T1/qtm/m/n/10 \spxentrynum_neurons\spxextraColoring.ColorImages
- []
-
-
-Overfull \hbox (43.56244pt too wide) in paragraph at lines 407--409
-[]\T1/qtm/m/n/10 \spxentrynum_neurons\spxextraDecodingAnalysis.DecodingModule
- []
-
-
-Overfull \hbox (56.7824pt too wide) in paragraph at lines 409--411
-[]\T1/qtm/m/n/10 \spxentrynum_stim\spxextraBurrowFearConditioning.FearCondition
-ing
- []
-
-
-Overfull \hbox (59.90237pt too wide) in paragraph at lines 411--413
-[]\T1/qtm/m/n/10 \spxentrynum_trials\spxextraBurrowFearConditioning.FearConditi
-oning
- []
-
-
-Overfull \hbox (32.10242pt too wide) in paragraph at lines 413--415
-[]\T1/qtm/m/n/10 \spxentrynum_trials\spxextraDecodingAnalysis.DecodingModule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 418--420
-[]\T1/qtm/m/n/10 \spxentryoverlay_colorized_rois()\spxextrain mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 420--422
-[]\T1/qtm/m/n/10 \spxentryoverlay_colorized_rois()\spxextrain mod-ule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 422--424
-[]\T1/qtm/m/n/10 \spxentryoverlays\spxextraColoring.ColorImages prop-
- []
-
-
-Overfull \hbox (45.45241pt too wide) in paragraph at lines 427--429
-[]\T1/qtm/m/n/10 \spxentrypass_meta()\spxextraExperimentHierarchy.ExperimentDat
-a
- []
-
-
-Overfull \hbox (31.73242pt too wide) in paragraph at lines 429--431
-[]\T1/qtm/m/n/10 \spxentrypath\spxextraExperimentHierarchy.CollectedDataFolder
- []
-
-
-Underfull \hbox (badness 7888) in paragraph at lines 431--433
-[]\T1/qtm/m/n/10 \spxentryPerformanceMetrics()\spxextrain mod-ule De-
- []
-
-
-Overfull \hbox (54.51242pt too wide) in paragraph at lines 433--435
-[]\T1/qtm/m/n/10 \spxentryplanes\spxextraExperimentHierarchy.CollectedImagingFo
-lder
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 435--437
-[]\T1/qtm/m/n/10 \spxentryplot_burrow_coordinates()\spxextrain mod-ule
- []
-
-
-Overfull \hbox (35.34242pt too wide) in paragraph at lines 449--451
-[]\T1/qtm/m/n/10 \spxentryplotROCs()\spxextraDecodingAnalysis.DecodingModule
- []
-
-[39]
-Overfull \hbox (35.24246pt too wide) in paragraph at lines 455--457
-[]\T1/qtm/m/n/10 \spxentrypredict()\spxextraLinearRegression.WienerFilterDecode
-r
- []
-
-
-Overfull \hbox (67.89244pt too wide) in paragraph at lines 457--459
-[]\T1/qtm/m/n/10 \spxentrypredict()\spxextraLogisticRegression.LogisticRegressi
-onDecoder
- []
-
-
-Overfull \hbox (23.2524pt too wide) in paragraph at lines 459--461
-[]\T1/qtm/m/n/10 \spxentrypreview_background()\spxextraColoring.ColorImages
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 461--463
-[]\T1/qtm/m/n/10 \spxentrypreview_color()\spxextraColoring.ColorImages
- []
-
-
-Overfull \hbox (62.09242pt too wide) in paragraph at lines 463--465
-[]\T1/qtm/m/n/10 \spxentryprintAssessment()\spxextraDecodingAnalysis.DecodingMo
-dule
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 467--469
-[]\T1/qtm/m/n/10 \spxentrypruneTracesByNeuronalIndex()\spxextrain
- []
-
-
-Overfull \hbox (52.11241pt too wide) in paragraph at lines 472--474
-[]\T1/qtm/m/n/10 \spxentryrecord_mod()\spxextraExperimentHierarchy.ExperimentDa
-ta
- []
-
-
-Overfull \hbox (55.00241pt too wide) in paragraph at lines 474--476
-[]\T1/qtm/m/n/10 \spxentryrecord_mod()\spxextraExperimentHierarchy.ExperimentSt
-age
- []
-
-
-Overfull \hbox (77.26242pt too wide) in paragraph at lines 476--478
-[]\T1/qtm/m/n/10 \spxentryrecord_stage_mod()\spxextraExperimentHierarchy.Experi
-mentData
- []
-
-
-Overfull \hbox (50.81241pt too wide) in paragraph at lines 478--480
-[]\T1/qtm/m/n/10 \spxentryreindex()\spxextraExperimentHierarchy.CollectedDataFo
-lder
- []
-
-
-Overfull \hbox (130.24243pt too wide) in paragraph at lines 482--484
-[]\T1/qtm/m/n/10 \spxentryreorganize_bruker_files()\spxextraExperimentHierarchy
-.CollectedImagingFolder
- []
-
-
-Overfull \hbox (74.64233pt too wide) in paragraph at lines 491--493
-[]\T1/qtm/m/n/10 \spxentrysave_experiments()\spxextraExperimentHierarchy.Experi
-mentData
- []
-
-
-Overfull \hbox (39.0124pt too wide) in paragraph at lines 500--502
-[]\T1/qtm/m/n/10 \spxentrysaveModel()\spxextraDecodingAnalysis.DecodingModule
- []
-
-
-Overfull \hbox (72.02243pt too wide) in paragraph at lines 502--504
-[]\T1/qtm/m/n/10 \spxentryshuffle_trial_labels()\spxextraDecodingAnalysis.Decod
-ingModule
- []
-
-
-Overfull \hbox (47.58243pt too wide) in paragraph at lines 504--506
-[]\T1/qtm/m/n/10 \spxentryshuffle_trials()\spxextraDecodingAnalysis.DecodingMod
-ule
- []
-
-
-Overfull \hbox (75.6124pt too wide) in paragraph at lines 506--508
-[]\T1/qtm/m/n/10 \spxentryshuffleByTrialIndex()\spxextraDecodingAnalysis.Decodi
-ngModule
- []
-
-
-Overfull \hbox (95.7124pt too wide) in paragraph at lines 508--510
-[]\T1/qtm/m/n/10 \spxentryshuffled_trials_by_group()\spxextraDecodingAnalysis.D
-ecodingModule
- []
-
-
-Overfull \hbox (72.06247pt too wide) in paragraph at lines 510--512
-[]\T1/qtm/m/n/10 \spxentryshuffleEachNeuron()\spxextraDecodingAnalysis.Decoding
-Module
- []
-
-
-Overfull \hbox (51.82245pt too wide) in paragraph at lines 512--514
-[]\T1/qtm/m/n/10 \spxentryshuffleFrames()\spxextraDecodingAnalysis.DecodingModu
-le
- []
-
-
-Overfull \hbox (49.04245pt too wide) in paragraph at lines 514--516
-[]\T1/qtm/m/n/10 \spxentryshuffleLabels()\spxextraDecodingAnalysis.DecodingModu
-le
- []
-
-
-Overfull \hbox (52.9124pt too wide) in paragraph at lines 522--524
-[]\T1/qtm/m/n/10 \spxentrysplit_by_trials()\spxextraDecodingAnalysis.DecodingMo
-dule
- []
-
-
-Overfull \hbox (31.89244pt too wide) in paragraph at lines 524--526
-[]\T1/qtm/m/n/10 \spxentrysplitData()\spxextraDecodingAnalysis.DecodingModule
- []
-
-
-Overfull \hbox (32.95241pt too wide) in paragraph at lines 526--528
-[]\T1/qtm/m/n/10 \spxentrystage_id\spxextraExperimentHierarchy.ExperimentStage
- []
-
-
-Overfull \hbox (38.8924pt too wide) in paragraph at lines 528--530
-[]\T1/qtm/m/n/10 \spxentrystart_log()\spxextraExperimentHierarchy.ExperimentDat
-a
- []
-
-
-Overfull \hbox (62.73242pt too wide) in paragraph at lines 530--532
-[]\T1/qtm/m/n/10 \spxentrystructural_report()\spxextraDecodingAnalysis.Decoding
-Module
- []
-
-
-Underfull \hbox (badness 6927) in paragraph at lines 541--543
-[]\T1/qtm/m/n/10 \spxentrytotal_rois\spxextraColoring.ColorImages prop-
- []
-
-
-Overfull \hbox (65.55237pt too wide) in paragraph at lines 543--545
-[]\T1/qtm/m/n/10 \spxentrytrial_groups\spxextraBurrowFearConditioning.FearCondi
-tioning
- []
-
-
-Overfull \hbox (76.97238pt too wide) in paragraph at lines 547--549
-[]\T1/qtm/m/n/10 \spxentrytrials_per_stim\spxextraBurrowFearConditioning.FearCo
-nditioning
- []
-
-
-Overfull \hbox (66.12239pt too wide) in paragraph at lines 552--554
-[]\T1/qtm/m/n/10 \spxentryunique_stim\spxextraBurrowFearConditioning.FearCondit
-ioning
- []
-
-
-Overfull \hbox (125.7924pt too wide) in paragraph at lines 554--556
-[]\T1/qtm/m/n/10 \spxentryupdate_all_folder_dictionaries()\spxextraExperimentHi
-erarchy.ExperimentData
- []
-
-
-Overfull \hbox (107.5724pt too wide) in paragraph at lines 556--558
-[]\T1/qtm/m/n/10 \spxentryupdate_folder_dictionary()\spxextraExperimentHierarch
-y.ExperimentStage
- []
-
-
-Overfull \hbox (68.85245pt too wide) in paragraph at lines 563--565
-[]\T1/qtm/m/n/10 \spxentryvalidate_data_sets()\spxextraDecodingAnalysis.Decodin
-gModule
- []
-
-
-Overfull \hbox (79.61241pt too wide) in paragraph at lines 565--567
-[]\T1/qtm/m/n/10 \spxentryview_figure()\spxextraExperimentHierarchy.CollectedFi
-guresFolder
- []
-
-
-Overfull \hbox (51.74242pt too wide) in paragraph at lines 574--576
-[]\T1/qtm/m/n/10 \spxentrywidth\spxextraExperimentHierarchy.CollectedImagingFol
-der
+Overfull \hbox (52.02243pt too wide) in paragraph at lines 199--201
+[]\T1/qtm/m/n/10 \spxentryupdate_folder_dictionary()\spxextraOrganization.Exper
+iment
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 576--578
-[]\T1/qtm/m/n/10 \spxentryWienerFilterDecoder\spxextraclass in Lin-ear-
+Underfull \hbox (badness 10000) in paragraph at lines 208--210
+[]\T1/qtm/m/n/10 \spxentryview_figure()\spxextraOrganization.Figures
  []
-
-[40]
-Underfull \hbox (badness 10000) in paragraph at lines 581--583
-[]\T1/qtm/m/n/10 \spxentryxpix\spxextraColoring.ColorImages prop-erty,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 586--588
-[]\T1/qtm/m/n/10 \spxentryypix\spxextraColoring.ColorImages prop-erty,
- []
-
-[41
 
-])
+[17])
 (C:/ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeline\auxil\in-vivo-
 imaging-pipeline.aux)
 Package rerunfilecheck Info: File `in-vivo-imaging-pipeline.out' has not change
 d.
-(rerunfilecheck)             Checksum: B60B63F49F19AF6C4822C61C461F8664;3674.
+(rerunfilecheck)             Checksum: D02FD0A3E856189EE65281F16B459EB9;854.
  ) 
 Here is how much of TeX's memory you used:
- 15777 strings out of 475385
- 275794 string characters out of 2776908
- 634076 words of memory out of 3000000
- 36474 multiletter control sequences out of 15000+600000
+ 15348 strings out of 475385
+ 261213 string characters out of 2776908
+ 619215 words of memory out of 3000000
+ 36246 multiletter control sequences out of 15000+600000
  515143 words of font info for 68 fonts, out of 8000000 for 9000
  1142 hyphenation exceptions out of 8191
- 70i,12n,76p,1725b,803s stack positions out of 10000i,1000n,20000p,200000b,80000s
+ 70i,12n,76p,662b,809s stack positions out of 10000i,1000n,20000p,200000b,80000s
 {C:/Users/YUSTE/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ec.e
 nc}{C:/Users/YUSTE/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ts1
 .enc}<C:/Users/YUSTE/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
@@ -1931,9 +1290,9 @@ MiKTeX/fonts/type1/public/txfonts/t1xbtt.pfb><C:/Users/YUSTE/AppData/Local/Prog
 rams/MiKTeX/fonts/type1/public/txfonts/t1xtt.pfb><C:/Users/YUSTE/AppData/Local/
 Programs/MiKTeX/fonts/type1/public/txfonts/t1xtt.pfb>
 Output written on C:/ProgramData\Anaconda3\envs\Calcium-Imaging-Analysis-Pipeli
-ne\out\in-vivo-imaging-pipeline.pdf (45 pages, 367882 bytes).
+ne\out\in-vivo-imaging-pipeline.pdf (21 pages, 238708 bytes).
 PDF statistics:
- 969 PDF objects out of 1000 (max. 8388607)
- 304 named destinations out of 1000 (max. 500000)
- 213 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 372 PDF objects out of 1000 (max. 8388607)
+ 103 named destinations out of 1000 (max. 500000)
+ 69 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -20,7 +20,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="UserInterfaces module" href="UserInterfaces.html" />
-    <link rel="prev" title="Management" href="Management.html" /> 
+    <link rel="prev" title="ConfigHandling module" href="ConfigHandling.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -41,6 +41,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="Management.html">Management</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ConfigHandling.html">ConfigHandling module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Organization module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="UserInterfaces.html">UserInterfaces module</a></li>
 </ul>
@@ -78,7 +79,7 @@
 <dt class="sig sig-object py" id="Organization.BehavioralExperiment">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Organization.</span></span><span class="sig-name descname"><span class="pre">BehavioralExperiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ExperimentName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Organization.BehavioralExperiment" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Organization.Experiment" title="Organization.Experiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Experiment</span></code></a></p>
-<p>Data Class for a generic day of a behavioral task</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">Experiment</span></code> class for a generic day of a behavioral task</p>
 <dl>
 <dt><strong>Required Inputs</strong></dt><dd><div class="line-block">
 <div class="line"><em>Meta</em> : Passed meta from experimental hierarchy (directory, mouse_id)</div>
@@ -94,14 +95,13 @@
 <div class="line"><em>data</em> : Pandas dataframe of synced data</div>
 <div class="line"><em>folder_dictionary</em> : A dictionary of relevant folders for this behavioral ExperimentName</div>
 <div class="line"><em>modifications</em> : List of modifications made to this behavioral ExperimentName</div>
-<div class="line"><em>meta</em> : bruker metadata</div>
 <div class="line"><em>multi_index</em>: Pandas multi-index of behavioral components</div>
 <div class="line"><em>state_index</em> : look-up table / index relating states to integers</div>
 <div class="line"><em>trial_parameters</em> : behavioral parameters</div>
 </div>
 </dd>
 <dt><strong>Methods</strong></dt><dd><div class="line-block">
-<div class="line"><em>add_image_sampling_folder</em> : Generates a folder for containing imaging data of a specific sampling rate</div>
+<div class="line"><em>copy_raw_behavioral_data</em> : Interactive tool for copying raw behavioral data</div>
 <div class="line"><em>load_data</em> : Loads all data</div>
 <div class="line"><em>record_mod</em> :  Records a modification made to the behavioral ExperimentName (Date &amp; Time)</div>
 <div class="line"><em>update_folder_dictionary</em> : This function re-indexes all folders in the folder dictionary</div>
@@ -109,21 +109,25 @@
 </dd>
 </dl>
 <dl class="py method">
+<dt class="sig sig-object py" id="Organization.BehavioralExperiment.copy_raw_behavioral_data">
+<span class="sig-name descname"><span class="pre">copy_raw_behavioral_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#Organization.BehavioralExperiment.copy_raw_behavioral_data" title="Permalink to this definition"></a></dt>
+<dd><p>Interactive tool for copying raw behavioral data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="Organization.BehavioralExperiment.load_data">
-<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ImagingParameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#Organization.BehavioralExperiment.load_data" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#Organization.BehavioralExperiment.load_data" title="Permalink to this definition"></a></dt>
 <dd><blockquote>
-<div><p>Loads all data</p>
+<div><p>Loads behavioral data</p>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ImagingParameters</strong> (<em>Optional</em><em>[</em><em>dict</em><em>]</em>) – Parameters for some imaging dataset or list of datasets (e.g., for two different sampling rates)</p></li>
-<li><p><strong>args</strong> (<em>Tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) – Optionally pass Sync Key to synchronize bruker recordings</p></li>
-<li><p><strong>kwargs</strong> – passed to internal functions taking kwargs</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>Any</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
 </dd>
 </dl>
 </dd></dl>
@@ -241,7 +245,7 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Organization.</span></span><span class="sig-name descname"><span class="pre">Experiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ExperimentName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Organization.Experiment" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <blockquote>
-<div><p>Class for a generic experiment</p>
+<div><p>Experiment class for a generic experiment</p>
 </div></blockquote>
 <dl>
 <dt><strong>Required Inputs</strong></dt><dd><div class="line-block">
@@ -257,47 +261,32 @@
 <dt><strong>Attributes</strong></dt><dd><div class="line-block">
 <div class="line"><em>data</em> : a pandas dataframe containing synchronized data</div>
 <div class="line"><em>folder_dictionary</em> : A dictionary of relevant folders for this experiment</div>
-<div class="line"><em>meta</em> : bruker metadata</div>
 <div class="line"><em>modifications</em> : List of modifications made to this experiment</div>
 </div>
 </dd>
 <dt><strong>Public Methods</strong></dt><dd><div class="line-block">
-<div class="line"><em>add_image_sampling_folder</em> : Generates a folder for containing imaging data of a specific sampling rate</div>
-<div class="line"><em>load_data</em> : Loads all data</div>
+<div class="line"><em>copy_data</em> : Interactive tool to copy data to directory (Intended to be overwritten during inheritance)</div>
+<div class="line"><em>load_data</em> : Loads all data (Intended to be overwritten during inheritance)</div>
 <div class="line"><em>record_mod</em> :  Records a modification made to the experiment (Date &amp; Time)</div>
 <div class="line"><em>update_folder_dictionary</em> : This function re-indexes all folders in the folder dictionary</div>
 </div>
 </dd>
 </dl>
-<dl class="py property">
-<dt class="sig sig-object py" id="Organization.Experiment.ExperimentName_id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ExperimentName_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#Organization.Experiment.ExperimentName_id" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py method">
-<dt class="sig sig-object py" id="Organization.Experiment.add_image_sampling_folder">
-<span class="sig-name descname"><span class="pre">add_image_sampling_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">SamplingRate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#Organization.Experiment.add_image_sampling_folder" title="Permalink to this definition"></a></dt>
-<dd><p>Generates a folder for containing imaging data of a specific sampling rate</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>SamplingRate</strong> (<em>int</em>) – Sampling Rate of Dataset in Hz</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>Any</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="Organization.Experiment.copy_raw_imaging_data">
-<span class="sig-name descname"><span class="pre">copy_raw_imaging_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#Organization.Experiment.copy_raw_imaging_data" title="Permalink to this definition"></a></dt>
-<dd><p>This function copies raw imaging data to the appropriate folder</p>
+<dt class="sig sig-object py" id="Organization.Experiment.copy_data">
+<span class="sig-name descname"><span class="pre">copy_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#Organization.Experiment.copy_data" title="Permalink to this definition"></a></dt>
+<dd><p>Interactive tool to copy data to directory</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>Any</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="Organization.Experiment.experiment_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">experiment_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#Organization.Experiment.experiment_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="Organization.Experiment.instance_date">
@@ -306,27 +295,6 @@
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="Organization.Experiment.load_data">
-<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ImagingParameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#Organization.Experiment.load_data" title="Permalink to this definition"></a></dt>
-<dd><p>Loads all data</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ImagingParameters</strong> (<em>Optional</em><em>[</em><em>dict</em><em>]</em>) – Parameters for some imaging dataset or list of datasets (e.g., for two different sampling rates)</p></li>
-<li><p><strong>args</strong> (<em>Tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) – Optionally pass Sync Key to synchronize bruker recordings</p></li>
-<li><p><strong>kwargs</strong> – passed to internal functions taking kwargs</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>Any</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Any</p>
 </dd>
 </dl>
 </dd></dl>
@@ -370,7 +338,7 @@
 <dt class="sig sig-object py" id="Organization.Figures">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Organization.</span></span><span class="sig-name descname"><span class="pre">Figures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Organization.Figures" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Organization.Data" title="Organization.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a></p>
-<p>A class for storing figures, inherits collected data folder</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span> <span class="pre">Folder</span></code> specifically for storing figures.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="Organization.Figures.view_figure">
 <span class="sig-name descname"><span class="pre">view_figure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">plt.Figure</span></span></span><a class="headerlink" href="#Organization.Figures.view_figure" title="Permalink to this definition"></a></dt>
@@ -394,7 +362,7 @@
 <dt class="sig sig-object py" id="Organization.Images">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Organization.</span></span><span class="sig-name descname"><span class="pre">Images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Organization.Images" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Organization.Data" title="Organization.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a></p>
-<p>Class specifically for folders containing raw images, inherits collected data folder</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span> <span class="pre">Folder</span></code> specifically for folders containing raw images.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="Organization.Images.channels">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#Organization.Images.channels" title="Permalink to this definition"></a></dt>
@@ -462,7 +430,7 @@
 <dt class="sig sig-object py" id="Organization.ImagingAnalysis">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Organization.</span></span><span class="sig-name descname"><span class="pre">ImagingAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Organization.ImagingAnalysis" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Organization.Data" title="Organization.Data"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a></p>
-<p>Class specifically for imaging analysis folders, inherits collected data folder</p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span> <span class="pre">Folder</span></code> specifically for imaging analysis folders.</p>
 <dl>
 <dt><strong>Self Methods</strong></dt><dd><div class="line-block">
 <div class="line"><em>load_fissa_exports</em> : loads fissa exported files</div>
@@ -583,6 +551,159 @@
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="Organization.ImagingBehaviorExperiment">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Organization.</span></span><span class="sig-name descname"><span class="pre">ImagingBehaviorExperiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ExperimentName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Organization.ImagingBehaviorExperiment" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Organization.ImagingExperiment" title="Organization.ImagingExperiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImagingExperiment</span></code></a>, <a class="reference internal" href="#Organization.BehavioralExperiment" title="Organization.BehavioralExperiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">BehavioralExperiment</span></code></a></p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">Experiment</span></code> class for a generic day of an
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Imaging</span></code> /
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Behavioral</span></code> experiment</p>
+<dl>
+<dt><strong>Required Inputs</strong></dt><dd><div class="line-block">
+<div class="line"><em>Meta</em> : Passed meta from experimental hierarchy (directory, mouse_id)</div>
+<div class="line"><em>ExperimentName</em> : Title of ExperimentName</div>
+</div>
+</dd>
+<dt><strong>Properties</strong></dt><dd><div class="line-block">
+<div class="line"><em>mouse_id</em> : Identifies which mouse this data belongs to</div>
+<div class="line"><em>instance_data</em> : Identifies when this behavioral ExperimentName was created</div>
+</div>
+</dd>
+<dt><strong>Attributes</strong></dt><dd><div class="line-block">
+<div class="line"><em>data</em> : Pandas dataframe of synced data</div>
+<div class="line"><em>folder_dictionary</em> : A dictionary of relevant folders for this behavioral ExperimentName</div>
+<div class="line"><em>modifications</em> : List of modifications made to this behavioral ExperimentName</div>
+<div class="line"><em>meta</em> : bruker metadata</div>
+<div class="line"><em>multi_index</em>: Pandas multi-index of behavioral components</div>
+<div class="line"><em>state_index</em> : look-up table / index relating states to integers</div>
+<div class="line"><em>trial_parameters</em> : behavioral parameters</div>
+</div>
+</dd>
+<dt><strong>Methods</strong></dt><dd><div class="line-block">
+<div class="line"><em>copy_raw_imaging_data</em> : Interactive tool for copying raw imaging data</div>
+<div class="line"><em>copy_raw_behavioral_data</em> : Interactive tool for copying raw behavioral data</div>
+<div class="line"><em>load_data</em> : Loads all data</div>
+<div class="line"><em>record_mod</em> :  Records a modification made to the experiment (Date &amp; Time)</div>
+<div class="line"><em>update_folder_dictionary</em> : This function re-indexes all folders in the folder dictionary</div>
+</div>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="Organization.ImagingBehaviorExperiment.copy_data">
+<span class="sig-name descname"><span class="pre">copy_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#Organization.ImagingBehaviorExperiment.copy_data" title="Permalink to this definition"></a></dt>
+<dd><p>Interactive tool to copy data to directory</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Organization.ImagingBehaviorExperiment.load_data">
+<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ImagingParameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#Organization.ImagingBehaviorExperiment.load_data" title="Permalink to this definition"></a></dt>
+<dd><blockquote>
+<div><p>Loads all data</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ImagingParameters</strong> – Parameters for some imaging dataset or list of datasets</p>
+</dd>
+</dl>
+<p>(e.g., for two different sampling rates)
+:type ImagingParameters: Optional[dict]
+:param args: Optionally pass Sync Key to synchronize bruker recordings
+:type args: Tuple[str, str]
+:param kwargs: passed to internal functions taking kwargs
+:rtype: Any</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="Organization.ImagingExperiment">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Organization.</span></span><span class="sig-name descname"><span class="pre">ImagingExperiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ExperimentName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Organization.ImagingExperiment" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Organization.Experiment" title="Organization.Experiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Experiment</span></code></a></p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">Experiment</span></code> class for a generic imaging experiment</p>
+<dl>
+<dt><strong>Required Inputs</strong></dt><dd><div class="line-block">
+<div class="line"><em>Meta</em> : Passed meta from mouse  (directory, mouse_id)</div>
+<div class="line"><em>ExperimentName</em> : Title of experiment</div>
+</div>
+</dd>
+<dt><strong>Properties</strong></dt><dd><div class="line-block">
+<div class="line"><em>mouse_id</em> : Identifies which mouse this data belongs to</div>
+<div class="line"><em>instance_data</em> : Identifies when this experiment was created</div>
+</div>
+</dd>
+<dt><strong>Attributes</strong></dt><dd><div class="line-block">
+<div class="line"><em>data</em> : a pandas dataframe containing synchronized data</div>
+<div class="line"><em>folder_dictionary</em> : A dictionary of relevant folders for this experiment</div>
+<div class="line"><em>meta</em> : bruker metadata</div>
+<div class="line"><em>modifications</em> : List of modifications made to this experiment</div>
+</div>
+</dd>
+<dt><strong>Public Methods</strong></dt><dd><div class="line-block">
+<div class="line"><em>add_image_sampling_folder</em> : Generates a folder for containing imaging data of a specific sampling rate</div>
+<div class="line"><em>copy_raw_imaging_data</em> : Interactive tool for copying raw imaging data</div>
+<div class="line"><em>load_data</em> : Loads all data</div>
+<div class="line"><em>record_mod</em> :  Records a modification made to the experiment (Date &amp; Time)</div>
+<div class="line"><em>update_folder_dictionary</em> : This function re-indexes all folders in the folder dictionary</div>
+</div>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="Organization.ImagingExperiment.add_image_sampling_folder">
+<span class="sig-name descname"><span class="pre">add_image_sampling_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">SamplingRate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#Organization.ImagingExperiment.add_image_sampling_folder" title="Permalink to this definition"></a></dt>
+<dd><p>Generates a folder for containing imaging data of a specific sampling rate</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>SamplingRate</strong> (<em>int</em>) – Sampling Rate of Dataset in Hz</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Organization.ImagingExperiment.copy_data">
+<span class="sig-name descname"><span class="pre">copy_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#Organization.ImagingExperiment.copy_data" title="Permalink to this definition"></a></dt>
+<dd><p>Interactive tool to copy data to directory</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Organization.ImagingExperiment.copy_raw_imaging_data">
+<span class="sig-name descname"><span class="pre">copy_raw_imaging_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#Organization.ImagingExperiment.copy_raw_imaging_data" title="Permalink to this definition"></a></dt>
+<dd><p>This function copies raw imaging data to the appropriate folder</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Organization.ImagingExperiment.load_data">
+<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ImagingParameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#Organization.ImagingExperiment.load_data" title="Permalink to this definition"></a></dt>
+<dd><p>Loads all data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ImagingParameters</strong> (<em>Optional</em><em>[</em><em>dict</em><em>]</em>) – Parameters for some imaging dataset or list of datasets (e.g., for two different sampling rates)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="Organization.Mouse">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Organization.</span></span><span class="sig-name descname"><span class="pre">Mouse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Organization.Mouse" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -663,14 +784,14 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Organization.Mouse.create_experiment">
-<span class="sig-name descname"><span class="pre">create_experiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ExperimentName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Experiment'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#Organization.Mouse.create_experiment" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">create_experiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ExperimentName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#Organization.Experiment" title="Organization.Experiment"><span class="pre">Experiment</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Experiment'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#Organization.Mouse.create_experiment" title="Permalink to this definition"></a></dt>
 <dd><p>Generates an experiment ExperimentName folder and attribute</p>
 <p>Kwargs are passed to underlying functions</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ExperimentName</strong> (<em>str</em>) – Name of experimental ExperimentName</p></li>
-<li><p><strong>Type</strong> (<em>Optional</em><em>[</em><em>str</em><em>, </em><em>object</em><em>]</em>) – Type of experimental ExperimentName (Optional, default = Experiment)</p></li>
+<li><p><strong>Type</strong> (<em>Optional</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="#Organization.Experiment" title="Organization.Experiment"><em>Experiment</em></a><em>]</em>) – Type of experiment (Optional, default = Experiment)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -725,11 +846,11 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Organization.Mouse.load">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#Organization.Mouse" title="Organization.Mouse"><span class="pre">Mouse</span></a></span></span><a class="headerlink" href="#Organization.Mouse.load" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#Organization.Mouse" title="Organization.Mouse"><span class="pre">Mouse</span></a></span></span><a class="headerlink" href="#Organization.Mouse.load" title="Permalink to this definition"></a></dt>
 <dd><p>Function that loads the entire mouse</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>Directory</strong> (<em>str</em>) – Directory containing the organization.json file and associated data</p>
+<dd class="field-odd"><p><strong>Directory</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Directory containing the organization.json file and associated data</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Mouse</p>
@@ -881,7 +1002,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="Management.html" class="btn btn-neutral float-left" title="Management" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ConfigHandling.html" class="btn btn-neutral float-left" title="ConfigHandling module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="UserInterfaces.html" class="btn btn-neutral float-right" title="UserInterfaces module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
