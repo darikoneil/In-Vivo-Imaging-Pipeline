@@ -809,6 +809,7 @@ class ImagingExperiment(Experiment):
 
     def copy_data(self) -> Self:
         self.copy_raw_imaging_data()
+        self.folder_dictionary.get("raw_imaging_data").reorganize_bruker_files()
 
     def copy_raw_imaging_data(self) -> Self:
         """
@@ -1580,6 +1581,10 @@ class Images(Data):
         :rtype: None
         """
 
+        # make sure im updated
+        self.reindex()
+
+        # find bruker meta path
         _parent_directory = pathlib.Path(self.path).parents[0]
         _bruker_meta_folder = "".join([str(_parent_directory), "\\", "BrukerMetaData"])
 

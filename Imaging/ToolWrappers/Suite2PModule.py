@@ -69,7 +69,7 @@ class Suite2PAnalysis:
         self.spks = None
 
         # Protected
-        self.__instance_date = ExperimentData.get_date()
+        self.__instance_date = get_date()
 
         # Check Filename Types, only support binary of tiff
         if self.file_type == "tiff" or self.file_type == "tif" or self.file_type == ".tiff" or self.file_type == ".tif":
