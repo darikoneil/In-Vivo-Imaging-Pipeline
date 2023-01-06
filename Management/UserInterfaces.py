@@ -1,3 +1,5 @@
+from __future__ import annotations
+from typing import Union
 import os.path
 import tkinter as tk
 from tkinter.filedialog import askdirectory
@@ -7,6 +9,14 @@ import pathlib
 
 
 def select_directory(**kwargs) -> str:
+    """
+    Interactive tool for directory selection. All keyword arguments are
+    passed to `tkinter.filedialog.askdirectory <https://docs.python.org/3/library/tk.html>`_
+
+    :param kwargs: keyword arguments
+    :return: absolute path to directory
+    :rtype: str
+    """
     # Make Root
     root = tk.Tk()
 
@@ -20,27 +30,36 @@ def select_directory(**kwargs) -> str:
     return path
 
 
-def verbose_copying(src, dst) -> None:
-
-    # Make sure src is a pathlib.Path object for rglob and dst is a str for copy2
-    if isinstance(src, str):
-        src = pathlib.Path(src)
-    if isinstance(dst, pathlib.Path):
-        dst = str(dst)
+def verbose_copying(SourceFolder: Union[str, pathlib.Path], DestinationFolder: Union[str, pathlib.Path]) -> None:
+    """
+    Verbose copying of one folder's contents to another
+    
+    :param SourceFolder: Source folder
+    :type SourceFolder: Union[str, pathlib.Path]
+    :param DestinationFolder: Destination folder
+    :type DestinationFolder: Union[str, pathlib.Path]
+    :rtype: None
+    """
+    
+    # Make sure SourceFolder is a pathlib.Path object for rglob and DestinationFolder is a str for copy2
+    if isinstance(SourceFolder, str):
+        SourceFolder = pathlib.Path(SourceFolder)
+    if isinstance(DestinationFolder, pathlib.Path):
+        DestinationFolder = str(DestinationFolder)
 
     # Make sure destination is not the source
-    if src == dst:
+    if SourceFolder == DestinationFolder:
         raise ValueError("Destination and source files are identical")
 
-    _num_files = sum([1 for _file in src.rglob("*") if _file.is_file()])
+    _num_files = sum([1 for _file in SourceFolder.rglob("*") if _file.is_file()])
     _pbar = tqdm(total=_num_files)
     _pbar.set_description("Copying files...")
 
-    if os.path.exists(dst):
-        rmtree(dst)
+    if os.path.exists(DestinationFolder):
+        rmtree(DestinationFolder)
 
-    def verbose_copy(_src, _dst):
-        copy2(_src, _dst)
+    def verbose_copy(_SourceFolder, _DestinationFolder):
+        copy2(_SourceFolder, _DestinationFolder)
         _pbar.update(1)
 
-    copytree(src, dst, copy_function=verbose_copy)
+    copytree(SourceFolder, DestinationFolder, copy_function=verbose_copy)

@@ -5,7 +5,7 @@ from datetime import datetime, date, time, timedelta
 from decimal import Decimal
 from fractions import Fraction
 
-from json_tricks import NoEnumException, NoPandasException, NoNumpyException
+from modified_json_tricks import NoEnumException, NoPandasException, NoNumpyException
 from .utils import ClassInstanceHookBase, nested_index, str_type, gzip_decompress, filtered_wrapper
 
 

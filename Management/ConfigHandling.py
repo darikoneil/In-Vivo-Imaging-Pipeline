@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Optional
-from json_tricks import dumps, loads
+from modified_json_tricks import dumps, loads
 from os import getcwd
 
 
