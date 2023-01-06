@@ -189,7 +189,7 @@ def load_all_tiffs(ImageDirectory: str) -> np.ndarray:
 
     :param ImageDirectory: Directory containing a sequence of tiff stacks
     :type ImageDirectory: str
-    :return: complete_image numpy array [Z x Y x X] as int16
+    :return: complete_image numpy array [Z x Y x X] as uint16
     :rtype: Any
     """
     _fnames = os.listdir(ImageDirectory)
@@ -197,7 +197,7 @@ def load_all_tiffs(ImageDirectory: str) -> np.ndarray:
     _num_frames = [] # initialize
     [_num_frames.append(len(tifffile.TiffFile(ImageDirectory + "\\" + _fname).pages)) for _fname in _fnames]
     _total_frames = sum(_num_frames)
-    complete_image = np.full((_total_frames, y_pix, x_pix), 0, dtype=np.int16)
+    complete_image = np.full((_total_frames, y_pix, x_pix), 0, dtype=np.uint16)
     _last_frame = 0
 
     for _fname in tqdm(
@@ -400,9 +400,9 @@ def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str, *args: Uni
     return
 
 
-def save_single_tiff(Images: np.ndarray, Filename: str, Type: Optional[np.dtype] = np.int16) -> None:
+def save_single_tiff(Images: np.ndarray, Filename: str, Type: Optional[np.dtype] = np.uint16) -> None:
     """
-    Save a numpy array to a single tiff file as type int16
+    Save a numpy array to a single tiff file as type uint16
 
     :param Images: numpy array [frames, y pixels, x pixels]
     :type Images: Any
@@ -417,13 +417,13 @@ def save_single_tiff(Images: np.ndarray, Filename: str, Type: Optional[np.dtype]
             tif.save(frame)
 
 
-def save_tiff_stack(Images: str, OutputDirectory: str, Type: Optional[np.dtype] = np.int16) -> None:
+def save_tiff_stack(Images: str, OutputDirectory: str, Type: Optional[np.dtype] = np.uint16) -> None:
     """
     Save a numpy array to a sequence of tiff stacks
 
     :param Images: A numpy array containing a tiff stack [Z x Y x X]
     :type Images: Any
-    :param OutputDirectory: A directory to save the sequence of tiff stacks in int16
+    :param OutputDirectory: A directory to save the sequence of tiff stacks in uint16
     :type OutputDirectory: str
     :param Type: type for saving
     :type Type: Optional[Any]

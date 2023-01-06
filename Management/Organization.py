@@ -23,7 +23,7 @@ class Study:
 
 class Mouse:
     """
-    Class for Organizing & Managing Experimental Data Across Sessions
+    Class for organizing & managing experimental data within one mouse.
 
     **Keyword Arguments**
         | *Logfile* : Path to existing log file (str, default None)
@@ -34,17 +34,17 @@ class Mouse:
         | *StudyMouse* : Study ID (str, default None)
 
     **Properties**
-        | *mouse_id* : ID of Mouse
-        | *log_file* : Log Filename Path
         | *experimental_condition* : Experiment condition of the mouse
+        | *log_file* : Log Filename Path
         | *instance_data* : Date when this experimental hierarchy was created
+        | *mouse_id* : ID of Mouse
 
     **Attributes**
         | *directory* : Experimental Hierarchy Directory
         | *experiments* : Names of included experiments
+        | *modifications* : modifications made to this file
         | *study* : Study
         | *study_mouse* : ID of mouse in study
-        | *modifications* : modifications made to this file
 
     **Public Class Methods**
         | *load* : Function that loads the entire mouse
@@ -898,7 +898,6 @@ class ImagingExperiment(Experiment):
         return meta
 
 
-
 class BehavioralExperiment(Experiment):
     """
     :class:`Experiment <Management.Organization.Experiment>` class for a generic day of a behavioral task
@@ -1417,19 +1416,21 @@ class ImagingBehaviorExperiment(ImagingExperiment, BehavioralExperiment):
 
 class Data:
     """
-This is a class for managing a folder of unorganized data files
+    This is a class for managing a folder of unorganized data files
 
-**Required Inputs**
-    | *Path* : path to folder
+    **Required Inputs**
+        | *Path* : absolute filepath for data folder
 
-**Self Methods**
+    **Self Methods**
+        | *find_all_ext* :  Finds all files with specific extension
         | *find_matching_files* : Finds all matching files
         | *reindex* : Function that indexed the files within folder again
-        | *find_all_ext* :  Finds all files with specific extension
-**Properties**
+
+    **Properties**
+        | *files* : List of files in folder
         | *instance_data* : Data created
         | *path* : path to folder
-        | *files* : List of files in folder
+
     """
 
     def __init__(self, Path: str):
@@ -1564,6 +1565,9 @@ class Images(Data):
     """
     :class:`Data Folder <Management.Organization.Data>` specifically for folders containing raw images.
 
+    **Required Inputs**
+        | *Path* : absolute filepath for data folder
+
     """
 
     def __init__(self, Path: str):
@@ -1673,6 +1677,8 @@ class ImagingAnalysis(Data):
     """
     :class:`Data Folder <Management.Organization.Data>` specifically for imaging analysis folders.
 
+    **Required Inputs**
+        | *Path* : absolute filepath for data folder
     **Self Methods**
         | *load_fissa_exports* : loads fissa exported files
         | *load_cascade_exports* : loads cascade exported files
@@ -1681,7 +1687,11 @@ class ImagingAnalysis(Data):
         | *clean_up_motion_correction* : This function removes the reg_tif folder and registered.bin generated during motion correction.
         | *clean_up_compilation* : This function removes the compiled tif files
         | *add_notes* : Function adds notes
-
+    **Properties**
+        | *files* : List of files in folder
+        | *folders* : List of sub-folders in folder
+        | *instance_data* : Data created
+        | *path* : path to folder
     """
 
     def __init__(self, Path: str):
@@ -1690,9 +1700,24 @@ class ImagingAnalysis(Data):
         # self.default_folders()
 
     @property
-    def current_ExperimentName(self) -> str:
+    def current_experiment_step(self) -> str:
         """
-        ExperimentName of Analysis
+        Current stage in imaging analysis
+
+            | 1. Compilation
+            | 2. Pre-Processing
+            | 3. Motion Correction `Suite2P <https://github.com/MouseLand/suite2p>`_
+            | 4. Denoising (Optional) `DeepCAD <https://github.com/cabooster/DeepCAD>`_
+            | 5. ROI Detection `CellPose <https://github.com/MouseLand/cellpose>`_
+            | 6. Float-32 Trace Extraction `Suite2P <https://github.com/MouseLand/suite2p>`_
+            | 7. ROI Classification `CellPose <https://github.com/MouseLand/cellpose>`_
+            | 8. Spike Inference [Formality] `Suite2P <https://github.com/MouseLand/suite2p>`_
+            | 9. Float-64 Trace Extraction `Fissa <https://github.com/rochefort-lab/fissa>`_
+            | 10. Post-Processing
+            | 11. Source-Separation `Fissa <https://github.com/rochefort-lab/fissa>`_
+            | 12. Infer Spike Probability `Cascade <https://github.com/HelmchenLabSoftware/Cascade>`_
+            | 13. Discrete Event Inference `Cascade <https://github.com/HelmchenLabSoftware/Cascade>`_
+            | 14. Ready for Analysis
 
         :rtype: str
         """
@@ -1701,10 +1726,12 @@ class ImagingAnalysis(Data):
             return "Ready for Analysis"
         elif 1 < self.find_matching_files("cascade").__len__() < 3:
             return "Cascade: Discrete Inference"
-        elif self.find_matching_files("fissa").__len__() >= 2:
+        elif self.find_matching_files("fissa").__len__() >= 3:
             return "Cascade: Spike Probability"
-        elif 1 <= self.find_matching_files("fissa").__len__() < 2:
+        elif 2 <= self.find_matching_files("fissa").__len__() < 3:
             return "Fissa: Source-Separation"
+        elif self.find_matching_files("fissa").__len__() == 1:
+            return "Post-Processing"
         elif self.find_matching_files("spks.npy", "suite2p\\plane0").__len__() > 0:
             return "Fissa: Trace Extraction"
         elif self.find_matching_files("iscell.npy", "suite2p\\plane0").__len__() > 0:
@@ -1716,9 +1743,13 @@ class ImagingAnalysis(Data):
         elif self.find_matching_files("denoised").__len__() >= 1:
             return "Suite2P: ROI Detection"
         elif self.find_matching_files("suite2p").__len__() >= 2:
-            return "DeepCAD: ModifiedDenoising"
+            return "DeepCAD: Denoising"
+        elif self.find_matching_files("meta", "compiled").__len__() > 0:
+            return "Suite2P: Motion Correction"
+        elif self.find_matching_files("compiled", "compiled").__len__() >= 1:
+            return "Pre-Processing"
         else:
-            return "Motion Correction"
+            return "Compilation"
 
     def add_notes(self, Step: str, KeyOrDict: Union[str, dict], Notes: Optional[Any] = None) -> Self:
         """
@@ -1959,6 +1990,8 @@ class Figures(Data):
     """
     :class:`Data Folder <Management.Organization.Data>` specifically for storing figures.
 
+    **Required Inputs**
+        | *Path* : absolute filepath for data folder
     """
 
     def __init__(self, Path: str):
