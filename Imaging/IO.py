@@ -19,30 +19,33 @@ def determine_bruker_folder_contents(ImageDirectory: str) -> Tuple[int, int, int
 
     :param ImageDirectory: Directory containing bruker imaging data
     :type ImageDirectory: str
+    :returns: Channels, Planes, Frames, Height, Width
     :rtype: tuple
     """
     _directory = pathlib.Path(ImageDirectory)
-    _files = [_file for _file in _directory.rglob("*.tif") if _file.is_file()]
+    _files = [_file for _file in _directory.glob("*.tif") if _file.is_file()]
     # preallocate
 
     def parser(Tag_: str, SplitStrs: list) -> str:
         return [_tag for _tag in SplitStrs if Tag_ in _tag]
 
-    def find_unique_substrings(Tag: str) -> int:
+    def find_num_unique_strings_given_static_substring(Tag: str) -> int:
+        nonlocal _files
+        _hits = [parser(Tag, str(_file).split("_")) for _file in _files]
+        _hits = [_hit for _nested_hit in _hits for _hit in _nested_hit]
+        return list(_hits).__len__()
+
+    def find_num_unique_substring_containing_tag(Tag: str) -> int:
         nonlocal _files
         _hits = [parser(Tag, str(_file).split("_")) for _file in _files]
         _hits = [_hit for _nested_hit in _hits for _hit in _nested_hit]
         return list(dict.fromkeys(_hits)).__len__()
 
-    def find_unique_strings_given_substring(StaticTag: str) -> int:
-        nonlocal _files
-        return [parser(StaticTag, str(_file).split("_")) for _file in _files].__len__()
-
     def find_channels() -> int:
-        return find_unique_substrings("Ch")
+        return find_num_unique_substring_containing_tag("Ch")
 
     def is_multiplane() -> bool:
-        if find_unique_substrings("Cycle") > 1:
+        if find_num_unique_strings_given_static_substring("Cycle00001") > 1:
             return True
         else:
             return False
@@ -51,16 +54,16 @@ def determine_bruker_folder_contents(ImageDirectory: str) -> Tuple[int, int, int
         nonlocal channels
 
         if is_multiplane():
-            return find_unique_substrings("Cycle00001")//channels
+            return find_num_unique_strings_given_static_substring("Cycle00001")//channels
         else:
             return 1
 
     def find_frames() -> int:
         nonlocal channels
         if is_multiplane():
-            return find_unique_strings_given_substring("000001.ome")//channels
+            return find_num_unique_strings_given_static_substring("000001.ome")//channels
         else:
-            return find_unique_strings_given_substring("Cycle00001")//channels
+            return find_num_unique_strings_given_static_substring("Cycle00001")//channels
 
     def find_dimensions() -> Tuple[int, int]:
         nonlocal ImageDirectory
@@ -87,7 +90,7 @@ def load_bruker_tiffs(ImageDirectory: str) -> Union[np.ndarray, Tuple[np.ndarray
      """
 
     _channels, _planes, _frames, _y_pixels, _x_pixels = determine_bruker_folder_contents(ImageDirectory)
-    _pretty_print_bruker_command(_channels, _planes, _frames, _y_pixels, _x_pixels)
+    pretty_print_bruker_command(_channels, _planes, _frames, _y_pixels, _x_pixels)
 
     def find_files(Tag: Union[str, list[str]]):
         nonlocal ImageDirectory
@@ -287,6 +290,7 @@ def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str, *args: Uni
     of tiff stacks.
     Designed to compile the outputs of a certain imaging utility
     that exports recordings such that each frame is saved as a single tiff.
+
     :param ImageDirectory: Directory containing a sequence of single frame tiff files
     :type ImageDirectory: str
     :param OutputDirectory: Empty directory where tiff stacks will be saved
@@ -295,6 +299,8 @@ def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str, *args: Uni
     :type args: int
     :rtype: None
     """
+
+    # code here is pretty rough, needs TLC. Maybe simpler to use a generator to generate chunks
 
     def load_image():
         nonlocal ImageDirectory
@@ -308,7 +314,7 @@ def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str, *args: Uni
         nonlocal _files
 
         def check_file_contents(Tag_: str, File_: pathlib.WindowsPath) -> bool:
-            if Tag_ in str(File_).split("_"):
+            if Tag_ in str(File_.stem).split("_"):
                 return True
             else:
                 return False
@@ -324,12 +330,23 @@ def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str, *args: Uni
         else:
             _files = [_file for _file in _files if check_file_contents(Tag, _file)]
 
+    def not_over_4gb() -> bool:
+        nonlocal _files
+        nonlocal _y
+        nonlocal _x
+
+        gb = np.full((_files.__len__(), _y, _x), 1, dtype=np.uint16).nbytes
+        if gb <= 3.9: # 3.9 as a safety buffer
+            return True
+        else:
+            return False
+
     _files = [_file for _file in pathlib.Path(ImageDirectory).rglob("*.tif")]
     _channels, _planes, _frames, _y, _x = determine_bruker_folder_contents(ImageDirectory)
-    _pretty_print_bruker_command(_channels, _planes, _frames, _y, _x)
+    pretty_print_bruker_command(_channels, _planes, _frames, _y, _x)
 
+    # finding the files for a specific channel/plane here
     if args:
-
         # unpack if necessary
         if isinstance(args[0], tuple):
             _c = args[0][0]
@@ -338,18 +355,19 @@ def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str, *args: Uni
 
         if _channels > 1 and _planes > 1 and len(args) >= 2:
             _base_tag = "00000"
-            _tag = ["".join(["Ch", str(args[0])]), "".join([_base_tag, str(args[1]), ".ome"])]
+            _tag = ["".join(["Ch", str(args[0])+1]), "".join([_base_tag, str(args[1]+1), ".ome"])]
             find_files(_tag)
         elif _channels == 1 and _planes > 1 and len(args) == 1:
             _base_tag = "00000"
-            _tag = "".join([_base_tag, str(args[0]), ".ome"])
+            _tag = "".join([_base_tag, str(args[0]+1), ".ome"])
             find_files(_tag)
+            print(_files)
         elif _channels == 1 and _planes > 1 and len(args) >= 2:
             _base_tag = "00000"
-            _tag = "".join([_base_tag, str(args[1]), ".ome"])
+            _tag = "".join([_base_tag, str(args[1]+1), ".ome"])
             find_files(_tag)
         elif _channels > 1 and _planes == 1:
-            _tag = "".join(["Ch", str(args[0])])
+            _tag = "".join(["Ch", str(args[0]+1)])
             find_files(_tag)
         else:
             pass
@@ -366,37 +384,48 @@ def repackage_bruker_tiffs(ImageDirectory: str, OutputDirectory: str, *args: Uni
             return
 
     # noinspection PyTypeChecker
-    _chunks = math.ceil(_frames/7000)
-    c_idx = 1
-    _offset = int()
 
-    _pbar = tq(total=_frames)
-    _pbar.set_description("Repackaging Bruker Tiffs...")
+    # Decide whether saving in single stack is possible
+    if not_over_4gb():
+        _images = np.full((_frames, _y, _x), 0, dtype=np.uint16)
+        _offset = 0
+        for _file in range(_frames):
+            _images[_file, :, :] = load_image()
+        save_single_tiff(_images, "".join([OutputDirectory, "\\compiledVideo_01_of_1.tif"]))
+        return
+    else:
+        # noinspection PyTypeChecker
+        _chunks = math.ceil(_frames/7000)
+        c_idx = 1
+        _offset = int()
 
-    for _chunk in range(0, _frames, 7000):
+        _pbar = tq(total=_frames)
+        _pbar.set_description("Repackaging Bruker Tiffs...")
 
-        _start_idx = _chunk
-        _offset = _start_idx
-        _end_idx = _chunk + 7000
-        _chunk_frames = _end_idx-_start_idx
-        # If this is the last chunk which may not contain a full 7000 frames...
-        if _end_idx > _frames:
-            _end_idx = _frames
-            _chunk_frames = _end_idx - _start_idx
-            _end_idx += 1
+        for _chunk in range(0, _frames, 7000):
 
-        image_chunk = np.full((_chunk_frames, _y, _x), 0, dtype=np.uint16)
+            _start_idx = _chunk
+            _offset = _start_idx
+            _end_idx = _chunk + 7000
+            _chunk_frames = _end_idx-_start_idx
+            # If this is the last chunk which may not contain a full 7000 frames...
+            if _end_idx > _frames:
+                _end_idx = _frames
+                _chunk_frames = _end_idx - _start_idx
+                _end_idx += 1
 
-        for _file in range(_chunk_frames):
-            image_chunk[_file, :, :] = load_image()
-            _pbar.update(1)
+            image_chunk = np.full((_chunk_frames, _y, _x), 0, dtype=np.uint16)
 
-        if c_idx < 10:
-            save_single_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_0" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
-        else:
-            save_single_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
-        c_idx += 1
-    _pbar.close()
+            for _file in range(_chunk_frames):
+                image_chunk[_file, :, :] = load_image()
+                _pbar.update(1)
+
+            if c_idx < 10:
+                save_single_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_0" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
+            else:
+                save_single_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
+            c_idx += 1
+        _pbar.close()
     return
 
 
@@ -511,7 +540,7 @@ def save_video(Images: np.ndarray, Filename: str, fps: Union[float, int] = 30) -
     print("\nFinished writing images to .mp4.\n")
 
 
-def _pretty_print_bruker_command(Channels, Planes, Frames, Height, Width) -> None:
+def pretty_print_bruker_command(Channels, Planes, Frames, Height, Width) -> None:
     """
     Function simply prints the bruker folder contents detected
 

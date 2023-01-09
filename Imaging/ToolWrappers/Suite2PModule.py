@@ -7,9 +7,9 @@ from suite2p import gui
 from natsort import natsorted
 import os
 import glob
-from Management.Organization import get_date, get_time
 from Imaging.IO import load_raw_binary, save_raw_binary
 from typing import Tuple, List, Union, Optional
+from datetime import date, datetime
 
 
 class Suite2PAnalysis:
@@ -523,3 +523,11 @@ class Suite2PAnalysis:
             return Images
         else:
             return Images.astype(np.int16)
+
+
+def get_date():
+    return date.isoformat(date.today())
+
+
+def get_time():
+    return datetime.now().strftime("%H:%M:%S")

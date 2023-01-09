@@ -11,9 +11,13 @@ from IPython import get_ipython
 import pathlib
 from tqdm import tqdm
 from shutil import copytree
-from Imaging.IO import save_raw_binary, determine_bruker_folder_contents
+from Imaging.IO import save_raw_binary, determine_bruker_folder_contents, repackage_bruker_tiffs, \
+    pretty_print_bruker_command, load_all_tiffs
 from MigrationTools.Converters import renamed_load
 from Management.UserInterfaces import select_directory, verbose_copying
+from Imaging.BrukerMetaModule import BrukerMeta
+from itertools import product
+from Imaging.ToolWrappers.Suite2PModule import Suite2PAnalysis
 
 
 class Study:
@@ -123,9 +127,9 @@ class Mouse:
 
     @experimental_condition.setter
     def experimental_condition(self, Condition: str) -> Self:
-        if self._experimental_condition is None and Condition is not None:
+        if self._experimental_condition is None:
             self._experimental_condition = Condition
-        else:
+        elif self._experimental_condition is not None:
             print("Experimental condition can only be assigned ONCE.")
 
     @property
@@ -139,9 +143,9 @@ class Mouse:
 
     @log_file.setter
     def log_file(self, LogFile: str) -> Self:
-        if self._log_file is None and LogFile is not None:
+        if self._log_file is None:
             self._log_file = LogFile
-        else:
+        elif self._log_file is not None:
             print("Log file can only be assigned ONCE.")
 
     @property
@@ -156,9 +160,9 @@ class Mouse:
     @mouse_id.setter
     def mouse_id(self, ID: str) -> Self:
         # This is a way to adjust if you really wanted to
-        if self._mouse_id is None and ID is not None:
+        if self._mouse_id is None:
             self._mouse_id = ID
-        else:
+        elif self._mouse_id is not None:
             print("Mouse ID can only be set ONCE.")
 
     @property
@@ -260,6 +264,7 @@ class Mouse:
         if _interactive:
             # noinspection PyProtectedMember
             self.__getattribute__(ExperimentName).copy_data()
+            self.update_all_folder_dictionaries()
 
     # noinspection All
     def end_log(self) -> Self:
@@ -383,12 +388,14 @@ class Mouse:
         :rtype: None
         """
 
-
         _include_behavior = kwargs.get('Behavior', True)
         _include_imaging = kwargs.get('Imaging', True)
         _include_analysis = kwargs.get('Analysis', True)
         _include_figures = kwargs.get("Figures", True)
         _experiment_directory = "".join([self.directory, "\\", Name])
+
+        if os.path.exists(_experiment_directory):
+            raise FileExistsError("This directory already exists!")
 
         if _include_behavior:
             self._generate_behavior_subdirectory(_experiment_directory)
@@ -722,7 +729,7 @@ class ImagingExperiment(Experiment):
         | *modifications* : List of modifications made to this experiment
 
     **Public Methods**
-        | *add_image_sampling_folder* : Generates a folder for containing imaging data of a specific sampling rate
+        | *add_image_analysis_folder* : Generates a folder for containing imaging data of a specific sampling rate
         | *copy_raw_imaging_data* : Interactive tool for copying raw imaging data
         | *load_data* : Loads all data
         | *record_mod* :  Records a modification made to the experiment (Date & Time)
@@ -787,17 +794,24 @@ class ImagingExperiment(Experiment):
         # Rearrange as Imaging, Voltage Recording, Voltage Output
         self.meta = self._load_bruker_meta_file(_files)
 
-    def add_image_sampling_folder(self, SamplingRate: int) -> Self:
+    def add_image_analysis_folder(self, SamplingRate: Union[int, float], *args: Optional[str]) -> Self:
         """
         Generates a folder for containing imaging data of a specific sampling rate
 
-        :param SamplingRate: Sampling Rate of Dataset in Hz
+        :param SamplingRate: Effective Sampling Rate of Dataset in Hz
         :type SamplingRate: int
+        :param args: secondary tag
+        :type args: str
         :rtype: Any
         """
         SamplingRate = str(SamplingRate)  # Because we know I'll always forget and send an int anyway
+
         _folder_name = "".join([self.folder_dictionary['imaging_folder'], "\\", SamplingRate, "Hz"])
         _key_name = "".join(["imaging_", SamplingRate, "Hz"])
+        if args:
+            assert(isinstance(args[0], str))
+            _key_name = "".join([_key_name, args[0]])
+            _folder_name = "".join([_folder_name, args[0]])
         try:
             os.makedirs(_folder_name)
         except FileExistsError:
@@ -811,6 +825,7 @@ class ImagingExperiment(Experiment):
         self.copy_raw_imaging_data()
         self.folder_dictionary.get("raw_imaging_data").reorganize_bruker_files()
 
+    # noinspection PyArgumentList
     def copy_raw_imaging_data(self) -> Self:
         """
         This function copies raw imaging data to the appropriate folder
@@ -819,7 +834,81 @@ class ImagingExperiment(Experiment):
         """
 
         _raw_imaging_data_path = select_directory(title="Select folder containing raw imaging data", mustexist=True)
+        _c, _p, _f, _h, _w = determine_bruker_folder_contents(_raw_imaging_data_path)
+        pretty_print_bruker_command(_c, _p, _f, _h, _w)
         verbose_copying(_raw_imaging_data_path, self.folder_dictionary.get("raw_imaging_data").path)
+
+    def analyze_images(self, Config: str, FrameRate: float) -> np.ndarray:
+        """
+        This is a wrapper function to analyze images with a single function
+
+        :param Config: Absolute filepath to a configuration file (.json)
+        :param FrameRate: float of framerate
+        :rtype: Any
+        """
+
+        # First, we load our meta data
+        self._load_bruker_meta_data()
+
+        # Next, we load any analog recordings that we collected during imaging
+
+
+        # for each channel and plane we must:
+        # 1. instance an analysis folder,
+        # 2. compile the images,
+        # 3. preprocess the data,
+        # 4. send through the analysis pipeline
+
+        _channels, _planes = determine_bruker_folder_contents(
+            self.folder_dictionary.get("raw_imaging_data").path)[0:2]
+        _combos = [range(_channels), range(_planes)]
+
+        # for each channel and plane...
+        for _combo in product(*_combos): # just generating tuples of all (channel id, plane id)
+            # Instance analysis folder for this channel/plane
+            _string_of_combo = "".join(["_channel_", str(_combo[0]), "_plane_", str(_combo[1])])
+            self.add_image_analysis_folder(str(FrameRate), _string_of_combo)
+
+            # Repackage loose, single frame tiffs into stacks
+            _name = "".join(["imaging_", str(FrameRate), "Hz", _string_of_combo])
+            repackage_bruker_tiffs(self.folder_dictionary.get("raw_imaging_data").path,
+                                   self.folder_dictionary.get(_name).folders.get("compiled"),
+                                   _combo)
+            self.update_folder_dictionary() # update file contents
+
+            # preprocess
+            _images = load_all_tiffs(self.folder_dictionary.get(_name).folders.get("compiled"))
+            _images = self.process_data(_images)
+            save_raw_binary(_images, self.folder_dictionary.get(_name).folders.get("compiled"))
+            _final_frames, _final_y, _final_x = _images.shape
+            _images = None
+            self.update_folder_dictionary()
+            self.folder_dictionary.get(_name).clean_up_compilation()
+            self.update_folder_dictionary()
+
+            # pipeline
+            self.pipeline(_name, _final_frames, _final_y, _final_x)
+
+    # noinspection PyMethodMayBeStatic
+    def process_data(self, ImagesIn) -> Self:
+        return ImagesIn
+
+    def pipeline(self, Name, Frames, Y, X) -> Self:
+        _s2p = Suite2PAnalysis(self.folder_dictionary.get(Name).folders.get("compiled"),
+                               self.folder_dictionary.get(Name).path, file_type="binary")
+        _s2p.motionCorrect()
+        self.folder_dictionary.get(Name).export_registration_to_denoised(Frames, Y, X)
+        _s2p.ops["meanImg_chan2"] = np.array([0])  # Don't question, needed for now
+        _s2p.ops.pop("meanImg_chan2")  # Don't question, needed for now
+        _s2p.db = _s2p.ops  # Don't question, needed for now
+        _s2p.roiDetection()
+        _s2p.extractTraces()
+        _s2p.classifyROIs()
+        _s2p.spikeExtraction()
+        _s2p.save_files()
+        self.update_folder_dictionary()
+        _s2p = None # garbage
+        return
 
     def load_data(self, ImagingParameters: Optional[Union[dict, list[dict]]] = None) -> Self:
         """
@@ -832,7 +921,7 @@ class ImagingExperiment(Experiment):
         # Load Behavior
         if self.data is not None:
             input("\nDetected there is currently data loaded!\n Would you like to Overwrite?(Y/N)\n")
-            if input == "Y" or input == "Yes" or input == "Ye" or input == "es":
+            if "y" in input.lower():
                 pass
             else:
                 return
@@ -1612,14 +1701,6 @@ class Images(Data):
         for _file in self.find_all_ext(".csv"):
             pathlib.Path(_file).rename("".join([_bruker_meta_folder, "\\", pathlib.Path(_file).name]))
 
-        if self.planes > 1 and self.channels == 1:
-            for _plane in range(self.planes):
-                _plane_folder = "".join([_parent_directory, "\\", "raw_imaging_data_plane_", str(_plane)])
-                try:
-                    os.mkdir(_plane_folder)
-                except FileExistsError:
-                    pass
-
     @property
     def file_format(self):
         # Needs modified for edge cases !!!!
@@ -1676,6 +1757,320 @@ class Images(Data):
     @property
     def height(self):
         return determine_bruker_folder_contents(self.path)[3]
+
+
+class ImagingAnalysis(Data):
+    """
+    :class:`Data Folder <Management.Organization.Data>` specifically for imaging analysis folders.
+
+    **Required Inputs**
+        | *Path* : absolute filepath for data folder
+    **Self Methods**
+        | *load_fissa_exports* : loads fissa exported files
+        | *load_cascade_exports* : loads cascade exported files
+        | *load_suite2p* : loads suite2p exported files
+        | *export_registration_to_denoised* : moves registration to new folder for namespace compatibility when skipping denoising step
+        | *clean_up_motion_correction* : This function removes the reg_tif folder and registered.bin generated during motion correction.
+        | *clean_up_compilation* : This function removes the compiled tif files
+        | *add_notes* : Function adds notes
+    **Properties**
+        | *files* : List of files in folder
+        | *folders* : List of sub-folders in folder
+        | *instance_data* : Data created
+        | *path* : path to folder
+    """
+
+    def __init__(self, Path: str):
+        super().__init__(Path)
+        self.parameters = dict()
+        # self.default_folders()
+
+    @property
+    def current_experiment_step(self) -> str:
+        """
+        Current stage in imaging analysis
+
+            | 1. Compilation
+            | 2. Pre-Processing
+            | 3. Motion Correction `Suite2P <https://github.com/MouseLand/suite2p>`_
+            | 4. Denoising (Optional) `DeepCAD <https://github.com/cabooster/DeepCAD>`_
+            | 5. ROI Detection `CellPose <https://github.com/MouseLand/cellpose>`_
+            | 6. Float-32 Trace Extraction `Suite2P <https://github.com/MouseLand/suite2p>`_
+            | 7. ROI Classification `CellPose <https://github.com/MouseLand/cellpose>`_
+            | 8. Spike Inference [Formality] `Suite2P <https://github.com/MouseLand/suite2p>`_
+            | 9. Float-64 Trace Extraction `Fissa <https://github.com/rochefort-lab/fissa>`_
+            | 10. Post-Processing
+            | 11. Source-Separation `Fissa <https://github.com/rochefort-lab/fissa>`_
+            | 12. Infer Spike Probability `Cascade <https://github.com/HelmchenLabSoftware/Cascade>`_
+            | 13. Discrete Event Inference `Cascade <https://github.com/HelmchenLabSoftware/Cascade>`_
+            | 14. Ready for Analysis
+
+        :rtype: str
+        """
+
+        if self.find_matching_files("cascade").__len__() >= 3:
+            return "Ready for Analysis"
+        elif 1 < self.find_matching_files("cascade").__len__() < 3:
+            return "Cascade: Discrete Inference"
+        elif self.find_matching_files("fissa").__len__() >= 3:
+            return "Cascade: Spike Probability"
+        elif 2 <= self.find_matching_files("fissa").__len__() < 3:
+            return "Fissa: Source-Separation"
+        elif self.find_matching_files("fissa").__len__() == 1:
+            return "Post-Processing"
+        elif self.find_matching_files("spks.npy", "suite2p\\plane0").__len__() > 0:
+            return "Fissa: Trace Extraction"
+        elif self.find_matching_files("iscell.npy", "suite2p\\plane0").__len__() > 0:
+            return "Suite2P: Spike Inference [Formality]"
+        elif self.find_matching_files("F.npy", "suite2p\\plane0").__len__() > 0:
+            return "Suite2P: Classify ROIs"
+        elif self.find_matching_files("stat.npy", "suite2p\\plane0").__len__() > 0:
+            return "Suite2P: Trace Extraction"
+        elif self.find_matching_files("denoised").__len__() >= 1:
+            return "Suite2P: ROI Detection"
+        elif self.find_matching_files("suite2p").__len__() >= 2:
+            return "DeepCAD: Denoising"
+        elif self.find_matching_files("meta", "compiled").__len__() > 0:
+            return "Suite2P: Motion Correction"
+        elif self.find_matching_files("compiled", "compiled").__len__() >= 1:
+            return "Pre-Processing"
+        else:
+            return "Compilation"
+
+    def add_notes(self, Step: str, KeyOrDict: Union[str, dict], Notes: Optional[Any] = None) -> Self:
+        """
+        Function adds notes indicating steps
+
+        :param Step: Step of Analysis
+        :param Step: str
+        :param KeyOrDict: Either a Key or a dictionary containing multiple key-value (note) pairs
+        :type KeyOrDict: Union[str, dict]
+        :param Notes: If using key, then notes is the paired value
+        :type Notes: Optional[Any]
+        :rtype: Any
+        """
+        if isinstance(KeyOrDict, str) and Notes is not None:
+            self.parameters[(Step, KeyOrDict)] = Notes
+        elif isinstance(KeyOrDict, str) and Notes is None:
+            self.parameters[(Step, KeyOrDict)] = Notes
+            print("No value (note) provided to pair with key value. Added None")
+        elif isinstance(KeyOrDict, dict):
+            for _key in KeyOrDict:
+                self.parameters[(Step, _key)] = KeyOrDict.get(_key)
+
+    def clean_up_motion_correction(self) -> Self:
+        """
+        This function removes the reg_tif folder and registered.bin generated during motion correction.
+         (You can avoid the creation of these in the first place by changing suite2p parameters)
+
+        :rtype: Any
+        """
+
+        if self.find_matching_files("reg_tif").__len__() != 0:
+            [pathlib.Path(_file).unlink() for _file in self.find_matching_files("reg_tif")]
+        if self.find_matching_files("registered_data.bin").__len__() != 0 and self.find_matching_files(
+                "binary_video", "suite2p//plane0").__len__() != 0:
+            [pathlib.Path(_file).unlink() for _file in self.find_matching_files("data.bin")]
+        if self.find_matching_files("data.bin").__len__() != 0 and self.find_matching_files(
+                "binary_video", "suite2p//plane0").__len__() != 0:
+            [pathlib.Path(_file).unlink() for _file in self.find_matching_files("data.bin")]
+
+    def clean_up_compilation(self) -> Self:
+        """
+        This function removes the compiled tif files generated inside CompiledImagingData
+        (You can avoid the creation of these in the first place by changing suite2p parameters)
+
+        :rtype: Any
+        """
+
+        if self.find_matching_files("compiledVideo", "compiled").__len__() != 0:
+            [pathlib.Path(_file).unlink() for _file in self.find_matching_files("compiledVideo", "compiled")]
+
+    def default_folders(self):
+        self.folders = {
+            "denoised": "".join([self.path, "\\denoised"]),
+            "fissa": "".join([self.path, "\\fissa"]),
+            "suite2p": "".join([self.path, "\\suite2p"]),
+            "cascade": "".join([self.path, "\\cascade"]),
+            "sorting": "".join([self.path, "\\sorting"]),
+            "plane0": "".join([self.path, "\\suite2p\\plane0"]),
+            "compiled": "".join([self.path, "\\compiled"])
+        }
+
+    def export_registration_to_denoised(self, Frames, Y, X):
+        """
+        moves registration to new folder for namespace compatibility
+
+        :return:
+        """
+        _images = np.reshape(np.fromfile(self.find_matching_files("registered_data.bin", "plane0")[0],
+                                         dtype=np.int16), (Frames, Y, X))
+        save_raw_binary(_images, self.folders.get("denoised"))
+
+    def load_fissa_exports(self) -> Tuple[dict, dict, dict]:
+        """
+        This function loads the prepared and separated files exported from Fissa
+
+        :return: Prepared, Separated, ProcessedTraces
+        :rtype: tuple[dict, dict, dict]
+        """
+
+        def load_processed_traces(Filename) -> dict:
+
+            def load_proc_traces(Filename_) -> dict:
+                """
+                Load Processed Traces from file
+
+                :keyword load_path: Path containing processed traces
+                :keyword absolute_path: Absolute filepath
+                :rtype: dict
+                """
+                try:
+                    print("Loading Processed Traces...")
+                    _input_pickle = open(Filename_, 'rb')
+                    ProcessedTraces_ = pkl.load(_input_pickle)
+                    _input_pickle.close()
+                    print("Finished Loading Processed Traces.")
+                except RuntimeError:
+                    print("Unable to load processed traces. Check supplied path.")
+                    return dict()
+
+                return ProcessedTraces_
+
+            try:
+                return load_proc_traces(Filename)
+            except ModuleNotFoundError:
+                print("Detected Deprecated Save. Migrating...")
+                with open(Filename, "rb") as _file:
+                    _ = renamed_load(_file)
+                _file.close()
+                with open(Filename, "wb") as _file:
+                    pkl.dump(_, _file)
+                _file.close()
+                # noinspection PyBroadException
+                try:
+                    return load_proc_traces(Filename)
+                except Exception:
+                    print("Migration Unsuccessful")
+                    return dict()
+
+        try:
+            Prepared = np.load(self.find_matching_files("prepared")[0], allow_pickle=True)
+        except FileNotFoundError:
+            print("Could Not Locate Fissa Prepared Filename")
+            Prepared = dict()
+
+        try:
+            Separated = np.load(self.find_matching_files("separated")[0], allow_pickle=True)
+        except FileNotFoundError:
+            print("Could Not Locate Fissa Separated Filename")
+            Separated = dict()
+
+        # noinspection PyBroadException
+        try:
+            ProcessedTraces = load_processed_traces(self.find_matching_files("ProcessedTraces")[0])
+        except Exception:
+            print("Could not locate processed traces file")
+            ProcessedTraces = dict()
+
+        if isinstance(ProcessedTraces, dict):
+            return {**Prepared}, {**Separated}, {**ProcessedTraces}
+        else:
+            return {**Prepared}, {**Separated}, {**ProcessedTraces.__dict__}
+
+    def load_cascade_exports(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray, dict]:
+        """
+        This function loads the Spike Times, Spike Prob, Discrete Approximation and ProcessedInferences files exported from Cascade
+
+        :return: SpikeTimes, SpikeProb, DiscreteApproximation, Processed Inferences
+        :rtype: tuple[Any, Any, Any, dict]
+        """
+
+        def load_processed_inferences(Filename) -> dict:
+
+            def load_proc_inferences(Filename_) -> dict:
+                """
+                Load Processed Inferences from file
+
+                :keyword load_path: Path containing processed inferences
+                :keyword absolute_path: Absolute filepath
+                :rtype: dict
+                """
+                try:
+                    print("Loading Processed Inferences...")
+                    _input_pickle = open(Filename_, 'rb')
+                    ProcessedInferences_ = pkl.load(_input_pickle)
+                    _input_pickle.close()
+                    print("Finished Loading Processed Inferences.")
+                except RuntimeError:
+                    print("Unable to load processed inferences. Check supplied path.")
+                    return dict()
+
+                return ProcessedInferences_
+
+            try:
+                return load_proc_inferences(Filename)
+            except ModuleNotFoundError:
+                print("Detected Deprecated Save. Migrating...")
+                with open(Filename, "rb") as _file:
+                    _ = renamed_load(_file)
+                _file.close()
+                with open(Filename, "wb") as _file:
+                    pkl.dump(_, _file)
+                _file.close()
+                # noinspection PyBroadException
+                try:
+                    return load_proc_inferences(Filename)
+                except Exception:
+                    print("Migration Unsuccessful")
+                    return dict()
+
+        try:
+            SpikeTimes = np.load(self.find_matching_files("spike_times", "cascade")[0], allow_pickle=True)
+        except FileNotFoundError:
+            print("Could not locate Cascade spike times file.")
+            SpikeTimes = None
+
+        try:
+            SpikeProb = np.load(self.find_matching_files("spike_prob", "cascade")[0], allow_pickle=True)
+        except FileNotFoundError:
+            print("Could not locate Cascade spike prob file.")
+            SpikeProb = None
+
+        try:
+            DiscreteApproximation = np.load(self.find_matching_files("discrete_approximation", "cascade")[0], allow_pickle=True)
+        except FileNotFoundError:
+            print("Could not locate Cascade discrete approximation file.")
+            DiscreteApproximation = None
+
+        # noinspection PyBroadException
+        try:
+            ProcessedInferences = load_processed_inferences(self.find_matching_files("ProcessedInferences")[0])
+        except Exception:
+            print("Unable to locate processed inferences file")
+            ProcessedInferences = dict()
+
+        if isinstance(ProcessedInferences, dict):
+            return SpikeTimes, SpikeProb, DiscreteApproximation, ProcessedInferences
+        else:
+            return SpikeTimes, SpikeProb, DiscreteApproximation, {**ProcessedInferences.__dict__}
+
+    def load_suite2p(self, *args: str):
+
+        if args:
+            _folder = args[0]
+        else:
+            _folder = "denoised"
+
+
+        # Dynamic imports because \m/_(>.<)_\m/
+        print("Loading Suite2p...")
+        from Imaging.ToolWrappers.Suite2PModule import Suite2PAnalysis
+        suite2p_module = Suite2PAnalysis(self.folders.get(_folder), self.path, file_type="binary")
+        suite2p_module.load_files() # load the files
+        suite2p_module.db = suite2p_module.ops # make sure db never overwrites ops
+        print("Finished.")
+        return suite2p_module
 
 
 class Figures(Data):
