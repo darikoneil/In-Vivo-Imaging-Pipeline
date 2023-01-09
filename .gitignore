@@ -229,3 +229,4 @@ DarikDataScripts/EM0122_Retrieval.ipynb
 /TestingData/
 /Testing/.pytest_cache/
 /Testing/.hypothesis/
+/Testing/.hypothesis/unicode_data/11.0.0/charmap.json.gz
