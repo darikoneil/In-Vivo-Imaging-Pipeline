@@ -1,33 +1,34 @@
 from __future__ import annotations
-from typing import Optional
+from typing import Optional, Callable, Tuple
 from modified_json_tricks import dumps, loads
 from os import getcwd
 
 
-def config_generator(Config: Optional[dict] = None) -> None:
+def wrapper_config_generator(Functions: Tuple[Callable], Parameters: Tuple[dict], Name: Optional[str] = "config.json",
+                             SavePath: Optional[str] = os.getcwd()) -> None:
     """
-    Generates a configuration file
+    Generates a configuration file for wrapper functions *experimental*. Pass a tuple of functions and a tuple of
+    dictionaries containing any key-value pairs that are associated with each function.
 
-    :param Config: Configuration to write to file (Optional)
-    :type Config: dict
+    :param Functions: Callables to be wrapped
+    :type Functions: tuple
+    :param Parameters: Parameters associated with callables to be wrapped
+    :type Parameters: tuple[dict]
+    :param Name: Name of file
+    :type Name: str
+    :param SavePath: Path to save file
+    :type SavePath: str
     :rtype: None
     """
 
-    if Config is None:
-        Config = {
-            "preprocessing": {
-                "shutter artifact length": 1000,
-                "grouped-z project bin size": 3,
-                "median filter tensor size": (7, 3, 3),
-                "test": {0, 1, 2}
-            },
-            "postprocesssing": {
-                "color": "blue",
-                "name": "test"
-            }
-        }
-
-    _config_filename = "".join([getcwd(), "\\config.json"])
+    # parse user input
+    try:
+        if ".json" not in Name:
+            Name = "".join([Name, ".json"])
+        _config_filename = "".join([SavePath, Name])
+    except TypeError:
+        print("Name and SavePath must be str")
+        return
 
     _serialized_parameters = dumps(Config, indent=0, maintain_tuples=True)
 
@@ -37,9 +38,10 @@ def config_generator(Config: Optional[dict] = None) -> None:
     _file.close()
 
 
-def config_reader(File: Optional[str]) -> dict:
+def wrapper_config_reader(File: Optional[str]) -> dict:
     """
-    Reads config into a dictionary
+    Reads config into a dicitonary containing a tuple of callables and
+    a tuple of dictionaries containing associated parameters
 
     :param File: Configuration File (Optional)
     :type File: str
@@ -51,5 +53,7 @@ def config_reader(File: Optional[str]) -> dict:
 
     with open(_config_filename, "r") as _file:
         _config = loads(_config_filename)
+
+    # need to unwrap here
 
     return _config

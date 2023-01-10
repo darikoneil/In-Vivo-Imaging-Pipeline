@@ -749,50 +749,56 @@ class ImagingExperiment(Experiment):
         self.meta = None
         self._fill_imaging_folder_dictionary()
 
-    def _fill_imaging_folder_dictionary(self) -> Self:
+    def analyze_images(self, Config: str, FrameRate: float) -> np.ndarray:
         """
-        Generates folders and a dictionary of imaging files (Raw, Meta, Compiled)
+        This is a wrapper function to analyze images with a single function
 
+        :param Config: Absolute filepath to a configuration file (.json)
+        :param FrameRate: float of framerate
         :rtype: Any
         """
-        # RAW
-        _raw_data_folder = self.folder_dictionary['imaging_folder'] + "\\RawImagingData"
-        try:
-            os.makedirs(_raw_data_folder)
-        except FileExistsError:
-            pass
-        self.folder_dictionary['raw_imaging_data'] = Images(_raw_data_folder)
-        # META
-        _bruker_meta_folder = self.folder_dictionary['imaging_folder'] + "\\BrukerMetaData"
-        try:
-            os.makedirs(_bruker_meta_folder)
-        except FileExistsError:
-            pass
-        self.folder_dictionary['bruker_meta_data'] = Data(_bruker_meta_folder)
 
-    def _load_bruker_analog_recordings(self) -> pd.DataFrame:
-        """
-        Loads Bruker Analog Recordings
+        # First, we load our meta data
+        self._load_bruker_meta_data()
 
-        :returns: Analog Recording
-        :rtype: pd.DataFrame
-        """
+        # Next, we load any analog recordings that we collected during imaging
 
-        self.folder_dictionary["bruker_meta_data"].reindex()
-        _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("csv")
-        return self._load_bruker_analog_file(_files[-1])
 
-    def _load_bruker_meta_data(self) -> Self:
-        """
-        Loads Bruker Meta Data
+        # for each channel and plane we must:
+        # 1. instance an analysis folder,
+        # 2. compile the images,
+        # 3. preprocess the data,
+        # 4. send through the analysis pipeline
 
-        :rtype: Any
-        """
-        self.folder_dictionary["bruker_meta_data"].reindex()
-        _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("xml")
-        _files = [_files[0], _files[2], _files[1]]
-        # Rearrange as Imaging, Voltage Recording, Voltage Output
-        self.meta = self._load_bruker_meta_file(_files)
+        _channels, _planes = determine_bruker_folder_contents(
+            self.folder_dictionary.get("raw_imaging_data").path)[0:2]
+        _combos = [range(_channels), range(_planes)]
+
+        # for each channel and plane...
+        for _combo in product(*_combos): # just generating tuples of all (channel id, plane id)
+            # Instance analysis folder for this channel/plane
+            _string_of_combo = "".join(["_channel_", str(_combo[0]), "_plane_", str(_combo[1])])
+            self.add_image_analysis_folder(str(FrameRate), _string_of_combo)
+
+            # Repackage loose, single frame tiffs into stacks
+            _name = "".join(["imaging_", str(FrameRate), "Hz", _string_of_combo])
+            repackage_bruker_tiffs(self.folder_dictionary.get("raw_imaging_data").path,
+                                   self.folder_dictionary.get(_name).folders.get("compiled"),
+                                   _combo)
+            self.update_folder_dictionary() # update file contents
+
+            # preprocess
+            _images = load_all_tiffs(self.folder_dictionary.get(_name).folders.get("compiled"))
+            _images = self.preprocess_data(_images) # Need to have added wrapped config import here
+            save_raw_binary(_images, self.folder_dictionary.get(_name).folders.get("compiled"))
+            _final_frames, _final_y, _final_x = _images.shape
+            _images = None
+            self.update_folder_dictionary()
+            self.folder_dictionary.get(_name).clean_up_compilation()
+            self.update_folder_dictionary()
+
+            # pipeline
+            self.pipeline(_name, _final_frames, _final_y, _final_x)
 
     def add_image_analysis_folder(self, SamplingRate: Union[int, float], *args: Optional[str]) -> Self:
         """
@@ -838,60 +844,43 @@ class ImagingExperiment(Experiment):
         pretty_print_bruker_command(_c, _p, _f, _h, _w)
         verbose_copying(_raw_imaging_data_path, self.folder_dictionary.get("raw_imaging_data").path)
 
-    def analyze_images(self, Config: str, FrameRate: float) -> np.ndarray:
+    # noinspection PyMethodMayBeStatic
+    def preprocess(self, ImageStack: np.ndarray, Functions: Tuple[Union[Callable, str]], Parameters: Tuple[dict]) -> np.ndarray:
         """
-        This is a wrapper function to analyze images with a single function
+        This is a wrapper for preprocessing. A tuple of functions and a tuple of associated parameters are fed alongside
+        the images to be preprocessed. For example, a single element in a Functions tuple might be *np.max*. It's associated
+         element in the Parameters tuple might be a dictionary containing the keys-value pairs "axis"=1,
+         and keepsdims=False)
 
-        :param Config: Absolute filepath to a configuration file (.json)
-        :param FrameRate: float of framerate
+        :param ImageStack: A stack of images to be preprocessed
+        :type ImageStack: Any
+        :param Functions: A tuple of callable functions to perform on the image stack
+        :type Functions: tuple[callable]
+        :param Parameters: A tuple of dictionaries containing the associated parameters for each function
+        :type Parameters: tuple[dict]
+        :return: The preprocessed image stack
         :rtype: Any
         """
 
-        # First, we load our meta data
-        self._load_bruker_meta_data()
+        # quick return if simply passing
+        if Functions is None:
+            return ImageStack
 
-        # Next, we load any analog recordings that we collected during imaging
+        # actually run if callables passed
+        for _fun, _params in zip(Functions, Parameters):
+            try:
+                ImageStack = _fun(ImageStack, **_params)
+            except TypeError:
+                print("Please pass a tuple of callables and a tuples of dictionaries")
+                return
+            except ModuleNotFoundError:
+                print("Please make sure all requisite modules have been imported")
+                return
+            except AssertionError or RuntimeError or ValueError or ZeroDivisionError:
+                print("Please make sure you have followed the appropriate documentation for passed callables")
+                return
 
-
-        # for each channel and plane we must:
-        # 1. instance an analysis folder,
-        # 2. compile the images,
-        # 3. preprocess the data,
-        # 4. send through the analysis pipeline
-
-        _channels, _planes = determine_bruker_folder_contents(
-            self.folder_dictionary.get("raw_imaging_data").path)[0:2]
-        _combos = [range(_channels), range(_planes)]
-
-        # for each channel and plane...
-        for _combo in product(*_combos): # just generating tuples of all (channel id, plane id)
-            # Instance analysis folder for this channel/plane
-            _string_of_combo = "".join(["_channel_", str(_combo[0]), "_plane_", str(_combo[1])])
-            self.add_image_analysis_folder(str(FrameRate), _string_of_combo)
-
-            # Repackage loose, single frame tiffs into stacks
-            _name = "".join(["imaging_", str(FrameRate), "Hz", _string_of_combo])
-            repackage_bruker_tiffs(self.folder_dictionary.get("raw_imaging_data").path,
-                                   self.folder_dictionary.get(_name).folders.get("compiled"),
-                                   _combo)
-            self.update_folder_dictionary() # update file contents
-
-            # preprocess
-            _images = load_all_tiffs(self.folder_dictionary.get(_name).folders.get("compiled"))
-            _images = self.process_data(_images)
-            save_raw_binary(_images, self.folder_dictionary.get(_name).folders.get("compiled"))
-            _final_frames, _final_y, _final_x = _images.shape
-            _images = None
-            self.update_folder_dictionary()
-            self.folder_dictionary.get(_name).clean_up_compilation()
-            self.update_folder_dictionary()
-
-            # pipeline
-            self.pipeline(_name, _final_frames, _final_y, _final_x)
-
-    # noinspection PyMethodMayBeStatic
-    def process_data(self, ImagesIn) -> Self:
-        return ImagesIn
+        return ImageStack
 
     def pipeline(self, Name, Frames, Y, X) -> Self:
         _s2p = Suite2PAnalysis(self.folder_dictionary.get(Name).folders.get("compiled"),
@@ -953,6 +942,51 @@ class ImagingExperiment(Experiment):
         os.makedirs(_compiled)
         generate_read_me(_roi_sorting + "\\ReadMe.txt", "Read-Me for ROI Sorting")
 
+    def _fill_imaging_folder_dictionary(self) -> Self:
+        """
+        Generates folders and a dictionary of imaging files (Raw, Meta, Compiled)
+
+        :rtype: Any
+        """
+        # RAW
+        _raw_data_folder = self.folder_dictionary['imaging_folder'] + "\\RawImagingData"
+        try:
+            os.makedirs(_raw_data_folder)
+        except FileExistsError:
+            pass
+        self.folder_dictionary['raw_imaging_data'] = Images(_raw_data_folder)
+        # META
+        _bruker_meta_folder = self.folder_dictionary['imaging_folder'] + "\\BrukerMetaData"
+        try:
+            os.makedirs(_bruker_meta_folder)
+        except FileExistsError:
+            pass
+        self.folder_dictionary['bruker_meta_data'] = Data(_bruker_meta_folder)
+
+    def _load_bruker_analog_recordings(self) -> pd.DataFrame:
+        """
+        Loads Bruker Analog Recordings
+
+        :returns: Analog Recording
+        :rtype: pd.DataFrame
+        """
+
+        self.folder_dictionary["bruker_meta_data"].reindex()
+        _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("csv")
+        return self._load_bruker_analog_file(_files[-1])
+
+    def _load_bruker_meta_data(self) -> Self:
+        """
+        Loads Bruker Meta Data
+
+        :rtype: Any
+        """
+        self.folder_dictionary["bruker_meta_data"].reindex()
+        _files = self.folder_dictionary["bruker_meta_data"].find_all_ext("xml")
+        _files = [_files[0], _files[2], _files[1]]
+        # Rearrange as Imaging, Voltage Recording, Voltage Output
+        self.meta = self._load_bruker_meta_file(_files)
+
     @staticmethod
     def _load_bruker_analog_file(File: str) -> pd.DataFrame:
         """
@@ -986,6 +1020,7 @@ class ImagingExperiment(Experiment):
         meta.creation_date = get_date()
 
         return meta
+
 
 
 class BehavioralExperiment(Experiment):
