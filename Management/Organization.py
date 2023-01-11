@@ -1022,7 +1022,6 @@ class ImagingExperiment(Experiment):
         return meta
 
 
-
 class BehavioralExperiment(Experiment):
     """
     :class:`Experiment <Management.Organization.Experiment>` class for a generic day of a behavioral task

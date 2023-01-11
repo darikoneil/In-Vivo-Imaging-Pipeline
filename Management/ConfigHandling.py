@@ -1,59 +1,44 @@
 from __future__ import annotations
+from collections import OrderedDict
+import importlib
 from typing import Optional, Callable, Tuple
-from modified_json_tricks import dumps, loads
-from os import getcwd
+from json_tricks import dumps, loads
+import numpy as np
 
 
-def wrapper_config_generator(Functions: Tuple[Callable], Parameters: Tuple[dict], Name: Optional[str] = "config.json",
-                             SavePath: Optional[str] = os.getcwd()) -> None:
+class FunctionWrapper:
     """
-    Generates a configuration file for wrapper functions *experimental*. Pass a tuple of functions and a tuple of
-    dictionaries containing any key-value pairs that are associated with each function.
-
-    :param Functions: Callables to be wrapped
-    :type Functions: tuple
-    :param Parameters: Parameters associated with callables to be wrapped
-    :type Parameters: tuple[dict]
-    :param Name: Name of file
-    :type Name: str
-    :param SavePath: Path to save file
-    :type SavePath: str
-    :rtype: None
+    This is a class for wrapping functions into a single step pipeline
     """
+    def __init__(self):
+        self.config = OrderedDict()
 
-    # parse user input
-    try:
-        if ".json" not in Name:
-            Name = "".join([Name, ".json"])
-        _config_filename = "".join([SavePath, Name])
-    except TypeError:
-        print("Name and SavePath must be str")
-        return
+    def wrap_function(self, Function: Callable, **kwargs) -> Self:
+        """
+        Stores functions into a dictionary where key is the function name and the value is a tuple:
+        (Module/Package, Function, Parameters)
 
-    _serialized_parameters = dumps(Config, indent=0, maintain_tuples=True)
+        :param Function: Function to add
+        :type Function: Callable
+        :param kwargs: Parameters to pass
+        :rtype: Any
+        """
+        # noinspection PyArgumentList
+        self.config[Function.__name__] = (Function.__module__, Function, dict(**kwargs))
 
-    with open(_config_filename, "w") as _file:
-        _file.write(_serialized_parameters)
-        print("Configuration File Generated.")
-    _file.close()
+    def __json_encode__(self):
+        # noinspection PyTypeChecker
+        for _key in self.config.keys():
+            self.config[_key] = {
+                "Module": self.config[_key][0],
+                "Function": _key,
+                "Parameters": self.config[_key][2],
+            }
+        return {"config": self.config}
 
-
-def wrapper_config_reader(File: Optional[str]) -> dict:
-    """
-    Reads config into a dicitonary containing a tuple of callables and
-    a tuple of dictionaries containing associated parameters
-
-    :param File: Configuration File (Optional)
-    :type File: str
-    :return: Configuration
-    :rtype: dict
-    """
-
-    _config_filename = "".join([getcwd(), "\\config.json"])
-
-    with open(_config_filename, "r") as _file:
-        _config = loads(_config_filename)
-
-    # need to unwrap here
-
-    return _config
+    def __json_decode__(self, **attrs):
+        self.config = attrs["config"]
+        for _key in self.config.keys():
+            self.config[_key] = (self.config[_key].get("Module"),
+                                 importlib.import_module(self.config[_key].get("Module")).__dict__.get(_key),
+                                 self.config[_key].get("Parameters"))
